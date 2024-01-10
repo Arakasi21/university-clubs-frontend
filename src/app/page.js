@@ -29,7 +29,7 @@ export default function Home() {
       </div>
 
       <div className={styles.center}>
-        <p>Hello world</p>
+        <p>Hello world! Sad life requires more energy, that's why we are sleeping too much :) </p>
       </div>
 
       <div className={styles.grid}>
