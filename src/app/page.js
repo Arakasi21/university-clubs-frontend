@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link';
 import styles from './page.module.css'
 
 export default function Home() {
@@ -30,6 +31,10 @@ export default function Home() {
 
       <div className={styles.center}>
         <p>Hello world! Sad life requires more energy, that's why we are sleeping too much :) </p>
+        {/* Replace <a> with Link for internal navigation */}
+        <Link href="/"><a>Go to Main Page</a></Link>
+        <Link href="/clubs"><a>Go to Clubs Overview</a></Link>
+        <Link href="/contacts"><a>Go to Contacts</a></Link>
       </div>
 
       <div className={styles.grid}>
