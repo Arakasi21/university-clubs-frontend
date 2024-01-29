@@ -1,10 +1,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import Nav from "@/components/Nav";
 
 const page = () => {
     return (
-        <main><h1>Testpage</h1></main>
+
+        <main className="p-24"> <Nav/>
+             <h1>Testpage</h1></main>
     )
 }
 

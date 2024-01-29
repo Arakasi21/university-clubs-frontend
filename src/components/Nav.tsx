@@ -1,13 +1,16 @@
 'use client'
 import Link from 'next/link'
-import {ModeToggle} from "@/components/ui/toggle-mode";
+import {ModeToggle} from "@/components/ui/toggle-mode"
+
+
 export default function Nav() {
     return (
         <header>
             <nav>
-                <ul className="flex items-center justify-between">
+                <ul className="flex justify-between">
                     <Link href="/pages">Testing</Link>
-                    <li><ModeToggle/></li>
+                    <Link href="/pages/loginpage">Login</Link>
+                    <li className="right-4"><ModeToggle/></li>
                 </ul>
             </nav>
         </header>
