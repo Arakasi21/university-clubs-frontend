@@ -1,6 +1,9 @@
 'use client'
 import Link from 'next/link'
+
 import {ModeToggle} from "@/components/ui/toggle-mode"
+import { Separator } from "@/components/ui/separator"
+
 
 
 export default function Nav() {

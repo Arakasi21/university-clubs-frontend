@@ -1,5 +1,6 @@
 import Nav from "@/components/Nav"
 import {Button} from "@/components/ui/button"
+import {ToastSimple} from "@/components/ButtonWithToast"
 
 import {
     Table,
@@ -16,6 +17,8 @@ export default function Home() {
     <main className="p-24">
 
       <Nav/>
+
+        <ToastSimple/>
 
     <div className="flex gap-6 items-center justify-center">
         <Button variant={"secondary"}>ButtonTest</Button>
