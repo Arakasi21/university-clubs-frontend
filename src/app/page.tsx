@@ -1,12 +1,46 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import Testpage from '@/app/pages/page'
+import Nav from "@/components/Nav"
+import {Button} from "@/components/ui/button"
+
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
 
 export default function Home() {
   return (
-    <main>
+    <main className="p-24">
 
-      <Link href="/pages">Testing</Link>
+      <Nav/>
+
+    <div className="flex gap-6 items-center justify-center">
+        <Button variant={"secondary"}>ButtonTest</Button>
+        <Button>ButtonTest2</Button>
+
+        <Table>
+            <TableCaption>A list of your recent invoices.</TableCaption>
+            <TableHeader>
+                <TableRow>
+                    <TableHead className="w-[100px]">Invoice</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Method</TableHead>
+                    <TableHead className="text-right">Amount</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                <TableRow>
+                    <TableCell className="font-medium">INV001</TableCell>
+                    <TableCell>Paid</TableCell>
+                    <TableCell>Credit Card</TableCell>
+                    <TableCell className="text-right">$250.00</TableCell>
+                </TableRow>
+            </TableBody>
+        </Table>
+    </div>
     </main>
   )
 }
