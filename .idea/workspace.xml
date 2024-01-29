@@ -4,17 +4,11 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="60483ad7-697e-46a0-884e-cc375914b34f" name="Changes" comment="added form, just to check, after some time need to modify according to the project structure: &#10;&#10;&#9;ID          int64     `json:&quot;id&quot;`&#10;&#9;FirstName   string    `json:&quot;first_name&quot;`&#10;&#9;LastName    string    `json:&quot;second_name&quot;`&#10;&#9;Email       string    `json:&quot;email&quot;`&#10;&#9;Password    string    `json:&quot;-&quot;`&#10;&#9;CreatedAt   time.Time `json:&quot;created_at&quot;`&#10;&#9;Role        string    `json:&quot;role&quot;`&#10;&#9;Barcode     string    `json:&quot;barcode&quot;`&#10;&#9;PhoneNumber string    `json:&quot;phone_number&quot;`&#10;&#9;Major       string    `json:&quot;major&quot;`&#10;&#9;GroupName   string    `json:&quot;group_name&quot;`&#10;&#9;Year        int       `json:&quot;year&quot;`&#10;&#9;&#10;&#9;&#10;&#9;and need to rewrite NavBar after (add the background)">
-      <change afterPath="$PROJECT_DIR$/src/components/ButtonWithToast.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/separator.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/toast.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/toaster.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/use-toast.ts" afterDir="false" />
+    <list default="true" id="60483ad7-697e-46a0-884e-cc375914b34f" name="Changes" comment="added sample for toast">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/pages/loginpage/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/loginpage/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/pages/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Nav.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Nav.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -106,7 +100,8 @@
     <MESSAGE value="tested navbad&#10;&#10;added dark/light toggle mode button &#10;&#10;shadcn is working fine" />
     <MESSAGE value="workspace push" />
     <MESSAGE value="added form, just to check, after some time need to modify according to the project structure: &#10;&#10;&#9;ID          int64     `json:&quot;id&quot;`&#10;&#9;FirstName   string    `json:&quot;first_name&quot;`&#10;&#9;LastName    string    `json:&quot;second_name&quot;`&#10;&#9;Email       string    `json:&quot;email&quot;`&#10;&#9;Password    string    `json:&quot;-&quot;`&#10;&#9;CreatedAt   time.Time `json:&quot;created_at&quot;`&#10;&#9;Role        string    `json:&quot;role&quot;`&#10;&#9;Barcode     string    `json:&quot;barcode&quot;`&#10;&#9;PhoneNumber string    `json:&quot;phone_number&quot;`&#10;&#9;Major       string    `json:&quot;major&quot;`&#10;&#9;GroupName   string    `json:&quot;group_name&quot;`&#10;&#9;Year        int       `json:&quot;year&quot;`&#10;&#9;&#10;&#9;&#10;&#9;and need to rewrite NavBar after (add the background)" />
-    <option name="LAST_COMMIT_MESSAGE" value="added form, just to check, after some time need to modify according to the project structure: &#10;&#10;&#9;ID          int64     `json:&quot;id&quot;`&#10;&#9;FirstName   string    `json:&quot;first_name&quot;`&#10;&#9;LastName    string    `json:&quot;second_name&quot;`&#10;&#9;Email       string    `json:&quot;email&quot;`&#10;&#9;Password    string    `json:&quot;-&quot;`&#10;&#9;CreatedAt   time.Time `json:&quot;created_at&quot;`&#10;&#9;Role        string    `json:&quot;role&quot;`&#10;&#9;Barcode     string    `json:&quot;barcode&quot;`&#10;&#9;PhoneNumber string    `json:&quot;phone_number&quot;`&#10;&#9;Major       string    `json:&quot;major&quot;`&#10;&#9;GroupName   string    `json:&quot;group_name&quot;`&#10;&#9;Year        int       `json:&quot;year&quot;`&#10;&#9;&#10;&#9;&#10;&#9;and need to rewrite NavBar after (add the background)" />
+    <MESSAGE value="added sample for toast" />
+    <option name="LAST_COMMIT_MESSAGE" value="added sample for toast" />
   </component>
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>

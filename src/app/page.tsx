@@ -11,16 +11,16 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import {Separator} from "@/components/ui/separator";
 
 export default function Home() {
   return (
-    <main className="p-24">
+    <main>
 
       <Nav/>
+    <br/>
+    <div className="flex px-24 gap-6 items-center justify-center">
 
-        <ToastSimple/>
-
-    <div className="flex gap-6 items-center justify-center">
         <Button variant={"secondary"}>ButtonTest</Button>
         <Button>ButtonTest2</Button>
 

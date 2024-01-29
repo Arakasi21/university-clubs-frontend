@@ -6,8 +6,11 @@ import Nav from "@/components/Nav";
 const page = () => {
     return (
 
-        <main className="p-24"> <Nav/>
-             <h1>Testpage</h1></main>
+        <main>
+            <Nav/>
+
+             <h1>Testpage</h1>
+        </main>
     )
 }
 
