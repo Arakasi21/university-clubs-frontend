@@ -4,25 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="60483ad7-697e-46a0-884e-cc375914b34f" name="Changes" comment="Ok navigation is working now&#10;&#10;Need to mention about client and server rendering&#10;&#10;'use client' - to every client component, it should be as small as possible">
-      <change afterPath="$PROJECT_DIR$/components.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/theme-provider.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/button.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/dropdown-menu.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/form.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/label.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/table.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/toggle-mode.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/utils.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/globals.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/navbar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Nav.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tailwind.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.ts" afterDir="false" />
-    </list>
+    <list default="true" id="60483ad7-697e-46a0-884e-cc375914b34f" name="Changes" comment="tested navbad&#10;&#10;added dark/light toggle mode button &#10;&#10;shadcn is working fine" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -108,7 +90,8 @@
     <MESSAGE value="test 4" />
     <MESSAGE value="checking and trying to access via other thing" />
     <MESSAGE value="Ok navigation is working now&#10;&#10;Need to mention about client and server rendering&#10;&#10;'use client' - to every client component, it should be as small as possible" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ok navigation is working now&#10;&#10;Need to mention about client and server rendering&#10;&#10;'use client' - to every client component, it should be as small as possible" />
+    <MESSAGE value="tested navbad&#10;&#10;added dark/light toggle mode button &#10;&#10;shadcn is working fine" />
+    <option name="LAST_COMMIT_MESSAGE" value="tested navbad&#10;&#10;added dark/light toggle mode button &#10;&#10;shadcn is working fine" />
   </component>
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>
