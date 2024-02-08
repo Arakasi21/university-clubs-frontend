@@ -1,5 +1,5 @@
-import LoginForm from "@/components/LoginForm";
-import Nav from "@/components/Nav";
+import LoginForm from "@/components/loginForm";
+import Nav from "@/components/nav";
 
 export default function LoginPage(){
     return(
@@ -9,5 +9,5 @@ export default function LoginPage(){
 
             <LoginForm/>
         </main>
-    )
-}
+    );
+};
