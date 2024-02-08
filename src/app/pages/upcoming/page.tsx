@@ -14,34 +14,17 @@ import {
 
 export default function Events(){
     return (
-        <div>
-            <Nav/>
+        <main>
+                <Nav/>
 
-            <h1>Below you can see upcoming events</h1>
+            <div>
+                <h1>Below you can see upcoming events</h1>
 
-            <Table>
-                <TableCaption>A list of your recent invoices.</TableCaption>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead className="w-[100px]">Invoice</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Method</TableHead>
-                        <TableHead className="text-right">Amount</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    <TableRow>
-                        <TableCell className="font-medium">INV001</TableCell>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                        <TableCell className="text-right">$250.00</TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
-
-
-            <Calendar/>
-        </div>
+                <div className="flex px-32 gap-6 items-center justify-center flex-wrap text-center">
+                    <Calendar/>
+                </div>
+            </div>
+        </main>
     );
 };
 

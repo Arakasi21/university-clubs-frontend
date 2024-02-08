@@ -4,20 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="60483ad7-697e-46a0-884e-cc375914b34f" name="Changes" comment="added sample for toast">
-      <change afterPath="$PROJECT_DIR$/src/app/pages/upcoming/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/calendar.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ui/card.tsx" afterDir="false" />
+    <list default="true" id="60483ad7-697e-46a0-884e-cc375914b34f" name="Changes" comment="added sample of navbar, needed to change but its OK">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/next.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pages/loginpage/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/loginpage/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pages/page.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ButtonWithToast.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/buttonWithToast.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/LoginForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/loginForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Nav.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/nav.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/pages/upcoming/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/upcoming/page.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +19,20 @@
   <component name="GOROOT" url="file://$PROJECT_DIR$/../../../../Program Files/Go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Arakasi21"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="54423d19-db6e-46ff-8501-74493e59bbc4" />
+        <option name="url" value="https://github.com/ARUMANDESU/university-clubs-frontend.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="GoLibraries">
     <option name="indexEntireGoPath" value="true" />
@@ -63,27 +66,21 @@
     &quot;git-widget-placeholder&quot;: &quot;mvp-1-front&quot;,
     &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
     &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/77753/Desktop/university-clubs-frontend/src/app/pages&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/araka&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\77753\\Desktop\\university-clubs-frontend\\node_modules\\typescript\\lib&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\araka\\GolandProjects\\university-clubs-frontend\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\77753\Desktop\university-clubs-frontend\src\app\pages" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\77753\Desktop\university-clubs-frontend\src\app\pages\upcoming" />
-      <recent name="C:\Users\77753\Desktop\university-clubs-frontend\src\app\pages" />
-      <recent name="C:\Users\77753\Desktop\university-clubs-frontend\src\app\pages\upcoming_events" />
-      <recent name="C:\Users\77753\Desktop\university-clubs-frontend\src" />
       <recent name="C:\Users\araka\GolandProjects\university-clubs-frontend\src\app\pages" />
+      <recent name="C:\Users\araka\GolandProjects\university-clubs-frontend\src\app" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -95,15 +92,27 @@
       <option name="presentableId" value="Default" />
       <updated>1705595194815</updated>
       <workItem from="1705595195992" duration="388000" />
-      <workItem from="1707164635776" duration="7907000" />
-      <workItem from="1707260424174" duration="3461000" />
-      <workItem from="1707280816750" duration="624000" />
-      <workItem from="1707386686659" duration="518000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/src/app/layout.js" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
