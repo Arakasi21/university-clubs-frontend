@@ -25,7 +25,7 @@ const formSchema = z.object({
     barcode: z.string().min(1, { message: "Barcode is required" }),
     major: z.string().min(1, { message: "Major is required" }),
     group_name: z.string().min(1, { message: "Group name is required" }),
-    year: z.coerce.number(),
+    year: z.coerce.number().max(3),
 });
 
 
