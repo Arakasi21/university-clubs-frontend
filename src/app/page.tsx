@@ -1,6 +1,6 @@
 import Nav from "@/components/nav"
 import Link from "next/link";
-
+import Image from "next/image";
 
 import {
   Card,
@@ -27,6 +27,12 @@ export default function Home() {
         {/*  Browse some of our most popular and most distinct clubs in AITU.</p>*/}
       </div>
 
+
+
+
+
+
+
       <div className="flex my-10 mx-60 gap-6 justify-center flex-wrap">
 
         <Card className="w-80">
@@ -36,9 +42,18 @@ export default function Home() {
           </CardHeader>
 
           <CardContent>
-            <p className="py-2">Cooking club</p>
-            <p className="py-2">AITU Charity</p>
-            <p className="py-2">AITU Volunteers</p>
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">Cooking club</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">AITU Charity</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">AITU Volunteers</p>
+            </Link>
+
           </CardContent>
 
         </Card>
@@ -51,9 +66,18 @@ export default function Home() {
           </CardHeader>
 
           <CardContent>
-            <p className="py-2">AITU Gaming club</p>
-            <p className="py-2">Board Games</p>
-            <p className="py-2">GameDev club</p>
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">AITU Gaming club</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">Board Games</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">GameDev club</p>
+            </Link>
+
           </CardContent>
 
         </Card>
@@ -66,9 +90,18 @@ export default function Home() {
           </CardHeader>
 
           <CardContent>
-            <p className="py-2">Basketball </p>
-            <p className="py-2">Volleyball </p>
-            <p className="py-2">Football</p>
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">Basketball</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">Volleyball</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">Football</p>
+            </Link>
+
           </CardContent>
 
         </Card>
@@ -81,9 +114,19 @@ export default function Home() {
           </CardHeader>
 
           <CardContent>
-            <p className="py-2">AITU Dance</p>
-            <p className="py-2">KCA club</p>
-            <p className="py-2">AITU Music</p>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">AITU Dance</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">KCA club</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">AITU Music</p>
+            </Link>
+
           </CardContent>
 
         </Card>
