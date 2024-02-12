@@ -1,15 +1,6 @@
 import React from 'react'
 import Nav from "@/components/nav";
 import {Calendar} from "@/components/ui/calendar";
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
 
 
 export default function Events(){

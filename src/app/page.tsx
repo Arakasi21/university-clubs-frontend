@@ -1,4 +1,5 @@
 import Nav from "@/components/nav"
+import Link from "next/link";
 
 
 import {
@@ -28,65 +29,142 @@ export default function Home() {
 
       <div className="flex my-10 mx-20 gap-6 justify-center flex-wrap">
 
-        <Card>
+        <Card className="w-80">
           <CardHeader>
             <CardTitle>Volunteer clubs</CardTitle>
             <CardDescription>Card Description</CardDescription>
           </CardHeader>
-          <CardContent>
-            <p className="py-3">Cooking club</p>
-            <p className="py-3">AITU Charity</p>
-            <p className="py-3">AITU Volunteers</p>
+          <CardContent className="text-lg">
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">Cooking club</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">AITU Charity</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">AITU Volunteers</p>
+            </Link>
 
           </CardContent>
 
         </Card>
 
 
-        <Card>
+        <Card className="w-80">
           <CardHeader>
             <CardTitle>Game clubs</CardTitle>
             <CardDescription>Card Description</CardDescription>
           </CardHeader>
-          <CardContent>
-            <p className="py-3">AITU Gaming club</p>
-            <p className="py-3">Board Games</p>
-            <p className="py-3">GameDev club</p>
+          <CardContent className="text-lg">
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">AITU Gaming club</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">Board Games</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">GameDev club</p>
+            </Link>
+
+
 
           </CardContent>
 
         </Card>
 
 
-        <Card>
+        <Card className="w-80">
           <CardHeader>
             <CardTitle>For Athletes</CardTitle>
             <CardDescription>Card Description</CardDescription>
           </CardHeader>
-          <CardContent>
-            <p className="py-3">Basketball </p>
-            <p className="py-3">Volleyball </p>
-            <p className="py-3">Football</p>
-            <p className="py-3">Table tennis</p>
+          <CardContent className="text-lg">
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">Basketball </p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">Volleyball </p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">Football</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">Table tennis</p>
+            </Link>
+
+
+
+
 
           </CardContent>
 
         </Card>
 
 
-        <Card>
+        <Card className="w-80">
           <CardHeader>
             <CardTitle>Dance & Music</CardTitle>
             <CardDescription>Card Description</CardDescription>
           </CardHeader>
-          <CardContent>
-            <p className="py-3">AITU Dance</p>
-            <p className="py-3">KCA(Korean Culture Association) club</p>
-            <p className="py-3">AITU Music</p>
+          <CardContent className="text-lg">
+
+            <Link href="/" >
+              <p className="py-3 hover:text-blue-500">AITU Dance</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">KCA(Korean Culture Association) club</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">AITU Music</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">AITU Orchestra</p>
+            </Link>
+
           </CardContent>
 
         </Card>
 
+
+        <Card className="w-80">
+          <CardHeader>
+            <CardTitle>Speaking clubs</CardTitle>
+            <CardDescription>Card Description</CardDescription>
+          </CardHeader>
+          <CardContent className="text-lg">
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">SPQR</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">Debate club</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">Oratory club</p>
+            </Link>
+
+            <Link href="/">
+              <p className="py-3 hover:text-blue-500">AITU Orchestra</p>
+            </Link>
+
+          </CardContent>
+
+        </Card>
       </div>
 
     </main>
