@@ -25,7 +25,7 @@ const formSchema = z.object({
     barcode: z.string().min(1, { message: "Barcode is required" }),
     major: z.string().min(1, { message: "Major is required" }),
     group_name: z.string().min(1, { message: "Group name is required" }),
-    year: z.coerce.number(),
+    year: z.coerce.number().max(3),
 });
 
 
@@ -78,6 +78,7 @@ export default function SignUp() {
                             <FormControl>
                                 <Input type="text" placeholder="Your first name" {...field} />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}/>
                     <FormField control={form.control} name="last_name" render={({ field }) => (
@@ -86,6 +87,7 @@ export default function SignUp() {
                             <FormControl>
                                 <Input type="text" placeholder="Your last name" {...field} />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}/>
                     <FormField control={form.control} name="email" render={({ field }) => (
@@ -94,6 +96,7 @@ export default function SignUp() {
                             <FormControl>
                                 <Input type="email" placeholder="Your email" {...field} />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}/>
                     <FormField control={form.control} name="password" render={({ field }) => (
@@ -102,6 +105,7 @@ export default function SignUp() {
                             <FormControl>
                                 <Input type="password" placeholder="Your password" {...field} />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}/>
                     <FormField control={form.control} name="barcode" render={({ field }) => (
@@ -110,6 +114,7 @@ export default function SignUp() {
                             <FormControl>
                                 <Input type="text" placeholder="Your barcode" {...field} />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}/>
                     <FormField control={form.control} name="major" render={({ field }) => (
@@ -118,6 +123,7 @@ export default function SignUp() {
                             <FormControl>
                                 <Input type="text" placeholder="Your major" {...field} />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}/>
                     <FormField control={form.control} name="group_name" render={({ field }) => (
@@ -126,6 +132,7 @@ export default function SignUp() {
                             <FormControl>
                                 <Input type="text" placeholder="Your group name" {...field} />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}/>
                     <FormField control={form.control} name="year" render={({ field }) => (
@@ -134,10 +141,11 @@ export default function SignUp() {
                             <FormControl>
                                 <Input type="number" placeholder="Your year" {...field} />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}/>
                     <Button type="submit" className="w-full">
-                        Submit
+                        Register
                     </Button>
                 </form>
             </Form>

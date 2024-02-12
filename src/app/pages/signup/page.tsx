@@ -1,11 +1,11 @@
 import Nav from "@/components/nav";
-import LoginForm from "@/app/pages/loginpage/_components/LoginForm";
+import SignUp from "@/app/pages/signup/_components/SignUpForm";
 
 export default function LoginPage(){
     return(
         <main>
             <Nav/>
-            <LoginForm/>
+            <SignUp/>
         </main>
     );
 };
