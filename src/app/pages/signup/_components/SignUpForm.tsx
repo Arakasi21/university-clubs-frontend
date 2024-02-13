@@ -8,24 +8,24 @@ import { Button } from "@/components/ui/button";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {toast} from "sonner";
 
 const formSchema = z.object({
 
-    first_name: z.string().min(1, { message: "First name is required" }),
-    last_name: z.string().min(1, { message: "Last name is required" }),
-    email: z.string().email({ message: "Invalid email format" }),
-    password: z.string().min(6, { message: "Password must be at least 6 characters" }),
-    barcode: z.string().min(1, { message: "Barcode is required" }),
-    major: z.string().min(1, { message: "Major is required" }),
-    group_name: z.string().min(1, { message: "Group name is required" }),
-    year: z.coerce.number().max(3),
+    first_name: z.string().min(1, { message: "First name is required" }).max(30),
+    last_name: z.string().min(1, { message: "Last name is required" }).max(30),
+    email: z.string().email({ message: "Invalid email format" }).max(60),
+    password: z.string().min(6, { message: "Password must be at least 6 characters" }).max(30),
+    barcode: z.string().min(1, { message: "Barcode is required" }).max(10),
+    major: z.string().min(1, { message: "Major is required" }).max(40),
+    group_name: z.string().min(1, { message: "Group name is required" }).max(10),
+    year: z.coerce.number().min(1).max(3),
 });
 
 
@@ -58,9 +58,21 @@ export default function SignUp() {
                 throw new Error(errorData.error || 'Signup failed');
             }
 
-            alert('Signup successful!');
+            toast("Signup successful!", {
+                action: {
+                    label: "Okay",
+                    onClick: () => console.log("Okay"),
+                },
+            });
         } catch (error) {
-            alert(`Signup failed:`);
+            console.log(error)
+            toast.error("Signup error", {
+                description: error.description,
+                action: {
+                    label: "Try again",
+                    onClick: () => console.log("Error"),
+                },
+            });
         }
     };
 
@@ -139,14 +151,15 @@ export default function SignUp() {
                         <FormItem>
                             <FormLabel>Year</FormLabel>
                             <FormControl>
-                                <Input type="number" placeholder="Your year" {...field} />
+                                <Input type="text" placeholder="Your year" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}/>
                     <Button type="submit" className="w-full">
-                        Register
+                        Sign up
                     </Button>
+
                 </form>
             </Form>
         </main>
