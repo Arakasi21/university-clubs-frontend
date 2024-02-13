@@ -1,16 +1,7 @@
 import Nav from "@/components/nav"
 import Link from "next/link";
-import Image from "next/image";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-
+import {Card, CardContent, CardDescription, CardHeader, CardTitle,} from "@/components/ui/card"
 
 
 export default function Home() {
@@ -18,7 +9,7 @@ export default function Home() {
     <main>
 
       <Nav/>
-    <br/>
+      <br/>
 
       <div className="flex py-16 gap-6 items-center justify-center flex-wrap text-center">
         <h1 className="text-xl">Do you want to choose a club based on your interest, but you don&apos;t know which one is more suitable for you?</h1>
@@ -26,12 +17,6 @@ export default function Home() {
         {/*  for everything from niche hobbies to extracurriculars to career-oriented and professional groups.*/}
         {/*  Browse some of our most popular and most distinct clubs in AITU.</p>*/}
       </div>
-
-
-
-
-
-
 
       <div className="flex my-10 mx-60 gap-6 justify-center flex-wrap">
 

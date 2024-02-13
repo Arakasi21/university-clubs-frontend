@@ -2,8 +2,7 @@
 import Link from 'next/link';
 import Image from "next/image";
 import {ModeToggle} from "@/components/ui/toggle-mode";
-import { Separator } from "@/components/ui/separator";
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 
 export default function Nav() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -35,19 +34,19 @@ export default function Nav() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/pages/upcoming">
+                                <Link href={"/events"}>
                                     <p>Upcoming Events</p>
                                 </Link>
                             </li>
                             {!isAuthenticated && (
                                 <>
                                     <li>
-                                        <Link href="/pages/loginpage">
+                                        <Link href={"/sign-in"}>
                                             <p className="nav-link">Login</p>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href="/pages/signup">
+                                        <Link href={"/sign-up"}>
                                             <p className="nav-link">Sign Up</p>
                                         </Link>
                                     </li>

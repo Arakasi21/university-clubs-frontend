@@ -1,23 +1,15 @@
 "use client";
 import React from 'react';
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {useForm} from "react-hook-form";
+import {z} from "zod";
 
-import { Button } from "@/components/ui/button";
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
+import {Input} from "@/components/ui/input";
 import {toast} from "sonner";
 
 const formSchema = z.object({
-
     first_name: z.string().min(1, { message: "First name is required" }).max(30),
     last_name: z.string().min(1, { message: "Last name is required" }).max(30),
     email: z.string().email({ message: "Invalid email format" }).max(60),
@@ -54,7 +46,12 @@ export default function SignUp() {
             });
 
             if (!response.ok) {
-                const errorData = await response.json();
+                let errorData = await response.json();
+
+                toast.error("Signup error", {
+                    description: errorData.error,
+                });
+
                 throw new Error(errorData.error || 'Signup failed');
             }
 
@@ -66,13 +63,6 @@ export default function SignUp() {
             });
         } catch (error) {
             console.log(error)
-            toast.error("Signup error", {
-                description: error.description,
-                action: {
-                    label: "Try again",
-                    onClick: () => console.log("Error"),
-                },
-            });
         }
     };
 

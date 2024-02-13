@@ -1,5 +1,5 @@
 import Nav from "@/components/nav";
-import SignUp from "@/app/pages/signup/_components/SignUpForm";
+import SignUp from "@/app/sign-up/_components/SignUpForm";
 
 
 export default function LoginPage(){

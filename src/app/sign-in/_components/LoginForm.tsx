@@ -14,6 +14,7 @@ import {
     FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {toast} from "sonner";
 
 const formSchema = z.object({
     email: z.string().email({ message: "Invalid email format" }),
@@ -40,12 +41,18 @@ export default function Login() {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.error || 'Login failed');
+
+                toast.error("SignIn error", {
+                    description: errorData.error,
+                });
+
+                throw new Error(errorData.error || 'SignIn failed');
             }
 
-            alert('Signup successful!');
+            toast("You Signed In successfully!");
+
         } catch (error) {
-            alert(`Signup failed:`);
+            console.log(error)
         }
     };
 
