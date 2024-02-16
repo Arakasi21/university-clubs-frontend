@@ -4,13 +4,24 @@ import Image from "next/image";
 import {ModeToggle} from "@/components/ui/toggle-mode";
 import React, {useEffect, useState} from 'react';
 
+/*function getCookie(name: string): string | null {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for(let i=0;i < ca.length;i++) {
+        let c = ca[i].trim();
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}*/
+
 export default function Nav() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-
-        const token = localStorage.getItem('sessionToken');
-        setIsAuthenticated(!!token);
+        //todo: нужно по другому логику реализовать
+        /*const token = getCookie("session_token")
+        console.log(token)
+        setIsAuthenticated(!!token);*/
     }, []);
 
     return (
