@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {toast} from "sonner";
+import useUserStore from "@/store/user";
+import {IUser} from "@/interface/user";
 
 const formSchema = z.object({
     email: z.string().email({ message: "Invalid email format" }),
@@ -29,6 +31,8 @@ export default function Login() {
             password: "",
         }
     });
+
+    const { login, user } = useUserStore();
 
     const handleSubmit = async (values: z.infer<typeof formSchema>) => {
         const apiUrl = 'http://localhost:5000/auth/sign-in';
@@ -50,6 +54,26 @@ export default function Login() {
                 throw new Error(errorData.error || 'SignIn failed');
             }
 
+            const data = await response.json();
+
+            const { avatar_url, barcode, created_at, email, first_name, group_name, id, last_name, major, role, year } = data.user;
+
+            const userRes: IUser = {
+                avatar_url,
+                barcode,
+                created_at,
+                email,
+                first_name,
+                group_name,
+                id,
+                last_name,
+                major,
+                role,
+                year
+            }
+
+            login(userRes)
+            console.log(user)
             toast("You Signed In successfully!");
 
         } catch (error) {

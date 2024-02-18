@@ -6,6 +6,7 @@ import React, {useEffect, useState} from 'react';
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Search} from "lucide-react";
+import useUserStore from "@/store/user";
 
 /*function getCookie(name: string): string | null {
     const nameEQ = name + "=";
@@ -17,38 +18,29 @@ import {Search} from "lucide-react";
     return null;
 }*/
 
-export default function Nav() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    useEffect(() => {
-        //todo: нужно по другому логику реализовать
-        /*const token = getCookie("session_token")
-        console.log(token)
-        setIsAuthenticated(!!token);*/
-    }, []);
+
+export default function Nav() {
+    const { isLoggedIn } = useUserStore();
+
 
     return (
         <header>
-            <nav className="bg-white border-gray-200 dark:bg-gray-900">
-                <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <nav className="bg-white border-gray-200 dark:bg-gray-900 ">
+                <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-3">
 
                     <Link href="../" className="flex items-center space-x-3 rtl:space-x-reverse">
                         <Image src="" className="h-8" alt=""/>
-                        <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">UCMS AITU</span>
+                        <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">UCMS AITU</span>
                     </Link>
 
-                    <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-
-                        <Link href={"/sign-in"}>
-                            <Button>
-                                Log in
-                            </Button>
-                        </Link>
-
-                    </div>
 
 
-                    <div className="items-center justify-items-stretch hidden w-full md:flex max-w-xl md:order-1 " id="navbar-cta">
+
+
+
+
+                    <div className="items-center justify-items-stretch hidden w-full md:flex max-w-xl md:order-1" id="navbar-cta">
                         <div className="w-full max-w-[700px] flex items-center relative ">
                             <Search size={20} className=" absolute left-3  text-muted-foreground" />
                             <Input
@@ -56,8 +48,21 @@ export default function Nav() {
                                 placeholder="Search"
                             />
                         </div>
-
                     </div>
+
+                    <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                        {isLoggedIn ? (
+                            <p>Logged in</p>
+                        ):(
+                            <Link href={"/sign-in"}>
+                                <Button>
+                                    Log in
+                                </Button>
+                            </Link>
+                        )}
+                    </div>
+
+
                 </div>
             </nav>
         </header>
