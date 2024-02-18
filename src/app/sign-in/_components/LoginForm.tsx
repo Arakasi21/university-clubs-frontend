@@ -83,7 +83,7 @@ export default function Login() {
                         </FormItem>
                     )}/>
                     <Button type="submit" className="w-full">
-                        Login
+                        Log in
                     </Button>
                 </form>
             </Form>

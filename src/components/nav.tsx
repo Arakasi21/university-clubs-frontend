@@ -5,6 +5,7 @@ import {ModeToggle} from "@/components/ui/toggle-mode";
 import React, {useEffect, useState} from 'react';
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
+import {Search} from "lucide-react";
 
 /*function getCookie(name: string): string | null {
     const nameEQ = name + "=";
@@ -37,17 +38,25 @@ export default function Nav() {
                     </Link>
 
                     <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                        <ModeToggle/>
+
                         <Link href={"/sign-in"}>
                             <Button>
-                                Login
+                                Log in
                             </Button>
                         </Link>
+
                     </div>
 
 
-                    <div className="items-center justify-items-stretch hidden w-full md:flex max-w-xl md:order-1" id="navbar-cta">
-                        <Input className="rounded-3xl bg-gray-200"/>
+                    <div className="items-center justify-items-stretch hidden w-full md:flex max-w-xl md:order-1 " id="navbar-cta">
+                        <div className="w-full max-w-[700px] flex items-center relative ">
+                            <Search size={20} className=" absolute left-3  text-muted-foreground" />
+                            <Input
+                                className=" w-full pl-10 focus-visible:ring-blue-600 rounded-full"
+                                placeholder="Search"
+                            />
+                        </div>
+
                     </div>
                 </div>
             </nav>
