@@ -56,24 +56,8 @@ export default function Login() {
 
             const data = await response.json();
 
-            const { avatar_url, barcode, created_at, email, first_name, group_name, id, last_name, major, role, year } = data.user;
+            login(data.user)
 
-            const userRes: IUser = {
-                avatar_url,
-                barcode,
-                created_at,
-                email,
-                first_name,
-                group_name,
-                id,
-                last_name,
-                major,
-                role,
-                year
-            }
-
-            login(userRes)
-            console.log(user)
             toast("You Signed In successfully!");
 
         } catch (error) {

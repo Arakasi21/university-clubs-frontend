@@ -2,27 +2,28 @@
 import Link from 'next/link';
 import Image from "next/image";
 import {ModeToggle} from "@/components/ui/toggle-mode";
-import React, {useEffect, useState} from 'react';
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Search} from "lucide-react";
 import useUserStore from "@/store/user";
 
-/*function getCookie(name: string): string | null {
-    const nameEQ = name + "=";
-    const ca = document.cookie.split(';');
-    for(let i=0;i < ca.length;i++) {
-        let c = ca[i].trim();
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-    }
-    return null;
-}*/
-
 
 
 export default function Nav() {
-    const { isLoggedIn } = useUserStore();
+    const { isLoggedIn, logout } = useUserStore();
 
+
+    const logOutHandle = async () => {
+        await fetch('http://localhost:5000/auth/logout', {
+            method: "POST",
+            credentials: "include"
+        }).then(() => {
+            logout();
+        }).catch((error) => {
+            console.log(error)
+        })
+
+    }
 
     return (
         <header>
@@ -33,11 +34,6 @@ export default function Nav() {
                         <Image src="" className="h-8" alt=""/>
                         <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">UCMS AITU</span>
                     </Link>
-
-
-
-
-
 
 
                     <div className="items-center justify-items-stretch hidden w-full md:flex max-w-xl md:order-1" id="navbar-cta">
@@ -52,7 +48,7 @@ export default function Nav() {
 
                     <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                         {isLoggedIn ? (
-                            <p>Logged in</p>
+                            <Button onClick={logOutHandle}>Log out </Button>
                         ):(
                             <Link href={"/sign-in"}>
                                 <Button>
