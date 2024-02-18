@@ -3,6 +3,8 @@ import Link from 'next/link';
 import Image from "next/image";
 import {ModeToggle} from "@/components/ui/toggle-mode";
 import React, {useEffect, useState} from 'react';
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
 
 export default function Nav() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -25,34 +27,16 @@ export default function Nav() {
 
                     <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                         <ModeToggle/>
+                        <Link href={"/sign-in"}>
+                            <Button>
+                                Login
+                            </Button>
+                        </Link>
                     </div>
-                    <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-cta">
-                        <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                            <li>
-                                <Link href="../">
-                                    <p>Home</p>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href={"/events"}>
-                                    <p>Upcoming Events</p>
-                                </Link>
-                            </li>
-                            {!isAuthenticated && (
-                                <>
-                                    <li>
-                                        <Link href={"/sign-in"}>
-                                            <p className="nav-link">Login</p>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link href={"/sign-up"}>
-                                            <p className="nav-link">Sign Up</p>
-                                        </Link>
-                                    </li>
-                                </>
-                            )}
-                        </ul>
+
+
+                    <div className="items-center justify-items-stretch hidden w-full md:flex max-w-xl md:order-1" id="navbar-cta">
+                        <Input className="rounded-3xl bg-gray-200"/>
                     </div>
                 </div>
             </nav>
