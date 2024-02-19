@@ -8,6 +8,9 @@ import {Button} from "@/components/ui/button";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import { useNavigate } from 'react-router-dom';
+
+import { useRouter } from 'next/navigation';
+
 import {toast} from "sonner";
 
 const formSchema = z.object({
@@ -37,6 +40,9 @@ export default function SignUp() {
         }
     });
 
+
+    const router = useRouter();
+
     const navigate = useNavigate();
 
     const handleSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -64,7 +70,8 @@ export default function SignUp() {
                     onClick: () => console.log("Okay"),
                 },
             });
-            navigate('/');
+            router.push('/');
+
         } catch (error) {
             console.log(error)
         }

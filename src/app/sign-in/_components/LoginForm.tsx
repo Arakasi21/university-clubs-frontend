@@ -62,7 +62,6 @@ export default function Login() {
             login(data.user)
 
             toast("You Signed In successfully!");
-
             router.push('/');
 
         } catch (error) {
