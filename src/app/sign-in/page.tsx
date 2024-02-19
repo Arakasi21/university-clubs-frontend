@@ -13,6 +13,7 @@ export default function LoginPage(){
                 <Link href={"/sign-up"} className="text-blue-500">Sign up</Link>
             </div>
 
+
         </main>
     );
 };

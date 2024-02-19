@@ -3,8 +3,10 @@ import React from 'react';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
+
+import { useRouter } from 'next/navigation';
+
 import {
     Form,
     FormControl,
@@ -16,7 +18,6 @@ import {
 import { Input } from "@/components/ui/input";
 import {toast} from "sonner";
 import useUserStore from "@/store/user";
-import {IUser} from "@/interface/user";
 
 const formSchema = z.object({
     email: z.string().email({ message: "Invalid email format" }),
@@ -33,6 +34,8 @@ export default function Login() {
     });
 
     const { login, user } = useUserStore();
+
+    const router = useRouter();
 
     const handleSubmit = async (values: z.infer<typeof formSchema>) => {
         const apiUrl = 'http://localhost:5000/auth/sign-in';
@@ -59,6 +62,8 @@ export default function Login() {
             login(data.user)
 
             toast("You Signed In successfully!");
+
+            router.push('/');
 
         } catch (error) {
             console.log(error)
