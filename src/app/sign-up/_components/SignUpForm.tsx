@@ -7,7 +7,7 @@ import {z} from "zod";
 import {Button} from "@/components/ui/button";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
-import { useNavigate } from 'react-router-dom';
+
 
 import { useRouter } from 'next/navigation';
 
@@ -43,7 +43,6 @@ export default function SignUp() {
 
     const router = useRouter();
 
-    const navigate = useNavigate();
 
     const handleSubmit = async (values: z.infer<typeof formSchema>) => {
         const apiUrl = 'http://localhost:5000/auth/sign-up';

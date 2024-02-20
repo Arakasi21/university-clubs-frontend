@@ -21,7 +21,7 @@ export default function Footer(){
                             <div
                                 className="flex items-center justify-between gap-6 border-b border-white dark:border-gray-800 py-6 md:block md:space-y-6 md:border-none md:py-0"
                             >
-                                <img src="images/logo.svg" alt="logo tailus" width="100" height="42"
+                                <img src="/aitu-logo-3-400x205.png" alt="logo " width="100" height="42"
                                      className="w-32 dark:brightness-200 dark:grayscale"/>
                                 <div className="flex gap-6">
                                     <a href="#" target="blank" aria-label="github" className="hover:text-cyan-600">
@@ -77,18 +77,8 @@ export default function Footer(){
                                         <li>
                                             <a href="#" className="transition hover:text-cyan-600">About</a>
                                         </li>
-                                        <li>
-                                            <a href="#" className="transition hover:text-cyan-600">Customers</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" className="transition hover:text-cyan-600">Enterprise</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" className="transition hover:text-cyan-600">Partners</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" className="transition hover:text-cyan-600">Jobs</a>
-                                        </li>
+
+
                                     </ul>
                                 </div>
                                 <div>
@@ -97,18 +87,8 @@ export default function Footer(){
                                         <li>
                                             <a href="#" className="transition hover:text-cyan-600">About</a>
                                         </li>
-                                        <li>
-                                            <a href="#" className="transition hover:text-cyan-600">Customers</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" className="transition hover:text-cyan-600">Enterprise</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" className="transition hover:text-cyan-600">Partners</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" className="transition hover:text-cyan-600">Jobs</a>
-                                        </li>
+
+
                                     </ul>
                                 </div>
                                 <div>
@@ -117,18 +97,7 @@ export default function Footer(){
                                         <li>
                                             <a href="#" className="transition hover:text-cyan-600">About</a>
                                         </li>
-                                        <li>
-                                            <a href="#" className="transition hover:text-cyan-600">Customers</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" className="transition hover:text-cyan-600">Enterprise</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" className="transition hover:text-cyan-600">Partners</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" className="transition hover:text-cyan-600">Jobs</a>
-                                        </li>
+
                                     </ul>
                                 </div>
                             </div>
