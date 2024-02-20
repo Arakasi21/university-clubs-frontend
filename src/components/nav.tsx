@@ -51,6 +51,7 @@ export default function Nav() {
                     <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                         {isLoggedIn ? (
                             <DropdownForLoggedIn user={user} logout={logOutHandle}/>
+
                         ) : (
                             <Link href={"/sign-in"}>
                                 <Button>

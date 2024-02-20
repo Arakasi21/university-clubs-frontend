@@ -1,7 +1,14 @@
 import Nav from "@/components/nav"
+import Footer from "@/components/footer";
 import Link from "next/link";
+import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "@/components/ui/carousel";
+import Image from "next/image";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 
-import {Card, CardContent, CardDescription, CardHeader, CardTitle,} from "@/components/ui/card"
+
+
+
+
 
 
 export default function Home() {
@@ -13,29 +20,56 @@ export default function Home() {
 
       <div className="flex py-16 gap-6 items-center justify-center flex-wrap text-center">
         <h1 className="text-xl">Do you want to choose a club based on your interest, but you don&apos;t know which one is more suitable for you?</h1>
-        {/*<p className="text-lg ">There are a lot of student clubs and organizations at the Astana IT University,*/}
-        {/*  for everything from niche hobbies to extracurriculars to career-oriented and professional groups.*/}
-        {/*  Browse some of our most popular and most distinct clubs in AITU.</p>*/}
+
+        <h2 className="pt-10 text-xl">Below you can see our most popular clubs</h2>
       </div>
+
+
+
+
+
+
+
+        <div className="flex items-center justify-center max-h-96 m-32">
+
+            <Carousel>
+                <CarouselContent>
+                    <CarouselItem>
+                      <Image src="/main_photo.jpeg" alt=" " width="1000" height="1080"></Image>
+                    </CarouselItem>
+
+                    <CarouselItem>
+                      <Image src="/main_photo.jpeg" alt=" " width="1000" height="1080"></Image>
+                    </CarouselItem>
+                    <CarouselItem>
+                      <Image src="/main_photo.jpeg" alt=" " width="1000" height="1080"></Image>
+                    </CarouselItem>
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+            </Carousel>
+        </div>
+
+
 
       <div className="flex my-10 mx-60 gap-6 justify-center flex-wrap">
 
-        <Card className="w-80">
+        <Card className="w-100">
           <CardHeader>
             <CardTitle>Volunteer clubs</CardTitle>
-            <CardDescription>Card Description</CardDescription>
+            <CardDescription className="text-md">For someone who loves to help others</CardDescription>
           </CardHeader>
 
           <CardContent>
-            <Link href="/">
+            <Link href="/club_pages/volunteer_clubs/cooking_club">
               <p className="py-3 hover:text-blue-500">Cooking club</p>
             </Link>
 
-            <Link href="/">
+            <Link href="/club_pages/volunteer_clubs/charity_club">
               <p className="py-3 hover:text-blue-500">AITU Charity</p>
             </Link>
 
-            <Link href="/">
+            <Link href="/club_pages/volunteer_clubs/volunteer_club">
               <p className="py-3 hover:text-blue-500">AITU Volunteers</p>
             </Link>
 
@@ -44,10 +78,10 @@ export default function Home() {
         </Card>
 
 
-        <Card className="w-80">
+        <Card className="w-100">
           <CardHeader>
             <CardTitle>Gaming clubs</CardTitle>
-            <CardDescription>Card Description</CardDescription>
+            <CardDescription>We think that descriptions are unnecessary</CardDescription>
           </CardHeader>
 
           <CardContent>
@@ -68,10 +102,11 @@ export default function Home() {
         </Card>
 
 
-        <Card className="w-80">
+        <Card className="w-100">
           <CardHeader>
             <CardTitle>For Athletes</CardTitle>
-            <CardDescription>Card Description</CardDescription>
+            <CardDescription>Do you like to win and love physical activity?
+              Then we think these clubs will suit you</CardDescription>
           </CardHeader>
 
           <CardContent>
@@ -117,7 +152,7 @@ export default function Home() {
         </Card>
 
 
-        <Card className="w-80">
+        <Card className="w-100">
           <CardHeader>
             <CardTitle>Speaking clubs</CardTitle>
             <CardDescription>Card Description</CardDescription>
@@ -145,6 +180,7 @@ export default function Home() {
         </Card>
       </div>
 
+      <Footer/>
     </main>
   )
 }
