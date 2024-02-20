@@ -27,21 +27,20 @@ const Page = () => {
         try {
             let response = await fetch(`http://localhost:5000/auth/activate?token=${token}`, {method: "POST"});
 
-            if (!response.ok) {
-                let errorData = await response.json();
-
-                toast.error("Account activation error", {
-                    description: errorData.error,
-                });
+            if (response.ok) {
+                toast("Account activated successfully!");
+                setSuccessful(true)
                 setLoading(false)
-
-                throw new Error(errorData.error || 'Account activation failed');
             }
 
-            toast("Account activated successfully!");
-            setSuccessful(true)
+            let errorData = await response.json();
+
+            toast.error("Account activation error", {
+                description: errorData.error,
+            });
             setLoading(false)
 
+            throw new Error(errorData.error || 'Account activation failed');
         } catch (e) {
 
         }

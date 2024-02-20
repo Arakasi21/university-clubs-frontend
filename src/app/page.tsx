@@ -18,11 +18,7 @@ export default function Home() {
       <Nav/>
       <br/>
 
-      <div className="flex py-16 gap-6 items-center justify-center flex-wrap text-center">
-        <h1 className="text-xl">Do you want to choose a club based on your interest, but you don&apos;t know which one is more suitable for you?</h1>
 
-        <h2 className="pt-10 text-xl">Below you can see our most popular clubs</h2>
-      </div>
 
 
 
@@ -35,14 +31,7 @@ export default function Home() {
             <Carousel>
                 <CarouselContent>
                     <CarouselItem>
-                      <Image src="/main_photo.jpeg" alt=" " width="1000" height="1080"></Image>
-                    </CarouselItem>
-
-                    <CarouselItem>
-                      <Image src="/main_photo.jpeg" alt=" " width="1000" height="1080"></Image>
-                    </CarouselItem>
-                    <CarouselItem>
-                      <Image src="/main_photo.jpeg" alt=" " width="1000" height="1080"></Image>
+                      <Image src="/main_photo.jpeg" alt=" " width="900" height="1080"></Image>
                     </CarouselItem>
                 </CarouselContent>
                 <CarouselPrevious />
