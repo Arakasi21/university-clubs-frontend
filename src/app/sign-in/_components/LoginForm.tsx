@@ -65,9 +65,30 @@ export default function Login() {
             router.push('/');
 
         } catch (error) {
-            console.log(error)
+            toast.error("ERROR", { description: "An error occurred while trying to log in." });
         }
     };
+
+    const OpenIDConnectLoginHandler = async () =>{
+        try {
+            // Make a request to your backend to get the Microsoft login URL
+            const response = await fetch("http://localhost:5000/auth/microsoft/login", { method: "POST" });
+            const data = await response.json();
+
+            if (!response.ok) {
+                // If the response is not OK, handle the error
+                toast.error("ERROR", { description: data.error });
+                return;
+            }
+
+            // If the response is OK, redirect the user to the Microsoft login page
+            // Note: The backend should respond with a URL for redirection
+            window.location.href = data.url;
+        } catch (error) {
+            // Handle any other errors
+            toast.error("ERROR", { description: "An error occurred while trying to log in." });
+        }
+    }
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -99,6 +120,9 @@ export default function Login() {
                     </Button>
                 </form>
             </Form>
+            <Button onClick={() => {OpenIDConnectLoginHandler()}}>
+                <p>OpenID Connect</p>
+            </Button>
         </main>
     );
 }

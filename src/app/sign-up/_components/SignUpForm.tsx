@@ -72,7 +72,7 @@ export default function SignUp() {
             router.push('/');
 
         } catch (error) {
-            console.log(error)
+            toast.error("ERROR", { description: "An error occurred while trying to Sign up." });
         }
     };
 
