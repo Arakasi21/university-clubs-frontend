@@ -19,10 +19,21 @@ export function ModeToggle() {
         setTheme(newTheme);
     };
 
+
+
     return (
         <div className="flex items-center space-x-2">
             <Switch id="theme-mode" checked={isDarkMode} onCheckedChange={handleToggle} />
-            <Label htmlFor="theme-mode">Dark Mode</Label>
+
+            {
+                isDarkMode ? (
+                    <Label htmlFor="theme-mode">Dark Mode</Label>
+                ) : (
+                    <Label htmlFor="theme-mode">White Mode</Label>
+                )
+            }
+
+
         </div>
     );
 }
