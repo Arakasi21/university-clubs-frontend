@@ -13,9 +13,9 @@ import {
 import {ModeToggle} from "@/components/ui/toggle-mode";
 import {Button} from "@/components/ui/button";
 import {IUser} from "@/interface/user";
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {useRouter} from "next/navigation";
 import {GavelIcon, LogOutIcon, PlusCircleIcon, SettingsIcon, UserRoundIcon} from "lucide-react";
+import UserAvatar from "@/components/userAvatar";
 
 const DropdownForLoggedIn = ({user, logout}:{user: IUser, logout: () => void }) => {
     const router = useRouter()
@@ -26,10 +26,7 @@ const DropdownForLoggedIn = ({user, logout}:{user: IUser, logout: () => void }) 
                 <DropdownMenuTrigger asChild>
                     <Button variant="outline" className="flex space-x-2.5 items-center ">
                         <p>{user?.first_name}</p>
-                        <Avatar>
-                            <AvatarImage src={user?.avatar_url} alt={`${user?.first_name}'s profile picture`}/>
-                            <AvatarFallback>{user?.first_name.slice(0, 1)}</AvatarFallback>
-                        </Avatar>
+                        <UserAvatar user={user}/>
                     </Button>
                 </DropdownMenuTrigger>
 
@@ -51,7 +48,7 @@ const DropdownForLoggedIn = ({user, logout}:{user: IUser, logout: () => void }) 
                         </DropdownMenuItem>
 
                         {canHandleNewClubs && (
-                            <DropdownMenuItem className="flex flex-row space-x-4">
+                            <DropdownMenuItem onClick={()=>{router.push(`/clubs/handle`)}} className="flex flex-row space-x-4">
                                 <GavelIcon/>
                                 <p>Handle new Clubs</p>
                             </DropdownMenuItem>
