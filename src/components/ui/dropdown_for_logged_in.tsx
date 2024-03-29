@@ -7,7 +7,6 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
@@ -16,6 +15,7 @@ import {Button} from "@/components/ui/button";
 import {IUser} from "@/interface/user";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {useRouter} from "next/navigation";
+import {GavelIcon, LogOutIcon, PlusCircleIcon, SettingsIcon, UserRoundIcon} from "lucide-react";
 
 const DropdownForLoggedIn = ({user, logout}:{user: IUser, logout: () => void }) => {
     const router = useRouter()
@@ -24,42 +24,50 @@ const DropdownForLoggedIn = ({user, logout}:{user: IUser, logout: () => void }) 
         <div>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="flex flex-row">
+                    <Button variant="outline" className="flex space-x-2.5 items-center ">
+                        <p>{user?.first_name}</p>
                         <Avatar>
-                            <AvatarImage src={user?.avatar_url} alt={`${user?.first_name} profile picture`}/>
+                            <AvatarImage src={user?.avatar_url} alt={`${user?.first_name}'s profile picture`}/>
                             <AvatarFallback>{user?.first_name.slice(0, 1)}</AvatarFallback>
                         </Avatar>
-                        {user?.first_name}
                     </Button>
                 </DropdownMenuTrigger>
 
-                <DropdownMenuContent className="w-56">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator/>
-                    <DropdownMenuGroup>
-                        <DropdownMenuItem onClick={()=>{router.push(`/user/${user.id}`)}}>
-                            Profile
+                <DropdownMenuContent className="w-56" onSelect={(e)=>{e.stopPropagation()}} >
+                    <DropdownMenuGroup onSelect={(e)=>{e.stopPropagation()}}>
+                        <DropdownMenuItem onClick={()=>{router.push(`/user/${user.id}`)}} className="flex flex-row space-x-4" >
+                            <UserRoundIcon/>
+                            <p>Profile</p>
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            Settings
+
+                        <DropdownMenuItem className="flex flex-row space-x-4"  >
+                            <SettingsIcon/>
+                            <p>Settings</p>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={()=>{router.push(`/clubs/create`)}}>
-                            Create new Club
+
+                        <DropdownMenuItem onClick={()=>{router.push(`/clubs/create`)}} className="flex flex-row space-x-4">
+                            <PlusCircleIcon/>
+                            <p>Create new Club</p>
                         </DropdownMenuItem>
+
                         {canHandleNewClubs && (
-                            <DropdownMenuItem>
-                                Handle new Clubs
+                            <DropdownMenuItem className="flex flex-row space-x-4">
+                                <GavelIcon/>
+                                <p>Handle new Clubs</p>
                             </DropdownMenuItem>
                         )}
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={(e)=>{ e.preventDefault()}}>
                             <ModeToggle/>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
+
                     <DropdownMenuSeparator/>
-                    <DropdownMenuItem>
-                        <Button onClick={logout}>Log out</Button>
-                        {/*<DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>*/}
+                    <DropdownMenuItem onClick={logout} className="flex flex-row space-x-4">
+                        <LogOutIcon/>
+                        <p>Log out</p>
                     </DropdownMenuItem>
+
+
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>
