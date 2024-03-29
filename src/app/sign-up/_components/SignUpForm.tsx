@@ -9,7 +9,7 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@
 import {Input} from "@/components/ui/input";
 
 
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 
 import {toast} from "sonner";
 
@@ -59,8 +59,6 @@ export default function SignUp() {
                 toast.error("Signup error", {
                     description: errorData.error,
                 });
-
-                throw new Error(errorData.error || 'Signup failed');
             }
 
             toast("Signup successful!", {

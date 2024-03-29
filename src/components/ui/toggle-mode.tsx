@@ -14,7 +14,7 @@ export function ModeToggle() {
         setIsDarkMode(theme === 'dark');
     }, [theme]);
 
-    const handleToggle = (newCheckedState) => {
+    const handleToggle = (newCheckedState: boolean) => {
         const newTheme = newCheckedState ? 'dark' : 'light';
         setTheme(newTheme);
     };
@@ -22,18 +22,16 @@ export function ModeToggle() {
 
 
     return (
-        <div className="flex items-center space-x-2">
-            <Switch id="theme-mode" checked={isDarkMode} onCheckedChange={handleToggle} />
-
-            {
-                isDarkMode ? (
+        <div className="flex items-center content-between">
+            {isDarkMode ?
+                (
                     <Label htmlFor="theme-mode">Dark Mode</Label>
                 ) : (
                     <Label htmlFor="theme-mode">White Mode</Label>
                 )
             }
 
-
+            <Switch id="theme-mode" checked={isDarkMode} onCheckedChange={handleToggle} />
         </div>
     );
 }

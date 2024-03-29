@@ -1,28 +1,27 @@
-import create from 'zustand';
-import { IUser } from '@/interface/user';
+import {create} from 'zustand';
+import {IUser} from '@/interface/user';
 import {persist} from "zustand/middleware";
 
 interface userStore{
     user: IUser | null;
     isLoggedIn : boolean;
 
-    login : (IUser) => void
-    logout : () => void
+    login: (user: IUser) => void
+    logout: () => void
 }
 
-const useUserStore = create<userStore>(
+const useUserStore = create<userStore>()(
     persist(
         (set) => ({
-
             isLoggedIn: false,
             user: null,
             login: (user: IUser) =>
-                set((state) => ({
+                set(() => ({
                     isLoggedIn: true,
                     user: user
                 })),
             logout: () =>
-                set((state) => ({
+                set(() => ({
                     isLoggedIn: false,
                     user: null
                 })),

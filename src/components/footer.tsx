@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from "next/image";
 
 export default function Footer(){
 
@@ -21,7 +22,7 @@ export default function Footer(){
                             <div
                                 className="flex items-center justify-between gap-6 border-b border-white dark:border-gray-800 py-6 md:block md:space-y-6 md:border-none md:py-0"
                             >
-                                <img src="/aitu-logo-3-400x205.png" alt="logo " width="100" height="42"
+                                <Image src="/aitu-logo-3-400x205.png" alt="logo " width="400" height="205"
                                      className="w-32 dark:brightness-200 dark:grayscale"/>
                                 <div className="flex gap-6">
                                     <a href="#" target="blank" aria-label="github" className="hover:text-cyan-600">

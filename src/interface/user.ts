@@ -5,7 +5,7 @@ export interface IUser{
     avatar_url: "string",
     email: "string",
     created_at: "string",
-    role: "string",
+    role: "DSVR" | "ADMIN" | "MODER" | "USER",
     barcode: "string",
     major: "string",
     group_name: "string",

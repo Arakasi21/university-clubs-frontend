@@ -1,21 +1,14 @@
 "use client";
 import React from 'react';
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {useForm} from "react-hook-form";
+import {z} from "zod";
+import {Button} from "@/components/ui/button";
 
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormMessage,
-    FormLabel,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
+import {Input} from "@/components/ui/input";
 import {toast} from "sonner";
 import useUserStore from "@/store/user";
 
@@ -33,7 +26,7 @@ export default function Login() {
         }
     });
 
-    const { login, user } = useUserStore();
+    const { login } = useUserStore();
 
     const router = useRouter();
 
@@ -54,7 +47,6 @@ export default function Login() {
                     description: errorData.error,
                 });
 
-                throw new Error(errorData.error || 'SignIn failed');
             }
 
             const data = await response.json();

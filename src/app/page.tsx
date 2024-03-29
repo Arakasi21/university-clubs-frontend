@@ -6,25 +6,12 @@ import Image from "next/image";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 
 
-
-
-
-
-
 export default function Home() {
   return (
     <main>
 
       <Nav/>
       <br/>
-
-
-
-
-
-
-
-
 
         <div className="flex items-center justify-center max-h-96 m-32">
 
