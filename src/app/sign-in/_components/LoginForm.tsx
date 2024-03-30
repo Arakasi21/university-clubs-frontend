@@ -26,7 +26,7 @@ export default function Login() {
         }
     });
 
-    const { login } = useUserStore();
+    const { setUser } = useUserStore();
 
     const router = useRouter();
 
@@ -51,7 +51,7 @@ export default function Login() {
 
             const data = await response.json();
 
-            login(data.user)
+            setUser(data.user)
 
             toast("You Signed In successfully!");
             router.push('/');

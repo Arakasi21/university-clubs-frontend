@@ -4,12 +4,17 @@ import {IUser} from "@/interface/user";
 import {toast} from "sonner";
 import Image from "next/image";
 import Nav from "@/components/nav";
+import {Button} from "@/components/ui/button";
+import {useRouter} from "next/navigation";
 
 
 const UserPage = ({params}:{params:{userID: number}}) => {
     const [user, setUser] = useState(null as IUser | null )
+    const [isOwner, setIsOwner] = useState(false)
 
-    const userF = useCallback( async () =>{
+    const router = useRouter()
+
+    const fetchUserInfo = useCallback(  () =>{
         fetch(`http://localhost:5000/user/${params.userID}`)
             .then(async (res)=>{
                 const data = await res.json()
@@ -22,12 +27,13 @@ const UserPage = ({params}:{params:{userID: number}}) => {
                 }
 
                 setUser(data.user)
+                setIsOwner(data.user.id == params.userID)
             }).catch(error => console.log(error.message))
     }, [params.userID])
 
     useEffect(() => {
-        userF()
-    }, [userF, params.userID]);
+        fetchUserInfo()
+    }, [fetchUserInfo, params.userID]);
 
 
 
@@ -38,6 +44,11 @@ const UserPage = ({params}:{params:{userID: number}}) => {
 
             <p>{user?.first_name} {user?.last_name}</p>
             <p>Barcode: {user?.barcode}</p>
+            {isOwner && (
+                <Button onClick={()=>{router.push("/user/edit")}}>
+                    Edit Profile
+                </Button>
+            )}
 
 
         </div>

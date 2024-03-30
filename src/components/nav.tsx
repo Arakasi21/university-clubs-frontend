@@ -9,7 +9,7 @@ import DropdownForLoggedIn from '@/components/ui/dropdown_for_logged_in'
 
 
 export default function Nav() {
-    const { isLoggedIn, user, logout } = useUserStore();
+    const { isLoggedIn, user, purgeUser } = useUserStore();
 
 
     const logOutHandle = async () => {
@@ -17,7 +17,7 @@ export default function Nav() {
             method: "POST",
             credentials: "include"
         }).then(() => {
-            logout();
+            purgeUser();
         }).catch((error) => {
             console.log(error)
         })

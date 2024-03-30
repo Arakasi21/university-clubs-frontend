@@ -6,8 +6,8 @@ interface userStore{
     user: IUser | null;
     isLoggedIn : boolean;
 
-    login: (user: IUser) => void
-    logout: () => void
+    setUser: (user: IUser) => void
+    purgeUser: () => void
 }
 
 const useUserStore = create<userStore>()(
@@ -15,12 +15,12 @@ const useUserStore = create<userStore>()(
         (set) => ({
             isLoggedIn: false,
             user: null,
-            login: (user: IUser) =>
+            setUser: (user: IUser) =>
                 set(() => ({
                     isLoggedIn: true,
                     user: user
                 })),
-            logout: () =>
+            purgeUser: () =>
                 set(() => ({
                     isLoggedIn: false,
                     user: null
