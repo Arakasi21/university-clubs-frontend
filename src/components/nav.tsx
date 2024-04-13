@@ -1,11 +1,11 @@
 'use client'
-import Link from 'next/link'
-import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Search } from 'lucide-react'
-import useUserStore from '@/store/user'
 import DropdownForLoggedIn from '@/components/ui/dropdown_for_logged_in'
+import { Input } from '@/components/ui/input'
+import useUserStore from '@/store/user'
+import { Search } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Nav() {
 	const { isLoggedIn, user, purgeUser } = useUserStore()
@@ -24,8 +24,8 @@ export default function Nav() {
 	}
 
 	return (
-		<header>
-			<nav className=" ">
+		<header className="sticky top-0 isolate z-50  order-last">
+			<nav className="border-b border-solid bg-background">
 				{/* <nav className="bg-white border-gray-200 dark:bg-gray-900 ">*/}
 				<div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-3">
 					<Link href="../" className="flex items-center space-x-3 rtl:space-x-reverse">

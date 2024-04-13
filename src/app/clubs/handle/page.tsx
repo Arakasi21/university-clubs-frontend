@@ -30,7 +30,7 @@ import { toast } from 'sonner'
 import HandleDialog from './_components/HandleDialog'
 
 type Columns = {
-	clubs: IClub
+	club: IClub
 	owner: IClubMember
 }
 
