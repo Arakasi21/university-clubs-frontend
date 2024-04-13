@@ -6,12 +6,15 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { IClub } from '@/interface/club'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 export default function Home() {
 	const [clubs, setClubs] = useState<IClub[]>()
 	const [loading, setLoading] = useState(true)
+
+	const router = useRouter()
 
 	const fetchClubs = useCallback(() => {
 		fetch(`http://localhost:5000/clubs/?page=1&page_size=30`, { method: 'GET' })
@@ -86,7 +89,13 @@ export default function Home() {
 							</div>
 						) : (
 							clubs?.map((club) => (
-								<Card className="flex flex-col space-y-3" key={club.id}>
+								<Card
+									className="flex flex-col space-y-3 transition-transform group-hover:scale-110"
+									key={club.id}
+									onClick={() => {
+										router.push(`/clubs/${club.id}`)
+									}}
+								>
 									<CardTitle>
 										<Image
 											src={club.banner_url ?? '/main_photo.jpeg'}
