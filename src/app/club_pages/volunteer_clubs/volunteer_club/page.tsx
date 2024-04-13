@@ -1,10 +1,9 @@
-import Nav from "@/components/nav";
+import Nav from '@/components/nav'
 
-
-export default function Volunteer_club(){
-    return(
-        <main>
-            <Nav/>
-        </main>
-    );
-};
+export default function Volunteer_club() {
+	return (
+		<main>
+			<Nav />
+		</main>
+	)
+}

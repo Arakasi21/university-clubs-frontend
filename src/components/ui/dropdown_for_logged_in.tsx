@@ -1,74 +1,100 @@
 'use client'
 
-import React from 'react';
+import React from 'react'
 
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {ModeToggle} from "@/components/ui/toggle-mode";
-import {Button} from "@/components/ui/button";
-import {IUser} from "@/interface/user";
-import {useRouter} from "next/navigation";
-import {GavelIcon, LogOutIcon, PlusCircleIcon, SettingsIcon, UserRoundIcon} from "lucide-react";
-import UserAvatar from "@/components/userAvatar";
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { ModeToggle } from '@/components/ui/toggle-mode'
+import { Button } from '@/components/ui/button'
+import { IUser } from '@/interface/user'
+import { useRouter } from 'next/navigation'
+import { GavelIcon, LogOutIcon, PlusCircleIcon, SettingsIcon, UserRoundIcon } from 'lucide-react'
+import UserAvatar from '@/components/userAvatar'
 
-const DropdownForLoggedIn = ({user, logout}:{user: IUser, logout: () => void }) => {
-    const router = useRouter()
-    const canHandleNewClubs:boolean = user.role === "ADMIN" || user.role === "DSVR"
-    return (
-        <div>
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="flex space-x-2.5 items-center ">
-                        <p>{user?.first_name}</p>
-                        <UserAvatar user={user}/>
-                    </Button>
-                </DropdownMenuTrigger>
+const DropdownForLoggedIn = ({ user, logout }: { user: IUser; logout: () => void }) => {
+	const router = useRouter()
+	const canHandleNewClubs: boolean = user.role === 'ADMIN' || user.role === 'DSVR'
+	return (
+		<div>
+			<DropdownMenu>
+				<DropdownMenuTrigger asChild>
+					<Button variant="outline" className="flex items-center space-x-2.5 ">
+						<p>{user?.first_name}</p>
+						<UserAvatar user={user} />
+					</Button>
+				</DropdownMenuTrigger>
 
-                <DropdownMenuContent className="w-56" onSelect={(e)=>{e.stopPropagation()}} >
-                    <DropdownMenuGroup onSelect={(e)=>{e.stopPropagation()}}>
-                        <DropdownMenuItem onClick={()=>{router.push(`/user/${user.id}`)}} className="flex flex-row space-x-4" >
-                            <UserRoundIcon/>
-                            <p>Profile</p>
-                        </DropdownMenuItem>
+				<DropdownMenuContent
+					className="w-56"
+					onSelect={(e) => {
+						e.stopPropagation()
+					}}
+				>
+					<DropdownMenuGroup
+						onSelect={(e) => {
+							e.stopPropagation()
+						}}
+					>
+						<DropdownMenuItem
+							onClick={() => {
+								router.push(`/user/${user.id}`)
+							}}
+							className="flex flex-row space-x-4"
+						>
+							<UserRoundIcon />
+							<p>Profile</p>
+						</DropdownMenuItem>
 
-                        <DropdownMenuItem className="flex flex-row space-x-4"  >
-                            <SettingsIcon/>
-                            <p>Settings</p>
-                        </DropdownMenuItem>
+						<DropdownMenuItem className="flex flex-row space-x-4">
+							<SettingsIcon />
+							<p>Settings</p>
+						</DropdownMenuItem>
 
-                        <DropdownMenuItem onClick={()=>{router.push(`/clubs/create`)}} className="flex flex-row space-x-4">
-                            <PlusCircleIcon/>
-                            <p>Create new Club</p>
-                        </DropdownMenuItem>
+						<DropdownMenuItem
+							onClick={() => {
+								router.push(`/clubs/create`)
+							}}
+							className="flex flex-row space-x-4"
+						>
+							<PlusCircleIcon />
+							<p>Create new Club</p>
+						</DropdownMenuItem>
 
-                        {canHandleNewClubs && (
-                            <DropdownMenuItem onClick={()=>{router.push(`/clubs/handle`)}} className="flex flex-row space-x-4">
-                                <GavelIcon/>
-                                <p>Handle new Clubs</p>
-                            </DropdownMenuItem>
-                        )}
-                        <DropdownMenuItem onClick={(e)=>{ e.preventDefault()}}>
-                            <ModeToggle/>
-                        </DropdownMenuItem>
-                    </DropdownMenuGroup>
+						{canHandleNewClubs && (
+							<DropdownMenuItem
+								onClick={() => {
+									router.push(`/clubs/handle`)
+								}}
+								className="flex flex-row space-x-4"
+							>
+								<GavelIcon />
+								<p>Handle new Clubs</p>
+							</DropdownMenuItem>
+						)}
+						<DropdownMenuItem
+							onClick={(e) => {
+								e.preventDefault()
+							}}
+						>
+							<ModeToggle />
+						</DropdownMenuItem>
+					</DropdownMenuGroup>
 
-                    <DropdownMenuSeparator/>
-                    <DropdownMenuItem onClick={logout} className="flex flex-row space-x-4">
-                        <LogOutIcon/>
-                        <p>Log out</p>
-                    </DropdownMenuItem>
+					<DropdownMenuSeparator />
+					<DropdownMenuItem onClick={logout} className="flex flex-row space-x-4">
+						<LogOutIcon />
+						<p>Log out</p>
+					</DropdownMenuItem>
+				</DropdownMenuContent>
+			</DropdownMenu>
+		</div>
+	)
+}
 
-
-                </DropdownMenuContent>
-            </DropdownMenu>
-        </div>
-    );
-};
-
-export default DropdownForLoggedIn;
+export default DropdownForLoggedIn
