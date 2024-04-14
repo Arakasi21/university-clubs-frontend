@@ -78,11 +78,18 @@ export default function Page() {
 			<Nav />
 			<div className="flex min-h-screen flex-col items-center justify-between p-24">
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(handleSubmit)}>
+					<form onSubmit={form.handleSubmit(handleSubmit)} className="w-60">
+
+						<div className="text-center mb-6"> {/* Center the text and add margin to the bottom */}
+							<p  className="break-words text-sm text-gray-400">
+								"You need to wait some time for an admin approval after submitting this form."
+							</p>
+						</div>
+
 						<FormField
 							name="name"
 							render={({ field }) => (
-								<FormItem>
+								<FormItem className="mb-4">
 									<FormLabel>Club Name</FormLabel>
 									<FormControl>
 										<Input placeholder="name" {...field} />
@@ -94,7 +101,7 @@ export default function Page() {
 						<FormField
 							name="description"
 							render={({ field }) => (
-								<FormItem>
+								<FormItem className="mb-4">
 									<FormLabel>Description</FormLabel>
 									<FormControl>
 										<Input placeholder="description" {...field} />
@@ -106,7 +113,7 @@ export default function Page() {
 						<FormField
 							name="club_type"
 							render={({ field }) => (
-								<FormItem>
+								<FormItem className="mb-8">
 									<FormLabel>Type</FormLabel>
 									<Select onValueChange={field.onChange} defaultValue={field.value}>
 										<FormControl>

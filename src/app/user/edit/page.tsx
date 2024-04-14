@@ -28,7 +28,7 @@ const Page = () => {
 	return (
 		<>
 			<Nav />
-			<div className="flex justify-start">
+			<div className="flex min-h-screen flex-col items-center justify-between p-24">
 				<AvatarEditForm user={user} className="flex min-h-screen flex-col justify-between p-24" />
 			</div>
 		</>

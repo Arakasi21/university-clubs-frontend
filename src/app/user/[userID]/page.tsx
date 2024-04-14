@@ -38,27 +38,31 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 	return (
 		<div>
 			<Nav />
-			<div>
-				<Image
-					src={user?.avatar_url!}
-					alt={`${user?.first_name} profile picture`}
-					width={300}
-					height={300}
-				/>
+			<div className="flex min-h-screen flex-col items-center justify-between p-24">
+				<div>
+					<Image
+						src={user?.avatar_url!}
+						alt={`${user?.first_name} profile picture`}
+						width={200}
+						height={200}
+					/>
 
-				<p>
-					{user?.first_name} {user?.last_name}
-				</p>
-				<p>Barcode: {user?.barcode}</p>
-				{isOwner && (
-					<Button
-						onClick={() => {
-							router.push('/user/edit')
-						}}
-					>
-						Edit Profile
-					</Button>
-				)}
+					<p>
+						Name: {user?.first_name} {user?.last_name}
+					</p>
+					<p>Barcode: {user?.barcode}</p>
+					<p>Email: {user?.email}</p>
+					<p>Group: {user?.group_name}</p>
+					{isOwner && (
+						<Button
+							onClick={() => {
+								router.push('/user/edit')
+							}}
+						>
+							Edit Profile
+						</Button>
+					)}
+				</div>
 			</div>
 		</div>
 	)

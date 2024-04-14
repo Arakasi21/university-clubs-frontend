@@ -90,8 +90,8 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 										<Image
 											src={imagePreview ? imagePreview : ''}
 											alt={`${user.first_name}'s avatar`}
-											width={400}
-											height={400}
+											width={200}
+											height={200}
 										/>
 									</FormLabel>
 									<FormControl>
