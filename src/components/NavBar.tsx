@@ -27,7 +27,7 @@ export default function Nav() {
 		<header className="sticky top-0 isolate z-50  order-last">
 			<nav className="border-b border-solid bg-background">
 				{/* <nav className="bg-white border-gray-200 dark:bg-gray-900 ">*/}
-				<div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-3">
+				<div className="mx-auto flex max-w-full flex-wrap items-center justify-between p-3">
 					<Link href="../" className="flex items-center space-x-3 rtl:space-x-reverse">
 						<Image src="" className="h-8" alt="" />
 						<span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">

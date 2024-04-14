@@ -1,9 +1,9 @@
 'use client'
-import React, { useCallback, useEffect, useState } from 'react'
-import { IUser } from '@/interface/user'
 import AvatarEditForm from '@/app/user/edit/_components/avatarEditForm'
+import Nav from '@/components/NavBar'
+import { IUser } from '@/interface/user'
 import useUserStore from '@/store/user'
-import Nav from '@/components/nav'
+import { useCallback, useEffect, useState } from 'react'
 
 const Page = () => {
 	const store = useUserStore()

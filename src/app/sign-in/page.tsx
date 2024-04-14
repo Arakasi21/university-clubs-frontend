@@ -1,6 +1,5 @@
-import Nav from '@/components/nav'
 import LoginForm from '@/app/sign-in/_components/LoginForm'
-import React from 'react'
+import Nav from '@/components/NavBar'
 import Link from 'next/link'
 
 export default function LoginPage() {

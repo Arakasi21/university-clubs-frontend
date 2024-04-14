@@ -1,5 +1,4 @@
-import React from 'react'
-import Nav from '@/components/nav'
+import Nav from '@/components/NavBar'
 import { Calendar } from '@/components/ui/calendar'
 
 export default function Events() {

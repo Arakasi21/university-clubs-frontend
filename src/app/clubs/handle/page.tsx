@@ -1,5 +1,5 @@
 'use client'
-import Nav from '@/components/nav'
+import Nav from '@/components/NavBar'
 import { Button } from '@/components/ui/button'
 import {
 	Table,
@@ -9,7 +9,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table'
-import UserAvatar from '@/components/userAvatar'
+import UserAvatar from '@/components/UserAvatar'
 import { IClub, IClubMember } from '@/interface/club'
 import {
 	ColumnDef,

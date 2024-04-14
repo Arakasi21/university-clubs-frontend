@@ -1,7 +1,7 @@
 'use client'
-import React, { useCallback, useEffect, useState } from 'react'
-import Nav from '@/components/nav'
+import Nav from '@/components/NavBar'
 import { useSearchParams } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 function debounce<T extends (...args: any[]) => any>(

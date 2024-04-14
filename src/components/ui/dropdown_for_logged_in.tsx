@@ -1,7 +1,6 @@
 'use client'
 
-import React from 'react'
-
+import { Button } from '@/components/ui/button'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -11,11 +10,10 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { ModeToggle } from '@/components/ui/toggle-mode'
-import { Button } from '@/components/ui/button'
+import UserAvatar from '@/components/UserAvatar'
 import { IUser } from '@/interface/user'
-import { useRouter } from 'next/navigation'
 import { GavelIcon, LogOutIcon, PlusCircleIcon, SettingsIcon, UserRoundIcon } from 'lucide-react'
-import UserAvatar from '@/components/userAvatar'
+import { useRouter } from 'next/navigation'
 
 const DropdownForLoggedIn = ({ user, logout }: { user: IUser; logout: () => void }) => {
 	const router = useRouter()

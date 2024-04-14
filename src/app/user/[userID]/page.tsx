@@ -1,11 +1,11 @@
 'use client'
-import { useCallback, useEffect, useState } from 'react'
-import { IUser } from '@/interface/user'
-import { toast } from 'sonner'
-import Image from 'next/image'
-import Nav from '@/components/nav'
+import Nav from '@/components/NavBar'
 import { Button } from '@/components/ui/button'
+import { IUser } from '@/interface/user'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 const UserPage = ({ params }: { params: { userID: number } }) => {
 	const [user, setUser] = useState(null as IUser | null)

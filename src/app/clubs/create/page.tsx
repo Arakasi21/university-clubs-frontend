@@ -1,5 +1,6 @@
 'use client'
-import React from 'react'
+import Nav from '@/components/NavBar'
+import { Button } from '@/components/ui/button'
 import {
 	Form,
 	FormControl,
@@ -9,9 +10,6 @@ import {
 	FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
 import {
 	Select,
 	SelectContent,
@@ -19,9 +17,10 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
-import Nav from '@/components/nav'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { z } from 'zod'
 
 const formSchema = z.object({
 	name: z.string().min(2, {
