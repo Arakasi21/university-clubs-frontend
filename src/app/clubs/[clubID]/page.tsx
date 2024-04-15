@@ -67,12 +67,12 @@ function Page({ params }: { params: { clubID: number } }) {
 					</div>
 				) : (
 					<>
-						<div className="flex">
+						<div className="flex overflow-hidden">
 							<div className="flex-1">
 								<div className=" flex flex-wrap justify-center gap-6">
 									<div
 										style={{ backgroundImage: `url(${club?.banner_url ?? '/main_photo.jpeg'})` }}
-										className="relative h-40 w-screen bg-cover bg-center bg-no-repeat"
+										className="relative h-40 w-screen bg-center bg-no-repeat"
 									/>
 									<div className="flex flex-row space-y-3">
 										<Image
