@@ -28,6 +28,7 @@ import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import HandleDialog from './_components/HandleDialog'
+import useUserStore from '@/store/user'
 
 type Columns = {
 	club: IClub
@@ -36,33 +37,22 @@ type Columns = {
 
 const columns: ColumnDef<Columns>[] = [
 	{
-		accessorKey: 'clubs',
+		accessorKey: 'user',
 		header: 'Name',
 		cell: ({ row }) => <div className="capitalize">{row.getValue('name')}</div>,
 	},
 	{
-		accessorKey: 'clubs',
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				>
-					Type
-					<ArrowUpDown className="ml-2 h-4 w-4" />
-				</Button>
-			)
-		},
-		cell: ({ row }) => <div className="lowercase">{row.getValue('type')}</div>,
-	},
-	{
-		accessorKey: 'owner',
+		accessorKey: 'profile',
 		header: () => <div className="text-right">Owner</div>,
 		cell: ({ row }) => <div className="lowercase">{row.getValue('first_name')}</div>,
 	},
 ]
-function Page() {
-	const [data, setData] = useState([] as { club: IClub; owner: IClubMember }[])
+function Page({ params }: { params: { clubID: number } }) {
+	const [data, setData] = useState([] as IClubMember[])
+	const { user } = useUserStore()
+	const [club, setClub] = useState<IClub>()
+	const [loading, setLoading] = useState(true)
+	const [isOwner, setIsOwner] = useState(false)
 
 	const [page, setPage] = useState(1)
 	const [pageSize, setPageSize] = useState(25)
@@ -75,10 +65,34 @@ function Page() {
 	const [rowSelection, setRowSelection] = useState({})
 
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
-	const [selectedClub, setSelectedClub] = useState<IClub>()
+	const [selectedUser, setSelectedUser] = useState<IClubMember>()
+
+	const fetchClubInfo = useCallback(() => {
+		fetch(`http://localhost:5000/clubs/${params.clubID}`)
+			.then(async (res) => {
+				const data = await res.json()
+				if (!res.ok) {
+					toast.error('not found', {
+						description: data.error,
+					})
+
+					throw new Error(data.error || 'Failed to Fetch club info')
+				}
+
+				setClub(data.club)
+				setIsOwner(data.club.owner_id == user?.id)
+				setLoading(false)
+			})
+			.catch((error) => console.log(error.message))
+	}, [params.clubID, user?.id])
+
+	useEffect(() => {
+		fetchClubInfo()
+	}, [fetchClubInfo, params.clubID])
 
 	const fetchPendingClubs = useCallback(() => {
-		fetch(`http://localhost:5000/clubs/pending?page=${page}&page_size=${pageSize}`, {
+		console.log(params.clubID)
+		fetch(`http://localhost:5000/clubs/${params.clubID}/join?page=${page}&page_size=${pageSize}`, {
 			credentials: 'include',
 		})
 			.then(async (res) => {
@@ -89,7 +103,7 @@ function Page() {
 					})
 				}
 
-				setData(data.items as { club: IClub; owner: IClubMember }[])
+				setData(data.users)
 				setFirstPage(data.metadata.first_page)
 				setLastPage(data.metadata.last_page)
 				setTotalRecords(data.metadata.total_records)
@@ -101,8 +115,8 @@ function Page() {
 		fetchPendingClubs()
 	}, [page, pageSize, fetchPendingClubs])
 
-	const handleRowClick = (club: IClub) => {
-		setSelectedClub(club)
+	const handleRowClick = (user: IClubMember) => {
+		setSelectedUser(user)
 		setIsDialogOpen(true)
 	}
 
@@ -125,6 +139,11 @@ function Page() {
 		},
 	})
 
+	//TODO: change later
+	if (!isOwner) {
+		return null
+	}
+
 	return (
 		<div>
 			<Nav />
@@ -145,21 +164,19 @@ function Page() {
 				<TableBody>
 					{data?.map((c) => (
 						<TableRow
-							key={c.club.id}
+							key={c.id}
 							onClick={() => {
-								handleRowClick(c.club)
+								handleRowClick(c)
 							}}
 						>
-							<TableCell>{c.club.name}</TableCell>
-							<TableCell>{c.club.club_type}</TableCell>
 							<TableCell>
-								<Link
-									href={`/user/${c.owner.id}`}
-									className="flex flex-row items-center space-x-2.5"
-								>
-									<UserAvatar user={c.owner} />
+								{c.first_name} - {c.last_name}
+							</TableCell>
+							<TableCell>
+								<Link href={`/user/${c.id}`} className="flex flex-row items-center space-x-2.5">
+									<UserAvatar user={c} />
 									<p>
-										{c.owner.last_name} {c.owner.first_name}
+										{c.last_name} {c.first_name}
 									</p>
 								</Link>
 							</TableCell>
@@ -167,10 +184,11 @@ function Page() {
 					))}
 				</TableBody>
 			</Table>
-			{selectedClub && (
+			{selectedUser && (
 				<HandleDialog
 					isOpen={isDialogOpen}
-					selectedClub={selectedClub}
+					selectedUser={selectedUser}
+					club={club ?? ({} as IClub)}
 					onClose={() => {
 						setIsDialogOpen(false)
 					}}

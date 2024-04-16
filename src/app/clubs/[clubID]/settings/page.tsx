@@ -78,43 +78,33 @@ function Page({ params }: { params: { clubID: number } }) {
 										style={{ backgroundImage: `url(${club?.banner_url ?? '/main_photo.jpeg'})` }}
 										className="relative h-40 w-screen bg-center bg-no-repeat"
 									/>
-									<div className="flex flex-row space-y-3">
-										<Image
-											src={club?.logo_url ?? '/main_photo.jpeg'}
-											width={100}
-											height={100}
-											alt={`banner of ${club?.name}`}
-										/>
-										<div className="space-y-2 p-3">
-											<p>{club?.name}</p>
-											<p>{club?.description}</p>
+
+									{club && (
+										<div className="flex justify-center gap-6">
+											<Link href={`/clubs/${club?.id}`}>
+												<Button variant={'outline'}>Club page</Button>
+											</Link>
+											<DialogUpdateClubLogo club={club} />
+											<DialogUpdateClubBanner club={club} />
+											<Link href={`/clubs/${club?.id}/join-request`}>
+												<Button variant={'outline'}>Handle new members</Button>
+											</Link>
 										</div>
-										<div>
-											{club && (
-												<>
-													<DialogUpdateClubLogo club={club} />
-													<DialogUpdateClubBanner club={club} />
-												</>
-											)}
-										</div>
-									</div>
+									)}
+									{clubMembers &&
+										clubMembers.map((member) => (
+											<Link
+												href={`/user/${member.id}`}
+												className="flex w-full flex-row items-center space-x-3.5 px-4"
+												key={member.id}
+											>
+												<UserAvatar user={member} />
+												<p style={{ color: `#${club?.roles[0].color.toString(16)}` ?? '#fff' }}>
+													{member.last_name} {member.first_name}
+												</p>
+											</Link>
+										))}
 								</div>
-							</div>
-							<div className="sticky right-0 isolate order-last w-96 border-l border-solid bg-background">
-								<p className="text-center">Members:</p>
-								{clubMembers &&
-									clubMembers.map((member) => (
-										<Link
-											href={`/user/${member.id}`}
-											className="flex w-full flex-row items-center space-x-3.5 px-4"
-											key={member.id}
-										>
-											<UserAvatar user={member} />
-											<p style={{ color: `#${club?.roles[0].color.toString(16)}` ?? '#fff' }}>
-												{member.last_name} {member.first_name}
-											</p>
-										</Link>
-									))}
 							</div>
 						</div>
 					</>

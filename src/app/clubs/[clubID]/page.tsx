@@ -9,6 +9,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { z } from 'zod'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
@@ -16,6 +17,37 @@ function Page({ params }: { params: { clubID: number } }) {
 	const [clubMembers, setClubMembers] = useState<IClubMember[]>()
 	const [loading, setLoading] = useState(true)
 	const [isOwner, setIsOwner] = useState(false)
+
+	const handleSubmit = async () => {
+		const apiUrl = `http://localhost:5000/clubs/${club?.id}/join`
+		try {
+			const response = await fetch(apiUrl, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				credentials: 'include',
+			})
+
+			if (!response.ok) {
+				let errorData = await response.json()
+
+				toast.error('Failed to make request to join club', {
+					description: errorData.error,
+				})
+			}
+
+			toast.success('Request to join club successfully made!', {
+				action: {
+					label: 'X',
+					onClick: () => {},
+				},
+			})
+		} catch (e) {
+			toast.error('ERROR', {
+				description: 'An error occurred while trying to make request to join club.',
+			})
+			console.log(e)
+		}
+	}
 
 	const fetchClubInfo = useCallback(() => {
 		fetch(`http://localhost:5000/clubs/${params.clubID}`)
@@ -87,7 +119,12 @@ function Page({ params }: { params: { clubID: number } }) {
 											<p>{club?.description}</p>
 										</div>
 										<div>
-											<Button>Join request</Button>
+											{/* TODO ЗДЕСЬ НУЖНО ПЕРЕПИСАТЬ -> убрать isOwner для JoinRequest, добавить isJoinedToClub */}
+											{!isOwner && (
+												<Button onClick={handleSubmit} type="submit">
+													Join request
+												</Button>
+											)}
 											{isOwner && (
 												<Link href={`/clubs/${club?.id}/settings`}>
 													<Button>Settings</Button>

@@ -6,24 +6,25 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@/components/ui/dialog'
-import { IClub } from '@/interface/club'
+import { IClub, IClubMember } from '@/interface/club'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 export type HandleDialogProps = {
-	selectedClub: IClub
+	selectedUser: IClubMember
+	club: IClub
 	onClose: () => void
 	isOpen: boolean
 }
 
-export default function HandleDialog({ selectedClub, isOpen, onClose }: HandleDialogProps) {
-	const [club, setClub] = useState(selectedClub)
+export default function HandleDialog({ selectedUser, club, isOpen, onClose }: HandleDialogProps) {
+	const [user, setUser] = useState(selectedUser)
 
 	const onApprove = () => {
-		fetch(`http://localhost:5000/clubs/${club.id}`, {
+		fetch(`http://localhost:5000/clubs/${club.id}/members`, {
 			method: 'POST',
 			credentials: 'include',
-			body: JSON.stringify({ status: 'approved' }),
+			body: JSON.stringify({ user_id: user.id, status: 'approved' }),
 		})
 			.then(async (res) => {
 				const data = await res.json()
@@ -44,10 +45,10 @@ export default function HandleDialog({ selectedClub, isOpen, onClose }: HandleDi
 
 	const onReject = () => {
 		onClose()
-		fetch(`http://localhost:5000/clubs/${club.id}`, {
+		fetch(`http://localhost:5000/clubs/${club.id}/members`, {
 			method: 'POST',
 			credentials: 'include',
-			body: JSON.stringify({ status: 'rejected' }),
+			body: JSON.stringify({ user_id: user.id, status: 'rejected' }),
 		})
 			.then(async (res) => {
 				const data = await res.json()
@@ -67,8 +68,8 @@ export default function HandleDialog({ selectedClub, isOpen, onClose }: HandleDi
 	}
 
 	useEffect(() => {
-		setClub(selectedClub)
-	}, [selectedClub])
+		setUser(selectedUser)
+	}, [selectedUser])
 
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>

@@ -40,11 +40,10 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 				const userClubsResponse = await fetch(`http://localhost:5000/user/${params.userID}/clubs`, {
 					method: 'GET',
 				})
-				console.log(userClubsResponse)
+
 				if (!userClubsResponse.ok) throw new Error('Failed to fetch user clubs')
 				const userClubsData = await userClubsResponse.json()
-
-				setClubs(userClubsData.clubs || [])
+				setClubs(userClubsData.clubs)
 			})
 			.catch((error) => console.log(error.message))
 	}, [params.userID])
@@ -73,17 +72,40 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 						<p>Group: {pageowner.group_name}</p>
 						<p>User ID: {params.userID}</p>
 						{isOwner && <Button onClick={() => router.push('/user/edit')}>Edit Profile</Button>}
-						<h2>Your Clubs</h2>
+						<br />
+						{/* TODO CHANGE BUTTON TO SOMETHING ELSE */}
+						<br />
+						<Button variant={'secondary'} disabled={true}>
+							Clubs
+						</Button>
+						<br />
+						<br />
 						{Number(clubs?.length) > 0 ? (
 							<ul>
 								{clubs?.map((club) => (
-									<li key={club?.id}>
-										{club?.name} - {club?.club_type}
+									<li
+										key={club?.id}
+										onClick={() => {
+											router.push(`/clubs/${club.id}`)
+										}}
+										className="border-r-1 relative my-4 hover:bg-accent"
+									>
+										<div className="flex flex-row items-center space-x-2 ">
+											<Image
+												src={club?.logo_url ?? '/main_photo.jpeg'}
+												width={64}
+												height={64}
+												alt={`banner of ${club?.name}`}
+											/>
+											<p>
+												{club?.name} - {club?.club_type}
+											</p>
+										</div>
 									</li>
 								))}
 							</ul>
 						) : (
-							<p>You are not the member of any clubs.</p>
+							<p>User is not the member of any clubs.</p>
 						)}
 					</div>
 				) : (
