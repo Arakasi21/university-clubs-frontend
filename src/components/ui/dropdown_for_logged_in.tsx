@@ -10,7 +10,7 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { ModeToggle } from '@/components/ui/toggle-mode'
-import UserAvatar from '@/components/UserAvatar'
+import UserAvatar from '@/components/userAvatar'
 import { IUser } from '@/interface/user'
 import { GavelIcon, LogOutIcon, PlusCircleIcon, SettingsIcon, UserRoundIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'

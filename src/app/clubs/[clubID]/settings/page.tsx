@@ -1,5 +1,8 @@
 'use client'
 import Nav from '@/components/NavBar'
+import { DialogUpdateClubLogo } from '@/components/DialogUpdateClubLogo'
+import { DialogUpdateClubBanner } from '@/components/DialogUpdateClubBanner'
+
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import UserAvatar from '@/components/userAvatar'
@@ -87,11 +90,11 @@ function Page({ params }: { params: { clubID: number } }) {
 											<p>{club?.description}</p>
 										</div>
 										<div>
-											<Button>Join request</Button>
-											{isOwner && (
-												<Link href={`/clubs/${club?.id}/settings`}>
-													<Button>Settings</Button>
-												</Link>
+											{club && (
+												<>
+													<DialogUpdateClubLogo club={club} />
+													<DialogUpdateClubBanner club={club} />
+												</>
 											)}
 										</div>
 									</div>
