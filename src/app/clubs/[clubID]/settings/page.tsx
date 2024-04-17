@@ -176,7 +176,9 @@ function Page({ params }: { params: { clubID: number } }) {
 																			</TableCell>
 																			<TableCell>{member.first_name}</TableCell>
 																			<TableCell>{member.last_name}</TableCell>
-																			<TableCell>{member.roles}</TableCell>
+																			<TableCell>
+																				{/*	TODO ROLE FIND CLUB ROLE ID === MEMBER'S ROLE ID*/}
+																			</TableCell>
 																			<TableCell>{member.email}</TableCell>
 																			<TableCell>{member.barcode}</TableCell>
 																		</TableRow>
