@@ -20,8 +20,11 @@ export interface IClubMember {
 }
 
 export interface IClubRole {
+	id: number
 	name: string
 	permissions: string[]
 	position: number
 	color: number
 }
+
+export type IUserClubStatus = 'NOT_MEMBER' | 'PENDING' | 'MEMBER'

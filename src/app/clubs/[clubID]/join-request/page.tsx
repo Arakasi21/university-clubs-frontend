@@ -119,6 +119,30 @@ function Page({ params }: { params: { clubID: number } }) {
 			.catch((error) => console.log(error.message))
 	}, [page, pageSize])
 
+	const onHandle = (userID: number, status: 'approved' | 'rejected') => {
+		fetch(`http://localhost:5000/clubs/${club.id}/members`, {
+			method: 'POST',
+			credentials: 'include',
+			body: JSON.stringify({ user_id: userID, status: status }),
+		})
+			.then(async (res) => {
+				const data = await res.json()
+				if (!res.ok) {
+					toast.error(`failed to ${status}`, {
+						description: data.error,
+					})
+					return
+				}
+
+				toast.success(`${status}!`)
+			})
+			.catch((error) => console.log(error.message))
+			.finally(() => {
+				setIsDialogOpen(false)
+				fetchPendingClubs()
+			})
+	}
+
 	useEffect(() => {
 		fetchPendingClubs()
 	}, [page, pageSize, fetchPendingClubs])
@@ -221,6 +245,7 @@ function Page({ params }: { params: { clubID: number } }) {
 
 			{selectedUser && (
 				<HandleDialog
+					onHandle={onHandle}
 					isOpen={isDialogOpen}
 					selectedUser={selectedUser}
 					club={club ?? ({} as IClub)}

@@ -1,26 +1,18 @@
 'use client'
 import Nav from '@/components/NavBar'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import UserAvatar from '@/components/userAvatar'
-import { IClub, IClubMember } from '@/interface/club'
+import { IClub, IClubMember, IUserClubStatus } from '@/interface/club'
 import useUserStore from '@/store/user'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { z } from 'zod'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select'
+
+import { Select } from '@/components/ui/select'
+import { useRouter } from 'next/navigation'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
@@ -28,9 +20,12 @@ function Page({ params }: { params: { clubID: number } }) {
 	const [clubMembers, setClubMembers] = useState<IClubMember[]>()
 	const [loading, setLoading] = useState(true)
 	const [isOwner, setIsOwner] = useState(false)
+	const [memberStatus, setMemberStatus] = useState<IUserClubStatus>('NOT_MEMBER' as IUserClubStatus)
 
-	const handleSubmit = async () => {
-		const apiUrl = `http://localhost:5000/clubs/${club?.id}/join`
+	const router = useRouter()
+
+	const handleJoinRequest = useCallback(async () => {
+		const apiUrl = `http://localhost:5000/clubs/${params.clubID}/join`
 		try {
 			const response = await fetch(apiUrl, {
 				method: 'POST',
@@ -58,7 +53,40 @@ function Page({ params }: { params: { clubID: number } }) {
 			})
 			console.log(e)
 		}
-	}
+		fetchUserClubStatus()
+	}, [params.clubID])
+
+	const handleLeaveClub = useCallback(async () => {
+		const apiUrl = `http://localhost:5000/clubs/${params.clubID}/members`
+		try {
+			const response = await fetch(apiUrl, {
+				method: 'DELETE',
+				credentials: 'include',
+			})
+
+			if (!response.ok) {
+				let errorData = await response.json()
+
+				toast.error('Failed to make request to leave club', {
+					description: errorData.error,
+				})
+				return
+			}
+
+			toast.success('Leaved club!', {
+				action: {
+					label: 'X',
+					onClick: () => {},
+				},
+			})
+		} catch (e) {
+			toast.error('ERROR', {
+				description: 'An error occurred while trying to make request to leave club.',
+			})
+			console.log(e)
+		}
+		fetchUserClubStatus()
+	}, [params.clubID])
 
 	const fetchClubInfo = useCallback(() => {
 		fetch(`http://localhost:5000/clubs/${params.clubID}`)
@@ -94,9 +122,28 @@ function Page({ params }: { params: { clubID: number } }) {
 			.catch((error) => console.log(error.message))
 	}, [params.clubID, user?.id])
 
+	const fetchUserClubStatus = useCallback(() => {
+		fetch(`http://localhost:5000/clubs/${params.clubID}/join/status`, { credentials: 'include' })
+			.then(async (res) => {
+				const data = await res.json()
+				if (!res.ok) {
+					toast.error('not found', {
+						description: data.error,
+					})
+
+					throw new Error(data.error || 'Failed to Fetch member join status info')
+				}
+
+				setMemberStatus(data.status)
+			})
+			.catch((error) => console.log(error.message))
+	}, [params.clubID])
+
 	useEffect(() => {
 		fetchClubInfo()
-	}, [fetchClubInfo, params.clubID])
+		fetchUserClubStatus()
+	}, [fetchClubInfo, fetchUserClubStatus, handleJoinRequest, handleLeaveClub, params.clubID])
+
 	return (
 		<>
 			<Nav />
@@ -137,16 +184,26 @@ function Page({ params }: { params: { clubID: number } }) {
 										<CardContent>
 											<div className="grid gap-6">
 												<div className="grid gap-3">
-													{/* TODO ЗДЕСЬ НУЖНО ПЕРЕПИСАТЬ -> убрать isOwner для JoinRequest, добавить isJoinedToClub */}
-													{!isOwner && (
-														<Button onClick={handleSubmit} type="submit">
+													{memberStatus == 'NOT_MEMBER' && (
+														<Button onClick={handleJoinRequest} type="submit">
 															Join request
 														</Button>
 													)}
+													{memberStatus == 'PENDING' && <Button disabled>Pending</Button>}
+													{/* TODO ЗДЕСЬ НУЖНО ПЕРЕПИСАТЬ => OWNER CHANGE TO CLUB ADMIN (with admin permissions) / DSVR */}
 													{isOwner && (
 														<Link href={`/clubs/${club?.id}/settings`}>
 															<Button>Settings</Button>
 														</Link>
+													)}
+													{memberStatus == 'MEMBER' && (
+														<Button
+															variant={'destructive'}
+															onClick={handleLeaveClub}
+															type={'submit'}
+														>
+															Leave Club
+														</Button>
 													)}
 												</div>
 											</div>

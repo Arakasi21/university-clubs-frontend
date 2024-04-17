@@ -14,58 +14,18 @@ export type HandleDialogProps = {
 	selectedUser: IClubMember
 	club: IClub
 	onClose: () => void
+	onHandle: (userID: number, status: 'approved' | 'rejected') => void
 	isOpen: boolean
 }
 
-export default function HandleDialog({ selectedUser, club, isOpen, onClose }: HandleDialogProps) {
+export default function HandleDialog({
+	selectedUser,
+	club,
+	isOpen,
+	onClose,
+	onHandle,
+}: HandleDialogProps) {
 	const [user, setUser] = useState(selectedUser)
-
-	const onApprove = () => {
-		fetch(`http://localhost:5000/clubs/${club.id}/members`, {
-			method: 'POST',
-			credentials: 'include',
-			body: JSON.stringify({ user_id: user.id, status: 'approved' }),
-		})
-			.then(async (res) => {
-				const data = await res.json()
-				if (!res.ok) {
-					toast.error('failed to approve', {
-						description: data.error,
-					})
-					return
-				}
-
-				toast.success('Approved!')
-			})
-			.catch((error) => console.log(error.message))
-			.finally(() => {
-				onClose()
-			})
-	}
-
-	const onReject = () => {
-		onClose()
-		fetch(`http://localhost:5000/clubs/${club.id}/members`, {
-			method: 'POST',
-			credentials: 'include',
-			body: JSON.stringify({ user_id: user.id, status: 'rejected' }),
-		})
-			.then(async (res) => {
-				const data = await res.json()
-				if (!res.ok) {
-					toast.error('failed to reject', {
-						description: data.error,
-					})
-					return
-				}
-
-				toast.success('Rejected!')
-			})
-			.catch((error) => console.log(error.message))
-			.finally(() => {
-				onClose()
-			})
-	}
 
 	useEffect(() => {
 		setUser(selectedUser)
@@ -77,8 +37,19 @@ export default function HandleDialog({ selectedUser, club, isOpen, onClose }: Ha
 				<DialogHeader>
 					<DialogTitle>Are you absolutely sure?</DialogTitle>
 					<DialogDescription className="space-x-2 space-y-2">
-						<Button onClick={onApprove}>Approve</Button>
-						<Button onClick={onReject} variant="destructive">
+						<Button
+							onClick={() => {
+								onHandle(user.id, 'approved')
+							}}
+						>
+							Approve
+						</Button>
+						<Button
+							onClick={() => {
+								onHandle(user.id, 'rejected')
+							}}
+							variant="destructive"
+						>
 							Reject
 						</Button>
 					</DialogDescription>
