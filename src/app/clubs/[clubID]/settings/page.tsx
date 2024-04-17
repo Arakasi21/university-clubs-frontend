@@ -6,12 +6,38 @@ import { DialogUpdateClubBanner } from '@/components/DialogUpdateClubBanner'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import UserAvatar from '@/components/userAvatar'
-import { IClub, IClubMember } from '@/interface/club'
+import { IClub, IClubMember, IClubRole } from '@/interface/club'
 import useUserStore from '@/store/user'
-import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { File, ListFilter } from 'lucide-react'
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '@/components/ui/table'
+import Image from 'next/image'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
@@ -73,37 +99,95 @@ function Page({ params }: { params: { clubID: number } }) {
 					<>
 						<div className="flex overflow-hidden">
 							<div className="flex-1">
-								<div className=" flex flex-wrap justify-center gap-6">
+								<div className="flex flex-wrap justify-center gap-6">
 									<div
 										style={{ backgroundImage: `url(${club?.banner_url ?? '/main_photo.jpeg'})` }}
 										className="relative h-40 w-screen bg-center bg-no-repeat"
 									/>
-
-									{club && (
-										<div className="flex justify-center gap-6">
-											<Link href={`/clubs/${club?.id}`}>
-												<Button variant={'outline'}>Club page</Button>
-											</Link>
-											<DialogUpdateClubLogo club={club} />
-											<DialogUpdateClubBanner club={club} />
-											<Link href={`/clubs/${club?.id}/join-request`}>
-												<Button variant={'outline'}>Handle new members</Button>
-											</Link>
+									<div className="flex w-full justify-center gap-3">
+										<Link href={`/clubs/${club?.id}`}>
+											<Button variant={'outline'}>
+												<Image
+													src={club?.logo_url ?? '/main_photo.jpeg'}
+													width={32}
+													height={32}
+													alt={`banner of ${club?.name}`}
+												/>
+												Club page
+											</Button>
+										</Link>
+										<Link href={`/clubs/${club?.id}/join-request`}>
+											<Button variant={'outline'}>Handle new members</Button>
+										</Link>
+									</div>
+									<div>
+										<div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+											<Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
+												<CardHeader className="pb-3">
+													<CardTitle>Club Roles</CardTitle>
+													<CardDescription className="max-w-lg text-balance leading-relaxed">
+														Introducing our new role management
+													</CardDescription>
+												</CardHeader>
+												<CardFooter>
+													<Link href={`/clubs/${club?.id}/settings/roles`}>
+														<Button variant={'default'}>Roles settings</Button>
+													</Link>
+												</CardFooter>
+											</Card>
+											<Card x-chunk="dashboard-05-chunk-1">
+												<CardHeader className="pb-3">
+													<CardDescription>Update your logo/banner</CardDescription>
+												</CardHeader>
+												<CardContent>
+													{club && (
+														<div className="flex gap-3">
+															<DialogUpdateClubLogo club={club} />
+															<DialogUpdateClubBanner club={club} />
+														</div>
+													)}
+												</CardContent>
+											</Card>
 										</div>
-									)}
-									{clubMembers &&
-										clubMembers.map((member) => (
-											<Link
-												href={`/user/${member.id}`}
-												className="flex w-full flex-row items-center space-x-3.5 px-4"
-												key={member.id}
-											>
-												<UserAvatar user={member} />
-												<p style={{ color: `#${club?.roles[0].color.toString(16)}` ?? '#fff' }}>
-													{member.last_name} {member.first_name}
-												</p>
-											</Link>
-										))}
+										<Tabs defaultValue="week">
+											<TabsContent value="week">
+												<Card x-chunk="dashboard-05-chunk-3">
+													<CardHeader className="px-7">
+														<CardTitle>Members</CardTitle>
+													</CardHeader>
+													<CardContent>
+														<Table>
+															<TableHeader>
+																<TableRow>
+																	<TableHead className="hidden sm:table-cell">Avatar</TableHead>
+																	<TableHead className="text-left">Name</TableHead>
+																	<TableHead className="text-left">Surname</TableHead>
+																	<TableHead className="hidden md:table-cell">Role</TableHead>
+																	<TableHead className="hidden md:table-cell">Email</TableHead>
+																	<TableHead className="hidden md:table-cell">Barcode</TableHead>
+																</TableRow>
+															</TableHeader>
+															<TableBody>
+																{clubMembers &&
+																	clubMembers.map((member) => (
+																		<TableRow key={member.id}>
+																			<TableCell>
+																				<UserAvatar user={member} />
+																			</TableCell>
+																			<TableCell>{member.first_name}</TableCell>
+																			<TableCell>{member.last_name}</TableCell>
+																			<TableCell>{member.roles}</TableCell>
+																			<TableCell>{member.email}</TableCell>
+																			<TableCell>{member.barcode}</TableCell>
+																		</TableRow>
+																	))}
+															</TableBody>
+														</Table>
+													</CardContent>
+												</Card>
+											</TabsContent>
+										</Tabs>
+									</div>
 								</div>
 							</div>
 						</div>

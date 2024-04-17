@@ -158,7 +158,7 @@ export function DialogUpdateClubLogo({ club }: DialogUpdateClubLogoProps) {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button variant="outline">Update Club Logo</Button>
+				<Button variant="secondary">Update Club Logo</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-md">
 				<DialogHeader>

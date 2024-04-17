@@ -6,14 +6,7 @@ export interface IClub {
 	logo_url: string
 	banner_url: string
 	number_of_members: number
-	roles: [
-		{
-			name: string
-			permissions: string[]
-			position: number
-			color: number
-		},
-	]
+	roles: [IClubRole]
 }
 
 export interface IClubMember {
@@ -24,4 +17,11 @@ export interface IClubMember {
 	email: string
 	barcode: string
 	roles: number[]
+}
+
+export interface IClubRole {
+	name: string
+	permissions: string[]
+	position: number
+	color: number
 }

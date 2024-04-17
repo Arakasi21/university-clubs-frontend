@@ -140,7 +140,7 @@ export function DialogUpdateClubBanner({ club }: DialogUpdateClubBannerProps) {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button variant="outline">Update Club banner</Button>
+				<Button variant="secondary">Update Club banner</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-md">
 				<DialogHeader>

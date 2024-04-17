@@ -23,20 +23,11 @@ import {
 	useReactTable,
 	VisibilityState,
 } from '@tanstack/react-table'
-import { ArrowUpDown, Badge, MoreHorizontal } from 'lucide-react'
 import Link from 'next/link'
 import React, { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import Image from 'next/image'
 import HandleDialog from './_components/HandleDialog'
 import useUserStore from '@/store/user'
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import {
 	Card,
 	CardContent,
@@ -46,7 +37,6 @@ import {
 	CardTitle,
 } from '@/components/ui/card'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
-import { router } from 'next/client'
 
 type Columns = {
 	club: IClub
