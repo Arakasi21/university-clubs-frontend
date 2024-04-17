@@ -55,7 +55,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 	return (
 		<div>
 			<Nav />
-			<div className="flex min-h-screen flex-col items-center justify-between p-24">
+			<div className="flex min-h-screen flex-col justify-between p-24">
 				{pageowner ? (
 					<div>
 						<Image
@@ -88,7 +88,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 										onClick={() => {
 											router.push(`/clubs/${club.id}`)
 										}}
-										className="border-r-1 relative my-4 hover:bg-accent"
+										className="border-r-1 relative my-4 hover:bg-accent "
 									>
 										<div className="flex flex-row items-center space-x-2 ">
 											<Image

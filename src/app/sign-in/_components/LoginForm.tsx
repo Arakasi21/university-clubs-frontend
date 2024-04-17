@@ -18,6 +18,15 @@ import {
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import useUserStore from '@/store/user'
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card'
+import Link from 'next/link'
 
 const formSchema = z.object({
 	email: z.string().email({ message: 'Invalid email format' }),
@@ -89,49 +98,65 @@ export default function Login() {
 
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-between p-24">
-			<Form {...form}>
-				<form
-					onSubmit={form.handleSubmit(handleSubmit)}
-					className="flex w-full max-w-md flex-col gap-4"
-				>
-					<FormField
-						control={form.control}
-						name="email"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Email Address</FormLabel>
-								<FormControl>
-									<Input type="email" placeholder="Your email" {...field} />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="password"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Password</FormLabel>
-								<FormControl>
-									<Input type="password" placeholder="Your password" {...field} />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<Button type="submit" className="w-full">
-						Log in
+			<Card className="w-full max-w-sm">
+				<CardHeader>
+					<CardTitle className="text-2xl">Login</CardTitle>
+					<CardDescription>Enter your email below to login to your account.</CardDescription>
+				</CardHeader>
+				<CardContent className="grid gap-4">
+					<Form {...form}>
+						<form
+							onSubmit={form.handleSubmit(handleSubmit)}
+							className="flex w-full max-w-md flex-col gap-4"
+						>
+							<FormField
+								control={form.control}
+								name="email"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Email Address</FormLabel>
+										<FormControl>
+											<Input type="email" placeholder="Your email" {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="password"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Password</FormLabel>
+										<FormControl>
+											<Input type="password" placeholder="Your password" {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<Button type="submit" className="w-full">
+								Log in
+							</Button>
+						</form>
+					</Form>
+					<Button
+						onClick={() => {
+							OpenIDConnectLoginHandler()
+						}}
+						variant="outline"
+						className="w-full"
+					>
+						<p>OpenID Connect</p>
 					</Button>
-				</form>
-			</Form>
-			<Button
-				onClick={() => {
-					OpenIDConnectLoginHandler()
-				}}
-			>
-				<p>OpenID Connect</p>
-			</Button>
+					<div className="mt-4 text-center text-sm">
+						Don&apos;t have an account?{' '}
+						<Link href="/sign-up" className="underline">
+							Sign up
+						</Link>
+					</div>
+				</CardContent>
+			</Card>
 		</main>
 	)
 }
