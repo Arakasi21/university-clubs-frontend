@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export default function LoginPage() {
 	return (
-		<main>
+		<main className="overflow-hidden">
 			<Nav />
 			<LoginForm />
 		</main>

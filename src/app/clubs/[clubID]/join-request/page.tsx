@@ -23,12 +23,30 @@ import {
 	useReactTable,
 	VisibilityState,
 } from '@tanstack/react-table'
-import { ArrowUpDown } from 'lucide-react'
+import { ArrowUpDown, Badge, MoreHorizontal } from 'lucide-react'
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import Image from 'next/image'
 import HandleDialog from './_components/HandleDialog'
 import useUserStore from '@/store/user'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card'
+import { Tabs, TabsContent } from '@/components/ui/tabs'
+import { router } from 'next/client'
 
 type Columns = {
 	club: IClub
@@ -38,12 +56,12 @@ type Columns = {
 const columns: ColumnDef<Columns>[] = [
 	{
 		accessorKey: 'user',
-		header: 'Name',
+		header: 'Barcode',
 		cell: ({ row }) => <div className="capitalize">{row.getValue('name')}</div>,
 	},
 	{
 		accessorKey: 'profile',
-		header: () => <div className="text-right">Owner</div>,
+		header: () => <div className="text">Name</div>,
 		cell: ({ row }) => <div className="lowercase">{row.getValue('first_name')}</div>,
 	},
 ]
@@ -147,43 +165,70 @@ function Page({ params }: { params: { clubID: number } }) {
 	return (
 		<div>
 			<Nav />
-			<Table>
-				<TableHeader>
-					{table.getHeaderGroups().map((headerGroup) => (
-						<TableRow key={headerGroup.id}>
-							{headerGroup.headers.map((header) => (
-								<TableHead key={header.id}>
-									{header.isPlaceholder
-										? null
-										: flexRender(header.column.columnDef.header, header.getContext())}
-								</TableHead>
-							))}
-						</TableRow>
-					))}
-				</TableHeader>
-				<TableBody>
-					{data?.map((c) => (
-						<TableRow
-							key={c.id}
-							onClick={() => {
-								handleRowClick(c)
-							}}
-						>
-							<TableCell>
-								{c.first_name} - {c.last_name}
-							</TableCell>
-							<TableCell>
-								<Link href={`/user/${c.id}`} className="flex flex-row items-center space-x-2.5">
-									<UserAvatar user={c} />
-									<p>
-										{c.last_name} {c.first_name}
-									</p>
-								</Link>
-							</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
+			<div
+				style={{ backgroundImage: `url(${club?.banner_url ?? '/main_photo.jpeg'})` }}
+				className="relative h-40 w-screen bg-center bg-no-repeat"
+			/>
+
+			<Tabs
+				className="grid flex-1 items-start gap-4 p-4 sm:px-64 sm:py-8 md:gap-8"
+				defaultValue="all"
+			>
+				<Link href={`/clubs/${club?.id}/settings`}>
+					<Button variant={'outline'}>Return to settings</Button>
+				</Link>
+				<TabsContent value="all">
+					<Card x-chunk="dashboard-06-chunk-0">
+						<CardHeader>
+							<CardTitle>Requested to join members</CardTitle>
+							<CardDescription>
+								Manage your members requests. You can either accept / reject.
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<Table>
+								<TableHeader>
+									{table.getHeaderGroups().map((headerGroup) => (
+										<TableRow key={headerGroup.id}>
+											{headerGroup.headers.map((header) => (
+												<TableHead key={header.id}>
+													{header.isPlaceholder
+														? null
+														: flexRender(header.column.columnDef.header, header.getContext())}
+												</TableHead>
+											))}
+										</TableRow>
+									))}
+								</TableHeader>
+								<TableBody>
+									{data?.map((c) => (
+										<TableRow
+											key={c.id}
+											onClick={() => {
+												handleRowClick(c)
+											}}
+										>
+											<TableCell>{c.barcode}</TableCell>
+											<TableCell>
+												<Link
+													href={`/user/${c.id}`}
+													className="flex flex-row items-center space-x-2.5"
+												>
+													<UserAvatar user={c} />
+													<p>
+														{c.last_name} {c.first_name}
+													</p>
+												</Link>
+											</TableCell>
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
+						</CardContent>
+					</Card>
+				</TabsContent>
+			</Tabs>
+
 			{selectedUser && (
 				<HandleDialog
 					isOpen={isDialogOpen}
