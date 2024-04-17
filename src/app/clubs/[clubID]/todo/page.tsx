@@ -381,7 +381,7 @@ const AddCard = ({ column, setCards }: AddCardProps) => {
 	)
 }
 
-type ColumnType = 'backlog' | 'todo' | 'doing' | 'done'
+type ColumnType = 'backlog' | 'todo' | 'doing' | 'done' | 'gay'
 
 type CardType = {
 	title: string

@@ -19,6 +19,7 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { MoreHorizontal } from 'lucide-react'
+import { decimalToRgb } from '@/helpers/helper'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const [club, setClub] = useState<IClub>()
@@ -96,7 +97,6 @@ function Page({ params }: { params: { clubID: number } }) {
 										<Table>
 											<TableHeader>
 												<TableRow>
-													<TableCell>Color</TableCell>
 													<TableCell>Name</TableCell>
 													<TableCell>Permissions</TableCell>
 													<TableCell>Action</TableCell>
@@ -104,35 +104,39 @@ function Page({ params }: { params: { clubID: number } }) {
 											</TableHeader>
 											<TableBody>
 												{club &&
-													club.roles.map((role: IClubRole) => (
-														<TableRow key={role.position}>
-															<TableCell>
-																<p
-																	style={{
-																		color: `#${club?.roles[0].color.toString(16)}` ?? '#fff',
-																	}}
-																>
-																	Hi
-																</p>
-															</TableCell>
-															<TableCell>{role.name}</TableCell>
-															<TableCell>{role.permissions}</TableCell>
-															<TableCell>
-																<DropdownMenu>
-																	<DropdownMenuTrigger asChild>
-																		<Button aria-haspopup="true" size="icon" variant="ghost">
-																			<MoreHorizontal className="h-4 w-4" />
-																			<span className="sr-only">Toggle menu</span>
-																		</Button>
-																	</DropdownMenuTrigger>
-																	<DropdownMenuContent align="end">
-																		<DropdownMenuItem>Edit</DropdownMenuItem>
-																		<DropdownMenuItem>Delete</DropdownMenuItem>
-																	</DropdownMenuContent>
-																</DropdownMenu>
-															</TableCell>
-														</TableRow>
-													))}
+													club.roles
+														.sort((role, role2) => role.position < role2.position)
+														.map((role: IClubRole) => (
+															<TableRow key={role.position}>
+																<TableCell>
+																	<p
+																		style={{
+																			color: `${decimalToRgb(role.color)}`,
+																		}}
+																	>
+																		{role.name}
+																	</p>
+																</TableCell>
+																<TableCell>
+																	{role.permissions &&
+																		role.permissions.map((permission) => <p>{permission}</p>)}
+																</TableCell>
+																<TableCell>
+																	<DropdownMenu>
+																		<DropdownMenuTrigger asChild>
+																			<Button aria-haspopup="true" size="icon" variant="ghost">
+																				<MoreHorizontal className="h-4 w-4" />
+																				<span className="sr-only">Toggle menu</span>
+																			</Button>
+																		</DropdownMenuTrigger>
+																		<DropdownMenuContent align="end">
+																			<DropdownMenuItem>Edit</DropdownMenuItem>
+																			<DropdownMenuItem>Delete</DropdownMenuItem>
+																		</DropdownMenuContent>
+																	</DropdownMenu>
+																</TableCell>
+															</TableRow>
+														))}
 											</TableBody>
 										</Table>
 									</CardContent>

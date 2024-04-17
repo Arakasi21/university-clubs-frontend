@@ -38,6 +38,7 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 import Image from 'next/image'
+import MemberRolesRow from '@/components/memberRolesRow'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
@@ -170,18 +171,7 @@ function Page({ params }: { params: { clubID: number } }) {
 															<TableBody>
 																{clubMembers &&
 																	clubMembers.map((member) => (
-																		<TableRow key={member.id}>
-																			<TableCell>
-																				<UserAvatar user={member} />
-																			</TableCell>
-																			<TableCell>{member.first_name}</TableCell>
-																			<TableCell>{member.last_name}</TableCell>
-																			<TableCell>
-																				{/*	TODO ROLE FIND CLUB ROLE ID === MEMBER'S ROLE ID*/}
-																			</TableCell>
-																			<TableCell>{member.email}</TableCell>
-																			<TableCell>{member.barcode}</TableCell>
-																		</TableRow>
+																		<MemberRolesRow member={member} roles={club?.roles} />
 																	))}
 															</TableBody>
 														</Table>
