@@ -192,18 +192,25 @@ function Page({ params }: { params: { clubID: number } }) {
 													{memberStatus == 'PENDING' && <Button disabled>Pending</Button>}
 													{/* TODO ЗДЕСЬ НУЖНО ПЕРЕПИСАТЬ => OWNER CHANGE TO CLUB ADMIN (with admin permissions) / DSVR */}
 													{isOwner && (
-														<Link href={`/clubs/${club?.id}/settings`}>
-															<Button>Settings</Button>
-														</Link>
+														<div className="flex gap-3">
+															<Link href={`/clubs/${club?.id}/settings`}>
+																<Button>Settings</Button>
+															</Link>
+															<Link href={`/clubs/${club?.id}/todo`}>
+																<Button>TODO</Button>
+															</Link>
+														</div>
 													)}
 													{memberStatus == 'MEMBER' && (
-														<Button
-															variant={'destructive'}
-															onClick={handleLeaveClub}
-															type={'submit'}
-														>
-															Leave Club
-														</Button>
+														<div>
+															<Button
+																variant={'destructive'}
+																onClick={handleLeaveClub}
+																type={'submit'}
+															>
+																Leave Club
+															</Button>
+														</div>
 													)}
 												</div>
 											</div>
