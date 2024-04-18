@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { MoreHorizontal } from 'lucide-react'
 import { decimalToRgb } from '@/helpers/helper'
+import { bgRed, red } from 'next/dist/lib/picocolors'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const [club, setClub] = useState<IClub>()
@@ -45,10 +46,44 @@ function Page({ params }: { params: { clubID: number } }) {
 			})
 			.catch((error) => console.log(error.message))
 	}, [params.clubID])
+	const handleDeleteClub = useCallback(
+		async (roleID: number) => {
+			const apiUrl = `http://localhost:5000/clubs/${params.clubID}/roles/${roleID}`
+			try {
+				const response = await fetch(apiUrl, {
+					method: 'DELETE',
+					credentials: 'include',
+				})
 
+				if (!response.ok) {
+					let errorData = await response.json()
+
+					toast.error('Failed to delete role', {
+						description: errorData.error,
+					})
+					return
+				}
+
+				fetchClubInfo()
+
+				toast.success('Role deleted!', {
+					action: {
+						label: 'X',
+						onClick: () => {},
+					},
+				})
+			} catch (e) {
+				toast.error('ERROR', {
+					description: 'An error occurred while trying to make request to delete role.',
+				})
+				console.log(e)
+			}
+		},
+		[fetchClubInfo(), params.clubID],
+	)
 	useEffect(() => {
 		fetchClubInfo()
-	}, [fetchClubInfo, params.clubID, user?.id])
+	}, [fetchClubInfo, handleDeleteClub, params.clubID, user?.id])
 
 	// if (!isOwner) {
 	// 	return null
@@ -80,9 +115,6 @@ function Page({ params }: { params: { clubID: number } }) {
 								<Link href={`/clubs/${club?.id}/settings`}>
 									<Button variant={'outline'}>Return to settings</Button>
 								</Link>
-								<Link href={`/clubs/${club?.id}/settings/roles/create`}>
-									<Button variant={'default'}>Create new role</Button>
-								</Link>
 							</div>
 
 							<TabsContent value="all">
@@ -90,7 +122,15 @@ function Page({ params }: { params: { clubID: number } }) {
 									<CardHeader>
 										<CardTitle>Club Roles</CardTitle>
 										<CardDescription>
-											Manage club roles. You can edit roles, create new one, delete and etc.
+											<div className="flex items-center justify-between">
+												{' '}
+												<p>
+													Manage club roles. You can edit roles, create new one, delete and etc.
+												</p>
+												<Link href={`/clubs/${club?.id}/settings/roles/create`}>
+													<Button variant={'default'}>Create new role</Button>
+												</Link>
+											</div>
 										</CardDescription>
 									</CardHeader>
 									<CardContent>
@@ -131,7 +171,12 @@ function Page({ params }: { params: { clubID: number } }) {
 																		</DropdownMenuTrigger>
 																		<DropdownMenuContent align="end">
 																			<DropdownMenuItem>Edit</DropdownMenuItem>
-																			<DropdownMenuItem>Delete</DropdownMenuItem>
+																			<DropdownMenuItem
+																				onClick={() => handleDeleteClub(role.id)}
+																				style={{ color: 'red' }}
+																			>
+																				Delete
+																			</DropdownMenuItem>
 																		</DropdownMenuContent>
 																	</DropdownMenu>
 																</TableCell>

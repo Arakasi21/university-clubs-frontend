@@ -201,7 +201,7 @@ function Page({ params }: { params: { clubID: number } }) {
 															</Link>
 														</div>
 													)}
-													{memberStatus == 'MEMBER' && (
+													{memberStatus == 'MEMBER' && !isOwner && (
 														<div>
 															<Button
 																variant={'destructive'}

@@ -40,6 +40,8 @@ import {
 import Image from 'next/image'
 import MemberRolesRow from '@/components/memberRolesRow'
 
+// TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
+
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
 	const [club, setClub] = useState<IClub>()
