@@ -30,6 +30,7 @@ import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import HandleDialog from './_components/HandleDialog'
+import useUserStore from '@/store/user'
 
 type Columns = {
 	club: Club
@@ -50,7 +51,8 @@ const columns: ColumnDef<Columns>[] = [
 ]
 function Page({ params }: { params: { clubID: number } }) {
 	const [data, setData] = useState([] as ClubMember[])
-	const { club, clubMembers, isOwner, loading } = useClub({ clubID: params.clubID })
+	const { user } = useUserStore()
+	const { club, clubMembers, isOwner, loading } = useClub({ clubID: params.clubID, user: user })
 
 	const [page, setPage] = useState(1)
 	const [pageSize, setPageSize] = useState(25)
@@ -87,7 +89,7 @@ function Page({ params }: { params: { clubID: number } }) {
 	}, [page, pageSize, params.clubID])
 
 	const onHandle = (userID: number, status: 'approved' | 'rejected') => {
-		fetch(`http://localhost:5000/clubs/${club.id}/members`, {
+		fetch(`http://localhost:5000/clubs/${club?.id}/members`, {
 			method: 'POST',
 			credentials: 'include',
 			body: JSON.stringify({ user_id: userID, status: status }),

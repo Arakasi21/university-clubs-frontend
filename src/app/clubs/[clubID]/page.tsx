@@ -9,11 +9,22 @@ import useClub from '@/hooks/useClub'
 import useUserClubStatus from '@/hooks/useUserClubStatus'
 import Image from 'next/image'
 import Link from 'next/link'
+import useMemberRoles from '@/hooks/useMemberRoles'
+import useUserStore from '@/store/user'
+import { hasPermission } from '@/helpers/permissions'
+import { Permissions } from '@/types/permissions'
+import { useEffect } from 'react'
 
 function Page({ params }: { params: { clubID: number } }) {
-	const { club, clubMembers, isOwner, loading } = useClub({ clubID: params.clubID })
+	const { user } = useUserStore()
+	const { club, clubMembers, isOwner, loading } = useClub({ clubID: params.clubID, user: user })
 	const { memberStatus, handleJoinRequest, handleLeaveClub } = useUserClubStatus({
 		clubID: params.clubID,
+	})
+	const { roles, permissions } = useMemberRoles({
+		clubID: params.clubID,
+		user: user,
+		userStatus: memberStatus,
 	})
 
 	return (
@@ -63,7 +74,7 @@ function Page({ params }: { params: { clubID: number } }) {
 													)}
 													{memberStatus == 'PENDING' && <Button disabled>Pending</Button>}
 													{/* TODO ЗДЕСЬ НУЖНО ПЕРЕПИСАТЬ => OWNER CHANGE TO CLUB ADMIN (with admin permissions) / DSVR */}
-													{isOwner && (
+													{hasPermission(permissions, Permissions.ALL) && (
 														<div className="flex gap-3">
 															<Link href={`/clubs/${club?.id}/settings`}>
 																<Button>Settings</Button>

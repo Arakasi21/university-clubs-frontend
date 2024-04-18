@@ -19,11 +19,32 @@ import { Tabs, TabsContent } from '@/components/ui/tabs'
 import useClub from '@/hooks/useClub'
 import Image from 'next/image'
 import Link from 'next/link'
+import useUserStore from '@/store/user'
+import useUserClubStatus from '@/hooks/useUserClubStatus'
+import useMemberRoles from '@/hooks/useMemberRoles'
+import { hasPermission } from '@/helpers/permissions'
+import { Permissions } from '@/types/permissions'
+import Error from 'next/error'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
 function Page({ params }: { params: { clubID: number } }) {
-	const { club, clubMembers, isOwner, loading } = useClub({ clubID: params.clubID })
+	const { user } = useUserStore()
+	const { club, clubMembers, isOwner, loading } = useClub({ clubID: params.clubID, user: user })
+	const { memberStatus, handleJoinRequest, handleLeaveClub } = useUserClubStatus({
+		clubID: params.clubID,
+	})
+	const { roles, permissions } = useMemberRoles({
+		clubID: params.clubID,
+		user: user,
+		userStatus: memberStatus,
+	})
+
+	//if do not have any permissions or not owner return nonauth
+	if (!hasPermission(permissions, Permissions.ALL) && !loading) {
+		return <Error statusCode={401} />
+	}
+
 	return (
 		<>
 			<Nav />
@@ -70,11 +91,13 @@ function Page({ params }: { params: { clubID: number } }) {
 														Introducing our new role management
 													</CardDescription>
 												</CardHeader>
-												<CardFooter>
-													<Link href={`/clubs/${club?.id}/settings/roles`}>
-														<Button variant={'default'}>Roles settings</Button>
-													</Link>
-												</CardFooter>
+												{hasPermission(permissions, Permissions.ManageRoles) && (
+													<CardFooter>
+														<Link href={`/clubs/${club?.id}/settings/roles`}>
+															<Button variant={'default'}>Roles settings</Button>
+														</Link>
+													</CardFooter>
+												)}
 											</Card>
 											<Card x-chunk="dashboard-05-chunk-1">
 												<CardHeader className="pb-3">

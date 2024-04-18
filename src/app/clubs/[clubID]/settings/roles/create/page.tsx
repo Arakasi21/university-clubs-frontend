@@ -25,6 +25,12 @@ import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import useUserStore from '@/store/user'
+import useUserClubStatus from '@/hooks/useUserClubStatus'
+import useMemberRoles from '@/hooks/useMemberRoles'
+import { hasPermission } from '@/helpers/permissions'
+import { Permissions } from '@/types/permissions'
+import Error from 'next/error'
 
 const formSchema = z.object({
 	name: z.string().min(2, {
@@ -42,7 +48,19 @@ const colorOptions = [
 ]
 
 export function Page({ params }: { params: { clubID: number } }) {
-	const { club } = useClub({ clubID: params.clubID })
+	const { user } = useUserStore()
+	const { club, loading } = useClub({
+		clubID: params.clubID,
+		user: user,
+	})
+	const { memberStatus } = useUserClubStatus({
+		clubID: params.clubID,
+	})
+	const { roles, permissions } = useMemberRoles({
+		clubID: params.clubID,
+		user: user,
+		userStatus: memberStatus,
+	})
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -84,6 +102,10 @@ export function Page({ params }: { params: { clubID: number } }) {
 		}
 	}
 
+	//if do not have any permissions or not owner return nonauth
+	if (!hasPermission(permissions, Permissions.ManageRoles) && !loading) {
+		return <Error statusCode={401} />
+	}
 	return (
 		<>
 			<Nav />
@@ -129,7 +151,7 @@ export function Page({ params }: { params: { clubID: number } }) {
 														const colorValue = colorOptions.find(
 															(option) => option.label === value,
 														)?.value
-														form.setValue('color', colorValue)
+														form.setValue('color', colorValue ?? 0)
 													}}
 												>
 													<SelectTrigger className="w-[180px]">

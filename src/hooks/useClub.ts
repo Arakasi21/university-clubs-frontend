@@ -2,13 +2,14 @@ import useUserStore from '@/store/user'
 import { Club, ClubMember } from '@/types/club'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { User } from '@/types/user'
 
 export type useClubProps = {
 	clubID: number
+	user: User | null
 }
 
-export default function useClub({ clubID }: useClubProps) {
-	const { user } = useUserStore()
+export default function useClub({ clubID, user }: useClubProps) {
 	const [club, setClub] = useState<Club>()
 	const [clubMembers, setClubMembers] = useState<ClubMember[]>()
 	const [loading, setLoading] = useState(true)

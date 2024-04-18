@@ -72,4 +72,8 @@ describe('Has Permissions', () => {
 	test('member have all perms', () => {
 		expect(hasPermission(Permissions.ALL, Permissions.ManageClub)).toBeTruthy()
 	})
+
+	test('member have all perms', () => {
+		expect(hasPermission(Permissions.ALL, Permissions.ALL)).toBeTruthy()
+	})
 })

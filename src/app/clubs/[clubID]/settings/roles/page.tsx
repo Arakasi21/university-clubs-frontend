@@ -18,9 +18,27 @@ import { MoreHorizontal } from 'lucide-react'
 import Link from 'next/link'
 import { useCallback } from 'react'
 import { toast } from 'sonner'
+import useUserStore from '@/store/user'
+import useUserClubStatus from '@/hooks/useUserClubStatus'
+import useMemberRoles from '@/hooks/useMemberRoles'
+import { hasPermission } from '@/helpers/permissions'
+import { Permissions } from '@/types/permissions'
+import Error from 'next/error'
 
 function Page({ params }: { params: { clubID: number } }) {
-	const { club, clubMembers, isOwner, loading, fetchClubInfo } = useClub({ clubID: params.clubID })
+	const { user } = useUserStore()
+	const { club, clubMembers, isOwner, loading, fetchClubInfo } = useClub({
+		clubID: params.clubID,
+		user: user,
+	})
+	const { memberStatus, handleJoinRequest, handleLeaveClub } = useUserClubStatus({
+		clubID: params.clubID,
+	})
+	const { roles, permissions } = useMemberRoles({
+		clubID: params.clubID,
+		user: user,
+		userStatus: memberStatus,
+	})
 
 	const handleDeleteClub = useCallback(
 		async (roleID: number) => {
@@ -58,9 +76,10 @@ function Page({ params }: { params: { clubID: number } }) {
 		[fetchClubInfo, params.clubID],
 	)
 
-	// if (!isOwner) {
-	// 	return null
-	// }
+	//if do not have any permissions or not owner return nonauth
+	if (!hasPermission(permissions, Permissions.ManageRoles) && !loading) {
+		return <Error statusCode={401} />
+	}
 
 	return (
 		<>
