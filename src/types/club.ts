@@ -1,3 +1,5 @@
+import { Permissions } from './permissions'
+
 export type Club = {
 	id: number
 	name: string
@@ -22,7 +24,7 @@ export type ClubMember = {
 export type ClubRole = {
 	id: number
 	name: string
-	permissions: number
+	permissions: Permissions
 	position: number
 	color: number
 }
