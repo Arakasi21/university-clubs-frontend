@@ -1,11 +1,7 @@
 'use client'
 
-import React, { useCallback, useEffect, useState } from 'react'
-import { toast } from 'sonner'
-import { IClub } from '@/interface/club'
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import Nav from '@/components/NavBar'
+import { Button } from '@/components/ui/button'
 import {
 	Form,
 	FormControl,
@@ -14,6 +10,7 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import {
 	Select,
 	SelectContent,
@@ -22,10 +19,12 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { decimalToRgb } from '@/helpers/helper'
-import Nav from '@/components/NavBar'
-import { Button } from '@/components/ui/button'
+import useClub from '@/hooks/useClub'
+import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
-import { Input } from '@/components/ui/input'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
 
 const formSchema = z.object({
 	name: z.string().min(2, {
@@ -34,14 +33,16 @@ const formSchema = z.object({
 	color: z.number(),
 })
 
+const colorOptions = [
+	{ value: 16711680, label: 'Red' },
+	{ value: 65280, label: 'Green' },
+	{ value: 255, label: 'Blue' },
+	{ value: 16777215, label: 'White' },
+	{ value: 16776960, label: 'Yellow' },
+]
+
 export function Page({ params }: { params: { clubID: number } }) {
-	const colorOptions = [
-		{ value: 16711680, label: 'Red' },
-		{ value: 65280, label: 'Green' },
-		{ value: 255, label: 'Blue' },
-		{ value: 16777215, label: 'White' },
-		{ value: 16776960, label: 'Yellow' },
-	]
+	const { club } = useClub({ clubID: params.clubID })
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -82,27 +83,6 @@ export function Page({ params }: { params: { clubID: number } }) {
 			console.log(e)
 		}
 	}
-	const [club, setClub] = useState<IClub>()
-	const fetchClubInfo = useCallback(() => {
-		fetch(`http://localhost:5000/clubs/${params.clubID}`)
-			.then(async (res) => {
-				const data = await res.json()
-				if (!res.ok) {
-					toast.error('not found', {
-						description: data.error,
-					})
-
-					throw new Error(data.error || 'Failed to Fetch club info')
-				}
-
-				setClub(data.club)
-			})
-			.catch((error) => console.log(error.message))
-	}, [params.clubID])
-
-	useEffect(() => {
-		fetchClubInfo()
-	}, [fetchClubInfo, params.clubID])
 
 	return (
 		<>

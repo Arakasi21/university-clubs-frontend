@@ -1,16 +1,10 @@
 'use client'
-import Nav from '@/components/NavBar'
-import { DialogUpdateClubLogo } from '@/components/DialogUpdateClubLogo'
 import { DialogUpdateClubBanner } from '@/components/DialogUpdateClubBanner'
+import { DialogUpdateClubLogo } from '@/components/DialogUpdateClubLogo'
+import Nav from '@/components/NavBar'
 
+import MemberRolesRow from '@/components/memberRolesRow'
 import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
-import UserAvatar from '@/components/userAvatar'
-import { IClub, IClubMember, IClubRole } from '@/interface/club'
-import useUserStore from '@/store/user'
-import Link from 'next/link'
-import React, { useCallback, useEffect, useState } from 'react'
-import { toast } from 'sonner'
 import {
 	Card,
 	CardContent,
@@ -19,73 +13,17 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import {
-	DropdownMenu,
-	DropdownMenuCheckboxItem,
-	DropdownMenuContent,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { File, ListFilter } from 'lucide-react'
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/ui/table'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Tabs, TabsContent } from '@/components/ui/tabs'
+import useClub from '@/hooks/useClub'
 import Image from 'next/image'
-import MemberRolesRow from '@/components/memberRolesRow'
+import Link from 'next/link'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
 function Page({ params }: { params: { clubID: number } }) {
-	const { user } = useUserStore()
-	const [club, setClub] = useState<IClub>()
-	const [clubMembers, setClubMembers] = useState<IClubMember[]>()
-	const [loading, setLoading] = useState(true)
-	const [isOwner, setIsOwner] = useState(false)
-
-	const fetchClubInfo = useCallback(() => {
-		fetch(`http://localhost:5000/clubs/${params.clubID}`)
-			.then(async (res) => {
-				const data = await res.json()
-				if (!res.ok) {
-					toast.error('not found', {
-						description: data.error,
-					})
-
-					throw new Error(data.error || 'Failed to Fetch club info')
-				}
-
-				setClub(data.club)
-				setIsOwner(data.club.owner_id == user?.id)
-				setLoading(false)
-			})
-			.catch((error) => console.log(error.message))
-
-		fetch(`http://localhost:5000/clubs/${params.clubID}/members?page=1&page_size=30`)
-			.then(async (res) => {
-				const data = await res.json()
-				if (!res.ok) {
-					toast.error('not found', {
-						description: data.error,
-					})
-
-					throw new Error(data.error || 'Failed to Fetch club info')
-				}
-
-				setClubMembers(data.members)
-			})
-			.catch((error) => console.log(error.message))
-	}, [params.clubID, user?.id])
-
-	useEffect(() => {
-		fetchClubInfo()
-	}, [fetchClubInfo, params.clubID])
+	const { club, clubMembers, isOwner, loading } = useClub({ clubID: params.clubID })
 	return (
 		<>
 			<Nav />
@@ -173,7 +111,11 @@ function Page({ params }: { params: { clubID: number } }) {
 															<TableBody>
 																{clubMembers &&
 																	clubMembers.map((member) => (
-																		<MemberRolesRow member={member} roles={club?.roles} />
+																		<MemberRolesRow
+																			member={member}
+																			roles={club?.roles ?? []}
+																			key={member.id}
+																		/>
 																	))}
 															</TableBody>
 														</Table>

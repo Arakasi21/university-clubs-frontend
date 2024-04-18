@@ -1,12 +1,12 @@
+import { User } from '@/types/user'
 import { create } from 'zustand'
-import { IUser } from '@/interface/user'
 import { persist } from 'zustand/middleware'
 
 interface userStore {
-	user: IUser | null
+	user: User | null
 	isLoggedIn: boolean
 
-	setUser: (user: IUser) => void
+	setUser: (user: User) => void
 	purgeUser: () => void
 }
 
@@ -15,7 +15,7 @@ const useUserStore = create<userStore>()(
 		(set) => ({
 			isLoggedIn: false,
 			user: null,
-			setUser: (user: IUser) =>
+			setUser: (user: User) =>
 				set(() => ({
 					isLoggedIn: true,
 					user: user,

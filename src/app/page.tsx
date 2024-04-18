@@ -2,14 +2,14 @@
 import Layout from '@/components/Layout'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-import { IClub } from '@/interface/club'
+import { Club } from '@/types/club'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 export default function Home() {
-	const [clubs, setClubs] = useState<IClub[]>()
+	const [clubs, setClubs] = useState<Club[]>()
 	const [loading, setLoading] = useState(true)
 
 	const router = useRouter()

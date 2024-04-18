@@ -2,147 +2,19 @@
 import Nav from '@/components/NavBar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Select } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
 import UserAvatar from '@/components/userAvatar'
-import { IClub, IClubMember, IUserClubStatus } from '@/interface/club'
-import useUserStore from '@/store/user'
+import useClub from '@/hooks/useClub'
+import useUserClubStatus from '@/hooks/useUserClubStatus'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
-import { toast } from 'sonner'
-
-import { Select } from '@/components/ui/select'
-import { useRouter } from 'next/navigation'
 
 function Page({ params }: { params: { clubID: number } }) {
-	const { user } = useUserStore()
-	const [club, setClub] = useState<IClub>()
-	const [clubMembers, setClubMembers] = useState<IClubMember[]>()
-	const [loading, setLoading] = useState(true)
-	const [isOwner, setIsOwner] = useState(false)
-	const [memberStatus, setMemberStatus] = useState<IUserClubStatus>('NOT_MEMBER' as IUserClubStatus)
-
-	const router = useRouter()
-
-	const handleJoinRequest = useCallback(async () => {
-		const apiUrl = `http://localhost:5000/clubs/${params.clubID}/join`
-		try {
-			const response = await fetch(apiUrl, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				credentials: 'include',
-			})
-
-			if (!response.ok) {
-				let errorData = await response.json()
-
-				toast.error('Failed to make request to join club', {
-					description: errorData.error,
-				})
-			}
-
-			toast.success('Request to join club successfully made!', {
-				action: {
-					label: 'X',
-					onClick: () => {},
-				},
-			})
-		} catch (e) {
-			toast.error('ERROR', {
-				description: 'An error occurred while trying to make request to join club.',
-			})
-			console.log(e)
-		}
-		fetchUserClubStatus()
-	}, [params.clubID])
-
-	const handleLeaveClub = useCallback(async () => {
-		const apiUrl = `http://localhost:5000/clubs/${params.clubID}/members`
-		try {
-			const response = await fetch(apiUrl, {
-				method: 'DELETE',
-				credentials: 'include',
-			})
-
-			if (!response.ok) {
-				let errorData = await response.json()
-
-				toast.error('Failed to make request to leave club', {
-					description: errorData.error,
-				})
-				return
-			}
-
-			toast.success('Leaved club!', {
-				action: {
-					label: 'X',
-					onClick: () => {},
-				},
-			})
-		} catch (e) {
-			toast.error('ERROR', {
-				description: 'An error occurred while trying to make request to leave club.',
-			})
-			console.log(e)
-		}
-		fetchUserClubStatus()
-	}, [params.clubID])
-
-	const fetchClubInfo = useCallback(() => {
-		fetch(`http://localhost:5000/clubs/${params.clubID}`)
-			.then(async (res) => {
-				const data = await res.json()
-				if (!res.ok) {
-					toast.error('not found', {
-						description: data.error,
-					})
-
-					throw new Error(data.error || 'Failed to Fetch club info')
-				}
-
-				setClub(data.club)
-				setIsOwner(data.club.owner_id == user?.id)
-				setLoading(false)
-			})
-			.catch((error) => console.log(error.message))
-
-		fetch(`http://localhost:5000/clubs/${params.clubID}/members?page=1&page_size=30`)
-			.then(async (res) => {
-				const data = await res.json()
-				if (!res.ok) {
-					toast.error('not found', {
-						description: data.error,
-					})
-
-					throw new Error(data.error || 'Failed to Fetch club info')
-				}
-
-				setClubMembers(data.members)
-			})
-			.catch((error) => console.log(error.message))
-	}, [params.clubID, user?.id])
-
-	const fetchUserClubStatus = useCallback(() => {
-		fetch(`http://localhost:5000/clubs/${params.clubID}/join/status`, { credentials: 'include' })
-			.then(async (res) => {
-				const data = await res.json()
-				if (!res.ok) {
-					toast.error('not found', {
-						description: data.error,
-					})
-
-					throw new Error(data.error || 'Failed to Fetch member join status info')
-				}
-
-				setMemberStatus(data.status)
-			})
-			.catch((error) => console.log(error.message))
-	}, [params.clubID])
-
-	useEffect(() => {
-		fetchClubInfo()
-		fetchUserClubStatus()
-	}, [fetchClubInfo, fetchUserClubStatus, handleJoinRequest, handleLeaveClub, params.clubID])
+	const { club, clubMembers, isOwner, loading } = useClub({ clubID: params.clubID })
+	const { memberStatus, handleJoinRequest, handleLeaveClub } = useUserClubStatus({
+		clubID: params.clubID,
+	})
 
 	return (
 		<>

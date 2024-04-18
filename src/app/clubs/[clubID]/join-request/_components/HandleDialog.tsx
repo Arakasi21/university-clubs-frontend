@@ -6,13 +6,12 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@/components/ui/dialog'
-import { IClub, IClubMember } from '@/interface/club'
+import { Club, ClubMember } from '@/types/club'
 import { useEffect, useState } from 'react'
-import { toast } from 'sonner'
 
 export type HandleDialogProps = {
-	selectedUser: IClubMember
-	club: IClub
+	selectedUser: ClubMember
+	club: Club
 	onClose: () => void
 	onHandle: (userID: number, status: 'approved' | 'rejected') => void
 	isOpen: boolean

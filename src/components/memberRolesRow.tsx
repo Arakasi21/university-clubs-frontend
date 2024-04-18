@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { IClubMember, IClubRole } from '@/interface/club'
 import { TableCell, TableRow } from '@/components/ui/table'
 import UserAvatar from '@/components/userAvatar'
 import { decimalToRgb } from '@/helpers/helper'
+import { ClubMember, ClubRole } from '@/types/club'
+import { useEffect, useState } from 'react'
 
-export type MemberRolesRowProps = { member: IClubMember; roles: IClubRole[] }
+export type MemberRolesRowProps = { member: ClubMember; roles: ClubRole[] }
 
 function MemberRolesRow({ member, roles }: MemberRolesRowProps) {
-	const [memberRoles, setMemberRoles] = useState<IClubRole[]>()
+	const [memberRoles, setMemberRoles] = useState<ClubRole[]>()
 
-	const roleFilter = (arr1: number[], arr2: IClubRole[]) => {
-		const res: IClubRole[] = []
+	const roleFilter = (arr1: number[], arr2: ClubRole[]) => {
+		const res: ClubRole[] = []
 		for (let i = 0; i < arr1.length; i++) {
 			for (let k = 0; k < arr2.length; k++) {
 				if (arr2[k].id === arr1[i]) {

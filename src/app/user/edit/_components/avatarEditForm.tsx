@@ -2,8 +2,8 @@ import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
-import { IUser } from '@/interface/user'
 import useUserStore from '@/store/user'
+import { User } from '@/types/user'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
@@ -142,7 +142,7 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 }
 
 interface AvatarEditFormProps {
-	user: IUser | null
+	user: User | null
 	className?: string
 }
 

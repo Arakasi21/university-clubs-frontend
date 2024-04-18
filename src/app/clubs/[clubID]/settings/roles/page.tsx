@@ -1,51 +1,27 @@
 'use client'
 import Nav from '@/components/NavBar'
-import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/table'
-import { IClub, IClubMember, IClubRole } from '@/interface/club'
-import React, { useCallback, useEffect, useState } from 'react'
-import useUserStore from '@/store/user'
-import { toast } from 'sonner'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Tabs, TabsContent } from '@/components/ui/tabs'
-import { Skeleton } from '@/components/ui/skeleton'
-import { DialogUpdateClubLogo } from '@/components/DialogUpdateClubLogo'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuLabel,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { MoreHorizontal } from 'lucide-react'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/table'
+import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { decimalToRgb } from '@/helpers/helper'
-import { bgRed, red } from 'next/dist/lib/picocolors'
+import useClub from '@/hooks/useClub'
+import { ClubRole } from '@/types/club'
+import { MoreHorizontal } from 'lucide-react'
+import Link from 'next/link'
+import { useCallback } from 'react'
+import { toast } from 'sonner'
 
 function Page({ params }: { params: { clubID: number } }) {
-	const [club, setClub] = useState<IClub>()
-	const [loading, setLoading] = useState(true)
-	const { user } = useUserStore()
-	const [isOwner, setIsOwner] = useState(false)
+	const { club, clubMembers, isOwner, loading, fetchClubInfo } = useClub({ clubID: params.clubID })
 
-	const fetchClubInfo = useCallback(() => {
-		fetch(`http://localhost:5000/clubs/${params.clubID}`)
-			.then(async (res) => {
-				const data = await res.json()
-				if (!res.ok) {
-					toast.error('not found', {
-						description: data.error,
-					})
-
-					throw new Error(data.error || 'Failed to Fetch club info')
-				}
-				setClub(data.club)
-				setIsOwner(data.club.owner_id == user?.id)
-				setLoading(false)
-				console.log(club?.roles)
-			})
-			.catch((error) => console.log(error.message))
-	}, [params.clubID])
 	const handleDeleteClub = useCallback(
 		async (roleID: number) => {
 			const apiUrl = `http://localhost:5000/clubs/${params.clubID}/roles/${roleID}`
@@ -79,11 +55,8 @@ function Page({ params }: { params: { clubID: number } }) {
 				console.log(e)
 			}
 		},
-		[fetchClubInfo(), params.clubID],
+		[fetchClubInfo, params.clubID],
 	)
-	useEffect(() => {
-		fetchClubInfo()
-	}, [fetchClubInfo, handleDeleteClub, params.clubID, user?.id])
 
 	// if (!isOwner) {
 	// 	return null
@@ -145,8 +118,8 @@ function Page({ params }: { params: { clubID: number } }) {
 											<TableBody>
 												{club &&
 													club.roles
-														.sort((role, role2) => role.position < role2.position)
-														.map((role: IClubRole) => (
+														.sort((role, role2) => role2.position - role.position)
+														.map((role: ClubRole) => (
 															<TableRow key={role.position}>
 																<TableCell>
 																	<p
@@ -158,8 +131,7 @@ function Page({ params }: { params: { clubID: number } }) {
 																	</p>
 																</TableCell>
 																<TableCell>
-																	{role.permissions &&
-																		role.permissions.map((permission) => <p>{permission}</p>)}
+																	<p>{role.permissions ?? 'Do not have any permissions'}</p>
 																</TableCell>
 																<TableCell>
 																	<DropdownMenu>
@@ -169,14 +141,17 @@ function Page({ params }: { params: { clubID: number } }) {
 																				<span className="sr-only">Toggle menu</span>
 																			</Button>
 																		</DropdownMenuTrigger>
+
 																		<DropdownMenuContent align="end">
 																			<DropdownMenuItem>Edit</DropdownMenuItem>
-																			<DropdownMenuItem
-																				onClick={() => handleDeleteClub(role.id)}
-																				style={{ color: 'red' }}
-																			>
-																				Delete
-																			</DropdownMenuItem>
+																			{role.name !== 'member' && (
+																				<DropdownMenuItem
+																					onClick={() => handleDeleteClub(role.id)}
+																					style={{ color: 'red' }}
+																				>
+																					Delete
+																				</DropdownMenuItem>
+																			)}
 																		</DropdownMenuContent>
 																	</DropdownMenu>
 																</TableCell>

@@ -1,4 +1,4 @@
-export interface IClub {
+export type Club = {
 	id: number
 	name: string
 	description: string
@@ -6,10 +6,10 @@ export interface IClub {
 	logo_url: string
 	banner_url: string
 	number_of_members: number
-	roles: [IClubRole]
+	roles: ClubRole[]
 }
 
-export interface IClubMember {
+export type ClubMember = {
 	id: number
 	first_name: string
 	last_name: string
@@ -19,12 +19,12 @@ export interface IClubMember {
 	roles: number[]
 }
 
-export interface IClubRole {
+export type ClubRole = {
 	id: number
 	name: string
-	permissions: string[]
+	permissions: number
 	position: number
 	color: number
 }
 
-export type IUserClubStatus = 'NOT_MEMBER' | 'PENDING' | 'MEMBER'
+export type UserClubStatus = 'NOT_MEMBER' | 'PENDING' | 'MEMBER'

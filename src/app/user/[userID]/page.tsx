@@ -1,19 +1,19 @@
 'use client'
 import Nav from '@/components/NavBar'
 import { Button } from '@/components/ui/button'
-import { IUser } from '@/interface/user'
-import { IClub } from '@/interface/club'
+import { Card, CardContent } from '@/components/ui/card'
 import useUserStore from '@/store/user'
+import { Club } from '@/types/club'
+import { User } from '@/types/user'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { Card, CardContent } from '@/components/ui/card'
 
 const UserPage = ({ params }: { params: { userID: number } }) => {
 	const { user } = useUserStore()
-	const [pageowner, setPageowner] = useState(null as IUser | null)
-	const [clubs, setClubs] = useState<IClub[] | null>(null)
+	const [pageowner, setPageowner] = useState(null as User | null)
+	const [clubs, setClubs] = useState<Club[] | null>(null)
 	const [isOwner, setIsOwner] = useState(false)
 
 	const router = useRouter()

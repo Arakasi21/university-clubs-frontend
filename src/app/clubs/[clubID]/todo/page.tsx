@@ -1,45 +1,16 @@
 'use client'
-import React, {
-	Dispatch,
-	SetStateAction,
-	useState,
-	DragEvent,
-	FormEvent,
-	useCallback,
-	useEffect,
-} from 'react'
-import { FiPlus, FiTrash } from 'react-icons/fi'
-import { motion } from 'framer-motion'
-import { FaFire } from 'react-icons/fa'
 import Nav from '@/components/NavBar'
-import { toast } from 'sonner'
-import { IClub } from '@/interface/club'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import useClub from '@/hooks/useClub'
+import { motion } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
+import { Dispatch, DragEvent, FormEvent, SetStateAction, useState } from 'react'
+import { FaFire } from 'react-icons/fa'
+import { FiPlus, FiTrash } from 'react-icons/fi'
 
 const CustomKanban = ({ params }: { params: { clubID: number } }) => {
-	const [club, setClub] = useState<IClub>()
-	const fetchClubInfo = useCallback(() => {
-		fetch(`http://localhost:5000/clubs/${params.clubID}`)
-			.then(async (res) => {
-				const data = await res.json()
-				if (!res.ok) {
-					toast.error('not found', {
-						description: data.error,
-					})
-
-					throw new Error(data.error || 'Failed to Fetch club info')
-				}
-
-				setClub(data.club)
-			})
-			.catch((error) => console.log(error.message))
-	}, [params.clubID])
-
-	useEffect(() => {
-		fetchClubInfo()
-	}, [fetchClubInfo, params.clubID])
+	const { club } = useClub({ clubID: params.clubID })
 
 	return (
 		<>

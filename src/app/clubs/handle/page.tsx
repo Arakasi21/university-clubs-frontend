@@ -10,7 +10,7 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 import UserAvatar from '@/components/userAvatar'
-import { IClub, IClubMember } from '@/interface/club'
+import { Club, ClubMember } from '@/types/club'
 import {
 	ColumnDef,
 	ColumnFiltersState,
@@ -30,8 +30,8 @@ import { toast } from 'sonner'
 import HandleDialog from './_components/HandleDialog'
 
 type Columns = {
-	club: IClub
-	owner: IClubMember
+	club: Club
+	owner: ClubMember
 }
 
 const columns: ColumnDef<Columns>[] = [
@@ -62,7 +62,7 @@ const columns: ColumnDef<Columns>[] = [
 	},
 ]
 function Page() {
-	const [data, setData] = useState([] as { club: IClub; owner: IClubMember }[])
+	const [data, setData] = useState([] as { club: Club; owner: ClubMember }[])
 
 	const [page, setPage] = useState(1)
 	const [pageSize, setPageSize] = useState(25)
@@ -75,7 +75,7 @@ function Page() {
 	const [rowSelection, setRowSelection] = useState({})
 
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
-	const [selectedClub, setSelectedClub] = useState<IClub>()
+	const [selectedClub, setSelectedClub] = useState<Club>()
 
 	const fetchPendingClubs = useCallback(() => {
 		fetch(`http://localhost:5000/clubs/pending?page=${page}&page_size=${pageSize}`, {
@@ -89,7 +89,7 @@ function Page() {
 					})
 				}
 
-				setData(data.items as { club: IClub; owner: IClubMember }[])
+				setData(data.items as { club: Club; owner: ClubMember }[])
 				setFirstPage(data.metadata.first_page)
 				setLastPage(data.metadata.last_page)
 				setTotalRecords(data.metadata.total_records)
@@ -101,7 +101,7 @@ function Page() {
 		fetchPendingClubs()
 	}, [page, pageSize, fetchPendingClubs])
 
-	const handleRowClick = (club: IClub) => {
+	const handleRowClick = (club: Club) => {
 		setSelectedClub(club)
 		setIsDialogOpen(true)
 	}

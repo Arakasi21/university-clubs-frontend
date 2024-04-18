@@ -1,5 +1,3 @@
-import { Copy } from 'lucide-react'
-
 import { Button } from '@/components/ui/button'
 import {
 	Dialog,
@@ -11,16 +9,16 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '@/components/ui/dialog'
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { z } from 'zod'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Club } from '@/types/club'
+import { zodResolver } from '@hookform/resolvers/zod'
+import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
-import { IClub } from '@/interface/club'
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
-import Image from 'next/image'
-import { Skeleton } from '@/components/ui/skeleton'
+import { z } from 'zod'
 
 const MAX_FILE_SIZE = 5000000 // ~5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -36,7 +34,7 @@ const formSchema = z.object({
 })
 
 export type ClubLogoFormProps = {
-	club: IClub
+	club: Club
 }
 
 const ClubLogoEditForm: React.FC<ClubLogoFormProps> = ({ club, ...props }) => {
@@ -151,7 +149,7 @@ const ClubLogoEditForm: React.FC<ClubLogoFormProps> = ({ club, ...props }) => {
 }
 
 export type DialogUpdateClubLogoProps = {
-	club: IClub
+	club: Club
 }
 
 export function DialogUpdateClubLogo({ club }: DialogUpdateClubLogoProps) {

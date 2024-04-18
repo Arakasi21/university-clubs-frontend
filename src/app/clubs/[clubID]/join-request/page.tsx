@@ -1,6 +1,7 @@
 'use client'
 import Nav from '@/components/NavBar'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
 	Table,
 	TableBody,
@@ -9,8 +10,10 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table'
+import { Tabs, TabsContent } from '@/components/ui/tabs'
 import UserAvatar from '@/components/userAvatar'
-import { IClub, IClubMember } from '@/interface/club'
+import useClub from '@/hooks/useClub'
+import { Club, ClubMember } from '@/types/club'
 import {
 	ColumnDef,
 	ColumnFiltersState,
@@ -24,23 +27,13 @@ import {
 	VisibilityState,
 } from '@tanstack/react-table'
 import Link from 'next/link'
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import HandleDialog from './_components/HandleDialog'
-import useUserStore from '@/store/user'
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card'
-import { Tabs, TabsContent } from '@/components/ui/tabs'
 
 type Columns = {
-	club: IClub
-	owner: IClubMember
+	club: Club
+	owner: ClubMember
 }
 
 const columns: ColumnDef<Columns>[] = [
@@ -56,11 +49,8 @@ const columns: ColumnDef<Columns>[] = [
 	},
 ]
 function Page({ params }: { params: { clubID: number } }) {
-	const [data, setData] = useState([] as IClubMember[])
-	const { user } = useUserStore()
-	const [club, setClub] = useState<IClub>()
-	const [loading, setLoading] = useState(true)
-	const [isOwner, setIsOwner] = useState(false)
+	const [data, setData] = useState([] as ClubMember[])
+	const { club, clubMembers, isOwner, loading } = useClub({ clubID: params.clubID })
 
 	const [page, setPage] = useState(1)
 	const [pageSize, setPageSize] = useState(25)
@@ -73,30 +63,7 @@ function Page({ params }: { params: { clubID: number } }) {
 	const [rowSelection, setRowSelection] = useState({})
 
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
-	const [selectedUser, setSelectedUser] = useState<IClubMember>()
-
-	const fetchClubInfo = useCallback(() => {
-		fetch(`http://localhost:5000/clubs/${params.clubID}`)
-			.then(async (res) => {
-				const data = await res.json()
-				if (!res.ok) {
-					toast.error('not found', {
-						description: data.error,
-					})
-
-					throw new Error(data.error || 'Failed to Fetch club info')
-				}
-
-				setClub(data.club)
-				setIsOwner(data.club.owner_id == user?.id)
-				setLoading(false)
-			})
-			.catch((error) => console.log(error.message))
-	}, [params.clubID, user?.id])
-
-	useEffect(() => {
-		fetchClubInfo()
-	}, [fetchClubInfo, params.clubID])
+	const [selectedUser, setSelectedUser] = useState<ClubMember>()
 
 	const fetchPendingClubs = useCallback(() => {
 		console.log(params.clubID)
@@ -117,7 +84,7 @@ function Page({ params }: { params: { clubID: number } }) {
 				setTotalRecords(data.metadata.total_records)
 			})
 			.catch((error) => console.log(error.message))
-	}, [page, pageSize])
+	}, [page, pageSize, params.clubID])
 
 	const onHandle = (userID: number, status: 'approved' | 'rejected') => {
 		fetch(`http://localhost:5000/clubs/${club.id}/members`, {
@@ -147,7 +114,7 @@ function Page({ params }: { params: { clubID: number } }) {
 		fetchPendingClubs()
 	}, [page, pageSize, fetchPendingClubs])
 
-	const handleRowClick = (user: IClubMember) => {
+	const handleRowClick = (user: ClubMember) => {
 		setSelectedUser(user)
 		setIsDialogOpen(true)
 	}
@@ -248,7 +215,7 @@ function Page({ params }: { params: { clubID: number } }) {
 					onHandle={onHandle}
 					isOpen={isDialogOpen}
 					selectedUser={selectedUser}
-					club={club ?? ({} as IClub)}
+					club={club ?? ({} as Club)}
 					onClose={() => {
 						setIsDialogOpen(false)
 					}}

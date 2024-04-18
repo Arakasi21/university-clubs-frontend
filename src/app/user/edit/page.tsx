@@ -1,13 +1,13 @@
 'use client'
 import AvatarEditForm from '@/app/user/edit/_components/avatarEditForm'
 import Nav from '@/components/NavBar'
-import { IUser } from '@/interface/user'
 import useUserStore from '@/store/user'
+import { User } from '@/types/user'
 import { useCallback, useEffect, useState } from 'react'
 
 const Page = () => {
 	const store = useUserStore()
-	const [user, setUser] = useState(null as IUser | null)
+	const [user, setUser] = useState(null as User | null)
 
 	const fetchUserInfo = useCallback(() => {
 		fetch(`http://localhost:5000/user/${store.user?.id}`)

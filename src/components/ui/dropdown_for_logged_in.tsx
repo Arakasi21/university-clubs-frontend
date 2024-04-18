@@ -11,11 +11,11 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { ModeToggle } from '@/components/ui/toggle-mode'
 import UserAvatar from '@/components/userAvatar'
-import { IUser } from '@/interface/user'
+import { User } from '@/types/user'
 import { GavelIcon, LogOutIcon, PlusCircleIcon, SettingsIcon, UserRoundIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
-const DropdownForLoggedIn = ({ user, logout }: { user: IUser; logout: () => void }) => {
+const DropdownForLoggedIn = ({ user, logout }: { user: User; logout: () => void }) => {
 	const router = useRouter()
 	const canHandleNewClubs: boolean = user.role === 'ADMIN' || user.role === 'DSVR'
 	return (
