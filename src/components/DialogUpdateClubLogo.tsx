@@ -115,26 +115,8 @@ const ClubLogoEditForm: React.FC<ClubLogoFormProps> = ({ club, ...props }) => {
 											}}
 										/>
 									</FormControl>
-									{/*<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-										<DialogContent>
-											<DialogHeader>
-												<DialogTitle>Crop your new profile picture</DialogTitle>
-											</DialogHeader>
-											{imagePreview && (
-												<AvatarEditor
-													ref={editor}
-													image={}
-													border={10}
-													scale={1.2}
-												/>
-											)}
-											<DialogFooter className="flex justify-center w-full">
-
-											</DialogFooter>
-										</DialogContent>
-									</Dialog>*/}
 									<Button type="submit" className="w-full">
-										Set new profile picture
+										Set new club logo
 									</Button>
 								</FormItem>
 							)}
@@ -161,7 +143,6 @@ export function DialogUpdateClubLogo({ club }: DialogUpdateClubLogoProps) {
 			<DialogContent className="sm:max-w-md">
 				<DialogHeader>
 					<DialogTitle>Update Club Logo</DialogTitle>
-					<DialogDescription>Anyone who has this link will be able to view this.</DialogDescription>
 				</DialogHeader>
 				<div className="flex items-center space-x-2">
 					<ClubLogoEditForm club={club} />

@@ -116,7 +116,7 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 										/>
 									</FormControl>
 									<Button type="submit" className="w-full">
-										Set new profile picture
+										Set new banner picture
 									</Button>
 								</FormItem>
 							)}

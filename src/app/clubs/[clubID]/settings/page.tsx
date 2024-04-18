@@ -78,9 +78,11 @@ function Page({ params }: { params: { clubID: number } }) {
 												Club page
 											</Button>
 										</Link>
-										<Link href={`/clubs/${club?.id}/join-request`}>
-											<Button variant={'outline'}>Handle new members</Button>
-										</Link>
+										{hasPermission(permissions, Permissions.ManageMembership) && (
+											<Link href={`/clubs/${club?.id}/join-request`}>
+												<Button variant={'outline'}>Handle new members</Button>
+											</Link>
+										)}
 									</div>
 									<div>
 										<div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
@@ -99,19 +101,21 @@ function Page({ params }: { params: { clubID: number } }) {
 													</CardFooter>
 												)}
 											</Card>
-											<Card x-chunk="dashboard-05-chunk-1">
-												<CardHeader className="pb-3">
-													<CardDescription>Update your logo/banner</CardDescription>
-												</CardHeader>
-												<CardContent>
-													{club && (
-														<div className="flex gap-3">
-															<DialogUpdateClubLogo club={club} />
-															<DialogUpdateClubBanner club={club} />
-														</div>
-													)}
-												</CardContent>
-											</Card>
+											{hasPermission(permissions, Permissions.ManageClub) && (
+												<Card x-chunk="dashboard-05-chunk-1">
+													<CardHeader className="pb-3">
+														<CardDescription>Update your logo/banner</CardDescription>
+													</CardHeader>
+													<CardContent>
+														{club && (
+															<div className="flex gap-3">
+																<DialogUpdateClubLogo club={club} />
+																<DialogUpdateClubBanner club={club} />
+															</div>
+														)}
+													</CardContent>
+												</Card>
+											)}
 										</div>
 										<Tabs defaultValue="week">
 											<TabsContent value="week">
