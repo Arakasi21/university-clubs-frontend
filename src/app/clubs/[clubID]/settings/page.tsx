@@ -3,7 +3,7 @@ import { DialogUpdateClubBanner } from '@/components/DialogUpdateClubBanner'
 import { DialogUpdateClubLogo } from '@/components/DialogUpdateClubLogo'
 import Nav from '@/components/NavBar'
 
-import MemberRolesRow from '@/components/memberRolesRow'
+import MemberRow from '@/components/memberRolesRow'
 import { Button } from '@/components/ui/button'
 import {
 	Card,

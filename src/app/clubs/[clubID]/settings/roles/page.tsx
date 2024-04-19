@@ -41,6 +41,7 @@ function Page({ params }: { params: { clubID: number } }) {
 		user: user,
 		userStatus: memberStatus,
 	})
+
 	const handleDeleteRole = useCallback(
 		async (roleID: number) => {
 			const apiUrl = `http://localhost:5000/clubs/${params.clubID}/roles/${roleID}`
