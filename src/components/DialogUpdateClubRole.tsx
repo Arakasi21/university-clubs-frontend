@@ -46,7 +46,7 @@ const RoleEditForm: React.FC<{
 		defaultValues: {
 			name: role.name,
 			color: `#${role.color.toString(16).padStart(6, '0')}`,
-			permissions: permissionsToStringArr(role.permissions),
+			permissions: permissionsToStringArr(role.permissions).map((p) => p.id),
 		},
 	})
 

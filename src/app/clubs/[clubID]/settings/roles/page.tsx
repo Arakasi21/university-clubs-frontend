@@ -25,6 +25,7 @@ import useMemberRoles from '@/hooks/useMemberRoles'
 import { hasPermission, permissionsToHex, permissionsToStringArr } from '@/helpers/permissions'
 import { Permissions } from '@/types/permissions'
 import Error from 'next/error'
+import { Badge } from '@/components/ui/badge'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
@@ -143,6 +144,7 @@ function Page({ params }: { params: { clubID: number } }) {
 															<TableRow key={role.position}>
 																<TableCell>
 																	<p
+																		className="text-1xl"
 																		style={{
 																			color: `${decimalToRgb(role.color)}`,
 																		}}
@@ -150,10 +152,19 @@ function Page({ params }: { params: { clubID: number } }) {
 																		{role.name}
 																	</p>
 																</TableCell>
-																<TableCell>
+																{/* TODO remove unneccessary margin*/}
+																<TableCell className="flex max-w-lg flex-wrap">
 																	{role.permissions
 																		? permissionsToStringArr(role.permissions).map((p, index) => (
-																				<p id={index}>{p}</p>
+																				<Badge
+																					key={index}
+																					variant={
+																						p.id === 'administrator' ? 'destructive' : 'default'
+																					}
+																					className="mx-2.5 my-1.5 w-fit text-nowrap text-center"
+																				>
+																					{p.label}
+																				</Badge>
 																			))
 																		: 'Do not have any permissions'}
 																</TableCell>

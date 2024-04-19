@@ -42,25 +42,25 @@ export const membersHighestRole = (roles: ClubRole[]) => {
 }
 
 export const permissionsToStringArr = (permissions: Permissions) => {
-	const arr: string[] = []
+	const arr: PermissionsListItem[] = []
 
 	if ((permissions & Permissions.administrator) !== 0) {
-		arr.push('administrator')
+		arr.push(PermissionsList[0])
 	}
 	if ((permissions & Permissions.manage_club) !== 0) {
-		arr.push('manage_club')
+		arr.push(PermissionsList[1])
 	}
 	if ((permissions & Permissions.manage_membership) !== 0) {
-		arr.push('manage_membership')
+		arr.push(PermissionsList[2])
 	}
 	if ((permissions & Permissions.kick_member) !== 0) {
-		arr.push('kick_member')
+		arr.push(PermissionsList[3])
 	}
 	if ((permissions & Permissions.ban_member) !== 0) {
-		arr.push('ban_member')
+		arr.push(PermissionsList[4])
 	}
 	if ((permissions & Permissions.manage_roles) !== 0) {
-		arr.push('manage_roles')
+		arr.push(PermissionsList[5])
 	}
 
 	return arr
