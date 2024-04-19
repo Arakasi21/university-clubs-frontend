@@ -79,9 +79,10 @@ export default function Page() {
 			<div className="flex min-h-screen flex-col items-center justify-between p-24">
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(handleSubmit)} className="w-60">
-
-						<div className="text-center mb-6"> {/* Center the text and add margin to the bottom */}
-							<p  className="break-words text-sm text-gray-400">
+						<div className="mb-6 text-center">
+							{' '}
+							{/* Center the text and add margin to the bottom */}
+							<p className="break-words text-sm text-gray-400">
 								"You need to wait some time for an admin approval after submitting this form."
 							</p>
 						</div>

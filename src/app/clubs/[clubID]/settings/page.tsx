@@ -25,6 +25,7 @@ import useMemberRoles from '@/hooks/useMemberRoles'
 import { hasPermission } from '@/helpers/permissions'
 import { Permissions } from '@/types/permissions'
 import Error from 'next/error'
+import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from '@/components/ui/context-menu'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
@@ -138,7 +139,7 @@ function Page({ params }: { params: { clubID: number } }) {
 															<TableBody>
 																{clubMembers &&
 																	clubMembers.map((member) => (
-																		<MemberRolesRow
+																		<MemberRow
 																			member={member}
 																			roles={club?.roles ?? []}
 																			key={member.id}

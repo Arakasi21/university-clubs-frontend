@@ -156,12 +156,13 @@ function Page({ params }: { params: { clubID: number } }) {
 																<TableCell className="flex max-w-lg flex-wrap">
 																	{role.permissions
 																		? permissionsToStringArr(role.permissions).map((p, index) => (
+																				// TODO we can implement own colors for variant. Go to 'variant' and add new colors
 																				<Badge
 																					key={index}
 																					variant={
 																						p.id === 'administrator' ? 'destructive' : 'default'
 																					}
-																					className="mx-2.5 my-1.5 w-fit text-nowrap text-center"
+																					className="text-1xl mx-2.5 my-1.5 w-fit text-nowrap text-center"
 																				>
 																					{p.label}
 																				</Badge>
