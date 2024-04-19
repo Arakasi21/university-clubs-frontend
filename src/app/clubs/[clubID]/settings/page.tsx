@@ -44,7 +44,7 @@ function Page({ params }: { params: { clubID: number } }) {
 	if (!hasPermission(permissions, Permissions.ALL) && !loading) {
 		return <Error statusCode={401} />
 	}
-
+	// TODO ASSIGN ROLE
 	return (
 		<>
 			<Nav />
@@ -78,7 +78,7 @@ function Page({ params }: { params: { clubID: number } }) {
 												Club page
 											</Button>
 										</Link>
-										{hasPermission(permissions, Permissions.ManageMembership) && (
+										{hasPermission(permissions, Permissions.manage_membership) && (
 											<Link href={`/clubs/${club?.id}/join-request`}>
 												<Button variant={'outline'}>Handle new members</Button>
 											</Link>
@@ -93,7 +93,7 @@ function Page({ params }: { params: { clubID: number } }) {
 														Introducing our new role management
 													</CardDescription>
 												</CardHeader>
-												{hasPermission(permissions, Permissions.ManageRoles) && (
+												{hasPermission(permissions, Permissions.manage_roles) && (
 													<CardFooter>
 														<Link href={`/clubs/${club?.id}/settings/roles`}>
 															<Button variant={'default'}>Roles settings</Button>
@@ -101,7 +101,7 @@ function Page({ params }: { params: { clubID: number } }) {
 													</CardFooter>
 												)}
 											</Card>
-											{hasPermission(permissions, Permissions.ManageClub) && (
+											{hasPermission(permissions, Permissions.manage_club) && (
 												<Card x-chunk="dashboard-05-chunk-1">
 													<CardHeader className="pb-3">
 														<CardDescription>Update your logo/banner</CardDescription>

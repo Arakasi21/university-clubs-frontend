@@ -103,7 +103,7 @@ export function Page({ params }: { params: { clubID: number } }) {
 	}
 
 	//if do not have any permissions or not owner return nonauth
-	if (!hasPermission(permissions, Permissions.ManageRoles) && !loading) {
+	if (!hasPermission(permissions, Permissions.manage_roles) && !loading) {
 		return <Error statusCode={401} />
 	}
 	return (

@@ -2,6 +2,7 @@
 import Nav from '@/components/NavBar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { DialogUpdateClubRole } from '@/components/DialogUpdateClubRole'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -21,26 +22,25 @@ import { toast } from 'sonner'
 import useUserStore from '@/store/user'
 import useUserClubStatus from '@/hooks/useUserClubStatus'
 import useMemberRoles from '@/hooks/useMemberRoles'
-import { hasPermission } from '@/helpers/permissions'
+import { hasPermission, permissionsToHex, permissionsToStringArr } from '@/helpers/permissions'
 import { Permissions } from '@/types/permissions'
 import Error from 'next/error'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
-	const { club, clubMembers, isOwner, loading, fetchClubInfo } = useClub({
+	const { club, isOwner, loading, fetchClubInfo } = useClub({
 		clubID: params.clubID,
 		user: user,
 	})
-	const { memberStatus, handleJoinRequest, handleLeaveClub } = useUserClubStatus({
+	const { memberStatus } = useUserClubStatus({
 		clubID: params.clubID,
 	})
-	const { roles, permissions } = useMemberRoles({
+	const { roles, permissions, highestRole } = useMemberRoles({
 		clubID: params.clubID,
 		user: user,
 		userStatus: memberStatus,
 	})
-
-	const handleDeleteClub = useCallback(
+	const handleDeleteRole = useCallback(
 		async (roleID: number) => {
 			const apiUrl = `http://localhost:5000/clubs/${params.clubID}/roles/${roleID}`
 			try {
@@ -59,6 +59,7 @@ function Page({ params }: { params: { clubID: number } }) {
 				}
 
 				fetchClubInfo()
+				console.log('Role deleted successfully')
 
 				toast.success('Role deleted!', {
 					action: {
@@ -77,7 +78,7 @@ function Page({ params }: { params: { clubID: number } }) {
 	)
 
 	//if do not have any permissions or not owner return nonauth
-	if (!hasPermission(permissions, Permissions.ManageRoles) && !loading) {
+	if (!hasPermission(permissions, Permissions.manage_roles) && !loading) {
 		return <Error statusCode={401} />
 	}
 
@@ -150,30 +151,43 @@ function Page({ params }: { params: { clubID: number } }) {
 																	</p>
 																</TableCell>
 																<TableCell>
-																	<p>{role.permissions ?? 'Do not have any permissions'}</p>
+																	{role.permissions
+																		? permissionsToStringArr(role.permissions).map((p, index) => (
+																				<p id={index}>{p}</p>
+																			))
+																		: 'Do not have any permissions'}
 																</TableCell>
-																<TableCell>
-																	<DropdownMenu>
-																		<DropdownMenuTrigger asChild>
-																			<Button aria-haspopup="true" size="icon" variant="ghost">
-																				<MoreHorizontal className="h-4 w-4" />
-																				<span className="sr-only">Toggle menu</span>
-																			</Button>
-																		</DropdownMenuTrigger>
-
-																		<DropdownMenuContent align="end">
-																			<DropdownMenuItem>Edit</DropdownMenuItem>
+																{(highestRole?.position > role.position || isOwner) && (
+																	<TableCell>
+																		<DropdownMenu>
+																			<DropdownMenuTrigger asChild>
+																				<Button aria-haspopup="true" size="icon" variant="ghost">
+																					<MoreHorizontal className="h-4 w-4" />
+																					<span className="sr-only">Toggle menu</span>
+																				</Button>
+																			</DropdownMenuTrigger>
 																			{role.name !== 'member' && (
-																				<DropdownMenuItem
-																					onClick={() => handleDeleteClub(role.id)}
-																					style={{ color: 'red' }}
-																				>
-																					Delete
-																				</DropdownMenuItem>
+																				<DropdownMenuContent align="end">
+																					<DropdownMenuItem>
+																						{/* TODO lower member cannot edit the role of lowest member*/}
+																						<DialogUpdateClubRole
+																							club={club}
+																							role={role}
+																							memberPermissions={permissions}
+																							onUpdateSuccess={() => fetchClubInfo()}
+																						/>
+																					</DropdownMenuItem>
+																					<DropdownMenuItem
+																						onClick={() => handleDeleteRole(role.id)}
+																						style={{ color: 'red' }}
+																					>
+																						Delete
+																					</DropdownMenuItem>
+																				</DropdownMenuContent>
 																			)}
-																		</DropdownMenuContent>
-																	</DropdownMenu>
-																</TableCell>
+																		</DropdownMenu>
+																	</TableCell>
+																)}
 															</TableRow>
 														))}
 											</TableBody>
