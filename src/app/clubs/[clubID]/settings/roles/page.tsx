@@ -2,20 +2,13 @@
 import Nav from '@/components/NavBar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { DialogUpdateClubRole } from '@/components/DialogUpdateClubRole'
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/table'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { decimalToRgb } from '@/helpers/helper'
 import useClub from '@/hooks/useClub'
 import { ClubRole } from '@/types/club'
-import { MoreHorizontal } from 'lucide-react'
+import RolesDropdownMenu from './_components/RolesDropdownMenu'
 import Link from 'next/link'
 import { useCallback } from 'react'
 import { toast } from 'sonner'
@@ -174,32 +167,12 @@ function Page({ params }: { params: { clubID: number } }) {
 																</TableCell>
 																{((highestRole?.position ?? 0) > role.position || isOwner) && (
 																	<TableCell>
-																		<DropdownMenu>
-																			<DropdownMenuTrigger asChild>
-																				<Button aria-haspopup="true" size="icon" variant="ghost">
-																					<MoreHorizontal className="h-4 w-4" />
-																					<span className="sr-only">Toggle menu</span>
-																				</Button>
-																			</DropdownMenuTrigger>
-																			{role.name !== 'member' && (
-																				<DropdownMenuContent align="end">
-																					<DropdownMenuItem>
-																						{/* TODO lower member cannot edit the role of lowest member*/}
-																						<DialogUpdateClubRole
-																							club={club}
-																							role={role}
-																							onUpdateSuccess={() => fetchClubInfo()}
-																						/>
-																					</DropdownMenuItem>
-																					<DropdownMenuItem
-																						onClick={() => handleDeleteRole(role.id)}
-																						style={{ color: 'red' }}
-																					>
-																						Delete
-																					</DropdownMenuItem>
-																				</DropdownMenuContent>
-																			)}
-																		</DropdownMenu>
+																		<RolesDropdownMenu
+																			role={role}
+																			club={club}
+																			onUpdateSuccess={() => fetchClubInfo()}
+																			onClick={() => handleDeleteRole(role.id)}
+																		/>
 																	</TableCell>
 																)}
 															</TableRow>

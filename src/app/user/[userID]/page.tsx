@@ -30,7 +30,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 				}
 
 				setPageowner(data.user)
-				setIsOwner(data.user?.id == user?.id)
+				setIsOwner(data.user?.id === user?.id)
 
 				console.log('Fetched user ID:', data.user.id) // Log fetched user ID
 				console.log('Params user ID:', params.userID) // Log params user ID
@@ -47,7 +47,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 				setClubs(userClubsData.clubs)
 			})
 			.catch((error) => console.log(error.message))
-	}, [params.userID])
+	}, [params.userID, user?.id])
 
 	useEffect(() => {
 		fetchUserInfo()
@@ -73,10 +73,10 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 											/>
 										</div>
 									) : (
-										<div className="border-1 overflow-hidden rounded-full border-white">
-											<img
-												src="https://moodle.astanait.edu.kz/pluginfile.php/1/core_admin/logocompact/300x300/1677736259/logo%20AITU%28imageonly%29.png"
-												alt=""
+										<div className=" overflow-hidden rounded-full border-4 border-white">
+											<Image
+												src={'/aitu-logo-3-400x205.png'}
+												alt={'non - image'}
 												width={200}
 												height={200}
 											/>
