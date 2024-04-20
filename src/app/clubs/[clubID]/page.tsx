@@ -1,5 +1,4 @@
 'use client'
-import Nav from '@/components/NavBar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select } from '@/components/ui/select'
@@ -14,6 +13,7 @@ import useUserStore from '@/store/user'
 import useUserRolesStore from '@/store/useUserRoles'
 import { hasPermission } from '@/helpers/permissions'
 import { Permissions } from '@/types/permissions'
+import Layout from '@/components/Layout'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
@@ -29,8 +29,7 @@ function Page({ params }: { params: { clubID: number } }) {
 
 	const { permissions } = useUserRolesStore()
 	return (
-		<>
-			<Nav />
+		<Layout>
 			<div>
 				{loading ? (
 					<div className="flex flex-col space-y-3">
@@ -44,7 +43,7 @@ function Page({ params }: { params: { clubID: number } }) {
 					<>
 						<div
 							style={{ backgroundImage: `url(${club?.banner_url ?? '/main_photo.jpeg'})` }}
-							className="relative h-40 w-screen bg-center bg-no-repeat"
+							className="relative h-40 w-full rounded-xl bg-center bg-no-repeat"
 						/>
 						{/* BODY */}
 						<div className="grid flex-1 items-start gap-4 p-4 sm:px-32 sm:py-8 md:gap-8">
@@ -138,7 +137,7 @@ function Page({ params }: { params: { clubID: number } }) {
 					</>
 				)}
 			</div>
-		</>
+		</Layout>
 	)
 }
 

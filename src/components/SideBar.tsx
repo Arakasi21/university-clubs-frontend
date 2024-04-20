@@ -1,124 +1,104 @@
-import Link from 'next/link'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
+import { FC, ReactNode, useContext } from 'react'
+import { MoreVertical, ChevronLast, ChevronFirst } from 'lucide-react'
+import { SidebarContext, SidebarContextType } from '@/helpers/context'
 
-function SideBar() {
+interface SidebarProps {
+	children: ReactNode
+}
+
+const Sidebar: FC<SidebarProps> = ({ children }) => {
+	const { expanded, setExpanded } = useContext(SidebarContext) as SidebarContextType
+
 	return (
-		<div className="h-screen overflow-x-hidden overflow-y-scroll ">
-			<div className="w-100">
-				<Card className="w-100">
-					<CardHeader>
-						<CardTitle>Volunteer clubs</CardTitle>
-						<CardDescription className="text-md">
-							For someone who loves to help others
-						</CardDescription>
-					</CardHeader>
+		<aside className="h-screen">
+			<nav className="flex h-full flex-col border-r bg-background shadow-sm">
+				<div className="flex items-center justify-between p-4 pb-2">
+					{/*<img*/}
+					{/*	src="https://img.logoipsum.com/243.svg"*/}
+					{/*	className={`overflow-hidden transition-all ${expanded ? 'w-32' : 'w-0'}`}*/}
+					{/*	alt=""*/}
+					{/*/>*/}
+					<button
+						onClick={() => setExpanded?.(!expanded)}
+						className="rounded-lg bg-background p-1.5 hover:bg-blue-200 dark:hover:bg-blue-950"
+					>
+						{expanded ? <ChevronFirst /> : <ChevronLast />}
+					</button>
+				</div>
 
-					<CardContent>
-						<Link href="/club_pages/volunteer_clubs/cooking_club">
-							<p className="py-3 hover:text-blue-500">Cooking club</p>
-						</Link>
+				<ul className="flex-1 px-3">{children}</ul>
 
-						<Link href="/club_pages/volunteer_clubs/charity_club">
-							<p className="py-3 hover:text-blue-500">AITU Charity</p>
-						</Link>
-
-						<Link href="/club_pages/volunteer_clubs/volunteer_club">
-							<p className="py-3 hover:text-blue-500">AITU Volunteers</p>
-						</Link>
-					</CardContent>
-				</Card>
-
-				<Card className="w-100">
-					<CardHeader>
-						<CardTitle>Gaming clubs</CardTitle>
-						<CardDescription>We think that descriptions are unnecessary</CardDescription>
-					</CardHeader>
-
-					<CardContent>
-						<Link href="/">
-							<p className="py-3 hover:text-blue-500">AITU Gaming club</p>
-						</Link>
-
-						<Link href="/">
-							<p className="py-3 hover:text-blue-500">Board Games</p>
-						</Link>
-
-						<Link href="/">
-							<p className="py-3 hover:text-blue-500">GameDev club</p>
-						</Link>
-					</CardContent>
-				</Card>
-
-				<Card className="w-100">
-					<CardHeader>
-						<CardTitle>For Athletes</CardTitle>
-						<CardDescription>
-							Do you like to win and love physical activity? Then we think these clubs will suit you
-						</CardDescription>
-					</CardHeader>
-
-					<CardContent>
-						<Link href="/">
-							<p className="py-3 hover:text-blue-500">Basketball</p>
-						</Link>
-
-						<Link href="/">
-							<p className="py-3 hover:text-blue-500">Volleyball</p>
-						</Link>
-
-						<Link href="/">
-							<p className="py-3 hover:text-blue-500">Football</p>
-						</Link>
-					</CardContent>
-				</Card>
-
-				<Card className="w-80">
-					<CardHeader>
-						<CardTitle>Dance & Music</CardTitle>
-						<CardDescription>Card Description</CardDescription>
-					</CardHeader>
-
-					<CardContent>
-						<Link href="/">
-							<p className="py-3 hover:text-blue-500">AITU Dance</p>
-						</Link>
-
-						<Link href="/">
-							<p className="py-3 hover:text-blue-500">KCA club</p>
-						</Link>
-
-						<Link href="/">
-							<p className="py-3 hover:text-blue-500">AITU Music</p>
-						</Link>
-					</CardContent>
-				</Card>
-
-				<Card className="w-100">
-					<CardHeader>
-						<CardTitle>Speaking clubs</CardTitle>
-						<CardDescription>Card Description</CardDescription>
-					</CardHeader>
-					<CardContent className="text-lg">
-						<Link href="/">
-							<p className="py-3 hover:text-blue-500">SPQR</p>
-						</Link>
-
-						<Link href="/">
-							<p className="py-3 hover:text-blue-500">Debate club</p>
-						</Link>
-
-						<Link href="/">
-							<p className="py-3 hover:text-blue-500">Oratory club</p>
-						</Link>
-
-						<Link href="/">
-							<p className="py-3 hover:text-blue-500">AITU Orchestra</p>
-						</Link>
-					</CardContent>
-				</Card>
-			</div>
-		</div>
+				<div className="flex border-t p-3">
+					<img
+						src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
+						alt=""
+						className="h-10 w-10 rounded-md"
+					/>
+					<div
+						className={`
+              flex items-center justify-between
+              overflow-hidden transition-all ${expanded ? 'ml-3 w-52' : 'w-0'}
+          `}
+					>
+						{/*<div className="leading-4">*/}
+						{/*	<h4 className="font-semibold">John Doe</h4>*/}
+						{/*	<span className="text-xs text-gray-600">johndoe@gmail.com</span>*/}
+						{/*</div>*/}
+						<MoreVertical size={20} />
+					</div>
+				</div>
+			</nav>
+		</aside>
 	)
 }
 
-export default SideBar
+interface SidebarItemProps {
+	icon: ReactNode
+	text: string
+	active?: boolean
+	alert?: boolean
+}
+
+const SidebarItem: FC<SidebarItemProps> = ({ icon, text, active, alert }) => {
+	const { expanded } = useContext(SidebarContext) as SidebarContextType
+
+	return (
+		<li
+			className={`
+        group relative my-1 flex cursor-pointer items-center
+        rounded-md px-3 py-2
+        font-medium transition-colors
+        ${
+					active
+						? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800'
+						: 'text-gray-600 hover:bg-indigo-50'
+				}
+    `}
+		>
+			{icon}
+			<span className={`overflow-hidden transition-all ${expanded ? 'ml-3 w-52' : 'w-0'}`}>
+				{text}
+			</span>
+			{alert && (
+				<div
+					className={`absolute right-2 h-2 w-2 rounded bg-indigo-400 ${expanded ? '' : 'top-2'}`}
+				/>
+			)}
+
+			{!expanded && (
+				<div
+					className={`
+          invisible absolute left-full ml-6 -translate-x-3 rounded-md
+          bg-indigo-100 px-2 py-1
+          text-sm text-indigo-800 opacity-20 transition-all
+          group-hover:visible group-hover:translate-x-0 group-hover:opacity-100
+      `}
+				>
+					{text}
+				</div>
+			)}
+		</li>
+	)
+}
+
+export { Sidebar, SidebarItem }
