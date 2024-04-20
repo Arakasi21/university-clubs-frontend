@@ -1,6 +1,7 @@
-import { FC, ReactNode, useContext } from 'react'
-import { MoreVertical, ChevronLast, ChevronFirst } from 'lucide-react'
+import React, { FC, ReactNode, useContext } from 'react'
+import { ChevronLast, ChevronFirst } from 'lucide-react'
 import { SidebarContext, SidebarContextType } from '@/helpers/context'
+import Image from 'next/image'
 
 interface SidebarProps {
 	children: ReactNode
@@ -13,40 +14,26 @@ const Sidebar: FC<SidebarProps> = ({ children }) => {
 		<aside className="h-screen">
 			<nav className="flex h-full flex-col border-r bg-background shadow-sm">
 				<div className="flex items-center justify-between p-4 pb-2">
-					{/*<img*/}
-					{/*	src="https://img.logoipsum.com/243.svg"*/}
-					{/*	className={`overflow-hidden transition-all ${expanded ? 'w-32' : 'w-0'}`}*/}
-					{/*	alt=""*/}
-					{/*/>*/}
+					<div
+						className={`justify-center overflow-hidden transition-all ${expanded ? 'w-32' : 'w-0'}`}
+					>
+						<Image
+							src={'/aitu-logo-3-400x205.png'}
+							alt=""
+							width={100}
+							height={50}
+							className="w-32 dark:brightness-200 dark:grayscale"
+						/>
+					</div>
 					<button
 						onClick={() => setExpanded?.(!expanded)}
-						className="rounded-lg bg-background p-1.5 hover:bg-blue-200 dark:hover:bg-blue-950"
+						className="context rounded-lg bg-background p-1.5 align-baseline hover:bg-blue-200 dark:hover:bg-blue-950"
 					>
 						{expanded ? <ChevronFirst /> : <ChevronLast />}
 					</button>
 				</div>
 
 				<ul className="flex-1 px-3">{children}</ul>
-
-				<div className="flex border-t p-3">
-					<img
-						src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
-						alt=""
-						className="h-10 w-10 rounded-md"
-					/>
-					<div
-						className={`
-              flex items-center justify-between
-              overflow-hidden transition-all ${expanded ? 'ml-3 w-52' : 'w-0'}
-          `}
-					>
-						{/*<div className="leading-4">*/}
-						{/*	<h4 className="font-semibold">John Doe</h4>*/}
-						{/*	<span className="text-xs text-gray-600">johndoe@gmail.com</span>*/}
-						{/*</div>*/}
-						<MoreVertical size={20} />
-					</div>
-				</div>
 			</nav>
 		</aside>
 	)
@@ -72,11 +59,11 @@ const SidebarItem: FC<SidebarItemProps> = ({ icon, text, active, alert }) => {
 					active
 						? 'bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800'
 						: 'text-gray-600 hover:bg-indigo-50'
-				}
+				}	
     `}
 		>
 			{icon}
-			<span className={`overflow-hidden transition-all ${expanded ? 'ml-3 w-52' : 'w-0'}`}>
+			<span className={`overflow-hidden transition-all ${expanded ? 'ml-3 w-40' : 'w-0'}`}>
 				{text}
 			</span>
 			{alert && (

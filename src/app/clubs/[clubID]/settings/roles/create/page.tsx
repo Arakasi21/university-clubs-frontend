@@ -31,6 +31,7 @@ import useUserRolesStore from '@/store/useUserRoles'
 import { hasPermission } from '@/helpers/permissions'
 import { Permissions } from '@/types/permissions'
 import Error from 'next/error'
+import useMemberRoles from '@/hooks/useMemberRoles'
 
 const formSchema = z.object({
 	name: z.string().min(4, {
@@ -56,7 +57,13 @@ export function Page({ params }: { params: { clubID: number } }) {
 	const { memberStatus } = useUserClubStatus({
 		clubID: params.clubID,
 	})
-	const { roles, permissions, highestRole } = useUserRolesStore()
+	useMemberRoles({
+		clubID: params.clubID,
+		user: user,
+		userStatus: memberStatus,
+	})
+
+	const { permissions } = useUserRolesStore()
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {

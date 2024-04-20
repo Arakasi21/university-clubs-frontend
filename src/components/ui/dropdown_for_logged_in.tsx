@@ -9,7 +9,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { ModeToggle } from '@/components/ui/toggle-mode'
+import { DarkThemeMenuToggle } from '@/components/ui/toggle-mode'
 import UserAvatar from '@/components/userAvatar'
 import { User } from '@/types/user'
 import { GavelIcon, LogOutIcon, PlusCircleIcon, SettingsIcon, UserRoundIcon } from 'lucide-react'
@@ -80,7 +80,7 @@ const DropdownForLoggedIn = ({ user, logout }: { user: User; logout: () => void 
 								e.preventDefault()
 							}}
 						>
-							<ModeToggle />
+							<DarkThemeMenuToggle />
 						</DropdownMenuItem>
 					</DropdownMenuGroup>
 

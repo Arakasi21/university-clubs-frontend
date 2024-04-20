@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { MoonIcon } from 'lucide-react'
 
-export function ModeToggle() {
+export function DarkThemeMenuToggle() {
 	const { theme, setTheme } = useTheme()
 	const [isDarkMode, setIsDarkMode] = useState(theme === 'dark')
 

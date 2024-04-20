@@ -25,12 +25,22 @@ import useUserRolesStore from '@/store/useUserRoles'
 import { hasPermission } from '@/helpers/permissions'
 import { Permissions } from '@/types/permissions'
 import Error from 'next/error'
+import useMemberRoles from '@/hooks/useMemberRoles'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
-	const { club, clubMembers, isOwner, loading } = useClub({ clubID: params.clubID, user: user })
+	const { club, clubMembers, loading } = useClub({ clubID: params.clubID, user: user })
+	const { memberStatus } = useUserClubStatus({
+		clubID: params.clubID,
+	})
+	useMemberRoles({
+		clubID: params.clubID,
+		user: user,
+		userStatus: memberStatus,
+	})
+
 	const { permissions } = useUserRolesStore()
 	//if do not have any permissions or not owner return nonauth
 	if (!hasPermission(permissions, Permissions.ALL) && !loading) {
