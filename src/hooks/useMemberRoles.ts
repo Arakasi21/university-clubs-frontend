@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { ClubRole, UserClubStatus } from '@/types/club'
+import { useCallback, useEffect } from 'react'
+import { UserClubStatus } from '@/types/club'
 import { toast } from 'sonner'
 import { accumulateMemberPermissions, membersHighestRole } from '@/helpers/permissions'
 import { User } from '@/types/user'
 import { Permissions } from '@/types/permissions'
+import useUserRolesStore from '@/store/useUserRoles'
 
 export type UseMemberRolesProps = {
 	userStatus: UserClubStatus
@@ -12,9 +13,7 @@ export type UseMemberRolesProps = {
 }
 
 function UseMemberRoles({ clubID, user, userStatus }: UseMemberRolesProps) {
-	const [roles, setRoles] = useState<ClubRole[]>([])
-	const [permissions, setPermissions] = useState(0)
-	const [highestRole, setHighestRole] = useState<ClubRole>(roles[0])
+	const { setUserRoles } = useUserRolesStore()
 
 	const fetchMemberRoles = useCallback(() => {
 		fetch(`http://localhost:5000/clubs/${clubID}/members/${user?.id}/roles`)
@@ -27,13 +26,15 @@ function UseMemberRoles({ clubID, user, userStatus }: UseMemberRolesProps) {
 
 					throw new Error(data.error || 'Failed to Fetch member roles ')
 				}
+				// do not touch
+				const permissions = data.is_owner
+					? Permissions.ALL
+					: accumulateMemberPermissions(data.roles)
 
-				setRoles(data.roles)
-				setPermissions(data.is_owner ? Permissions.ALL : accumulateMemberPermissions(data.roles))
-				setHighestRole(membersHighestRole(data.roles))
+				setUserRoles(data.roles, membersHighestRole(data.roles), permissions)
 			})
 			.catch((error) => console.log(error.message))
-	}, [clubID, user?.id])
+	}, [clubID, user?.id, setUserRoles])
 
 	useEffect(() => {
 		if (userStatus !== 'MEMBER' && !user) {
@@ -41,8 +42,5 @@ function UseMemberRoles({ clubID, user, userStatus }: UseMemberRolesProps) {
 		}
 		fetchMemberRoles()
 	}, [fetchMemberRoles, user, userStatus])
-
-	return { roles, permissions, highestRole }
 }
-
 export default UseMemberRoles

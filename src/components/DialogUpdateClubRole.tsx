@@ -17,15 +17,16 @@ import {
 import { Input } from '@/components/ui/input'
 import { Club, ClubRole } from '@/types/club'
 
-import React, { useState, MouseEvent, useEffect } from 'react'
+import React, { MouseEvent, useState } from 'react'
 
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { Permissions, PermissionsList } from '@/types/permissions'
+import { PermissionsList } from '@/types/permissions'
 import { Checkbox } from '@/components/ui/checkbox'
-import { membersHighestRole, permissionsToHex, permissionsToStringArr } from '@/helpers/permissions'
+import { permissionsToHex, permissionsToStringArr } from '@/helpers/permissions'
+import useUserRolesStore from '@/store/useUserRoles'
 
 const roleFormSchema = z.object({
 	name: z.string().min(2, { message: 'Role name must be at least 2 characters.' }),
@@ -38,10 +39,9 @@ const roleFormSchema = z.object({
 const RoleEditForm: React.FC<{
 	club: Club
 	role: ClubRole
-	memberPermissions: Permissions
 	onClose: () => void
 	onUpdateSuccess: () => void
-}> = ({ club, role, onClose, onUpdateSuccess, memberPermissions }) => {
+}> = ({ club, role, onClose, onUpdateSuccess }) => {
 	const form = useForm<z.infer<typeof roleFormSchema>>({
 		defaultValues: {
 			name: role.name,
@@ -49,7 +49,7 @@ const RoleEditForm: React.FC<{
 			permissions: permissionsToStringArr(role.permissions).map((p) => p.id),
 		},
 	})
-
+	const { permissions } = useUserRolesStore()
 	const updateRole = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
 		const values = form.getValues()
@@ -83,6 +83,7 @@ const RoleEditForm: React.FC<{
 			toast.error('ERROR', { description: 'An error occurred while trying to update role.' })
 		}
 	}
+
 	return (
 		<Form {...form}>
 			<form onSubmit={updateRole} onClick={(e) => e.stopPropagation()}>
@@ -129,7 +130,7 @@ const RoleEditForm: React.FC<{
 											<FormControl>
 												<Checkbox
 													checked={field.value.includes(permission.id)}
-													disabled={(memberPermissions & permission.hex) == 0} // member have permissions to edit
+													disabled={(permissions & permission.hex) == 0} // member have permissions to edit
 													onCheckedChange={(checked) => {
 														const newValue = checked
 															? [...field.value, permission.id]
@@ -173,27 +174,21 @@ export function DialogUpdateClubRole({
 	club,
 	role,
 	onUpdateSuccess,
-	memberPermissions,
 }: {
 	club: Club
 	role: ClubRole
 	onUpdateSuccess: () => void
-	memberPermissions: Permissions
 }) {
 	const [isOpen, setIsOpen] = useState(false)
-	const [isUpdating, setIsUpdating] = useState(false)
-
 	const toggleDialog = (event: MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault()
 		event.stopPropagation()
 		setIsOpen(!isOpen)
 	}
-
 	const handleUpdateSuccess = () => {
 		onUpdateSuccess()
 		console.log('handleUpdateSuccess Role updated successfully')
 	}
-
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogTrigger asChild>
@@ -209,7 +204,6 @@ export function DialogUpdateClubRole({
 					<RoleEditForm
 						role={role}
 						club={club}
-						memberPermissions={memberPermissions}
 						onClose={() => setIsOpen(false)}
 						onUpdateSuccess={handleUpdateSuccess}
 					/>

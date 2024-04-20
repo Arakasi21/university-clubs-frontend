@@ -21,26 +21,17 @@ import Image from 'next/image'
 import Link from 'next/link'
 import useUserStore from '@/store/user'
 import useUserClubStatus from '@/hooks/useUserClubStatus'
-import useMemberRoles from '@/hooks/useMemberRoles'
+import useUserRolesStore from '@/store/useUserRoles'
 import { hasPermission } from '@/helpers/permissions'
 import { Permissions } from '@/types/permissions'
 import Error from 'next/error'
-import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from '@/components/ui/context-menu'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
 	const { club, clubMembers, isOwner, loading } = useClub({ clubID: params.clubID, user: user })
-	const { memberStatus, handleJoinRequest, handleLeaveClub } = useUserClubStatus({
-		clubID: params.clubID,
-	})
-	const { roles, permissions } = useMemberRoles({
-		clubID: params.clubID,
-		user: user,
-		userStatus: memberStatus,
-	})
-
+	const { permissions } = useUserRolesStore()
 	//if do not have any permissions or not owner return nonauth
 	if (!hasPermission(permissions, Permissions.ALL) && !loading) {
 		return <Error statusCode={401} />

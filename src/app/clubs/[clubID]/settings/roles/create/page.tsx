@@ -27,14 +27,14 @@ import { toast } from 'sonner'
 import { z } from 'zod'
 import useUserStore from '@/store/user'
 import useUserClubStatus from '@/hooks/useUserClubStatus'
-import useMemberRoles from '@/hooks/useMemberRoles'
+import useUserRolesStore from '@/store/useUserRoles'
 import { hasPermission } from '@/helpers/permissions'
 import { Permissions } from '@/types/permissions'
 import Error from 'next/error'
 
 const formSchema = z.object({
-	name: z.string().min(2, {
-		message: 'Role name must be at least 2 characters.',
+	name: z.string().min(4, {
+		message: 'Role name must be at least 4 characters.',
 	}),
 	color: z.number(),
 })
@@ -56,12 +56,7 @@ export function Page({ params }: { params: { clubID: number } }) {
 	const { memberStatus } = useUserClubStatus({
 		clubID: params.clubID,
 	})
-	const { roles, permissions } = useMemberRoles({
-		clubID: params.clubID,
-		user: user,
-		userStatus: memberStatus,
-	})
-
+	const { roles, permissions, highestRole } = useUserRolesStore()
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {

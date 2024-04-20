@@ -21,11 +21,12 @@ import { useCallback } from 'react'
 import { toast } from 'sonner'
 import useUserStore from '@/store/user'
 import useUserClubStatus from '@/hooks/useUserClubStatus'
-import useMemberRoles from '@/hooks/useMemberRoles'
-import { hasPermission, permissionsToHex, permissionsToStringArr } from '@/helpers/permissions'
+import useUserRolesStore from '@/store/useUserRoles'
+import { hasPermission, permissionsToStringArr } from '@/helpers/permissions'
 import { Permissions } from '@/types/permissions'
 import Error from 'next/error'
 import { Badge } from '@/components/ui/badge'
+import useMemberRoles from '@/hooks/useMemberRoles'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
@@ -36,11 +37,12 @@ function Page({ params }: { params: { clubID: number } }) {
 	const { memberStatus } = useUserClubStatus({
 		clubID: params.clubID,
 	})
-	const { roles, permissions, highestRole } = useMemberRoles({
+	useMemberRoles({
 		clubID: params.clubID,
 		user: user,
 		userStatus: memberStatus,
 	})
+	const { permissions, highestRole } = useUserRolesStore()
 
 	const handleDeleteRole = useCallback(
 		async (roleID: number) => {
@@ -170,7 +172,7 @@ function Page({ params }: { params: { clubID: number } }) {
 																			))
 																		: 'Do not have any permissions'}
 																</TableCell>
-																{(highestRole?.position > role.position || isOwner) && (
+																{((highestRole?.position ?? 0) > role.position || isOwner) && (
 																	<TableCell>
 																		<DropdownMenu>
 																			<DropdownMenuTrigger asChild>
@@ -186,7 +188,6 @@ function Page({ params }: { params: { clubID: number } }) {
 																						<DialogUpdateClubRole
 																							club={club}
 																							role={role}
-																							memberPermissions={permissions}
 																							onUpdateSuccess={() => fetchClubInfo()}
 																						/>
 																					</DropdownMenuItem>

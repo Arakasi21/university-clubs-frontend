@@ -11,9 +11,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import useMemberRoles from '@/hooks/useMemberRoles'
 import useUserStore from '@/store/user'
+import useUserRolesStore from '@/store/useUserRoles'
 import { hasPermission } from '@/helpers/permissions'
 import { Permissions } from '@/types/permissions'
-import { useEffect } from 'react'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
@@ -21,12 +21,13 @@ function Page({ params }: { params: { clubID: number } }) {
 	const { memberStatus, handleJoinRequest, handleLeaveClub } = useUserClubStatus({
 		clubID: params.clubID,
 	})
-	const { roles, permissions } = useMemberRoles({
+	useMemberRoles({
 		clubID: params.clubID,
 		user: user,
 		userStatus: memberStatus,
 	})
 
+	const { permissions } = useUserRolesStore()
 	return (
 		<>
 			<Nav />
