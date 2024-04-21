@@ -28,9 +28,9 @@ import {
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import HandleDialog from '@/components/st/HandleDialog'
 import useUserStore from '@/store/user'
 import BackgroundClubImage from '@/components/st/BackgroundClubImage'
+import HandleJoinDialog from '@/components/st/HandleJoinDialog'
 function Page({ params }: { params: { clubID: number } }) {
 	const [data, setData] = useState([] as ClubMember[])
 	const { user } = useUserStore()
@@ -192,7 +192,7 @@ function Page({ params }: { params: { clubID: number } }) {
 			</Tabs>
 
 			{selectedUser && (
-				<HandleDialog
+				<HandleJoinDialog
 					onHandle={onHandle}
 					isOpen={isDialogOpen}
 					selectedUser={selectedUser}
