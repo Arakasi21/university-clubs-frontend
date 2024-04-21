@@ -3,7 +3,6 @@ import Nav from '@/components/NavBar'
 import { Button } from '@/components/ui/button'
 import useClub from '@/hooks/useClub'
 import { motion } from 'framer-motion'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Dispatch, DragEvent, FormEvent, SetStateAction, useState } from 'react'
 import { FaFire } from 'react-icons/fa'
@@ -13,6 +12,7 @@ import ClubImage from '@/components/st/ClubImage'
 import { undefined } from 'zod'
 
 const CustomKanban = ({ params }: { params: { clubID: number } }) => {
+	// @ts-ignore
 	const { club } = useClub({ clubID: params.clubID })
 
 	return (
@@ -115,6 +115,7 @@ const Column = ({ title, headingColor, cards, column, setCards }: ColumnProps) =
 				copy.push(cardToTransfer)
 			} else {
 				const insertAtIndex = copy.findIndex((el) => el.id === before)
+				// @ts-ignore
 				if (insertAtIndex === undefined) return
 
 				copy.splice(insertAtIndex, 0, cardToTransfer)
@@ -152,7 +153,7 @@ const Column = ({ title, headingColor, cards, column, setCards }: ColumnProps) =
 	const getNearestIndicator = (e: DragEvent, indicators: HTMLElement[]) => {
 		const DISTANCE_OFFSET = 50
 
-		const el = indicators.reduce(
+		return indicators.reduce(
 			(closest, child) => {
 				const box = child.getBoundingClientRect()
 
@@ -169,8 +170,6 @@ const Column = ({ title, headingColor, cards, column, setCards }: ColumnProps) =
 				element: indicators[indicators.length - 1],
 			},
 		)
-
-		return el
 	}
 
 	const getIndicators = () => {

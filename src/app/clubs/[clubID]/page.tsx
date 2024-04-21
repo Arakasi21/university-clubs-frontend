@@ -2,18 +2,15 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select } from '@/components/ui/select'
-import { Skeleton } from '@/components/ui/skeleton'
 import UserAvatar from '@/components/userAvatar'
 import useClub from '@/hooks/useClub'
 import useUserClubStatus from '@/hooks/useUserClubStatus'
-import Image from 'next/image'
 import Link from 'next/link'
 import useMemberRoles from '@/hooks/useMemberRoles'
 import useUserStore from '@/store/user'
 import useUserRolesStore from '@/store/useUserRoles'
 import { hasPermission } from '@/helpers/permissions'
 import { Permissions } from '@/types/permissions'
-import Layout from '@/components/Layout'
 import BackgroundClubImage from '@/components/st/BackgroundClubImage'
 import ClubImage from '@/components/st/ClubImage'
 import Nav from '@/components/NavBar'
@@ -71,7 +68,7 @@ function Page({ params }: { params: { clubID: number } }) {
 																<Button>Settings</Button>
 															</Link>
 															<Link href={`/clubs/${club?.id}/todo`}>
-																<Button>TODO</Button>
+																<Button>Notion Link</Button>
 															</Link>
 														</div>
 													)}

@@ -15,7 +15,6 @@ import UserAvatar from '@/components/userAvatar'
 import useClub from '@/hooks/useClub'
 import { Club, ClubMember } from '@/types/club'
 import {
-	ColumnDef,
 	ColumnFiltersState,
 	flexRender,
 	getCoreRowModel,
@@ -32,34 +31,16 @@ import { toast } from 'sonner'
 import HandleDialog from './_components/HandleDialog'
 import useUserStore from '@/store/user'
 import BackgroundClubImage from '@/components/st/BackgroundClubImage'
-
-type Columns = {
-	club: Club
-	owner: ClubMember
-}
-
-const columns: ColumnDef<Columns>[] = [
-	{
-		accessorKey: 'user',
-		header: 'Barcode',
-		cell: ({ row }) => <div className="capitalize">{row.getValue('name')}</div>,
-	},
-	{
-		accessorKey: 'profile',
-		header: () => <div className="text">Name</div>,
-		cell: ({ row }) => <div className="lowercase">{row.getValue('first_name')}</div>,
-	},
-]
 function Page({ params }: { params: { clubID: number } }) {
 	const [data, setData] = useState([] as ClubMember[])
 	const { user } = useUserStore()
-	const { club, clubMembers, isOwner, loading } = useClub({ clubID: params.clubID, user: user })
+	const { club, isOwner } = useClub({ clubID: params.clubID, user: user })
 
-	const [page, setPage] = useState(1)
-	const [pageSize, setPageSize] = useState(25)
-	const [firstPage, setFirstPage] = useState(1)
-	const [lastPage, setLastPage] = useState(1)
-	const [totalRecords, setTotalRecords] = useState(25)
+	const [page] = useState(1)
+	const [pageSize] = useState(25)
+	const [, setFirstPage] = useState(1)
+	const [, setLastPage] = useState(1)
+	const [, setTotalRecords] = useState(25)
 	const [sorting, setSorting] = useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -141,7 +122,7 @@ function Page({ params }: { params: { clubID: number } }) {
 		},
 	})
 
-	//TODO: change later
+	//TODO: change later ? To what
 	if (!isOwner) {
 		return null
 	}

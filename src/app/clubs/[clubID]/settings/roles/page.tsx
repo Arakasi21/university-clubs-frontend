@@ -146,11 +146,10 @@ function Page({ params }: { params: { clubID: number } }) {
 																		{role.name}
 																	</p>
 																</TableCell>
-																{/* TODO remove unneccessary margin*/}
-																<TableCell className="flex max-w-lg flex-wrap">
+																<TableCell className="flex  flex-wrap">
 																	{role.permissions
 																		? permissionsToStringArr(role.permissions).map((p, index) => (
-																				// TODO we can implement own colors for variant. Go to 'variant' and add new colors
+																				// we can implement own colors for variant. Go to 'variant' and add new colors
 																				<Badge
 																					key={index}
 																					variant={

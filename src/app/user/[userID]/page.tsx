@@ -47,7 +47,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 				setClubs(userClubsData.clubs)
 			})
 			.catch((error) => console.log(error.message))
-	}, [params.userID, user?.id])
+	}, [params.userID, user])
 
 	useEffect(() => {
 		fetchUserInfo()
@@ -97,7 +97,6 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 								</div>
 								<div className="grid gap-3">
 									<div>
-										{/* TODO CHANGE BUTTON TO SOMETHING ELSE */}
 										<br />
 										<Button variant={'secondary'} disabled={true}>
 											Clubs

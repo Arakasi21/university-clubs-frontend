@@ -3,20 +3,8 @@ import UserAvatar from '@/components/userAvatar'
 import { decimalToRgb } from '@/helpers/helper'
 import { ClubMember, ClubRole } from '@/types/club'
 import { useEffect, useState } from 'react'
-import {
-	ContextMenu,
-	ContextMenuContent,
-	ContextMenuItem,
-	ContextMenuTrigger,
-} from '@/components/ui/context-menu'
 import Link from 'next/link'
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select'
+
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -46,26 +34,21 @@ function MemberRolesRow({ member, roles }: MemberRolesRowProps) {
 
 	useEffect(() => {
 		setMemberRoles(roleFilter(member.roles, roles))
-	}, [])
+	}, [member.roles, roles])
 
 	return (
 		// TODO OPEN ASSIGN MENU WHEN RIGHT CLICK
 		<TableRow
 			key={member.id}
-			onContextMenu={() => {
+			onContextMenu={(e) => {
+				e.preventDefault()
 				setIsContextMenuOpen(true)
 			}}
-			onClick={() => {
+			onClick={(e) => {
+				e.preventDefault()
 				setIsContextMenuOpen(true)
 			}}
 		>
-			{/*<ContextMenu onOpenChange={setIsContextMenuOpen} modal={isContextMenuOpen}>
-				<ContextMenuContent hidden={!isContextMenuOpen}>
-					<ContextMenuItem>
-						<Link href={`/user/${member.id}`}>{member.first_name}</Link>
-					</ContextMenuItem>
-				</ContextMenuContent>
-			</ContextMenu>*/}
 			<DropdownMenu open={isContextMenuOpen} onOpenChange={setIsContextMenuOpen} modal={true}>
 				<TableCell>
 					<UserAvatar user={member} />

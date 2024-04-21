@@ -158,7 +158,6 @@ const RoleEditForm: React.FC<{
 	)
 }
 
-// TODO CHECK THIS
 // member roles: Moder , lower, member
 // const membersHighestRole= membersHighestRole(member.roles) = Moder
 // if membersHighestRole.position < role.position{

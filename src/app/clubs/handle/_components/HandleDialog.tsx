@@ -75,7 +75,7 @@ export default function HandleDialog({ selectedClub, isOpen, onClose }: HandleDi
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Are you absolutely sure?</DialogTitle>
-					<DialogDescription>
+					<DialogDescription className="space-x-2 space-y-2">
 						<Button onClick={onApprove}>Approve</Button>
 						<Button onClick={onReject} variant="destructive">
 							Reject

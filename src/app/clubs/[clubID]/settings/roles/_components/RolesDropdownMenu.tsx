@@ -27,7 +27,7 @@ export default function RolesDropdownMenu(props: {
 			{props.role.name !== 'member' && (
 				<DropdownMenuContent align="end">
 					<DropdownMenuItem>
-						{/* TODO lower member cannot edit the role of lowest member*/}
+						{/* TODO WAITING backend update :: lower member cannot edit the role of lowest member*/}
 						<DialogUpdateClubRole
 							club={props.club}
 							role={props.role}

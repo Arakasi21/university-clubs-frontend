@@ -81,9 +81,8 @@ export default function Page() {
 					<form onSubmit={form.handleSubmit(handleSubmit)} className="w-60">
 						<div className="mb-6 text-center">
 							{' '}
-							{/* Center the text and add margin to the bottom */}
 							<p className="break-words text-sm text-gray-400">
-								"You need to wait some time for an admin approval after submitting this form."
+								You need to wait some time for an admin approval after submitting this form
 							</p>
 						</div>
 

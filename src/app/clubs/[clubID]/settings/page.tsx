@@ -13,11 +13,9 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import useClub from '@/hooks/useClub'
-import Image from 'next/image'
 import Link from 'next/link'
 import useUserStore from '@/store/user'
 import useUserClubStatus from '@/hooks/useUserClubStatus'

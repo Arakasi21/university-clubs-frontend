@@ -28,6 +28,8 @@ import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import HandleDialog from './_components/HandleDialog'
+import { Tabs, TabsContent } from '@/components/ui/tabs'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 type Columns = {
 	club: Club
@@ -64,11 +66,11 @@ const columns: ColumnDef<Columns>[] = [
 function Page() {
 	const [data, setData] = useState([] as { club: Club; owner: ClubMember }[])
 
-	const [page, setPage] = useState(1)
-	const [pageSize, setPageSize] = useState(25)
-	const [firstPage, setFirstPage] = useState(1)
-	const [lastPage, setLastPage] = useState(1)
-	const [totalRecords, setTotalRecords] = useState(25)
+	const [page] = useState(1)
+	const [pageSize] = useState(25)
+	const [, setFirstPage] = useState(1)
+	const [, setLastPage] = useState(1)
+	const [, setTotalRecords] = useState(25)
 	const [sorting, setSorting] = useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -128,45 +130,61 @@ function Page() {
 	return (
 		<div>
 			<Nav />
-			<Table>
-				<TableHeader>
-					{table.getHeaderGroups().map((headerGroup) => (
-						<TableRow key={headerGroup.id}>
-							{headerGroup.headers.map((header) => (
-								<TableHead key={header.id}>
-									{header.isPlaceholder
-										? null
-										: flexRender(header.column.columnDef.header, header.getContext())}
-								</TableHead>
-							))}
-						</TableRow>
-					))}
-				</TableHeader>
-				<TableBody>
-					{data?.map((c) => (
-						<TableRow
-							key={c.club.id}
-							onClick={() => {
-								handleRowClick(c.club)
-							}}
-						>
-							<TableCell>{c.club.name}</TableCell>
-							<TableCell>{c.club.club_type}</TableCell>
-							<TableCell>
-								<Link
-									href={`/user/${c.owner.id}`}
-									className="flex flex-row items-center space-x-2.5"
-								>
-									<UserAvatar user={c.owner} />
-									<p>
-										{c.owner.last_name} {c.owner.first_name}
-									</p>
-								</Link>
-							</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
+
+			<Tabs
+				className="grid flex-1 items-start gap-4 p-4 sm:px-64 sm:py-8 md:gap-8"
+				defaultValue="all"
+			>
+				<TabsContent value="all">
+					<Card x-chunk="dashboard-06-chunk-0">
+						<CardHeader>
+							<CardTitle>Pending clubs</CardTitle>
+							<CardDescription>Approve / reject club creation request</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<Table>
+								<TableHeader>
+									{table.getHeaderGroups().map((headerGroup) => (
+										<TableRow key={headerGroup.id}>
+											{headerGroup.headers.map((header) => (
+												<TableHead key={header.id}>
+													{header.isPlaceholder
+														? null
+														: flexRender(header.column.columnDef.header, header.getContext())}
+												</TableHead>
+											))}
+										</TableRow>
+									))}
+								</TableHeader>
+								<TableBody>
+									{data?.map((c) => (
+										<TableRow
+											key={c.club.id}
+											onClick={() => {
+												handleRowClick(c.club)
+											}}
+										>
+											<TableCell>{c.club.name}</TableCell>
+											<TableCell>{c.club.club_type}</TableCell>
+											<TableCell>
+												<Link
+													href={`/user/${c.owner.id}`}
+													className="flex flex-row items-center space-x-2.5"
+												>
+													<UserAvatar user={c.owner} />
+													<p>
+														{c.owner.last_name} {c.owner.first_name}
+													</p>
+												</Link>
+											</TableCell>
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
+						</CardContent>
+					</Card>
+				</TabsContent>
+			</Tabs>
 			{selectedClub && (
 				<HandleDialog
 					isOpen={isDialogOpen}
