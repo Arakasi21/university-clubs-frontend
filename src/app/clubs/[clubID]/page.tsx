@@ -17,6 +17,7 @@ import Layout from '@/components/Layout'
 import BackgroundClubImage from '@/components/st/BackgroundClubImage'
 import ClubImage from '@/components/st/ClubImage'
 import Nav from '@/components/NavBar'
+import Sceleton from '@/components/st/Sceleton'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
@@ -36,13 +37,7 @@ function Page({ params }: { params: { clubID: number } }) {
 			<Nav />
 			<div>
 				{loading ? (
-					<div className="flex flex-col space-y-3">
-						<Skeleton className="h-[200px] w-[400px] rounded-xl" />
-						<div className="space-y-2">
-							<Skeleton className="h-4 w-[250px]" />
-							<Skeleton className="h-4 w-[200px]" />
-						</div>
-					</div>
+					<Sceleton />
 				) : (
 					<>
 						<BackgroundClubImage club={club} />

@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import Sceleton from '@/components/st/Sceleton'
 
 export default function Home() {
 	const [clubs, setClubs] = useState<Club[]>()
@@ -40,36 +41,7 @@ export default function Home() {
 		<main>
 			<Layout>
 				{loading ? (
-					<div className="flex flex-col space-y-3">
-						<div className="flex flex-col space-y-3">
-							<Skeleton className="h-[200px] w-[400px] rounded-xl" />
-							<div className="space-y-2">
-								<Skeleton className="h-4 w-[250px]" />
-								<Skeleton className="h-4 w-[200px]" />
-							</div>
-						</div>
-						<div className="flex flex-col space-y-3">
-							<Skeleton className="h-[200px] w-[400px] rounded-xl" />
-							<div className="space-y-2">
-								<Skeleton className="h-4 w-[250px]" />
-								<Skeleton className="h-4 w-[200px]" />
-							</div>
-						</div>
-						<div className="flex flex-col space-y-3">
-							<Skeleton className="h-[200px] w-[400px] rounded-xl" />
-							<div className="space-y-2">
-								<Skeleton className="h-4 w-[250px]" />
-								<Skeleton className="h-4 w-[200px]" />
-							</div>
-						</div>
-						<div className="flex flex-col space-y-3">
-							<Skeleton className="h-[200px] w-[400px] rounded-xl" />
-							<div className="space-y-2">
-								<Skeleton className="h-4 w-[250px]" />
-								<Skeleton className="h-4 w-[200px]" />
-							</div>
-						</div>
-					</div>
+					<Sceleton />
 				) : (
 					<div className="col-span-2 grid auto-rows-max grid-cols-2 items-start gap-4">
 						{clubs?.map((club) => (

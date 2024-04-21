@@ -28,6 +28,7 @@ import Error from 'next/error'
 import useMemberRoles from '@/hooks/useMemberRoles'
 import BackgroundClubImage from '@/components/st/BackgroundClubImage'
 import ClubImage from '@/components/st/ClubImage'
+import Sceleton from '@/components/st/Sceleton'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
@@ -54,13 +55,7 @@ function Page({ params }: { params: { clubID: number } }) {
 			<Nav />
 			<div>
 				{loading ? (
-					<div className="flex flex-col space-y-3">
-						<Skeleton className="h-[200px] w-[400px] rounded-xl" />
-						<div className="space-y-2">
-							<Skeleton className="h-4 w-[250px]" />
-							<Skeleton className="h-4 w-[200px]" />
-						</div>
-					</div>
+					<Sceleton />
 				) : (
 					<>
 						<div className="flex overflow-hidden">
