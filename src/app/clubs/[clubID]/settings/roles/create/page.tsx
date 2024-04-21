@@ -32,6 +32,7 @@ import { hasPermission } from '@/helpers/permissions'
 import { Permissions } from '@/types/permissions'
 import Error from 'next/error'
 import useMemberRoles from '@/hooks/useMemberRoles'
+import BackgroundClubImage from '@/components/st/BackgroundClubImage'
 
 const formSchema = z.object({
 	name: z.string().min(4, {
@@ -113,10 +114,7 @@ export function Page({ params }: { params: { clubID: number } }) {
 			<Nav />
 			<div>
 				<div className="flex flex-wrap justify-center gap-6">
-					<div
-						style={{ backgroundImage: `url(${club?.banner_url ?? '/main_photo.jpeg'})` }}
-						className="relative h-40 w-screen bg-center bg-no-repeat"
-					/>
+					<BackgroundClubImage club={club} />
 
 					<div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
 						<div className="flex flex-wrap justify-center gap-6">
@@ -127,7 +125,7 @@ export function Page({ params }: { params: { clubID: number } }) {
 
 						<Form {...form}>
 							<form onSubmit={form.handleSubmit(handleSubmit)} className="w-60">
-								<div className="mb-6 text-center"> </div>
+								<div className="mb-6 text-center"></div>
 
 								<FormField
 									name="name"

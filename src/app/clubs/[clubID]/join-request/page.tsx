@@ -31,6 +31,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import HandleDialog from './_components/HandleDialog'
 import useUserStore from '@/store/user'
+import BackgroundClubImage from '@/components/st/BackgroundClubImage'
 
 type Columns = {
 	club: Club
@@ -148,10 +149,7 @@ function Page({ params }: { params: { clubID: number } }) {
 	return (
 		<div>
 			<Nav />
-			<div
-				style={{ backgroundImage: `url(${club?.banner_url ?? '/main_photo.jpeg'})` }}
-				className="relative h-40 w-screen bg-center bg-no-repeat"
-			/>
+			<BackgroundClubImage club={club} />
 
 			<Tabs
 				className="grid flex-1 items-start gap-4 p-4 sm:px-64 sm:py-8 md:gap-8"

@@ -26,6 +26,8 @@ import { hasPermission } from '@/helpers/permissions'
 import { Permissions } from '@/types/permissions'
 import Error from 'next/error'
 import useMemberRoles from '@/hooks/useMemberRoles'
+import BackgroundClubImage from '@/components/st/BackgroundClubImage'
+import ClubImage from '@/components/st/ClubImage'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
@@ -64,19 +66,11 @@ function Page({ params }: { params: { clubID: number } }) {
 						<div className="flex overflow-hidden">
 							<div className="flex-1">
 								<div className="flex flex-wrap justify-center gap-6">
-									<div
-										style={{ backgroundImage: `url(${club?.banner_url ?? '/main_photo.jpeg'})` }}
-										className="relative h-40 w-screen bg-center bg-no-repeat"
-									/>
+									<BackgroundClubImage club={club} />
 									<div className="flex w-full justify-center gap-3">
 										<Link href={`/clubs/${club?.id}`}>
 											<Button variant={'outline'}>
-												<Image
-													src={club?.logo_url ?? '/main_photo.jpeg'}
-													width={32}
-													height={32}
-													alt={`banner of ${club?.name}`}
-												/>
+												<ClubImage club={club} width={32} height={32} />
 												Club page
 											</Button>
 										</Link>

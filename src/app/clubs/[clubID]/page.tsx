@@ -14,6 +14,9 @@ import useUserRolesStore from '@/store/useUserRoles'
 import { hasPermission } from '@/helpers/permissions'
 import { Permissions } from '@/types/permissions'
 import Layout from '@/components/Layout'
+import BackgroundClubImage from '@/components/st/BackgroundClubImage'
+import ClubImage from '@/components/st/ClubImage'
+import Nav from '@/components/NavBar'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
@@ -29,7 +32,8 @@ function Page({ params }: { params: { clubID: number } }) {
 
 	const { permissions } = useUserRolesStore()
 	return (
-		<Layout>
+		<>
+			<Nav />
 			<div>
 				{loading ? (
 					<div className="flex flex-col space-y-3">
@@ -41,10 +45,7 @@ function Page({ params }: { params: { clubID: number } }) {
 					</div>
 				) : (
 					<>
-						<div
-							style={{ backgroundImage: `url(${club?.banner_url ?? '/main_photo.jpeg'})` }}
-							className="relative h-40 w-full rounded-xl bg-center bg-no-repeat"
-						/>
+						<BackgroundClubImage club={club} />
 						{/* BODY */}
 						<div className="grid flex-1 items-start gap-4 p-4 sm:px-32 sm:py-8 md:gap-8">
 							<div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
@@ -52,12 +53,7 @@ function Page({ params }: { params: { clubID: number } }) {
 									<Card x-chunk="dashboard-07-chunk-0">
 										<CardHeader className="grid grid-cols-[auto,1fr] items-center gap-4">
 											<div>
-												<Image
-													src={club?.logo_url ?? '/main_photo.jpeg'}
-													width={100}
-													height={100}
-													alt={`banner of ${club?.name}`}
-												/>
+												<ClubImage club={club} width={100} height={100} />
 											</div>
 											<div>
 												<CardTitle>{club?.name}</CardTitle>
@@ -137,7 +133,7 @@ function Page({ params }: { params: { clubID: number } }) {
 					</>
 				)}
 			</div>
-		</Layout>
+		</>
 	)
 }
 

@@ -8,6 +8,8 @@ import Link from 'next/link'
 import { Dispatch, DragEvent, FormEvent, SetStateAction, useState } from 'react'
 import { FaFire } from 'react-icons/fa'
 import { FiPlus, FiTrash } from 'react-icons/fi'
+import BackgroundClubImage from '@/components/st/BackgroundClubImage'
+import ClubImage from '@/components/st/ClubImage'
 
 const CustomKanban = ({ params }: { params: { clubID: number } }) => {
 	const { club } = useClub({ clubID: params.clubID })
@@ -17,19 +19,11 @@ const CustomKanban = ({ params }: { params: { clubID: number } }) => {
 			{/* TODO REWRITE FULL LOGIC OF CANBAN BOARD, NEED TO WRITE MICROSERVICE TO HANDLE AND STORE THE CARDS */}
 			<Nav />
 
-			<div
-				style={{ backgroundImage: `url(${club?.banner_url ?? '/main_photo.jpeg'})` }}
-				className="relative h-40 w-screen bg-center bg-no-repeat"
-			/>
+			<BackgroundClubImage club={club} />
 			<div className="flex w-full justify-center gap-3 py-4">
 				<Link href={`/clubs/${club?.id}`}>
 					<Button variant={'outline'}>
-						<Image
-							src={club?.logo_url ?? '/main_photo.jpeg'}
-							width={32}
-							height={32}
-							alt={`banner of ${club?.name}`}
-						/>
+						<ClubImage club={club} />
 						Club page
 					</Button>
 				</Link>
