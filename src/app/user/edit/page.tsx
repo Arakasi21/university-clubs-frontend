@@ -1,5 +1,5 @@
 'use client'
-import AvatarEditForm from '@/app/user/edit/_components/avatarEditForm'
+import AvatarEditForm from '@/components/st/avatarEditForm'
 import Nav from '@/components/NavBar'
 import useUserStore from '@/store/user'
 import { User } from '@/types/user'

@@ -28,7 +28,7 @@ import {
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import HandleDialog from './_components/HandleDialog'
+import HandleDialog from '@/components/st/HandleDialog'
 import useUserStore from '@/store/user'
 import BackgroundClubImage from '@/components/st/BackgroundClubImage'
 function Page({ params }: { params: { clubID: number } }) {
