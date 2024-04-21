@@ -53,7 +53,7 @@ export default function Nav() {
 							<DropdownForLoggedIn user={user!} logout={logOutHandle} />
 						) : (
 							<Link href={'/sign-in'}>
-								<Button>Log in</Button>
+								<Button variant={'default'}>Sign in</Button>
 							</Link>
 						)}
 					</div>

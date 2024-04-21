@@ -32,12 +32,6 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 				setPageowner(data.user)
 				setIsOwner(data.user?.id === user?.id)
 
-				console.log('Fetched user ID:', data.user.id) // Log fetched user ID
-				console.log('Params user ID:', params.userID) // Log params user ID
-				console.log('Type of fetched user ID:', typeof data.user.id) // Check type
-				console.log('Type of params user ID:', typeof params.userID) // Check type
-				console.log('user: ', user)
-
 				const userClubsResponse = await fetch(`http://localhost:5000/user/${params.userID}/clubs`, {
 					method: 'GET',
 				})
