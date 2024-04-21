@@ -27,7 +27,7 @@ import { ArrowUpDown } from 'lucide-react'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import HandleDialog from './_components/HandleDialog'
+import HandleDialog from '../../../components/st/HandleDialog'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 

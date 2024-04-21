@@ -17,7 +17,7 @@ export type HandleDialogProps = {
 	isOpen: boolean
 }
 
-export default function HandleDialog({
+export default function HandleJoinDialog({
 	selectedUser,
 	club,
 	isOpen,
