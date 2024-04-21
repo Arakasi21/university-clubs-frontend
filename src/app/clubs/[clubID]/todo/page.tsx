@@ -10,6 +10,7 @@ import { FaFire } from 'react-icons/fa'
 import { FiPlus, FiTrash } from 'react-icons/fi'
 import BackgroundClubImage from '@/components/st/BackgroundClubImage'
 import ClubImage from '@/components/st/ClubImage'
+import { undefined } from 'zod'
 
 const CustomKanban = ({ params }: { params: { clubID: number } }) => {
 	const { club } = useClub({ clubID: params.clubID })
@@ -23,7 +24,7 @@ const CustomKanban = ({ params }: { params: { clubID: number } }) => {
 			<div className="flex w-full justify-center gap-3 py-4">
 				<Link href={`/clubs/${club?.id}`}>
 					<Button variant={'outline'}>
-						<ClubImage club={club} />
+						<ClubImage club={club} width={32} height={32} />
 						Club page
 					</Button>
 				</Link>

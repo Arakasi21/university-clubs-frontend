@@ -124,7 +124,7 @@ function Page({ params }: { params: { clubID: number } }) {
 
 	const table = useReactTable({
 		data,
-		columns,
+		columns: [],
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),

@@ -1,7 +1,11 @@
 import Image from 'next/image'
 import { Club } from '@/types/club'
 
-export default function ClubImage(props: { club: Club; width: number; height: number }) {
+export default function ClubImage(props: {
+	club: Club | undefined
+	width: number
+	height: number
+}) {
 	return (
 		<Image
 			src={props.club?.logo_url ?? '/main_photo.jpeg'}
