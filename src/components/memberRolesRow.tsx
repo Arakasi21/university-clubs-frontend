@@ -1,7 +1,7 @@
 import { TableCell, TableRow } from '@/components/ui/table'
 import UserAvatar from '@/components/userAvatar'
 import { decimalToRgb } from '@/helpers/helper'
-import { ClubMember, ClubRole } from '@/types/club'
+import { Club, ClubMember, ClubRole } from '@/types/club'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
@@ -30,6 +30,24 @@ function MemberRolesRow({ member, roles }: MemberRolesRowProps) {
 		}
 
 		return res
+	}
+
+	const addRoleMember = async (clubId: Club, roleId: ClubRole, memberId: ClubMember) => {
+		const response = await fetch(`/clubs/${clubId}/roles/${roleId}/members`, {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include',
+			body: JSON.stringify({ memberId }),
+		})
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`)
+		}
+
+		const data = await response.json()
+		return data
 	}
 
 	useEffect(() => {
@@ -70,7 +88,21 @@ function MemberRolesRow({ member, roles }: MemberRolesRowProps) {
 						<Link href={`/user/${member.id}`}>{member.first_name}</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem>
-						<p>Assign roles</p>
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<p>Assign roles</p>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								{roles.map((role) => (
+									<DropdownMenuItem
+										key={role.id}
+										onClick={() => addRoleMember(clubId, role.id, member.id)}
+									>
+										{role.name}
+									</DropdownMenuItem>
+								))}
+							</DropdownMenuContent>
+						</DropdownMenu>
 					</DropdownMenuItem>
 					<DropdownMenuItem>
 						<p>Kick</p>
