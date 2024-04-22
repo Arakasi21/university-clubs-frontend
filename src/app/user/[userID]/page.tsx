@@ -12,10 +12,9 @@ import { toast } from 'sonner'
 
 const UserPage = ({ params }: { params: { userID: number } }) => {
 	const { user } = useUserStore()
-	const [pageowner, setPageowner] = useState(null as User | null)
-	const [clubs, setClubs] = useState<Club[] | null>(null)
+	const [pageowner, setPageowner] = useState<User>()
 	const [isOwner, setIsOwner] = useState(false)
-
+	const [clubs, setClubs] = useState<Club[]>()
 	const router = useRouter()
 
 	const fetchUserInfo = useCallback(() => {
@@ -26,16 +25,17 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 					toast.error('not found', {
 						description: data.error,
 					})
-					throw new Error(data.error || 'Failed to Fetch user info')
+					return
 				}
-
 				setPageowner(data.user)
-				setIsOwner(data.user?.id === user?.id)
+				if (user?.id === data.user.id) {
+					setIsOwner(true)
+				}
+			})
+			.catch((error) => console.log(error.message))
 
-				const userClubsResponse = await fetch(`http://localhost:5000/user/${params.userID}/clubs`, {
-					method: 'GET',
-				})
-
+		fetch(`http://localhost:5000/user/${params.userID}/clubs`)
+			.then(async (userClubsResponse) => {
 				if (!userClubsResponse.ok) throw new Error('Failed to fetch user clubs')
 				const userClubsData = await userClubsResponse.json()
 				setClubs(userClubsData.clubs)

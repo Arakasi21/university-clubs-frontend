@@ -3,7 +3,7 @@ import { DialogUpdateClubBanner } from '@/components/DialogUpdateClubBanner'
 import { DialogUpdateClubLogo } from '@/components/DialogUpdateClubLogo'
 import Nav from '@/components/NavBar'
 
-import MemberRow from '@/components/memberRolesRow'
+import MemberRolesRow from '@/components/memberRolesRow'
 import { Button } from '@/components/ui/button'
 import {
 	Card,
@@ -127,9 +127,10 @@ function Page({ params }: { params: { clubID: number } }) {
 															<TableBody>
 																{clubMembers &&
 																	clubMembers.map((member) => (
-																		<MemberRow
+																		<MemberRolesRow
 																			member={member}
 																			roles={club?.roles ?? []}
+																			clubId={club?.id ?? 0}
 																			key={member.id}
 																		/>
 																	))}

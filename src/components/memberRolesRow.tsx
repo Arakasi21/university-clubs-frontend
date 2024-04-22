@@ -11,10 +11,21 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import RoleCheckboxDropdown from '@/components/st/RoleCheckboxDropdown'
 
-export type MemberRolesRowProps = { member: ClubMember; roles: ClubRole[] }
+export type MemberRolesRowProps = {
+	member: ClubMember
+	roles: ClubRole[]
+	clubId: number | undefined
+}
 
-function MemberRolesRow({ member, roles }: MemberRolesRowProps) {
+function MemberRolesRow({
+	member,
+	roles,
+	clubId,
+}: MemberRolesRowProps & {
+	addRoleMember: (roleId: number, memberId: number, clubId: number | undefined) => Promise<void>
+}) {
 	const [memberRoles, setMemberRoles] = useState<ClubRole[]>()
 	const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
 
@@ -32,22 +43,21 @@ function MemberRolesRow({ member, roles }: MemberRolesRowProps) {
 		return res
 	}
 
-	const addRoleMember = async (clubId: Club, roleId: ClubRole, memberId: ClubMember) => {
-		const response = await fetch(`/clubs/${clubId}/roles/${roleId}/members`, {
+	const addRoleMember = async (roleId: number, memberId: number, clubId: number) => {
+		console.log(`roleId: ${roleId}, memberId: ${memberId}, clubId: ${clubId}`) // Add this line
+
+		const response = await fetch(`http://localhost:5000/clubs/${clubId}/roles/${roleId}/members`, {
 			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			credentials: 'include',
-			body: JSON.stringify({ memberId }),
+			body: JSON.stringify({ members: [memberId] }),
 		})
 
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`)
 		}
-
-		const data = await response.json()
-		return data
 	}
 
 	useEffect(() => {
@@ -88,21 +98,19 @@ function MemberRolesRow({ member, roles }: MemberRolesRowProps) {
 						<Link href={`/user/${member.id}`}>{member.first_name}</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem>
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<p>Assign roles</p>
-							</DropdownMenuTrigger>
-							<DropdownMenuContent>
-								{roles.map((role) => (
-									<DropdownMenuItem
-										key={role.id}
-										onClick={() => addRoleMember(clubId, role.id, member.id)}
-									>
-										{role.name}
-									</DropdownMenuItem>
-								))}
-							</DropdownMenuContent>
-						</DropdownMenu>
+						<RoleCheckboxDropdown
+							roles={roles}
+							assignRole={async (roleId, assign) => {
+								if (assign) {
+									// Call the API to assign the role to the user
+									await addRoleMember(roleId, member.id, clubId || 0)
+								} else {
+									// Call the API to unassign the role from the user
+									// You need to implement this
+								}
+							}}
+							clubMember={member}
+						/>
 					</DropdownMenuItem>
 					<DropdownMenuItem>
 						<p>Kick</p>
