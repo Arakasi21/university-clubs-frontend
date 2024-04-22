@@ -2,6 +2,12 @@ import React, { useState } from 'react'
 import { ClubMember, ClubRole } from '@/types/club'
 import { Checkbox } from '@/components/ui/checkbox'
 import { decimalToRgb } from '@/helpers/helper'
+import {
+	DropdownMenuPortal,
+	DropdownMenuSub,
+	DropdownMenuSubContent,
+	DropdownMenuSubTrigger,
+} from '@/components/ui/dropdown-menu'
 
 interface RoleCheckboxDropdownProps {
 	roles: ClubRole[]
@@ -18,21 +24,24 @@ export default function RoleCheckboxDropdown({
 
 	return (
 		<div onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
-			<p>Assign roles</p>
-
-			{isOpen && (
-				<div>
-					{roles.map((role: ClubRole) => (
-						<div key={role.id}>
-							<Checkbox
-								checked={clubMember.roles.some((r) => r === role.id)}
-								onCheckedChange={(checked) => assignRole(role.id, Boolean(checked))}
-							/>
-							<label style={{ color: `${decimalToRgb(role.color)}` }}>{role.name}</label>
-						</div>
-					))}
-				</div>
-			)}
+			<DropdownMenuSub>
+				<DropdownMenuSubTrigger>Assign roles</DropdownMenuSubTrigger>
+				{isOpen && (
+					<DropdownMenuPortal>
+						<DropdownMenuSubContent>
+							{roles.map((role: ClubRole) => (
+								<div key={role.id} className="flex flex-row items-center space-x-1.5 font-normal">
+									<Checkbox
+										checked={clubMember.roles.some((r) => r === role.id)}
+										onCheckedChange={(checked) => assignRole(role.id, Boolean(checked))}
+									/>
+									<label style={{ color: `${decimalToRgb(role.color)}` }}>{role.name}</label>
+								</div>
+							))}
+						</DropdownMenuSubContent>
+					</DropdownMenuPortal>
+				)}
+			</DropdownMenuSub>
 		</div>
 	)
 }

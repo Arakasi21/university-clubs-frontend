@@ -9,17 +9,21 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import RoleCheckboxDropdown from '@/components/st/RoleCheckboxDropdown'
+import { color } from 'framer-motion'
 
 export type MemberRolesRowProps = {
+	onUpdate: () => void
 	member: ClubMember
 	roles: ClubRole[]
 	clubId: number | undefined
 }
 
 function MemberRolesRow({
+	onUpdate,
 	member,
 	roles,
 	clubId,
@@ -58,6 +62,8 @@ function MemberRolesRow({
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`)
 		}
+
+		onUpdate()
 	}
 
 	useEffect(() => {
@@ -97,26 +103,24 @@ function MemberRolesRow({
 					<DropdownMenuItem>
 						<Link href={`/user/${member.id}`}>{member.first_name}</Link>
 					</DropdownMenuItem>
+					<DropdownMenuSeparator />
+					<RoleCheckboxDropdown
+						roles={roles}
+						assignRole={async (roleId, assign) => {
+							if (assign) {
+								await addRoleMember(roleId, member.id, clubId || 0)
+							} else {
+								// TODO Call the API to unassign the role from the user
+							}
+						}}
+						clubMember={member}
+					/>
+					<DropdownMenuSeparator />
 					<DropdownMenuItem>
-						<RoleCheckboxDropdown
-							roles={roles}
-							assignRole={async (roleId, assign) => {
-								if (assign) {
-									// Call the API to assign the role to the user
-									await addRoleMember(roleId, member.id, clubId || 0)
-								} else {
-									// Call the API to unassign the role from the user
-									// You need to implement this
-								}
-							}}
-							clubMember={member}
-						/>
+						<p style={{ color: 'orange' }}>Kick</p>
 					</DropdownMenuItem>
 					<DropdownMenuItem>
-						<p>Kick</p>
-					</DropdownMenuItem>
-					<DropdownMenuItem>
-						<p>Ban</p>
+						<p style={{ color: 'red' }}>Ban</p>
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 				<DropdownMenuTrigger></DropdownMenuTrigger>

@@ -32,7 +32,10 @@ import Sceleton from '@/components/st/Sceleton'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
-	const { club, clubMembers, loading } = useClub({ clubID: params.clubID, user: user })
+	const { club, clubMembers, loading, fetchClubInfo } = useClub({
+		clubID: params.clubID,
+		user: user,
+	})
 	const { memberStatus } = useUserClubStatus({
 		clubID: params.clubID,
 	})
@@ -128,6 +131,7 @@ function Page({ params }: { params: { clubID: number } }) {
 																{clubMembers &&
 																	clubMembers.map((member) => (
 																		<MemberRolesRow
+																			onUpdate={() => fetchClubInfo()}
 																			member={member}
 																			roles={club?.roles ?? []}
 																			clubId={club?.id ?? 0}
