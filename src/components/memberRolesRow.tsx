@@ -4,6 +4,14 @@ import { decimalToRgb } from '@/helpers/helper'
 import { Club, ClubMember, ClubRole } from '@/types/club'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 
 import {
 	DropdownMenu,
@@ -14,6 +22,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import RoleCheckboxDropdown from '@/components/st/RoleCheckboxDropdown'
 import { color } from 'framer-motion'
+import user from '@/store/user'
 
 export type MemberRolesRowProps = {
 	onUpdate: () => void
@@ -51,12 +60,60 @@ function MemberRolesRow({
 		console.log(`roleId: ${roleId}, memberId: ${memberId}, clubId: ${clubId}`) // Add this line
 
 		const response = await fetch(`http://localhost:5000/clubs/${clubId}/roles/${roleId}/members`, {
-			method: 'PATCH',
+			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			credentials: 'include',
 			body: JSON.stringify({ members: [memberId] }),
+		})
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`)
+		}
+
+		onUpdate()
+	}
+
+	const removeRoleMember = async (roleId: number, memberId: number, clubId: number) => {
+		const response = await fetch(`http://localhost:5000/clubs/${clubId}/roles/${roleId}/members`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include',
+			body: JSON.stringify({ members: [memberId] }),
+		})
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status}`)
+		}
+
+		onUpdate()
+	}
+
+	const [isKickDialogOpen, setIsKickDialogOpen] = useState(false)
+	const [memberToKick, setMemberToKick] = useState<number | null>(null)
+
+	const handleKickMember = (memberId: number) => {
+		setMemberToKick(memberId)
+		setIsKickDialogOpen(true)
+	}
+
+	const confirmKickMember = async () => {
+		if (memberToKick !== null) {
+			await kickMember(memberToKick, clubId || 0)
+		}
+		setIsKickDialogOpen(false)
+	}
+
+	const kickMember = async (memberId: number, clubId: number) => {
+		const response = await fetch(`http://localhost:5000/clubs/${clubId}/members/${memberId}`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include',
 		})
 
 		if (!response.ok) {
@@ -110,13 +167,14 @@ function MemberRolesRow({
 							if (assign) {
 								await addRoleMember(roleId, member.id, clubId || 0)
 							} else {
-								// TODO Call the API to unassign the role from the user
+								await removeRoleMember(roleId, member.id, clubId || 0)
 							}
 						}}
 						clubMember={member}
 					/>
 					<DropdownMenuSeparator />
-					<DropdownMenuItem>
+
+					<DropdownMenuItem onClick={() => handleKickMember(member.id)}>
 						<p style={{ color: 'orange' }}>Kick</p>
 					</DropdownMenuItem>
 					<DropdownMenuItem>
@@ -125,6 +183,20 @@ function MemberRolesRow({
 				</DropdownMenuContent>
 				<DropdownMenuTrigger></DropdownMenuTrigger>
 			</DropdownMenu>
+			<Dialog open={isKickDialogOpen} onOpenChange={setIsKickDialogOpen}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>Are you absolutely sure?</DialogTitle>
+						<DialogDescription>
+							This will permanently kick the user from the club.
+						</DialogDescription>
+					</DialogHeader>
+					<Button variant={'destructive'} onClick={confirmKickMember}>
+						Yes, kick the user
+					</Button>
+					<Button onClick={() => setIsKickDialogOpen(false)}>No, cancel</Button>
+				</DialogContent>
+			</Dialog>
 		</TableRow>
 	)
 }
