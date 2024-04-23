@@ -29,15 +29,17 @@ export default function RoleCheckboxDropdown({
 				{isOpen && (
 					<DropdownMenuPortal>
 						<DropdownMenuSubContent>
-							{roles.map((role: ClubRole) => (
-								<div key={role.id} className="flex flex-row items-center space-x-1.5 font-normal">
-									<Checkbox
-										checked={clubMember.roles.some((r) => r === role.id)}
-										onCheckedChange={(checked) => assignRole(role.id, Boolean(checked))}
-									/>
-									<label style={{ color: `${decimalToRgb(role.color)}` }}>{role.name}</label>
-								</div>
-							))}
+							{roles
+								.filter((role) => role.name.toLowerCase() !== 'member')
+								.map((role: ClubRole) => (
+									<div key={role.id} className="flex flex-row items-center space-x-1.5 font-normal">
+										<Checkbox
+											checked={clubMember.roles.some((r) => r === role.id)}
+											onCheckedChange={(checked) => assignRole(role.id, Boolean(checked))}
+										/>
+										<label style={{ color: `${decimalToRgb(role.color)}` }}>{role.name}</label>
+									</div>
+								))}
 						</DropdownMenuSubContent>
 					</DropdownMenuPortal>
 				)}
