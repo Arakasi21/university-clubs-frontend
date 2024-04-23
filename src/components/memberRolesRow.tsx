@@ -21,8 +21,12 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import RoleCheckboxDropdown from '@/components/st/RoleCheckboxDropdown'
-import { color } from 'framer-motion'
-import user from '@/store/user'
+import useUserStore from '@/store/user'
+import { hasPermission } from '@/helpers/permissions'
+import useUserRolesStore from '@/store/useUserRoles'
+import { Permissions } from '@/types/permissions'
+import Error from 'next/error'
+import { toast } from 'sonner'
 
 export type MemberRolesRowProps = {
 	onUpdate: () => void
@@ -41,6 +45,8 @@ function MemberRolesRow({
 }) {
 	const [memberRoles, setMemberRoles] = useState<ClubRole[]>()
 	const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
+	const [loading, setLoading] = useState(true)
+	const { user } = useUserStore()
 
 	const roleFilter = (arr1: number[], arr2: ClubRole[]) => {
 		const res: ClubRole[] = []
@@ -69,7 +75,9 @@ function MemberRolesRow({
 		})
 
 		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`)
+			const errorData = await response.json()
+			toast.error('Failed to add role member', { description: errorData.error })
+			return
 		}
 
 		onUpdate()
@@ -86,7 +94,9 @@ function MemberRolesRow({
 		})
 
 		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`)
+			const errorData = await response.json()
+			toast.error('Failed to remove role member', { description: errorData.error })
+			return
 		}
 
 		onUpdate()
@@ -117,7 +127,9 @@ function MemberRolesRow({
 		})
 
 		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`)
+			const errorData = await response.json()
+			toast.error('Failed to kick member', { description: errorData.error })
+			return
 		}
 
 		onUpdate()
@@ -126,6 +138,13 @@ function MemberRolesRow({
 	useEffect(() => {
 		setMemberRoles(roleFilter(member.roles, roles))
 	}, [member.roles, roles])
+
+	const { permissions } = useUserRolesStore()
+
+	// TODO FIX LOADING STATE
+	if (!hasPermission(permissions, Permissions.ALL) && !loading) {
+		return <Error statusCode={401} />
+	}
 
 	return (
 		// TODO OPEN ASSIGN MENU WHEN RIGHT CLICK
@@ -161,6 +180,7 @@ function MemberRolesRow({
 						<Link href={`/user/${member.id}`}>{member.first_name}</Link>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
+					{/* TODO CHECK THE USER CAN ASSIGN OR DIASSIGN ROLE*/}
 					<RoleCheckboxDropdown
 						roles={roles}
 						assignRole={async (roleId, assign) => {
@@ -172,14 +192,19 @@ function MemberRolesRow({
 						}}
 						clubMember={member}
 					/>
-					<DropdownMenuSeparator />
-
-					<DropdownMenuItem onClick={() => handleKickMember(member.id)}>
-						<p style={{ color: 'orange' }}>Kick</p>
-					</DropdownMenuItem>
-					<DropdownMenuItem>
-						<p style={{ color: 'red' }}>Ban</p>
-					</DropdownMenuItem>
+					{user?.id !== member.id && (
+						<>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem onClick={() => handleKickMember(member.id)}>
+								<p style={{ color: 'orange' }}>Kick</p>
+							</DropdownMenuItem>
+							{hasPermission(permissions, Permissions.ban_member) && (
+								<DropdownMenuItem>
+									<p style={{ color: 'red' }}>Ban</p>
+								</DropdownMenuItem>
+							)}
+						</>
+					)}
 				</DropdownMenuContent>
 				<DropdownMenuTrigger></DropdownMenuTrigger>
 			</DropdownMenu>
