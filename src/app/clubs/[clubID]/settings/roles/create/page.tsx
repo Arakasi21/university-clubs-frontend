@@ -35,12 +35,16 @@ import useMemberRoles from '@/hooks/useMemberRoles'
 import BackgroundClubImage from '@/components/st/BackgroundClubImage'
 
 const formSchema = z.object({
-	name: z.string().min(4, {
-		message: 'Role name must be at least 4 characters.',
-	}),
+	name: z
+		.string()
+		.min(4, {
+			message: 'Role name must be at least 4 characters.',
+		})
+		.max(20, {
+			message: 'Role name can not be more than 20 characters',
+		}),
 	color: z.number(),
 })
-
 const colorOptions = [
 	{ value: 16711680, label: 'Red' },
 	{ value: 65280, label: 'Green' },

@@ -27,9 +27,13 @@ import { PermissionsList } from '@/types/permissions'
 import { Checkbox } from '@/components/ui/checkbox'
 import { permissionsToHex, permissionsToStringArr } from '@/helpers/permissions'
 import useUserRolesStore from '@/store/useUserRoles'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 const roleFormSchema = z.object({
-	name: z.string().min(2, { message: 'Role name must be at least 2 characters.' }),
+	name: z
+		.string()
+		.min(4, { message: 'Role name must be at least 4 characters.' })
+		.max(20, { message: 'Role name can not be more than 20 characters' }),
 	color: z.string(),
 	permissions: z.array(z.string()).refine((value) => value.some((item) => item), {
 		message: 'You have to select at least one item.',
@@ -43,6 +47,7 @@ const RoleEditForm: React.FC<{
 	onUpdateSuccess: () => void
 }> = ({ club, role, onClose, onUpdateSuccess }) => {
 	const form = useForm<z.infer<typeof roleFormSchema>>({
+		resolver: zodResolver(roleFormSchema),
 		defaultValues: {
 			name: role.name,
 			color: `#${role.color.toString(16).padStart(6, '0')}`,
@@ -52,6 +57,7 @@ const RoleEditForm: React.FC<{
 	const { permissions } = useUserRolesStore()
 	const updateRole = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
+
 		const values = form.getValues()
 		const hexColor = values.color
 		const decimalColor = parseInt(hexColor.slice(1), 16)

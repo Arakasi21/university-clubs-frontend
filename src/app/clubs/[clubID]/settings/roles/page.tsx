@@ -83,105 +83,93 @@ function Page({ params }: { params: { clubID: number } }) {
 	return (
 		<>
 			<div>
-				{loading ? (
-					<div className="flex flex-col space-y-3">
-						<Skeleton className="h-[200px] w-[400px] rounded-xl" />
-						<div className="space-y-2">
-							<Skeleton className="h-4 w-[250px]" />
-							<Skeleton className="h-4 w-[200px]" />
+				<>
+					<Nav />
+					<BackgroundClubImage club={club} />
+					<Tabs
+						className="grid flex-1 items-start gap-4 p-4 sm:px-64 sm:py-8 md:gap-8"
+						defaultValue="all"
+					>
+						<div className="flex flex-wrap justify-center gap-6">
+							<Link href={`/clubs/${club?.id}/settings`}>
+								<Button variant={'outline'}>Return to settings</Button>
+							</Link>
 						</div>
-					</div>
-				) : (
-					<>
-						<Nav />
-						<BackgroundClubImage club={club} />
-						<Tabs
-							className="grid flex-1 items-start gap-4 p-4 sm:px-64 sm:py-8 md:gap-8"
-							defaultValue="all"
-						>
-							<div className="flex flex-wrap justify-center gap-6">
-								<Link href={`/clubs/${club?.id}/settings`}>
-									<Button variant={'outline'}>Return to settings</Button>
-								</Link>
-							</div>
 
-							<TabsContent value="all">
-								<Card x-chunk="dashboard-06-chunk-0">
-									<CardHeader>
-										<CardTitle>Club Roles</CardTitle>
-										<CardDescription>
-											<div className="flex items-center justify-between">
-												{' '}
-												<p>
-													Manage club roles. You can edit roles, create new one, delete and etc.
-												</p>
-												<Link href={`/clubs/${club?.id}/settings/roles/create`}>
-													<Button variant={'default'}>Create new role</Button>
-												</Link>
-											</div>
-										</CardDescription>
-									</CardHeader>
-									<CardContent>
-										<Table>
-											<TableHeader>
-												<TableRow>
-													<TableCell>Name</TableCell>
-													<TableCell>Permissions</TableCell>
-													<TableCell>Action</TableCell>
-												</TableRow>
-											</TableHeader>
-											<TableBody>
-												{club &&
-													club.roles
-														.sort((role, role2) => role2.position - role.position)
-														.map((role: ClubRole) => (
-															<TableRow key={role.position}>
+						<TabsContent value="all">
+							<Card x-chunk="dashboard-06-chunk-0">
+								<CardHeader>
+									<CardTitle>Club Roles</CardTitle>
+									<CardDescription>
+										<div className="flex items-center justify-between">
+											{' '}
+											<p>Manage club roles. You can edit roles, create new one, delete and etc.</p>
+											<Link href={`/clubs/${club?.id}/settings/roles/create`}>
+												<Button variant={'default'}>Create new role</Button>
+											</Link>
+										</div>
+									</CardDescription>
+								</CardHeader>
+								<CardContent>
+									<Table>
+										<TableHeader>
+											<TableRow>
+												<TableCell>Name</TableCell>
+												<TableCell>Permissions</TableCell>
+												<TableCell>Action</TableCell>
+											</TableRow>
+										</TableHeader>
+										<TableBody>
+											{club &&
+												club.roles
+													.sort((role, role2) => role2.position - role.position)
+													.map((role: ClubRole) => (
+														<TableRow key={role.position}>
+															<TableCell>
+																<p
+																	className="text-1xl"
+																	style={{
+																		color: `${decimalToRgb(role.color)}`,
+																	}}
+																>
+																	{role.name}
+																</p>
+															</TableCell>
+															<TableCell className="flex  flex-wrap">
+																{role.permissions
+																	? permissionsToStringArr(role.permissions).map((p, index) => (
+																			// we can implement own colors for variant. Go to 'variant' and add new colors
+																			<Badge
+																				key={index}
+																				variant={
+																					p.id === 'administrator' ? 'destructive' : 'default'
+																				}
+																				className="text-1xl mx-2.5 my-1.5 w-fit text-nowrap text-center"
+																			>
+																				{p.label}
+																			</Badge>
+																		))
+																	: 'Do not have any permissions'}
+															</TableCell>
+															{((highestRole?.position ?? 0) > role.position || isOwner) && (
 																<TableCell>
-																	<p
-																		className="text-1xl"
-																		style={{
-																			color: `${decimalToRgb(role.color)}`,
-																		}}
-																	>
-																		{role.name}
-																	</p>
+																	<RolesDropdownMenu
+																		role={role}
+																		club={club}
+																		onUpdateSuccess={() => fetchClubInfo()}
+																		onClick={() => handleDeleteRole(role.id)}
+																	/>
 																</TableCell>
-																<TableCell className="flex  flex-wrap">
-																	{role.permissions
-																		? permissionsToStringArr(role.permissions).map((p, index) => (
-																				// we can implement own colors for variant. Go to 'variant' and add new colors
-																				<Badge
-																					key={index}
-																					variant={
-																						p.id === 'administrator' ? 'destructive' : 'default'
-																					}
-																					className="text-1xl mx-2.5 my-1.5 w-fit text-nowrap text-center"
-																				>
-																					{p.label}
-																				</Badge>
-																			))
-																		: 'Do not have any permissions'}
-																</TableCell>
-																{((highestRole?.position ?? 0) > role.position || isOwner) && (
-																	<TableCell>
-																		<RolesDropdownMenu
-																			role={role}
-																			club={club}
-																			onUpdateSuccess={() => fetchClubInfo()}
-																			onClick={() => handleDeleteRole(role.id)}
-																		/>
-																	</TableCell>
-																)}
-															</TableRow>
-														))}
-											</TableBody>
-										</Table>
-									</CardContent>
-								</Card>
-							</TabsContent>
-						</Tabs>
-					</>
-				)}
+															)}
+														</TableRow>
+													))}
+										</TableBody>
+									</Table>
+								</CardContent>
+							</Card>
+						</TabsContent>
+					</Tabs>
+				</>
 			</div>
 		</>
 	)

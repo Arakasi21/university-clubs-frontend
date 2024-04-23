@@ -31,10 +31,14 @@ import { toast } from 'sonner'
 import useUserStore from '@/store/user'
 import BackgroundClubImage from '@/components/st/BackgroundClubImage'
 import HandleJoinDialog from '@/components/st/HandleJoinDialog'
+import useUserRolesStore from '@/store/useUserRoles'
+import { hasPermission } from '@/helpers/permissions'
+import { Permissions } from '@/types/permissions'
+import Error from 'next/error'
 function Page({ params }: { params: { clubID: number } }) {
 	const [data, setData] = useState([] as ClubMember[])
 	const { user } = useUserStore()
-	const { club, isOwner } = useClub({ clubID: params.clubID, user: user })
+	const { club, loading, isOwner } = useClub({ clubID: params.clubID, user: user })
 
 	const [page] = useState(1)
 	const [pageSize] = useState(25)
@@ -122,11 +126,11 @@ function Page({ params }: { params: { clubID: number } }) {
 		},
 	})
 
-	//TODO: change later ? To what
-	if (!isOwner) {
-		return null
+	const { permissions } = useUserRolesStore()
+	//if do not have any permissions or not owner return nonauth
+	if (!hasPermission(permissions, Permissions.manage_membership) && !loading) {
+		return <Error statusCode={401} />
 	}
-
 	return (
 		<div>
 			<Nav />
