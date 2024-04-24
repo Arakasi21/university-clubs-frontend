@@ -58,7 +58,6 @@ function MemberRolesRow({
 				}
 			}
 		}
-
 		return res
 	}
 
@@ -79,7 +78,6 @@ function MemberRolesRow({
 			toast.error('Failed to add role member', { description: errorData.error })
 			return
 		}
-
 		onUpdate()
 	}
 
@@ -98,7 +96,6 @@ function MemberRolesRow({
 			toast.error('Failed to remove role member', { description: errorData.error })
 			return
 		}
-
 		onUpdate()
 	}
 
@@ -131,7 +128,6 @@ function MemberRolesRow({
 			toast.error('Failed to kick member', { description: errorData.error })
 			return
 		}
-
 		onUpdate()
 	}
 
@@ -141,13 +137,11 @@ function MemberRolesRow({
 
 	const { permissions } = useUserRolesStore()
 
-	// TODO FIX LOADING STATE
 	if (!hasPermission(permissions, Permissions.ALL) && !loading) {
 		return <Error statusCode={401} />
 	}
 
 	return (
-		// TODO OPEN ASSIGN MENU WHEN RIGHT CLICK
 		<TableRow
 			key={member.id}
 			onContextMenu={(e) => {
@@ -174,13 +168,11 @@ function MemberRolesRow({
 				</TableCell>
 				<TableCell>{member.email}</TableCell>
 				<TableCell>{member.barcode}</TableCell>
-
 				<DropdownMenuContent>
 					<DropdownMenuItem>
 						<Link href={`/user/${member.id}`}>{member.first_name}</Link>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
-					{/* TODO CHECK THE USER CAN ASSIGN OR DIASSIGN ROLE*/}
 					<RoleCheckboxDropdown
 						roles={roles}
 						assignRole={async (roleId, assign) => {
