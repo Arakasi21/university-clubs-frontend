@@ -26,7 +26,6 @@ import Error from 'next/error'
 import useMemberRoles from '@/hooks/useMemberRoles'
 import BackgroundClubImage from '@/components/st/BackgroundClubImage'
 import ClubImage from '@/components/st/ClubImage'
-import Sceleton from '@/components/st/Sceleton'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 

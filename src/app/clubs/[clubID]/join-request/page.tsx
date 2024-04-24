@@ -38,7 +38,7 @@ import Error from 'next/error'
 function Page({ params }: { params: { clubID: number } }) {
 	const [data, setData] = useState([] as ClubMember[])
 	const { user } = useUserStore()
-	const { club, loading, isOwner } = useClub({ clubID: params.clubID, user: user })
+	const { club, loading } = useClub({ clubID: params.clubID, user: user })
 
 	const [page] = useState(1)
 	const [pageSize] = useState(25)

@@ -14,11 +14,11 @@ import { Permissions } from '@/types/permissions'
 import BackgroundClubImage from '@/components/st/BackgroundClubImage'
 import ClubImage from '@/components/st/ClubImage'
 import Nav from '@/components/NavBar'
-import Sceleton from '@/components/st/Sceleton'
+import React from 'react'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
-	const { club, clubMembers, isOwner, loading } = useClub({ clubID: params.clubID, user: user })
+	const { club, clubMembers, isOwner } = useClub({ clubID: params.clubID, user: user })
 	const { memberStatus, handleJoinRequest, handleLeaveClub } = useUserClubStatus({
 		clubID: params.clubID,
 	})
@@ -29,6 +29,7 @@ function Page({ params }: { params: { clubID: number } }) {
 	})
 
 	const { permissions } = useUserRolesStore()
+	const { isLoggedIn } = useUserStore()
 	return (
 		<>
 			<Nav />
@@ -52,12 +53,16 @@ function Page({ params }: { params: { clubID: number } }) {
 									<CardContent>
 										<div className="grid gap-6">
 											<div className="grid gap-3">
-												{memberStatus == 'NOT_MEMBER' && (
-													<Button onClick={handleJoinRequest} type="submit">
-														Join request
-													</Button>
+												{isLoggedIn && (
+													<React.Fragment>
+														{memberStatus === 'NOT_MEMBER' && ( // Check membership status
+															<Button onClick={handleJoinRequest} type="submit">
+																Join request
+															</Button>
+														)}
+														{memberStatus === 'PENDING' && <Button disabled>Pending</Button>}
+													</React.Fragment>
 												)}
-												{memberStatus == 'PENDING' && <Button disabled>Pending</Button>}
 												{/* TODO ЗДЕСЬ НУЖНО ПЕРЕПИСАТЬ => OWNER CHANGE TO CLUB ADMIN (with admin permissions) / DSVR */}
 												{hasPermission(permissions, Permissions.ALL) && (
 													<div className="flex gap-3">

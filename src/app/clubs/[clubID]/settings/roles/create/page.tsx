@@ -145,7 +145,7 @@ export function Page({ params }: { params: { clubID: number } }) {
 								/>
 								<FormField
 									name="color"
-									render={({ field }) => (
+									render={() => (
 										<FormItem className="mb-8">
 											<FormLabel>Role Color</FormLabel>
 											<FormControl>
