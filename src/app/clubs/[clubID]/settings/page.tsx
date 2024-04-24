@@ -45,7 +45,6 @@ function Page({ params }: { params: { clubID: number } }) {
 	})
 
 	const { permissions } = useUserRolesStore()
-	//if do not have any permissions or not owner return nonauth
 	if (!hasPermission(permissions, Permissions.ALL) && !loading) {
 		return <Error statusCode={401} />
 	}
