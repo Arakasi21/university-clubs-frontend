@@ -148,13 +148,6 @@ export function DialogUpdateClubBanner({ club }: DialogUpdateClubBannerProps) {
 				<div className="flex items-center space-x-2">
 					<ClubBannerEditForm club={club} />
 				</div>
-				<DialogFooter className="sm:justify-start">
-					<DialogClose asChild>
-						<Button type="button" variant="secondary">
-							Close
-						</Button>
-					</DialogClose>
-				</DialogFooter>
 			</DialogContent>
 		</Dialog>
 	)

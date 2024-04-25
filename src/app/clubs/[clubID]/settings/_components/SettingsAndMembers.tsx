@@ -18,20 +18,21 @@ export default function Settings(props: {
 }) {
 	return (
 		<div>
-			<div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+			<div className="grid gap-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
 				{hasPermission(props.memberPerms, Permissions.manage_club) && (
 					<Card x-chunk="dashboard-05-chunk-1">
 						<CardHeader className="pb-3">
-							<CardDescription>Update your logo/banner</CardDescription>
+							<CardDescription>Update your logo</CardDescription>
 						</CardHeader>
-						<CardContent>
-							{props.club && (
-								<div className="flex gap-3">
-									<DialogUpdateClubLogo club={props.club} />
-									<DialogUpdateClubBanner club={props.club} />
-								</div>
-							)}
-						</CardContent>
+						<CardContent>{props.club && <DialogUpdateClubLogo club={props.club} />}</CardContent>
+					</Card>
+				)}
+				{hasPermission(props.memberPerms, Permissions.manage_club) && (
+					<Card x-chunk="dashboard-05-chunk-1">
+						<CardHeader className="pb-3">
+							<CardDescription>Update your banner</CardDescription>
+						</CardHeader>
+						<CardContent>{props.club && <DialogUpdateClubBanner club={props.club} />}</CardContent>
 					</Card>
 				)}
 			</div>

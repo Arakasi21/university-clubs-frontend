@@ -14,6 +14,7 @@ import { toast } from 'sonner'
 import RolesTab from './_components/RolesTab'
 import Settings from '@/app/clubs/[clubID]/settings/_components/SettingsAndMembers'
 import { useDragDrop } from '@/hooks/useDragDrop'
+import Link from 'next/link'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
@@ -78,13 +79,22 @@ function Page({ params }: { params: { clubID: number } }) {
 			<BackgroundClubImage club={club} />
 			<Tabs
 				className="grid flex-1 items-start gap-4 p-4 sm:px-64 sm:py-8 md:gap-8"
-				defaultValue="roles"
+				defaultValue="settings"
 			>
-				<TabsList className="grid w-full grid-cols-2">
+				<TabsList className="grid w-full grid-cols-3">
+					<Link
+						className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background"
+						href={`/clubs/${club?.id}`}
+					>
+						Return to Club Page
+					</Link>
 					<TabsTrigger value="settings">Settings</TabsTrigger>
 					<TabsTrigger value="roles">Roles</TabsTrigger>
 				</TabsList>
 
+				<TabsContent value="clubpage">
+					<div>Loading... Pls try to go to main page...</div>
+				</TabsContent>
 				<TabsContent value="settings">
 					<Settings
 						memberPerms={permissions}

@@ -90,7 +90,7 @@ const RoleCreateForm: React.FC<{
 						<FormItem className="mb-4">
 							<FormLabel>Role Color</FormLabel>
 							<FormControl>
-								<Input type="color" {...field} />
+								<Input type="color" style={{ height: '80px' }} {...field} />
 							</FormControl>
 						</FormItem>
 					)}
@@ -123,7 +123,7 @@ export function DialogCreateClubRole({
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogTrigger asChild>
-				<Button variant={'ghost'} onClick={toggleDialog}>
+				<Button variant={'default'} onClick={toggleDialog}>
 					Create Role
 				</Button>
 			</DialogTrigger>
