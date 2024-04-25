@@ -1,7 +1,5 @@
 'use client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/table'
 import { ClubRole } from '@/types/club'
 import { decimalToRgb } from '@/helpers/helper'
@@ -9,6 +7,8 @@ import { permissionsToStringArr } from '@/helpers/permissions'
 import { Badge } from '@/components/ui/badge'
 import RolesDropdownMenu from '@/components/st/RolesDropdownMenu'
 import React from 'react'
+import { DialogCreateClubRole } from '@/components/DialogCreateClubRole'
+import { useDragDrop } from '@/hooks/useDragDrop'
 
 interface RolesTabProps {
 	club: any
@@ -28,44 +28,14 @@ export default function RolesTab({
 	handleDeleteRole,
 	fetchClubInfo,
 }: RolesTabProps) {
-	const handleDragStart = (e: React.DragEvent, role: ClubRole) => {
-		e.dataTransfer.setData(
-			'application/my-app',
-			JSON.stringify({ id: role.id, position: role.position }),
-		)
-		e.dataTransfer.dropEffect = 'move'
-	}
-	const handleDragOver = (e: React.DragEvent) => {
-		e.preventDefault()
-	}
-	const handleDrop = async (e: React.DragEvent, role: ClubRole) => {
-		e.preventDefault()
-		const draggedRole = JSON.parse(e.dataTransfer.getData('application/my-app'))
-		const response = await fetch(`http://localhost:5000/clubs/${club?.id}/roles`, {
-			method: 'PATCH',
-			headers: { 'Content-Type': 'application/json' },
-			credentials: 'include',
-			body: JSON.stringify({
-				roles: [
-					{ id: draggedRole.id, position: role.position },
-					{ id: role.id, position: draggedRole.position },
-				],
-			}),
-		})
-		if (response.ok) {
-			fetchClubInfo()
-		}
-	}
-
+	const { handleDragStart, handleDragOver, handleDrop } = useDragDrop({ club, fetchClubInfo })
 	return (
 		<Card>
 			<CardHeader>
 				<CardTitle>Club Roles</CardTitle>
 				<CardDescription className="flex items-center justify-between">
 					Manage club roles. You can edit roles, create new one, delete and etc.
-					<Link href={`/clubs/${club?.id}/settings/roles/create`}>
-						<Button variant={'default'}>Create new role</Button>
-					</Link>
+					<DialogCreateClubRole club={club} onCreateSuccess={fetchClubInfo} />
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
