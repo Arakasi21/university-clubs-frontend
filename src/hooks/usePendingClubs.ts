@@ -20,9 +20,12 @@ export default function usePendingClubs() {
 				userStore.jwt_token,
 				userStore.setUser,
 			)
-			const data = await response.json()
 			if (response.ok) {
-				setPendingClubs(data.metadata.total_records)
+				const text = await response.text()
+				if (text.length) {
+					const data = JSON.parse(text)
+					setPendingClubs(data.metadata.total_records)
+				}
 			}
 		}
 
