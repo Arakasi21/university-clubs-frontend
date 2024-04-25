@@ -51,11 +51,16 @@ export default function HandleDialog({ selectedClub, isOpen, onClose }: HandleDi
 
 	const onReject = () => {
 		onClose()
-		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}`, {
-			method: 'POST',
-			credentials: 'include',
-			body: JSON.stringify({ status: 'rejected' }),
-		})
+		FetchWithAuth(
+			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}`,
+			{
+				method: 'POST',
+				credentials: 'include',
+				body: JSON.stringify({ status: 'rejected' }),
+			},
+			jwt_token,
+			setUser,
+		)
 			.then(async (res) => {
 				const data = await res.json()
 				if (!res.ok) {
