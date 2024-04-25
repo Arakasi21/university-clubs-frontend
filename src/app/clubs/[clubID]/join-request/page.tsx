@@ -37,6 +37,7 @@ import { Permissions } from '@/types/permissions'
 import Error from 'next/error'
 import useMemberRoles from '@/hooks/useMemberRoles'
 import useUserClubStatus from '@/hooks/useUserClubStatus'
+import { FetchWithAuth } from '@/helpers/fetch_api'
 function Page({ params }: { params: { clubID: number } }) {
 	const [data, setData] = useState([] as ClubMember[])
 	const { user } = useUserStore()
@@ -63,14 +64,16 @@ function Page({ params }: { params: { clubID: number } }) {
 
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
 	const [selectedUser, setSelectedUser] = useState<ClubMember>()
-
+	const { jwt_token, setUser } = useUserStore()
 	const fetchPendingClubs = useCallback(() => {
 		console.log(params.clubID)
-		fetch(
+		FetchWithAuth(
 			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${params.clubID}/join?page=${page}&page_size=${pageSize}`,
 			{
 				credentials: 'include',
 			},
+			jwt_token,
+			setUser,
 		)
 			.then(async (res) => {
 				const { users, metadata, error } = await res.json()
@@ -89,11 +92,16 @@ function Page({ params }: { params: { clubID: number } }) {
 	}, [page, pageSize, params.clubID])
 
 	const onHandle = (userID: number, status: 'approved' | 'rejected') => {
-		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club?.id}/members`, {
-			method: 'POST',
-			credentials: 'include',
-			body: JSON.stringify({ user_id: userID, status: status }),
-		})
+		FetchWithAuth(
+			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club?.id}/members`,
+			{
+				method: 'POST',
+				credentials: 'include',
+				body: JSON.stringify({ user_id: userID, status: status }),
+			},
+			jwt_token,
+			setUser,
+		)
 			.then(async (res) => {
 				const data = await res.json()
 				if (!res.ok) {

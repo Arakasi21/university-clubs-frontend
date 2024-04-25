@@ -14,6 +14,8 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import useUserStore from '@/store/user'
+import { FetchWithAuth } from '@/helpers/fetch_api'
 
 const roleFormSchema = z.object({
 	name: z
@@ -36,6 +38,8 @@ const RoleCreateForm: React.FC<{
 		},
 	})
 
+	const { jwt_token, setUser } = useUserStore()
+
 	const createRole = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
 
@@ -49,7 +53,7 @@ const RoleCreateForm: React.FC<{
 		}
 
 		try {
-			const response = await fetch(
+			const response = await FetchWithAuth(
 				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}/roles`,
 				{
 					method: 'POST',
@@ -57,6 +61,8 @@ const RoleCreateForm: React.FC<{
 					credentials: 'include',
 					body: JSON.stringify(updatedValues),
 				},
+				jwt_token,
+				setUser,
 			)
 
 			if (!response.ok) {

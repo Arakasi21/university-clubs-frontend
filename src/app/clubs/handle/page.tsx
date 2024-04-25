@@ -30,6 +30,8 @@ import { toast } from 'sonner'
 import HandleDialog from '../../../components/st/HandleDialog'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { FetchWithAuth } from '@/helpers/fetch_api'
+import useUserStore from '@/store/user'
 
 type Columns = {
 	club: Club
@@ -75,16 +77,18 @@ function Page() {
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 	const [rowSelection, setRowSelection] = useState({})
-
+	const { jwt_token, setUser } = useUserStore()
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
 	const [selectedClub, setSelectedClub] = useState<Club>()
 
 	const fetchPendingClubs = useCallback(() => {
-		fetch(
+		FetchWithAuth(
 			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/pending?page=${page}&page_size=${pageSize}`,
 			{
 				credentials: 'include',
 			},
+			jwt_token,
+			setUser,
 		)
 			.then(async (res) => {
 				const data = await res.json()
@@ -93,7 +97,6 @@ function Page() {
 						description: data.error,
 					})
 				}
-
 				setData(data.items as { club: Club; owner: ClubMember }[])
 				setFirstPage(data.metadata.first_page)
 				setLastPage(data.metadata.last_page)
@@ -194,6 +197,7 @@ function Page() {
 					selectedClub={selectedClub}
 					onClose={() => {
 						setIsDialogOpen(false)
+						fetchPendingClubs()
 					}}
 				/>
 			)}

@@ -19,6 +19,8 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import useUserStore from '@/store/user'
+import { FetchWithAuth } from '@/helpers/fetch_api'
 
 const MAX_FILE_SIZE = 5000000 // ~5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -45,7 +47,7 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 	useEffect(() => {
 		setImagePreview(club ? club.banner_url : null)
 	}, [club])
-
+	const { jwt_token, setUser } = useUserStore()
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -63,13 +65,15 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 			const formData = new FormData()
 			formData.append('banner', values.banner)
 
-			const response = await fetch(
+			const response = await FetchWithAuth(
 				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club?.id}/banner`,
 				{
 					method: 'PATCH',
 					credentials: 'include',
 					body: formData,
 				},
+				jwt_token,
+				setUser,
 			)
 
 			if (!response.ok) {

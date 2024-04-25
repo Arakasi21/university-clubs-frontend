@@ -10,6 +10,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { FetchWithAuth } from '@/helpers/fetch_api'
 
 const MAX_FILE_SIZE = 5000000 // ~5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -26,7 +27,6 @@ const formSchema = z.object({
 
 const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 	const editor = useRef(null)
-	const { setUser } = useUserStore()
 
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
 	const [imagePreview, setImagePreview] = useState<string | null>(user ? user.avatar_url : null)
@@ -41,7 +41,7 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 			avatar: user?.avatar_url,
 		},
 	})
-
+	const { jwt_token, setUser } = useUserStore()
 	const updateUserAvatar = async (values: z.infer<typeof formSchema>) => {
 		try {
 			if (!values.avatar) {
@@ -52,13 +52,15 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 			const formData = new FormData()
 			formData.append('avatar', values.avatar)
 
-			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${user?.id}/avatar`,
+			const response = await FetchWithAuth(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user?.id}/avatar`,
 				{
 					method: 'PATCH',
 					credentials: 'include',
 					body: formData,
 				},
+				jwt_token,
+				setUser,
 			)
 
 			if (!response.ok) {

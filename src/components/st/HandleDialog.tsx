@@ -9,6 +9,8 @@ import {
 import { Club } from '@/types/club'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { FetchWithAuth } from '@/helpers/fetch_api'
+import useUserStore from '@/store/user'
 
 export type HandleDialogProps = {
 	selectedClub: Club
@@ -18,13 +20,18 @@ export type HandleDialogProps = {
 
 export default function HandleDialog({ selectedClub, isOpen, onClose }: HandleDialogProps) {
 	const [club, setClub] = useState(selectedClub)
-
+	const { jwt_token, setUser } = useUserStore()
 	const onApprove = () => {
-		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}`, {
-			method: 'POST',
-			credentials: 'include',
-			body: JSON.stringify({ status: 'approved' }),
-		})
+		FetchWithAuth(
+			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}`,
+			{
+				method: 'POST',
+				credentials: 'include',
+				body: JSON.stringify({ status: 'approved' }),
+			},
+			jwt_token,
+			setUser,
+		)
 			.then(async (res) => {
 				const data = await res.json()
 				if (!res.ok) {

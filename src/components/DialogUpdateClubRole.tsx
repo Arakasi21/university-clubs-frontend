@@ -1,3 +1,4 @@
+'use client'
 import { Button } from '@/components/ui/button'
 import {
 	Dialog,
@@ -28,6 +29,8 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { permissionsToHex, permissionsToStringArr } from '@/helpers/permissions'
 import useUserRolesStore from '@/store/useUserRoles'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { FetchWithAuth } from '@/helpers/fetch_api'
+import useUserStore from '@/store/user'
 
 const roleFormSchema = z.object({
 	name: z
@@ -55,6 +58,7 @@ const RoleEditForm: React.FC<{
 		},
 	})
 	const { permissions } = useUserRolesStore()
+	const { jwt_token, setUser } = useUserStore()
 	const updateRole = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
 
@@ -69,7 +73,7 @@ const RoleEditForm: React.FC<{
 		}
 
 		try {
-			const response = await fetch(
+			const response = await FetchWithAuth(
 				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}/roles/${role.id}`,
 				{
 					method: 'PATCH',
@@ -77,6 +81,8 @@ const RoleEditForm: React.FC<{
 					credentials: 'include',
 					body: JSON.stringify(updatedValues),
 				},
+				jwt_token,
+				setUser,
 			)
 
 			if (!response.ok) {

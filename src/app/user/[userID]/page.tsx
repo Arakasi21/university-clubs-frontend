@@ -9,6 +9,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { FetchWithAuth } from '@/helpers/fetch_api'
 
 const UserPage = ({ params }: { params: { userID: number } }) => {
 	const { user } = useUserStore()
@@ -17,8 +18,12 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 	const [clubs, setClubs] = useState<Club[]>()
 	const router = useRouter()
 
+	const { jwt_token, setUser } = useUserStore()
+
 	const fetchUserInfo = useCallback(() => {
-		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${params.userID}`)
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${params.userID}`, {
+			method: 'GET',
+		})
 			.then(async (res) => {
 				const data = await res.json()
 				if (!res.ok) {
@@ -34,14 +39,16 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 			})
 			.catch((error) => console.log(error.message))
 
-		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${params.userID}/clubs`)
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${params.userID}/clubs`, {
+			method: 'GET',
+		})
 			.then(async (userClubsResponse) => {
 				if (!userClubsResponse.ok) throw new Error('Failed to fetch user clubs')
 				const userClubsData = await userClubsResponse.json()
 				setClubs(userClubsData.clubs)
 			})
 			.catch((error) => console.log(error.message))
-	}, [params.userID, user])
+	}, [params.userID, user, jwt_token, setUser])
 
 	useEffect(() => {
 		fetchUserInfo()

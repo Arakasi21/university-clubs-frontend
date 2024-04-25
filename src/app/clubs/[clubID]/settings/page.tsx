@@ -16,6 +16,7 @@ import Settings from '@/app/clubs/[clubID]/settings/_components/SettingsAndMembe
 import { useDragDrop } from '@/hooks/useDragDrop'
 import Link from 'next/link'
 import Members from '@/app/clubs/[clubID]/settings/_components/Members'
+import { FetchWithAuth } from '@/helpers/fetch_api'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
@@ -34,17 +35,22 @@ function Page({ params }: { params: { clubID: number } }) {
 		userStatus: memberStatus,
 	})
 	const { permissions, highestRole } = useUserRolesStore()
-
+	const { jwt_token, setUser } = useUserStore()
 	const { handleDragStart, handleDragOver, handleDrop } = useDragDrop({ club, fetchClubInfo })
 
 	const handleDeleteRole = useCallback(
 		async (roleID: number) => {
 			const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${params.clubID}/roles/${roleID}`
 			try {
-				const response = await fetch(apiUrl, {
-					method: 'DELETE',
-					credentials: 'include',
-				})
+				const response = await FetchWithAuth(
+					apiUrl,
+					{
+						method: 'DELETE',
+						credentials: 'include',
+					},
+					jwt_token,
+					setUser,
+				)
 
 				if (!response.ok) {
 					let errorData = await response.json()

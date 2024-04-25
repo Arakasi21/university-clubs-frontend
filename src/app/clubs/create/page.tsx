@@ -21,6 +21,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { FetchWithAuth } from '@/helpers/fetch_api'
+import useUserStore from '@/store/user'
 
 const formSchema = z.object({
 	name: z.string().min(2, {
@@ -40,16 +42,22 @@ export default function Page() {
 			description: '',
 		},
 	})
+	const { jwt_token, setUser } = useUserStore()
 
 	const handleSubmit = async (values: z.infer<typeof formSchema>) => {
 		const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs`
 		try {
-			const response = await fetch(apiUrl, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				credentials: 'include',
-				body: JSON.stringify(values),
-			})
+			const response = await FetchWithAuth(
+				apiUrl,
+				{
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					credentials: 'include',
+					body: JSON.stringify(values),
+				},
+				jwt_token,
+				setUser,
+			)
 
 			if (!response.ok) {
 				let errorData = await response.json()

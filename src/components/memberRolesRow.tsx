@@ -1,7 +1,7 @@
 import { TableCell, TableRow } from '@/components/ui/table'
 import UserAvatar from '@/components/userAvatar'
 import { decimalToRgb } from '@/helpers/helper'
-import { Club, ClubMember, ClubRole } from '@/types/club'
+import { ClubMember, ClubRole } from '@/types/club'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import {
@@ -27,6 +27,7 @@ import useUserRolesStore from '@/store/useUserRoles'
 import { Permissions } from '@/types/permissions'
 import Error from 'next/error'
 import { toast } from 'sonner'
+import { FetchWithAuth } from '@/helpers/fetch_api'
 
 export type MemberRolesRowProps = {
 	onUpdate: () => void
@@ -47,7 +48,7 @@ function MemberRolesRow({
 	const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
 	const [loading, setLoading] = useState(true)
 	const { user } = useUserStore()
-
+	const { jwt_token, setUser } = useUserStore()
 	const roleFilter = (arr1: number[], arr2: ClubRole[]) => {
 		const res: ClubRole[] = []
 		for (let i = 0; i < arr1.length; i++) {
@@ -64,7 +65,7 @@ function MemberRolesRow({
 	const addRoleMember = async (roleId: number, memberId: number, clubId: number) => {
 		console.log(`roleId: ${roleId}, memberId: ${memberId}, clubId: ${clubId}`) // Add this line
 
-		const response = await fetch(
+		const response = await FetchWithAuth(
 			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubId}/roles/${roleId}/members`,
 			{
 				method: 'POST',
@@ -74,6 +75,8 @@ function MemberRolesRow({
 				credentials: 'include',
 				body: JSON.stringify({ members: [memberId] }),
 			},
+			jwt_token,
+			setUser,
 		)
 
 		if (!response.ok) {
@@ -85,7 +88,7 @@ function MemberRolesRow({
 	}
 
 	const removeRoleMember = async (roleId: number, memberId: number, clubId: number) => {
-		const response = await fetch(
+		const response = await FetchWithAuth(
 			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubId}/roles/${roleId}/members`,
 			{
 				method: 'DELETE',
@@ -95,6 +98,8 @@ function MemberRolesRow({
 				credentials: 'include',
 				body: JSON.stringify({ members: [memberId] }),
 			},
+			jwt_token,
+			setUser,
 		)
 
 		if (!response.ok) {
@@ -121,7 +126,7 @@ function MemberRolesRow({
 	}
 
 	const kickMember = async (memberId: number, clubId: number) => {
-		const response = await fetch(
+		const response = await FetchWithAuth(
 			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubId}/members/${memberId}`,
 			{
 				method: 'DELETE',
@@ -130,6 +135,8 @@ function MemberRolesRow({
 				},
 				credentials: 'include',
 			},
+			jwt_token,
+			setUser,
 		)
 
 		if (!response.ok) {
