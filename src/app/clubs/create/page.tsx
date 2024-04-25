@@ -42,7 +42,7 @@ export default function Page() {
 	})
 
 	const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-		const apiUrl = 'http://localhost:5000/clubs'
+		const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs`
 		try {
 			const response = await fetch(apiUrl, {
 				method: 'POST',

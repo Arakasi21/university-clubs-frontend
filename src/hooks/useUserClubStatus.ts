@@ -10,7 +10,7 @@ export default function useUserClubStatus({ clubID }: useUserClubStatusProps) {
 	const [memberStatus, setMemberStatus] = useState<UserClubStatus>('NOT_MEMBER' as UserClubStatus)
 
 	const handleJoinRequest = useCallback(async () => {
-		const apiUrl = `http://localhost:5000/clubs/${clubID}/join`
+		const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/join`
 		try {
 			const response = await fetch(apiUrl, {
 				method: 'POST',
@@ -42,7 +42,7 @@ export default function useUserClubStatus({ clubID }: useUserClubStatusProps) {
 	}, [clubID])
 
 	const handleLeaveClub = useCallback(async () => {
-		const apiUrl = `http://localhost:5000/clubs/${clubID}/members`
+		const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/members`
 		try {
 			const response = await fetch(apiUrl, {
 				method: 'DELETE',
@@ -74,7 +74,9 @@ export default function useUserClubStatus({ clubID }: useUserClubStatusProps) {
 	}, [clubID])
 
 	const fetchUserClubStatus = useCallback(() => {
-		fetch(`http://localhost:5000/clubs/${clubID}/join/status`, { credentials: 'include' })
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/join/status`, {
+			credentials: 'include',
+		})
 			.then(async (res) => {
 				const data = await res.json()
 				if (!res.ok) {

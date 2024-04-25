@@ -10,7 +10,7 @@ const Page = () => {
 	const [user, setUser] = useState(null as User | null)
 
 	const fetchUserInfo = useCallback(() => {
-		fetch(`http://localhost:5000/user/${store.user?.id}`)
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${store.user?.id}`)
 			.then(async (res) => {
 				const data = await res.json()
 				if (!res.ok) {

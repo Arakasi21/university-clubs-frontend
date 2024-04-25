@@ -49,12 +49,15 @@ const RoleCreateForm: React.FC<{
 		}
 
 		try {
-			const response = await fetch(`http://localhost:5000/clubs/${club.id}/roles`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				credentials: 'include',
-				body: JSON.stringify(updatedValues),
-			})
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}/roles`,
+				{
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					credentials: 'include',
+					body: JSON.stringify(updatedValues),
+				},
+			)
 
 			if (!response.ok) {
 				const errorData = await response.json()

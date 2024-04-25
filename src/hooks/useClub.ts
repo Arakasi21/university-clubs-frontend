@@ -16,7 +16,7 @@ export default function useClub({ clubID, user }: useClubProps) {
 	const [isOwner, setIsOwner] = useState(false)
 
 	const fetchClubInfo = useCallback(() => {
-		fetch(`http://localhost:5000/clubs/${clubID}`)
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}`)
 			.then(async (res) => {
 				const data = await res.json()
 				if (!res.ok) {
@@ -33,7 +33,7 @@ export default function useClub({ clubID, user }: useClubProps) {
 			})
 			.catch((error) => console.log(error.message))
 
-		fetch(`http://localhost:5000/clubs/${clubID}/members?page=1&page_size=30`)
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/members?page=1&page_size=30`)
 			.then(async (res) => {
 				const data = await res.json()
 				if (!res.ok) {

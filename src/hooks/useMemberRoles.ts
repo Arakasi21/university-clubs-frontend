@@ -16,7 +16,7 @@ function UseMemberRoles({ clubID, user, userStatus }: UseMemberRolesProps) {
 	const { setUserRoles } = useUserRolesStore()
 
 	const fetchMemberRoles = useCallback(() => {
-		fetch(`http://localhost:5000/clubs/${clubID}/members/${user?.id}/roles`)
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/members/${user?.id}/roles`)
 			.then(async (res) => {
 				const data = await res.json()
 				if (!res.ok) {

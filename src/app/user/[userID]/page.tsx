@@ -18,7 +18,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 	const router = useRouter()
 
 	const fetchUserInfo = useCallback(() => {
-		fetch(`http://localhost:5000/user/${params.userID}`)
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${params.userID}`)
 			.then(async (res) => {
 				const data = await res.json()
 				if (!res.ok) {
@@ -34,7 +34,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 			})
 			.catch((error) => console.log(error.message))
 
-		fetch(`http://localhost:5000/user/${params.userID}/clubs`)
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${params.userID}/clubs`)
 			.then(async (userClubsResponse) => {
 				if (!userClubsResponse.ok) throw new Error('Failed to fetch user clubs')
 				const userClubsData = await userClubsResponse.json()

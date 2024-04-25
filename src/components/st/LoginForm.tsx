@@ -40,7 +40,7 @@ export default function Login() {
 	const router = useRouter()
 
 	const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-		const apiUrl = 'http://localhost:5000/auth/sign-in'
+		const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/sign-in`
 		try {
 			const response = await fetch(apiUrl, {
 				method: 'POST',
@@ -71,7 +71,9 @@ export default function Login() {
 	const OpenIDConnectLoginHandler = async () => {
 		try {
 			// Make a request to your backend to get the Microsoft login URL
-			const response = await fetch('http://localhost:5000/auth/microsoft/login', { method: 'POST' })
+			const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/microsoft/login`, {
+				method: 'POST',
+			})
 			const data = await response.json()
 
 			if (!response.ok) {

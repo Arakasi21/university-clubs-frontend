@@ -56,7 +56,7 @@ export default function SignUp() {
 	const router = useRouter()
 
 	const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-		const apiUrl = 'http://localhost:5000/auth/sign-up'
+		const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/sign-up`
 		try {
 			const response = await fetch(apiUrl, {
 				method: 'POST',

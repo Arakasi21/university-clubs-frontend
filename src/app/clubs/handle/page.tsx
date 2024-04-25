@@ -80,9 +80,12 @@ function Page() {
 	const [selectedClub, setSelectedClub] = useState<Club>()
 
 	const fetchPendingClubs = useCallback(() => {
-		fetch(`http://localhost:5000/clubs/pending?page=${page}&page_size=${pageSize}`, {
-			credentials: 'include',
-		})
+		fetch(
+			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/pending?page=${page}&page_size=${pageSize}`,
+			{
+				credentials: 'include',
+			},
+		)
 			.then(async (res) => {
 				const data = await res.json()
 				if (!res.ok) {

@@ -27,9 +27,12 @@ const Page = () => {
 
 	const activateAccount = async (token: string) => {
 		try {
-			let response = await fetch(`http://localhost:5000/auth/activate?token=${token}`, {
-				method: 'POST',
-			})
+			let response = await fetch(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/activate?token=${token}`,
+				{
+					method: 'POST',
+				},
+			)
 
 			if (response.ok) {
 				toast('Account activated successfully!')

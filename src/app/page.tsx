@@ -1,7 +1,6 @@
 'use client'
 import Layout from '@/components/Layout'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Club } from '@/types/club'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -16,7 +15,7 @@ export default function Home() {
 	const router = useRouter()
 
 	const fetchClubs = useCallback(() => {
-		fetch(`http://localhost:5000/clubs/?page=1&page_size=30`, { method: 'GET' })
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/?page=1&page_size=30`, { method: 'GET' })
 			.then(async (res) => {
 				const data = await res.json()
 				if (!res.ok) {

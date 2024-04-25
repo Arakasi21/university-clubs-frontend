@@ -23,17 +23,20 @@ export const useDragDrop = ({ club, fetchClubInfo }: UseDragDropProps) => {
 		async (e: React.DragEvent, role: ClubRole) => {
 			e.preventDefault()
 			const draggedRole = JSON.parse(e.dataTransfer.getData('application/my-app'))
-			const response = await fetch(`http://localhost:5000/clubs/${club?.id}/roles`, {
-				method: 'PATCH',
-				headers: { 'Content-Type': 'application/json' },
-				credentials: 'include',
-				body: JSON.stringify({
-					roles: [
-						{ id: draggedRole.id, position: role.position },
-						{ id: role.id, position: draggedRole.position },
-					],
-				}),
-			})
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club?.id}/roles`,
+				{
+					method: 'PATCH',
+					headers: { 'Content-Type': 'application/json' },
+					credentials: 'include',
+					body: JSON.stringify({
+						roles: [
+							{ id: draggedRole.id, position: role.position },
+							{ id: role.id, position: draggedRole.position },
+						],
+					}),
+				},
+			)
 			if (response.ok) {
 				fetchClubInfo()
 			}

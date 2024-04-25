@@ -20,7 +20,7 @@ export default function HandleDialog({ selectedClub, isOpen, onClose }: HandleDi
 	const [club, setClub] = useState(selectedClub)
 
 	const onApprove = () => {
-		fetch(`http://localhost:5000/clubs/${club.id}`, {
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}`, {
 			method: 'POST',
 			credentials: 'include',
 			body: JSON.stringify({ status: 'approved' }),
@@ -44,7 +44,7 @@ export default function HandleDialog({ selectedClub, isOpen, onClose }: HandleDi
 
 	const onReject = () => {
 		onClose()
-		fetch(`http://localhost:5000/clubs/${club.id}`, {
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}`, {
 			method: 'POST',
 			credentials: 'include',
 			body: JSON.stringify({ status: 'rejected' }),

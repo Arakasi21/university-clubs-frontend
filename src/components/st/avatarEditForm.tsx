@@ -52,11 +52,14 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 			const formData = new FormData()
 			formData.append('avatar', values.avatar)
 
-			const response = await fetch(`http://localhost:5000/user/${user?.id}/avatar`, {
-				method: 'PATCH',
-				credentials: 'include',
-				body: formData,
-			})
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/user/${user?.id}/avatar`,
+				{
+					method: 'PATCH',
+					credentials: 'include',
+					body: formData,
+				},
+			)
 
 			if (!response.ok) {
 				const errorData = await response.json()

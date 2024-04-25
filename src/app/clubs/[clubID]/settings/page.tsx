@@ -39,7 +39,7 @@ function Page({ params }: { params: { clubID: number } }) {
 
 	const handleDeleteRole = useCallback(
 		async (roleID: number) => {
-			const apiUrl = `http://localhost:5000/clubs/${params.clubID}/roles/${roleID}`
+			const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${params.clubID}/roles/${roleID}`
 			try {
 				const response = await fetch(apiUrl, {
 					method: 'DELETE',

@@ -11,7 +11,7 @@ export default function Nav() {
 	const { isLoggedIn, user, purgeUser } = useUserStore()
 
 	const logOutHandle = async () => {
-		await fetch('http://localhost:5000/auth/logout', {
+		await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`, {
 			method: 'POST',
 			credentials: 'include',
 		})

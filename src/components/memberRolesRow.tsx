@@ -64,14 +64,17 @@ function MemberRolesRow({
 	const addRoleMember = async (roleId: number, memberId: number, clubId: number) => {
 		console.log(`roleId: ${roleId}, memberId: ${memberId}, clubId: ${clubId}`) // Add this line
 
-		const response = await fetch(`http://localhost:5000/clubs/${clubId}/roles/${roleId}/members`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
+		const response = await fetch(
+			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubId}/roles/${roleId}/members`,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include',
+				body: JSON.stringify({ members: [memberId] }),
 			},
-			credentials: 'include',
-			body: JSON.stringify({ members: [memberId] }),
-		})
+		)
 
 		if (!response.ok) {
 			const errorData = await response.json()
@@ -82,14 +85,17 @@ function MemberRolesRow({
 	}
 
 	const removeRoleMember = async (roleId: number, memberId: number, clubId: number) => {
-		const response = await fetch(`http://localhost:5000/clubs/${clubId}/roles/${roleId}/members`, {
-			method: 'DELETE',
-			headers: {
-				'Content-Type': 'application/json',
+		const response = await fetch(
+			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubId}/roles/${roleId}/members`,
+			{
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include',
+				body: JSON.stringify({ members: [memberId] }),
 			},
-			credentials: 'include',
-			body: JSON.stringify({ members: [memberId] }),
-		})
+		)
 
 		if (!response.ok) {
 			const errorData = await response.json()
@@ -115,13 +121,16 @@ function MemberRolesRow({
 	}
 
 	const kickMember = async (memberId: number, clubId: number) => {
-		const response = await fetch(`http://localhost:5000/clubs/${clubId}/members/${memberId}`, {
-			method: 'DELETE',
-			headers: {
-				'Content-Type': 'application/json',
+		const response = await fetch(
+			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubId}/members/${memberId}`,
+			{
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				credentials: 'include',
 			},
-			credentials: 'include',
-		})
+		)
 
 		if (!response.ok) {
 			const errorData = await response.json()

@@ -63,11 +63,14 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 			const formData = new FormData()
 			formData.append('banner', values.banner)
 
-			const response = await fetch(`http://localhost:5000/clubs/${club?.id}/banner`, {
-				method: 'PATCH',
-				credentials: 'include',
-				body: formData,
-			})
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club?.id}/banner`,
+				{
+					method: 'PATCH',
+					credentials: 'include',
+					body: formData,
+				},
+			)
 
 			if (!response.ok) {
 				const errorData = await response.json()

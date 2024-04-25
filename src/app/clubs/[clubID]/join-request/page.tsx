@@ -35,10 +35,21 @@ import useUserRolesStore from '@/store/useUserRoles'
 import { hasPermission } from '@/helpers/permissions'
 import { Permissions } from '@/types/permissions'
 import Error from 'next/error'
+import useMemberRoles from '@/hooks/useMemberRoles'
+import useUserClubStatus from '@/hooks/useUserClubStatus'
 function Page({ params }: { params: { clubID: number } }) {
 	const [data, setData] = useState([] as ClubMember[])
 	const { user } = useUserStore()
 	const { club, loading } = useClub({ clubID: params.clubID, user: user })
+
+	const { memberStatus } = useUserClubStatus({
+		clubID: params.clubID,
+	})
+	useMemberRoles({
+		clubID: params.clubID,
+		user: user,
+		userStatus: memberStatus,
+	})
 
 	const [page] = useState(1)
 	const [pageSize] = useState(25)
@@ -55,27 +66,30 @@ function Page({ params }: { params: { clubID: number } }) {
 
 	const fetchPendingClubs = useCallback(() => {
 		console.log(params.clubID)
-		fetch(`http://localhost:5000/clubs/${params.clubID}/join?page=${page}&page_size=${pageSize}`, {
-			credentials: 'include',
-		})
+		fetch(
+			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${params.clubID}/join?page=${page}&page_size=${pageSize}`,
+			{
+				credentials: 'include',
+			},
+		)
 			.then(async (res) => {
-				const data = await res.json()
+				const { users, metadata, error } = await res.json()
 				if (!res.ok) {
 					toast.error('not found', {
-						description: data.error,
+						description: error,
 					})
 				}
 
-				setData(data.users)
-				setFirstPage(data.metadata.first_page)
-				setLastPage(data.metadata.last_page)
-				setTotalRecords(data.metadata.total_records)
+				setData(users)
+				setFirstPage(metadata.first_page)
+				setLastPage(metadata.last_page)
+				setTotalRecords(metadata.total_records)
 			})
 			.catch((error) => console.log(error.message))
 	}, [page, pageSize, params.clubID])
 
 	const onHandle = (userID: number, status: 'approved' | 'rejected') => {
-		fetch(`http://localhost:5000/clubs/${club?.id}/members`, {
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club?.id}/members`, {
 			method: 'POST',
 			credentials: 'include',
 			body: JSON.stringify({ user_id: userID, status: status }),
