@@ -122,7 +122,7 @@ export function Page({ params }: { params: { clubID: number } }) {
 
 					<div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
 						<div className="flex flex-wrap justify-center gap-6">
-							<Link href={`/clubs/${club?.id}/settings/roles`}>
+							<Link href={`/clubs/${club?.id}/settings/`}>
 								<Button variant={'default'}>Return to roles</Button>
 							</Link>
 						</div>

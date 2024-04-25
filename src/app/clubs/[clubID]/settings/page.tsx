@@ -14,7 +14,7 @@ import {
 	CardTitle,
 } from '@/components/ui/card'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Tabs, TabsContent } from '@/components/ui/tabs'
+import { Tabs, TabsContent, TabsTrigger, TabsList } from '@/components/ui/tabs'
 import useClub from '@/hooks/useClub'
 import Link from 'next/link'
 import useUserStore from '@/store/user'
@@ -26,12 +26,17 @@ import Error from 'next/error'
 import useMemberRoles from '@/hooks/useMemberRoles'
 import BackgroundClubImage from '@/components/st/BackgroundClubImage'
 import ClubImage from '@/components/st/ClubImage'
+import React, { useCallback } from 'react'
+import { ClubRole } from '@/types/club'
+import { toast } from 'sonner'
+import RolesTab from './_components/RolesTab'
+import SettingsAndMembers from '@/app/clubs/[clubID]/settings/_components/SettingsAndMembers'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
-	const { club, clubMembers, loading, fetchClubInfo } = useClub({
+	const { club, isOwner, loading, fetchClubInfo } = useClub({
 		clubID: params.clubID,
 		user: user,
 	})
@@ -43,108 +48,104 @@ function Page({ params }: { params: { clubID: number } }) {
 		user: user,
 		userStatus: memberStatus,
 	})
+	const { permissions, highestRole } = useUserRolesStore()
 
-	const { permissions } = useUserRolesStore()
-	if (!hasPermission(permissions, Permissions.ALL) && !loading) {
-		return <Error statusCode={401} />
+	const handleDragStart = (e: React.DragEvent, role: ClubRole) => {
+		e.dataTransfer.setData(
+			'application/my-app',
+			JSON.stringify({ id: role.id, position: role.position }),
+		)
+		e.dataTransfer.dropEffect = 'move'
 	}
-	// TODO ASSIGN ROLE
+
+	const handleDragOver = (e: React.DragEvent) => {
+		e.preventDefault()
+	}
+
+	const handleDrop = async (e: React.DragEvent, role: ClubRole) => {
+		e.preventDefault()
+		const draggedRole = JSON.parse(e.dataTransfer.getData('application/my-app'))
+		const response = await fetch(`http://localhost:5000/clubs/${club?.id}/roles`, {
+			method: 'PATCH',
+			headers: { 'Content-Type': 'application/json' },
+			credentials: 'include',
+			body: JSON.stringify({
+				roles: [
+					{ id: draggedRole.id, position: role.position },
+					{ id: role.id, position: draggedRole.position },
+				],
+			}),
+		})
+		if (response.ok) {
+			fetchClubInfo()
+		}
+	}
+
+	const handleDeleteRole = useCallback(
+		async (roleID: number) => {
+			const apiUrl = `http://localhost:5000/clubs/${params.clubID}/roles/${roleID}`
+			try {
+				const response = await fetch(apiUrl, {
+					method: 'DELETE',
+					credentials: 'include',
+				})
+
+				if (!response.ok) {
+					let errorData = await response.json()
+
+					toast.error('Failed to delete role', {
+						description: errorData.error,
+					})
+					return
+				}
+
+				fetchClubInfo()
+				console.log('Role deleted successfully')
+
+				toast.success('Role deleted!', {
+					action: {
+						label: 'X',
+						onClick: () => {},
+					},
+				})
+			} catch (e) {
+				toast.error('ERROR', {
+					description: 'An error occurred while trying to make request to delete role.',
+				})
+				console.log(e)
+			}
+		},
+		[fetchClubInfo, params.clubID],
+	)
+
 	return (
 		<>
 			<Nav />
-			<div>
-				<>
-					<div className="flex overflow-hidden">
-						<div className="flex-1">
-							<div className="flex flex-wrap justify-center gap-6">
-								<BackgroundClubImage club={club} />
-								<div className="flex w-full justify-center gap-3">
-									<Link href={`/clubs/${club?.id}`}>
-										<Button variant={'outline'}>
-											<ClubImage club={club} width={32} height={32} />
-											Club page
-										</Button>
-									</Link>
-									{hasPermission(permissions, Permissions.manage_membership) && (
-										<Link href={`/clubs/${club?.id}/join-request`}>
-											<Button variant={'outline'}>Handle new members</Button>
-										</Link>
-									)}
-								</div>
-								<div>
-									<div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-										<Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
-											<CardHeader className="pb-3">
-												<CardTitle>Club Roles</CardTitle>
-												<CardDescription className="max-w-lg text-balance leading-relaxed">
-													Introducing our new role management
-												</CardDescription>
-											</CardHeader>
-											{hasPermission(permissions, Permissions.manage_roles) && (
-												<CardFooter>
-													<Link href={`/clubs/${club?.id}/settings/roles`}>
-														<Button variant={'default'}>Roles settings</Button>
-													</Link>
-												</CardFooter>
-											)}
-										</Card>
-										{hasPermission(permissions, Permissions.manage_club) && (
-											<Card x-chunk="dashboard-05-chunk-1">
-												<CardHeader className="pb-3">
-													<CardDescription>Update your logo/banner</CardDescription>
-												</CardHeader>
-												<CardContent>
-													{club && (
-														<div className="flex gap-3">
-															<DialogUpdateClubLogo club={club} />
-															<DialogUpdateClubBanner club={club} />
-														</div>
-													)}
-												</CardContent>
-											</Card>
-										)}
-									</div>
-									<Tabs defaultValue="week">
-										<TabsContent value="week">
-											<Card x-chunk="dashboard-05-chunk-3">
-												<CardHeader className="px-7">
-													<CardTitle>Members</CardTitle>
-												</CardHeader>
-												<CardContent>
-													<Table>
-														<TableHeader>
-															<TableRow>
-																<TableHead className="hidden sm:table-cell">Avatar</TableHead>
-																<TableHead className="text-left">Name</TableHead>
-																<TableHead className="text-left">Surname</TableHead>
-																<TableHead className="hidden md:table-cell">Role</TableHead>
-																<TableHead className="hidden md:table-cell">Email</TableHead>
-																<TableHead className="hidden md:table-cell">Barcode</TableHead>
-															</TableRow>
-														</TableHeader>
-														<TableBody>
-															{clubMembers &&
-																clubMembers.map((member) => (
-																	<MemberRolesRow
-																		onUpdate={() => fetchClubInfo()}
-																		member={member}
-																		roles={club?.roles ?? []}
-																		clubId={club?.id ?? 0}
-																		key={member.id}
-																	/>
-																))}
-														</TableBody>
-													</Table>
-												</CardContent>
-											</Card>
-										</TabsContent>
-									</Tabs>
-								</div>
-							</div>
-						</div>
-					</div>
-				</>
-			</div>
+			<BackgroundClubImage club={club} />
+			<Tabs
+				className="grid flex-1 items-start gap-4 p-4 sm:px-64 sm:py-8 md:gap-8"
+				defaultValue="roles"
+			>
+				<TabsList className="grid w-full grid-cols-3">
+					<TabsTrigger value="roles">Roles</TabsTrigger>
+					<TabsTrigger value="members">Members</TabsTrigger>
+					<TabsTrigger value="settings">Settings</TabsTrigger>
+				</TabsList>
+				<TabsContent value="roles">
+					<RolesTab
+						club={club}
+						handleDragStart={handleDragStart}
+						handleDragOver={handleDragOver}
+						handleDrop={handleDrop}
+						highestRole={highestRole}
+						isOwner={isOwner}
+						handleDeleteRole={handleDeleteRole}
+						fetchClubInfo={fetchClubInfo}
+					/>
+				</TabsContent>
+				<TabsContent value="members">{/*  */}</TabsContent>
+				<TabsContent value="settings">{/* Settings content goes here */}</TabsContent>
+			</Tabs>
 		</>
 	)
 }
