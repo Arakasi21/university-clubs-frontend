@@ -5,6 +5,7 @@ import { Permissions } from '@/types/permissions'
 import { Club, ClubMember } from '@/types/club'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import usePendingJoinRequests from '@/hooks/usePendingJoinRequests'
 
 export default function Members({
 	club,
@@ -16,6 +17,7 @@ export default function Members({
 	clubMembers: ClubMember[] | undefined
 	callbackfn: (member: ClubMember) => JSX.Element
 }) {
+	const pendingRequests = usePendingJoinRequests(club?.id ?? 0)
 	return (
 		<div>
 			<Tabs defaultValue="week">
@@ -24,8 +26,16 @@ export default function Members({
 						<CardHeader className="px-7">
 							<CardTitle>Members</CardTitle>
 							{/*todo button to right side, show the number of new requests in the button */}
+
 							<Button variant={`outline`}>
-								<Link href={`/clubs/${club?.id}/join-request`}>Handle new members</Link>
+								<Link href={`/clubs/${club?.id}/join-request`}>
+									Handle new members{' '}
+									{pendingRequests > 0 && (
+										<span
+											className={pendingRequests > 0 ? 'text-red-500' : ''}
+										>{`(+${pendingRequests})`}</span>
+									)}
+								</Link>
 							</Button>
 						</CardHeader>
 						<CardContent>

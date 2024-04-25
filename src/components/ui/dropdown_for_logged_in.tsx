@@ -14,10 +14,12 @@ import UserAvatar from '@/components/userAvatar'
 import { User } from '@/types/user'
 import { GavelIcon, LogOutIcon, PlusCircleIcon, SettingsIcon, UserRoundIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import usePendingClubs from '@/hooks/usePendingClubs'
 
 const DropdownForLoggedIn = ({ user, logout }: { user: User; logout: () => void }) => {
 	const router = useRouter()
 	const canHandleNewClubs: boolean = user.role === 'ADMIN' || user.role === 'DSVR'
+	const pendingClubs = usePendingClubs()
 	return (
 		<div>
 			<DropdownMenu>
@@ -72,7 +74,14 @@ const DropdownForLoggedIn = ({ user, logout }: { user: User; logout: () => void 
 								className="flex flex-row space-x-4"
 							>
 								<GavelIcon />
-								<p>Handle new Clubs</p>
+								<p>
+									Handle new Clubs{' '}
+									{pendingClubs > 0 && (
+										<span
+											className={pendingClubs > 0 ? 'text-red-500' : ''}
+										>{`(+${pendingClubs})`}</span>
+									)}
+								</p>
 							</DropdownMenuItem>
 						)}
 						<DropdownMenuItem
