@@ -4,9 +4,10 @@ import { persist } from 'zustand/middleware'
 
 interface userStore {
 	user: User | null
+	jwt_token: string | null
 	isLoggedIn: boolean
 
-	setUser: (user: User) => void
+	setUser: (user: User, jwt_token: string) => void
 	purgeUser: () => void
 }
 
@@ -15,15 +16,18 @@ const useUserStore = create<userStore>()(
 		(set) => ({
 			isLoggedIn: false,
 			user: null,
-			setUser: (user: User) =>
+			jwt_token: null,
+			setUser: (user: User, jwt_token: string) =>
 				set(() => ({
 					isLoggedIn: true,
 					user: user,
+					jwt_token: jwt_token,
 				})),
 			purgeUser: () =>
 				set(() => ({
 					isLoggedIn: false,
 					user: null,
+					jwt_token: null,
 				})),
 		}),
 		{

@@ -1,6 +1,8 @@
 import { UserClubStatus } from '@/types/club'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import useUserStore from '@/store/user'
+import { FetchWithAuth } from '@/helpers/fetch_api'
 
 export type useUserClubStatusProps = {
 	clubID: number
@@ -8,15 +10,19 @@ export type useUserClubStatusProps = {
 
 export default function useUserClubStatus({ clubID }: useUserClubStatusProps) {
 	const [memberStatus, setMemberStatus] = useState<UserClubStatus>('NOT_MEMBER' as UserClubStatus)
-
+	const { jwt_token } = useUserStore()
 	const handleJoinRequest = useCallback(async () => {
 		const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/join`
 		try {
-			const response = await fetch(apiUrl, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				credentials: 'include',
-			})
+			const response = await FetchWithAuth(
+				apiUrl,
+				{
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					credentials: 'include',
+				},
+				jwt_token,
+			)
 
 			if (!response.ok) {
 				let errorData = await response.json()

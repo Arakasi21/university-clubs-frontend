@@ -55,14 +55,14 @@ export default function Home() {
 									<CardTitle>
 										<Image
 											src={club.banner_url ?? '/main_photo.jpeg'}
-											width="100"
+											width="600"
 											height="50"
 											alt={`banner image of club ${club.name}`}
 											sizes="(min-width: 1415px) 750px, (min-width: 768px) 50vw, 100vw"
-											className="max-h-[540px] w-full rounded-xl"
+											className="max-h-[540px] max-w-[1000px] rounded-xl"
 										/>
 									</CardTitle>
-									<CardContent className="flex flex-row space-x-2">
+									<CardContent className="flex flex-row space-x-2 pt-5">
 										<Image
 											src={club.logo_url ?? '/main_photo.jpeg'}
 											width="55"

@@ -71,7 +71,7 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 
 			const data = await response.json()
 
-			setUser(data.user)
+			setUser(data.user, data.jwt_token)
 
 			toast.success('Your avatar have changed!')
 		} catch (e) {
@@ -111,24 +111,6 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 											}}
 										/>
 									</FormControl>
-									{/*<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-										<DialogContent>
-											<DialogHeader>
-												<DialogTitle>Crop your new profile picture</DialogTitle>
-											</DialogHeader>
-											{imagePreview && (
-												<AvatarEditor
-													ref={editor}
-													image={}
-													border={10}
-													scale={1.2}
-												/>
-											)}
-											<DialogFooter className="flex justify-center w-full">
-
-											</DialogFooter>
-										</DialogContent>
-									</Dialog>*/}
 									<Button type="submit" className="w-full">
 										Set new profile picture
 									</Button>
