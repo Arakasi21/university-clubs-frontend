@@ -31,12 +31,13 @@ import { ClubRole } from '@/types/club'
 import { toast } from 'sonner'
 import RolesTab from './_components/RolesTab'
 import SettingsAndMembers from '@/app/clubs/[clubID]/settings/_components/SettingsAndMembers'
+import Settings from '@/app/clubs/[clubID]/settings/_components/SettingsAndMembers'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
-	const { club, isOwner, loading, fetchClubInfo } = useClub({
+	const { club, clubMembers, loading, fetchClubInfo, isOwner } = useClub({
 		clubID: params.clubID,
 		user: user,
 	})
@@ -126,11 +127,28 @@ function Page({ params }: { params: { clubID: number } }) {
 				className="grid flex-1 items-start gap-4 p-4 sm:px-64 sm:py-8 md:gap-8"
 				defaultValue="roles"
 			>
-				<TabsList className="grid w-full grid-cols-3">
-					<TabsTrigger value="roles">Roles</TabsTrigger>
-					<TabsTrigger value="members">Members</TabsTrigger>
+				<TabsList className="grid w-full grid-cols-2">
 					<TabsTrigger value="settings">Settings</TabsTrigger>
+					<TabsTrigger value="roles">Roles</TabsTrigger>
 				</TabsList>
+
+				<TabsContent value="settings">
+					<Settings
+						memberPerms={permissions}
+						club={club}
+						clubMembers={clubMembers}
+						callbackfn={(member) => (
+							<MemberRolesRow
+								onUpdate={() => fetchClubInfo()}
+								member={member}
+								roles={club?.roles ?? []}
+								clubId={club?.id ?? 0}
+								key={member.id}
+							/>
+						)}
+					/>
+				</TabsContent>
+
 				<TabsContent value="roles">
 					<RolesTab
 						club={club}
@@ -143,8 +161,6 @@ function Page({ params }: { params: { clubID: number } }) {
 						fetchClubInfo={fetchClubInfo}
 					/>
 				</TabsContent>
-				<TabsContent value="members">{/*  */}</TabsContent>
-				<TabsContent value="settings">{/* Settings content goes here */}</TabsContent>
 			</Tabs>
 		</>
 	)
