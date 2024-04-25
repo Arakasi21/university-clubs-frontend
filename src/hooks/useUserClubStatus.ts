@@ -71,10 +71,15 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 	const handleLeaveClub = useCallback(async () => {
 		try {
 			const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/members`
-			const response = await fetch(apiUrl, {
-				method: 'DELETE',
-				credentials: 'include',
-			})
+			const response = await FetchWithAuth(
+				apiUrl,
+				{
+					method: 'DELETE',
+					credentials: 'include',
+				},
+				jwt_token,
+				setUser,
+			)
 
 			if (!response.ok) {
 				const errorData = await response.json()
