@@ -15,6 +15,8 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
@@ -76,6 +78,69 @@ export default function Settings(props: {
 										<SelectItem value="Speaking">Speaking</SelectItem>
 									</SelectContent>
 								</Select>
+							</div>
+						</div>
+					</CardContent>
+				</Card>
+
+				<Card x-chunk="dashboard-05-chunk-1">
+					<CardHeader className="pb-5">
+						<CardDescription>Create Event</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<div className="grid w-full items-center gap-4">
+							<div className="flex flex-col space-y-1.5">
+								<h1>{props.club?.name} Event</h1>
+							</div>
+							<div className="flex flex-col space-y-1.5">
+								<p>You can create an event for your club.</p>
+							</div>
+							<div className="flex flex-col space-y-1.5">
+								<Link href={`/clubs/${props.club?.id}/events`}>
+									<Button>Create Event</Button>
+								</Link>
+							</div>
+						</div>
+					</CardContent>
+				</Card>
+
+				<Card x-chunk="dashboard-05-chunk-1">
+					<CardHeader className="pb-5">
+						<CardDescription>Store club file</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<div className="grid w-full items-center gap-4">
+							<div className="flex flex-col space-y-1.5">
+								<h1>{props.club?.name} File</h1>
+							</div>
+							<div className="flex flex-col space-y-1.5">
+								<p>You can store files for your club.</p>
+							</div>
+
+							<div className="flex flex-col space-y-1.5">
+								<Link href={`/clubs/${props.club?.id}/files`}>
+									<Button>Store File</Button>
+								</Link>
+							</div>
+						</div>
+					</CardContent>
+				</Card>
+				<Card x-chunk="dashboard-05-chunk-1">
+					<CardHeader className="pb-5">
+						<CardDescription>Get club file</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<div className="grid w-full items-center gap-4">
+							<div className="flex flex-col space-y-1.5">
+								<h1>{props.club?.name} File</h1>
+							</div>
+							<div className="flex flex-col space-y-1.5">
+								<p>List of current members XML - type</p>
+							</div>
+							<div className="flex flex-col space-y-1.5">
+								<Link href={`/clubs/${props.club?.id}/files`}>
+									<Button>Current members XML file</Button>
+								</Link>
 							</div>
 						</div>
 					</CardContent>

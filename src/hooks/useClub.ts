@@ -47,7 +47,7 @@ export default function useClub({ clubID, user }: useClubProps) {
 				setClubMembers(data.members)
 			})
 			.catch((error) => console.log(error.message))
-	}, [clubID, user?.id])
+	}, [clubID, user])
 
 	useEffect(() => {
 		fetchClubInfo()

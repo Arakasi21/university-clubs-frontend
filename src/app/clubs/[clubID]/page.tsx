@@ -15,6 +15,7 @@ import BackgroundClubImage from '@/components/st/BackgroundClubImage'
 import ClubImage from '@/components/st/ClubImage'
 import Nav from '@/components/NavBar'
 import React from 'react'
+import { Separator } from '@/components/ui/separator'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
@@ -22,6 +23,12 @@ function Page({ params }: { params: { clubID: number } }) {
 	const { memberStatus, handleJoinRequest, handleLeaveClub } = useUserClubStatus({
 		clubID: params.clubID,
 	})
+	const membersWithoutPresident = clubMembers?.filter((member) => {
+		const memberRole = club?.roles.find((role) => role.id === member.roles[1])
+		return memberRole?.name !== 'President'
+	})
+
+	const membersCount = membersWithoutPresident?.length
 
 	const { permissions } = useUserRolesStore()
 	const { isLoggedIn } = useUserStore()
@@ -31,6 +38,7 @@ function Page({ params }: { params: { clubID: number } }) {
 		userStatus: memberStatus,
 		shouldFetch: memberStatus === 'MEMBER',
 	})
+
 	return (
 		<>
 			<Nav />
@@ -101,23 +109,120 @@ function Page({ params }: { params: { clubID: number } }) {
 											<div className="grid gap-3">
 												<Select>
 													{clubMembers &&
-														clubMembers.map((member) => (
-															<Link
-																href={`/user/${member.id}`}
-																className="flex w-full flex-row items-center space-x-3.5 px-2"
-																key={member.id}
-															>
-																<UserAvatar user={member} />
-																<p
-																	style={{
-																		color: `#${club?.roles[0].color.toString(16)}` ?? '#fff',
-																	}}
-																>
-																	{member.last_name} {member.first_name}
-																</p>
-															</Link>
-														))}
+														clubMembers
+															.sort((a, b) => {
+																const roleA = club?.roles.find((role) => role.id === a.roles[1])
+																const roleB = club?.roles.find((role) => role.id === b.roles[1])
+																return (roleB?.position ?? 0) - (roleA?.position ?? 0)
+															})
+															.map((member) => {
+																const memberRole = club?.roles.find(
+																	(role) => role.id === member.roles[1],
+																)
+																if (memberRole?.name === 'President') {
+																	return (
+																		<>
+																			<h2>President</h2>
+																			<Link
+																				href={`/user/${member.id}`}
+																				className="flex w-full flex-row items-center space-x-3.5 px-2"
+																				key={member.id}
+																			>
+																				<UserAvatar user={member} />
+																				<p
+																					style={{
+																						color: `#${memberRole.color.toString(16)}` ?? '#fff',
+																					}}
+																				>
+																					{member.last_name} {member.first_name}
+																				</p>
+																			</Link>
+																			<Separator />
+																			<h1>Members - {membersCount} </h1>
+																		</>
+																	)
+																} else {
+																	return (
+																		<>
+																			<Link
+																				href={`/user/${member.id}`}
+																				className="flex w-full flex-row items-center space-x-3.5 px-2"
+																				key={member.id}
+																			>
+																				<UserAvatar user={member} />
+																				<p
+																					style={{
+																						color: `#${memberRole?.color.toString(16)}` ?? '#fff',
+																					}}
+																				>
+																					{member.last_name} {member.first_name}
+																				</p>
+																			</Link>
+																		</>
+																	)
+																}
+															})}
 												</Select>
+											</div>
+										</div>
+									</CardContent>
+								</Card>
+							</div>
+							<div>
+								<Card x-chunk="dashboard-07-chunk-2">
+									<CardHeader>
+										<CardTitle>Club Events</CardTitle>
+									</CardHeader>
+									<CardContent>
+										<div className="grid gap-6">
+											<div className="grid gap-3">
+												{/*	CURRENT EVENTS THAT IS ACTIVE FOR CLUB*/}
+												<div>
+													<p className=" text-muted-foreground" style={{ color: 'gray' }}>
+														There are no events for this club yet.
+													</p>
+												</div>
+											</div>
+										</div>
+									</CardContent>
+								</Card>
+								{/*CLUB NEWS*/}
+							</div>
+							<div>
+								<Card x-chunk="dashboard-07-chunk-3">
+									<CardHeader>
+										<CardTitle>Club Posts</CardTitle>
+									</CardHeader>
+									<CardContent>
+										<div className="grid gap-6">
+											<div className="grid gap-3">
+												{/*	NEWS FOR CLUB*/}
+												<div>
+													{/*MUTED*/}
+													<p className=" text-muted-foreground" style={{ color: 'gray' }}>
+														There are no Posts for this club yet.
+													</p>
+												</div>
+											</div>
+										</div>
+									</CardContent>
+								</Card>
+							</div>
+							<div>
+								{/*	Club Achievements*/}
+								<Card x-chunk="dashboard-07-chunk-4">
+									<CardHeader>
+										<CardTitle>Club Achievements</CardTitle>
+									</CardHeader>
+									<CardContent>
+										<div className="grid gap-6">
+											<div className="grid gap-3">
+												{/*	ACHIEVEMENTS FOR CLUB*/}
+												<div>
+													<p className=" text-muted-foreground" style={{ color: 'gray' }}>
+														There are no achievements for this club yet.
+													</p>
+												</div>
 											</div>
 										</div>
 									</CardContent>

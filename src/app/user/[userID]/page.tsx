@@ -111,7 +111,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 															onClick={() => {
 																router.push(`/clubs/${club.id}`)
 															}}
-															className="border-r-1 relative my-4 rounded-3xl hover:bg-accent"
+															className="border-r-1 relative my-4 cursor-pointer rounded-3xl hover:bg-accent"
 														>
 															<div className="flex flex-row items-center space-x-2 ">
 																<Image

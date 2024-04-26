@@ -91,7 +91,7 @@ export default function Home() {
 									>
 										{totalUsers}
 									</div>
-									<p className="mt-3 text-xs text-green-600 text-muted-foreground">{`+${0}% from last month`}</p>
+									<p className="mt-3 text-xs text-green-500 text-muted-foreground">{`+${0}% from last month`}</p>
 								</CardContent>
 							</Card>
 							<Card x-chunk="dashboard-01-chunk-2">
@@ -111,7 +111,7 @@ export default function Home() {
 									>
 										{totalClubs}
 									</div>
-									<p className="mt-3 text-xs text-green-600 text-muted-foreground">
+									<p className="mt-3 text-xs text-green-500 text-muted-foreground">
 										+0% from last year
 									</p>
 								</CardContent>
