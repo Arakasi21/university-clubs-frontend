@@ -90,7 +90,7 @@ function Page({ params }: { params: { clubID: number } }) {
 				setTotalRecords(metadata.total_records)
 			})
 			.catch((error) => console.log(error.message))
-	}, [page, pageSize, params.clubID])
+	}, [page, pageSize, params.clubID, jwt_token, setUser])
 
 	const onHandle = (userID: number, status: 'approved' | 'rejected') => {
 		FetchWithAuth(

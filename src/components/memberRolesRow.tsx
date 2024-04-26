@@ -34,6 +34,7 @@ export type MemberRolesRowProps = {
 	member: ClubMember
 	roles: ClubRole[]
 	clubId: number | undefined
+	addRoleMember: (roleId: number, memberId: number, clubId: number | undefined) => Promise<void>
 }
 
 function MemberRolesRow({

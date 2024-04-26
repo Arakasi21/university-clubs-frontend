@@ -6,11 +6,13 @@ import { Club, ClubMember } from '@/types/club'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import usePendingJoinRequests from '@/hooks/usePendingJoinRequests'
+import { hasPermission } from '@/helpers/permissions'
 
 export default function Members({
 	club,
 	clubMembers,
 	callbackfn,
+	memberPerms,
 }: {
 	memberPerms: Permissions
 	club: Club | undefined
@@ -27,16 +29,29 @@ export default function Members({
 							<CardTitle>Members</CardTitle>
 							{/*todo button to right side, show the number of new requests in the button */}
 
-							<Button variant={`outline`}>
-								<Link href={`/clubs/${club?.id}/join-request`}>
-									Handle new members{' '}
-									{pendingRequests > 0 && (
-										<span
-											className={pendingRequests > 0 ? 'text-red-500' : ''}
-										>{`(+${pendingRequests})`}</span>
-									)}
-								</Link>
-							</Button>
+							{hasPermission(memberPerms, Permissions.manage_membership) ? (
+								<Button variant={`outline`}>
+									<Link href={`/clubs/${club?.id}/join-request`}>
+										Handle new members{' '}
+										{pendingRequests > 0 && (
+											<span
+												className={pendingRequests > 0 ? 'text-red-500' : ''}
+											>{`(+${pendingRequests})`}</span>
+										)}
+									</Link>
+								</Button>
+							) : (
+								<Button variant={`outline`} disabled>
+									<Link href={`/clubs/${club?.id}/join-request`}>
+										Handle new members{' '}
+										{pendingRequests > 0 && (
+											<span
+												className={pendingRequests > 0 ? 'text-red-500' : ''}
+											>{`(+${pendingRequests})`}</span>
+										)}
+									</Link>
+								</Button>
+							)}
 						</CardHeader>
 						<CardContent>
 							<Table>

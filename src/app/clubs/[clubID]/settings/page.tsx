@@ -17,6 +17,8 @@ import { useDragDrop } from '@/hooks/useDragDrop'
 import Link from 'next/link'
 import Members from '@/app/clubs/[clubID]/settings/_components/Members'
 import { FetchWithAuth } from '@/helpers/fetch_api'
+import { Permissions } from '@/types/permissions'
+import { hasPermission } from '@/helpers/permissions'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
@@ -78,8 +80,13 @@ function Page({ params }: { params: { clubID: number } }) {
 				console.log(e)
 			}
 		},
-		[fetchClubInfo, params.clubID],
+		[fetchClubInfo, params.clubID, jwt_token, setUser],
 	)
+
+	// TODO CHECK THIS
+	if (!club) {
+		return <div>Club not found</div>
+	}
 
 	return (
 		<>
@@ -97,8 +104,20 @@ function Page({ params }: { params: { clubID: number } }) {
 						Return
 					</Link>
 					<TabsTrigger value="members">Members</TabsTrigger>
-					<TabsTrigger value="roles">Roles</TabsTrigger>
-					<TabsTrigger value="settings">Settings</TabsTrigger>
+					{hasPermission(permissions, Permissions.manage_roles) ? (
+						<TabsTrigger value="roles">Roles</TabsTrigger>
+					) : (
+						<TabsTrigger value="roles" disabled>
+							Roles
+						</TabsTrigger>
+					)}
+					{hasPermission(permissions, Permissions.manage_club) ? (
+						<TabsTrigger value="settings">Settings</TabsTrigger>
+					) : (
+						<TabsTrigger value="settings" disabled>
+							Settings
+						</TabsTrigger>
+					)}
 				</TabsList>
 
 				<TabsContent value="members">
@@ -113,6 +132,7 @@ function Page({ params }: { params: { clubID: number } }) {
 								roles={club?.roles ?? []}
 								clubId={club?.id ?? 0}
 								key={member.id}
+								addRoleMember={async () => {}}
 							/>
 						)}
 					/>
