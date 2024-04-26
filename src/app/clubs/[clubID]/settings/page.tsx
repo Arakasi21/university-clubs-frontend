@@ -33,6 +33,7 @@ function Page({ params }: { params: { clubID: number } }) {
 		clubID: params.clubID,
 		user: user,
 		userStatus: memberStatus,
+		shouldFetch: memberStatus === 'MEMBER',
 	})
 	const { permissions, highestRole } = useUserRolesStore()
 	const { jwt_token, setUser } = useUserStore()

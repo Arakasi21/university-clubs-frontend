@@ -22,14 +22,15 @@ function Page({ params }: { params: { clubID: number } }) {
 	const { memberStatus, handleJoinRequest, handleLeaveClub } = useUserClubStatus({
 		clubID: params.clubID,
 	})
+
+	const { permissions } = useUserRolesStore()
+	const { isLoggedIn } = useUserStore()
 	useMemberRoles({
 		clubID: params.clubID,
 		user: user,
 		userStatus: memberStatus,
+		shouldFetch: memberStatus === 'MEMBER',
 	})
-
-	const { permissions } = useUserRolesStore()
-	const { isLoggedIn } = useUserStore()
 	return (
 		<>
 			<Nav />

@@ -10,12 +10,16 @@ export type UseMemberRolesProps = {
 	userStatus: UserClubStatus
 	user: User | null
 	clubID: number
+	shouldFetch: boolean
 }
 
-function UseMemberRoles({ clubID, user, userStatus }: UseMemberRolesProps) {
+function useMemberRoles({ clubID, user, userStatus, shouldFetch }: UseMemberRolesProps) {
 	const { setUserRoles } = useUserRolesStore()
 
 	const fetchMemberRoles = useCallback(() => {
+		if (!shouldFetch) {
+			return
+		}
 		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/members/${user?.id}/roles`)
 			.then(async (res) => {
 				const data = await res.json()
@@ -34,13 +38,10 @@ function UseMemberRoles({ clubID, user, userStatus }: UseMemberRolesProps) {
 				setUserRoles(data.roles, membersHighestRole(data.roles), permissions)
 			})
 			.catch((error) => console.log(error.message))
-	}, [clubID, user?.id, setUserRoles])
+	}, [clubID, user?.id, setUserRoles, shouldFetch])
 
 	useEffect(() => {
-		if (userStatus !== 'MEMBER' && !user) {
-			return
-		}
 		fetchMemberRoles()
-	}, [fetchMemberRoles, user, userStatus])
+	}, [fetchMemberRoles])
 }
-export default UseMemberRoles
+export default useMemberRoles
