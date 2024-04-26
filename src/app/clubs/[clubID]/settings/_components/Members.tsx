@@ -31,7 +31,7 @@ export default function Members({
 
 							{hasPermission(memberPerms, Permissions.manage_membership) ? (
 								<Button variant={`outline`}>
-									<Link href={`/clubs/${club?.id}/join-request`}>
+									<Link className="w-full" href={`/clubs/${club?.id}/join-request`}>
 										Handle new members{' '}
 										{pendingRequests > 0 && (
 											<span

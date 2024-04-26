@@ -2,7 +2,8 @@ import { ClubRole } from '@/types/club'
 import { Permissions, PermissionsList, PermissionsListItem } from '@/types/permissions'
 
 // userRole [admin permission:(Manage club, Ban User),
-// moder(manage roles), lox]
+// moder(manage roles)
+
 export const accumulateMemberPermissions = (roles: ClubRole[]) => {
 	let acc = 0
 	roles.forEach((role) => {
@@ -21,7 +22,6 @@ export const accumulateMemberPermissions = (roles: ClubRole[]) => {
  * @returns True if the member has the permission, false otherwise.
  */
 export const hasPermission = (memberPerms: number, permission: Permissions) => {
-	// If the result is not 0, it means the member has the permission.
 	return (memberPerms & permission) !== 0
 }
 
@@ -37,7 +37,6 @@ export const membersHighestRole = (roles: ClubRole[]) => {
 			highestRole = role
 		}
 	})
-
 	return highestRole
 }
 
@@ -62,16 +61,13 @@ export const permissionsToStringArr = (permissions: Permissions) => {
 	if ((permissions & Permissions.manage_roles) !== 0) {
 		arr.push(PermissionsList[5])
 	}
-
 	return arr
 }
 
 export const permissionsToHex = (permissions: string[]) => {
 	let hex = 0
-
 	permissions.forEach((p) => {
 		hex |= Permissions[p as keyof typeof Permissions]
 	})
-
 	return hex
 }
