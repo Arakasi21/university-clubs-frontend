@@ -2,11 +2,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ClubMember } from '@/types/club'
 import { User } from '@/types/user'
 
-const UserAvatar = ({ user }: { user: User | ClubMember }) => {
+const UserAvatar = ({ user, size = 43 }: { user: User | ClubMember; size?: number }) => {
 	return (
-		<Avatar>
+		<Avatar style={{ width: size, height: size }}>
 			<AvatarImage src={user?.avatar_url} alt={`${user?.first_name}'s profile picture`} />
-			<AvatarFallback>{user?.first_name.slice(0, 1)}</AvatarFallback>
+			<AvatarFallback style={{ fontSize: size / 4 }}>{user?.first_name.slice(0, 1)}</AvatarFallback>
 		</Avatar>
 	)
 }

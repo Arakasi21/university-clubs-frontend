@@ -1,16 +1,5 @@
 'use client'
-import { Bird, CornerDownLeft, Mic, Paperclip, Rabbit, Settings, Turtle } from 'lucide-react'
-
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-	Drawer,
-	DrawerContent,
-	DrawerDescription,
-	DrawerHeader,
-	DrawerTitle,
-	DrawerTrigger,
-} from '@/components/ui/drawer'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -21,13 +10,11 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import Nav from '@/components/NavBar'
 import BackgroundClubImage from '@/components/st/BackgroundClubImage'
 import React from 'react'
 import useClub from '@/hooks/useClub'
 import Link from 'next/link'
-import ClubImage from '@/components/st/ClubImage'
 
 const CreateEventsPage = ({ params }: { params: { clubID: number } }) => {
 	// @ts-ignore

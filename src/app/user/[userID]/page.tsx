@@ -11,6 +11,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { FetchWithAuth } from '@/helpers/fetch_api'
 import Layout from '@/components/Layout'
+import UserAvatar from '@/components/userAvatar'
 
 const UserPage = ({ params }: { params: { userID: number } }) => {
 	const { user } = useUserStore()
@@ -76,12 +77,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 											</div>
 										) : (
 											<div className=" overflow-hidden rounded-full border-4 border-white">
-												<Image
-													src={'/aitu-logo-3-400x205.png'}
-													alt={'non - image'}
-													width={200}
-													height={200}
-												/>
+												<UserAvatar user={pageowner} size={270} />
 											</div>
 										)}
 										<p>
