@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	images: {
-		domains: ['localhost', 'ucms-user-profile-images-dev.s3.ap-northeast-1.amazonaws.com', 'ucms-club-images-dev.s3.ap-northeast-1.amazonaws.com'],
 		remotePatterns: [
 			{
 				protocol: 'http',
@@ -14,7 +13,12 @@ const nextConfig = {
 				port: '5001',
 			},
 			{
-				hostname: '',
+				protocol: 'https',
+				hostname: 'ucms-user-profile-images-dev.s3.ap-northeast-1.amazonaws.com',
+			},
+			{
+				protocol: 'https',
+				hostname: 'ucms-club-images-dev.s3.ap-northeast-1.amazonaws.com',
 			},
 		],
 	},
