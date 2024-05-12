@@ -1,10 +1,7 @@
 import { Button } from '@/components/ui/button'
 import {
 	Dialog,
-	DialogClose,
 	DialogContent,
-	DialogDescription,
-	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
@@ -19,8 +16,7 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
-import { FetchWithAuth } from '@/helpers/fetch_api'
-import useUserStore from '@/store/user'
+import { useAxiosInterceptor } from '@/helpers/fetch_api'
 
 const MAX_FILE_SIZE = 5000000 // ~5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -43,7 +39,8 @@ const ClubLogoEditForm: React.FC<ClubLogoFormProps> = ({ club, ...props }) => {
 	const [imagePreview, setImagePreview] = useState<string | null>(
 		club ? club.logo_url : '/main_photo.jpeg',
 	)
-	const { jwt_token, setUser } = useUserStore()
+
+	const axiosAuth = useAxiosInterceptor()
 
 	useEffect(() => {
 		setImagePreview(club ? club.logo_url : null)
@@ -66,26 +63,19 @@ const ClubLogoEditForm: React.FC<ClubLogoFormProps> = ({ club, ...props }) => {
 			const formData = new FormData()
 			formData.append('logo', values.logo)
 
-			const response = await FetchWithAuth(
+			const response = await axiosAuth(
 				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club?.id}/logo`,
 				{
 					method: 'PATCH',
-					credentials: 'include',
-					body: formData,
+					data: formData,
 				},
-				jwt_token,
-				setUser,
 			)
 
-			if (!response.ok) {
-				const errorData = await response.json()
-
+			if (response.status !== 200) {
 				toast.error('Change logo error', {
-					description: errorData.error,
+					description: response.data.error,
 				})
 			}
-
-			const data = await response.json()
 
 			toast.success('Club logo successfully have changed!')
 		} catch (e) {

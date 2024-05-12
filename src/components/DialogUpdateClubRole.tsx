@@ -28,8 +28,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { permissionsToHex, permissionsToStringArr } from '@/helpers/permissions'
 import useUserRolesStore from '@/store/useUserRoles'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FetchWithAuth } from '@/helpers/fetch_api'
-import useUserStore from '@/store/user'
+import { useAxiosInterceptor } from '@/helpers/fetch_api'
 
 const roleFormSchema = z.object({
 	name: z
@@ -57,7 +56,7 @@ const RoleEditForm: React.FC<{
 		},
 	})
 	const { permissions } = useUserRolesStore()
-	const { jwt_token, setUser } = useUserStore()
+	const axiosAuth = useAxiosInterceptor()
 	const updateRole = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
 
@@ -72,21 +71,17 @@ const RoleEditForm: React.FC<{
 		}
 
 		try {
-			const response = await FetchWithAuth(
+			const response = await axiosAuth(
 				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}/roles/${role.id}`,
 				{
 					method: 'PATCH',
 					headers: { 'Content-Type': 'application/json' },
-					credentials: 'include',
-					body: JSON.stringify(updatedValues),
+					data: JSON.stringify(updatedValues),
 				},
-				jwt_token,
-				setUser,
 			)
 
-			if (!response.ok) {
-				const errorData = await response.json()
-				toast.error('Failed to update role', { description: errorData.error })
+			if (response.status !== 200) {
+				toast.error('Failed to update role', { description: response.data.error })
 				return
 			}
 

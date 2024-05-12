@@ -1,22 +1,13 @@
 'use client'
 import Layout from '@/components/Layout'
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Club } from '@/types/club'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import Sceleton from '@/components/st/Sceleton'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { Activity, CalendarCheck, CreditCard, DollarSign, GraduationCap, Users } from 'lucide-react'
+import { CalendarCheck, GraduationCap, Users } from 'lucide-react'
 
 export default function Home() {
 	const [clubs, setClubs] = useState<Club[]>()
