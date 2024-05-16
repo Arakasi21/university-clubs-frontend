@@ -70,6 +70,11 @@ function Page({ params }: { params: { clubID: number } }) {
 															</Button>
 														)}
 														{memberStatus === 'PENDING' && <Button disabled>Pending</Button>}
+														{memberStatus === 'BANNED' && (
+															<Button disabled variant={'destructive'}>
+																You are banned
+															</Button>
+														)}
 													</React.Fragment>
 												)}
 												{/* TODO ЗДЕСЬ НУЖНО ПЕРЕПИСАТЬ => OWNER CHANGE TO CLUB ADMIN (with admin permissions) / DSVR */}

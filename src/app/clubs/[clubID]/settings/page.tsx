@@ -16,7 +16,7 @@ import Settings from '@/app/clubs/[clubID]/settings/_components/Settings'
 import { useDragDrop } from '@/hooks/useDragDrop'
 import Link from 'next/link'
 import Members from '@/app/clubs/[clubID]/settings/_components/Members'
-import { FetchWithAuth } from '@/helpers/fetch_api'
+import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { Permissions } from '@/types/permissions'
 import { hasPermission } from '@/helpers/permissions'
 
@@ -38,28 +38,20 @@ function Page({ params }: { params: { clubID: number } }) {
 		shouldFetch: memberStatus === 'MEMBER',
 	})
 	const { permissions, highestRole } = useUserRolesStore()
-	const { jwt_token, setUser } = useUserStore()
+	const axiosAuth = useAxiosInterceptor()
 	const { handleDragStart, handleDragOver, handleDrop } = useDragDrop({ club, fetchClubInfo })
 
 	const handleDeleteRole = useCallback(
 		async (roleID: number) => {
 			const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${params.clubID}/roles/${roleID}`
 			try {
-				const response = await FetchWithAuth(
-					apiUrl,
-					{
-						method: 'DELETE',
-						credentials: 'include',
-					},
-					jwt_token,
-					setUser,
-				)
+				const response = await axiosAuth(apiUrl, {
+					method: 'DELETE',
+				})
 
-				if (!response.ok) {
-					let errorData = await response.json()
-
+				if (!response.status.toString().startsWith('2')) {
 					toast.error('Failed to delete role', {
-						description: errorData.error,
+						description: response.data.error,
 					})
 					return
 				}
@@ -80,7 +72,7 @@ function Page({ params }: { params: { clubID: number } }) {
 				console.log(e)
 			}
 		},
-		[fetchClubInfo, params.clubID, jwt_token, setUser],
+		[params.clubID, axiosAuth, fetchClubInfo],
 	)
 
 	// TODO CHECK THIS

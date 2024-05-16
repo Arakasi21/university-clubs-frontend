@@ -29,4 +29,4 @@ export type ClubRole = {
 	color: number
 }
 
-export type UserClubStatus = 'NOT_MEMBER' | 'PENDING' | 'MEMBER'
+export type UserClubStatus = 'NOT_MEMBER' | 'PENDING' | 'MEMBER' | 'BANNED'

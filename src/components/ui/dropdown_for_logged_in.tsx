@@ -12,14 +12,15 @@ import {
 import { DarkThemeMenuToggle } from '@/components/ui/toggle-mode'
 import UserAvatar from '@/components/userAvatar'
 import { User } from '@/types/user'
-import { GavelIcon, LogOutIcon, PlusCircleIcon, SettingsIcon, UserRoundIcon } from 'lucide-react'
+import { LogOutIcon, PlusCircleIcon, SettingsIcon, UserRoundIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import usePendingClubs from '@/hooks/usePendingClubs'
+
+import PendingClubsDropdownItem from '@/components/PendingClubsDropdownItem'
 
 const DropdownForLoggedIn = ({ user, logout }: { user: User; logout: () => void }) => {
 	const router = useRouter()
 	const canHandleNewClubs: boolean = user.role === 'ADMIN' || user.role === 'DSVR'
-	const pendingClubs = usePendingClubs()
+
 	return (
 		<div>
 			<DropdownMenu>
@@ -66,24 +67,7 @@ const DropdownForLoggedIn = ({ user, logout }: { user: User; logout: () => void 
 							<p>Create new Club</p>
 						</DropdownMenuItem>
 
-						{canHandleNewClubs && (
-							<DropdownMenuItem
-								onClick={() => {
-									router.push(`/clubs/handle`)
-								}}
-								className="flex flex-row space-x-4"
-							>
-								<GavelIcon />
-								<p>
-									Handle new Clubs{' '}
-									{pendingClubs > 0 && (
-										<span
-											className={pendingClubs > 0 ? 'text-red-500' : ''}
-										>{`(+${pendingClubs})`}</span>
-									)}
-								</p>
-							</DropdownMenuItem>
-						)}
+						{canHandleNewClubs && <PendingClubsDropdownItem />}
 						<DropdownMenuItem
 							onClick={(e) => {
 								e.preventDefault()

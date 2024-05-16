@@ -2,7 +2,7 @@ import { UserClubStatus } from '@/types/club'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import useUserStore from '@/store/user'
-import { FetchWithAuth } from '@/helpers/fetch_api'
+import { useAxiosInterceptor } from '@/helpers/fetch_api'
 
 export type UseUserClubStatusProps = {
 	clubID: number
@@ -10,28 +10,24 @@ export type UseUserClubStatusProps = {
 
 export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 	const [memberStatus, setMemberStatus] = useState<UserClubStatus>('NOT_MEMBER')
-	const { jwt_token, setUser } = useUserStore()
+	const { jwt_token } = useUserStore()
+	const axiosAuth = useAxiosInterceptor()
 
 	const fetchUserClubStatus = useCallback(async () => {
 		try {
-			const response = await FetchWithAuth(
+			const response = await axiosAuth(
 				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/join/status`,
-				{
-					credentials: 'include',
-				},
-				jwt_token,
-				setUser,
+				{},
 			)
-			const data = await response.json()
-			if (!response.ok) {
-				toast.error('Failed to fetch member join status', { description: data.error })
-				throw new Error(data.error || 'Failed to fetch member join status')
+			if (!response.status.toString().startsWith('2')) {
+				toast.error('Failed to fetch member join status', { description: response.data.error })
+				throw new Error(response.data.error || 'Failed to fetch member join status')
 			}
-			setMemberStatus(data.status)
+			setMemberStatus(response.data.status)
 		} catch (error) {
 			console.error(error)
 		}
-	}, [clubID, jwt_token])
+	}, [axiosAuth, clubID])
 
 	const handleJoinRequest = useCallback(async () => {
 		try {
@@ -39,20 +35,13 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 				throw new Error('JWT token is missing')
 			}
 			const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/join`
-			const response = await FetchWithAuth(
-				apiUrl,
-				{
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					credentials: 'include',
-				},
-				jwt_token,
-				setUser,
-			)
+			const response = await axiosAuth(apiUrl, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+			})
 
-			if (!response.ok) {
-				const errorData = await response.json()
-				toast.error('Failed to make request to join club', { description: errorData.error })
+			if (!response.status.toString().startsWith('2')) {
+				toast.error('Failed to make request to join club', { description: response.data.error })
 			} else {
 				toast.success('Request to join club successfully made!', {
 					action: {
@@ -66,24 +55,17 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 			console.error(error)
 		}
 		await fetchUserClubStatus()
-	}, [clubID, jwt_token, fetchUserClubStatus])
+	}, [fetchUserClubStatus, jwt_token, clubID, axiosAuth])
 
 	const handleLeaveClub = useCallback(async () => {
 		try {
 			const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/members`
-			const response = await FetchWithAuth(
-				apiUrl,
-				{
-					method: 'DELETE',
-					credentials: 'include',
-				},
-				jwt_token,
-				setUser,
-			)
+			const response = await axiosAuth(apiUrl, {
+				method: 'DELETE',
+			})
 
-			if (!response.ok) {
-				const errorData = await response.json()
-				toast.error('Failed to leave club', { description: errorData.error })
+			if (!response.status.toString().startsWith('2')) {
+				toast.error('Failed to leave club', { description: response.data.error })
 			} else {
 				toast.success('Left club successfully')
 			}
@@ -92,7 +74,7 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 			console.error(error)
 		}
 		await fetchUserClubStatus()
-	}, [clubID, fetchUserClubStatus])
+	}, [axiosAuth, clubID, fetchUserClubStatus])
 
 	useEffect(() => {
 		fetchUserClubStatus()

@@ -1,5 +1,4 @@
 'use client'
-import Nav from '@/components/NavBar'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import useUserStore from '@/store/user'
@@ -9,7 +8,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { FetchWithAuth } from '@/helpers/fetch_api'
+import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import Layout from '@/components/Layout'
 import UserAvatar from '@/components/userAvatar'
 
@@ -20,37 +19,35 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 	const [clubs, setClubs] = useState<Club[]>()
 	const router = useRouter()
 
-	const { jwt_token, setUser } = useUserStore()
+	const axiosAuth = useAxiosInterceptor()
 
 	const fetchUserInfo = useCallback(() => {
-		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${params.userID}`, {
+		axiosAuth(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${params.userID}`, {
 			method: 'GET',
 		})
-			.then(async (res) => {
-				const data = await res.json()
-				if (!res.ok) {
+			.then((res) => {
+				if (!res.status.toString().startsWith('2')) {
 					toast.error('not found', {
-						description: data.error,
+						description: res.data.error,
 					})
 					return
 				}
-				setPageowner(data.user)
-				if (user?.id === data.user.id) {
+				setPageowner(res.data.user)
+				if (user?.id === res.data.user.id) {
 					setIsOwner(true)
 				}
 			})
 			.catch((error) => console.log(error.message))
 
-		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${params.userID}/clubs`, {
+		axiosAuth(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${params.userID}/clubs`, {
 			method: 'GET',
 		})
-			.then(async (userClubsResponse) => {
-				if (!userClubsResponse.ok) throw new Error('Failed to fetch user clubs')
-				const userClubsData = await userClubsResponse.json()
-				setClubs(userClubsData.clubs)
+			.then((res) => {
+				if (!res.status.toString().startsWith('2')) throw new Error('Failed to fetch user clubs')
+				setClubs(res.data.clubs)
 			})
 			.catch((error) => console.log(error.message))
-	}, [params.userID, user, jwt_token, setUser])
+	}, [axiosAuth, params.userID, user?.id])
 
 	useEffect(() => {
 		fetchUserInfo()

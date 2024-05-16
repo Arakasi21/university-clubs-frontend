@@ -10,7 +10,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
-import { FetchWithAuth } from '@/helpers/fetch_api'
+import { useAxiosInterceptor } from '@/helpers/fetch_api'
 
 const MAX_FILE_SIZE = 5000000 // ~5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -30,6 +30,8 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
 	const [imagePreview, setImagePreview] = useState<string | null>(user ? user.avatar_url : null)
+	const axiosAuth = useAxiosInterceptor()
+	const { setUser } = useUserStore()
 
 	useEffect(() => {
 		setImagePreview(user ? user.avatar_url : null)
@@ -41,7 +43,7 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 			avatar: user?.avatar_url,
 		},
 	})
-	const { jwt_token, setUser } = useUserStore()
+
 	const updateUserAvatar = async (values: z.infer<typeof formSchema>) => {
 		try {
 			if (!values.avatar) {
@@ -52,28 +54,21 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 			const formData = new FormData()
 			formData.append('avatar', values.avatar)
 
-			const response = await FetchWithAuth(
+			const response = await axiosAuth(
 				`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user?.id}/avatar`,
 				{
 					method: 'PATCH',
-					credentials: 'include',
-					body: formData,
+					data: formData,
 				},
-				jwt_token,
-				setUser,
 			)
 
-			if (!response.ok) {
-				const errorData = await response.json()
-
+			if (!response.status.toString().startsWith('2')) {
 				toast.error('Change avatar error', {
-					description: errorData.error,
+					description: response.data.error,
 				})
 			}
 
-			const data = await response.json()
-
-			setUser(data.user, data.jwt_token)
+			setUser(response.data.user, response.data.jwt_token)
 
 			toast.success('Your avatar have changed!')
 		} catch (e) {

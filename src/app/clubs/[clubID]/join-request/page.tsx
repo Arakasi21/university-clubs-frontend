@@ -37,7 +37,7 @@ import { Permissions } from '@/types/permissions'
 import Error from 'next/error'
 import useMemberRoles from '@/hooks/useMemberRoles'
 import useUserClubStatus from '@/hooks/useUserClubStatus'
-import { FetchWithAuth } from '@/helpers/fetch_api'
+import { useAxiosInterceptor } from '@/helpers/fetch_api'
 function Page({ params }: { params: { clubID: number } }) {
 	const [data, setData] = useState([] as ClubMember[])
 	const { user } = useUserStore()
@@ -65,49 +65,36 @@ function Page({ params }: { params: { clubID: number } }) {
 
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
 	const [selectedUser, setSelectedUser] = useState<ClubMember>()
-	const { jwt_token, setUser } = useUserStore()
+	const axiosAuth = useAxiosInterceptor()
 	const fetchPendingClubs = useCallback(() => {
 		console.log(params.clubID)
-		FetchWithAuth(
+		axiosAuth(
 			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${params.clubID}/join?page=${page}&page_size=${pageSize}`,
-			{
-				credentials: 'include',
-			},
-			jwt_token,
-			setUser,
 		)
 			.then(async (res) => {
-				const { users, metadata, error } = await res.json()
-				if (!res.ok) {
+				if (!res.status.toString().startsWith('2')) {
 					toast.error('not found', {
-						description: error,
+						description: res.data.error,
 					})
 				}
 
-				setData(users)
-				setFirstPage(metadata.first_page)
-				setLastPage(metadata.last_page)
-				setTotalRecords(metadata.total_records)
+				setData(res.data.users)
+				setFirstPage(res.data.metadata.first_page)
+				setLastPage(res.data.metadata.last_page)
+				setTotalRecords(res.data.metadata.total_records)
 			})
 			.catch((error) => console.log(error.message))
-	}, [page, pageSize, params.clubID, jwt_token, setUser])
+	}, [params.clubID, axiosAuth, page, pageSize])
 
 	const onHandle = (userID: number, status: 'approved' | 'rejected') => {
-		FetchWithAuth(
-			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club?.id}/members`,
-			{
-				method: 'POST',
-				credentials: 'include',
-				body: JSON.stringify({ user_id: userID, status: status }),
-			},
-			jwt_token,
-			setUser,
-		)
+		axiosAuth(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club?.id}/members`, {
+			method: 'POST',
+			data: JSON.stringify({ user_id: userID, status: status }),
+		})
 			.then(async (res) => {
-				const data = await res.json()
-				if (!res.ok) {
+				if (!res.status.toString().startsWith('2')) {
 					toast.error(`failed to ${status}`, {
-						description: data.error,
+						description: res.data.error,
 					})
 					return
 				}

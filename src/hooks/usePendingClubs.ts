@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import useUserStore from '@/store/user'
-import { FetchWithAuth } from '@/helpers/fetch_api'
+import { useAxiosInterceptor } from '@/helpers/fetch_api'
 
 export default function usePendingClubs() {
 	const [pendingClubs, setPendingClubs] = useState(0)
 	const userStore = useUserStore()
+	const axiosAuth = useAxiosInterceptor()
 
 	useEffect(() => {
 		const fetchPendingClubs = async () => {
@@ -12,25 +13,19 @@ export default function usePendingClubs() {
 				console.error('JWT token is missing')
 				return
 			}
-			const response = await FetchWithAuth(
+			const response = await axiosAuth(
 				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/pending?page=1&page_size=25`,
-				{
-					credentials: 'include',
-				},
-				userStore.jwt_token,
-				userStore.setUser,
+				{},
 			)
-			if (response.ok) {
-				const text = await response.text()
-				if (text.length) {
-					const data = JSON.parse(text)
-					setPendingClubs(data.metadata.total_records)
+			if (response.status.toString().startsWith('2')) {
+				if (response.data.metadata.total_records) {
+					setPendingClubs(response.data.metadata.total_records)
 				}
 			}
 		}
 
 		fetchPendingClubs()
-	}, [userStore.jwt_token])
+	}, [axiosAuth, userStore.jwt_token])
 
 	return pendingClubs
 }

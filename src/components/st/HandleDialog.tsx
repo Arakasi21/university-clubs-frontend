@@ -9,8 +9,7 @@ import {
 import { Club } from '@/types/club'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { FetchWithAuth } from '@/helpers/fetch_api'
-import useUserStore from '@/store/user'
+import { useAxiosInterceptor } from '@/helpers/fetch_api'
 
 export type HandleDialogProps = {
 	selectedClub: Club
@@ -20,23 +19,16 @@ export type HandleDialogProps = {
 
 export default function HandleDialog({ selectedClub, isOpen, onClose }: HandleDialogProps) {
 	const [club, setClub] = useState(selectedClub)
-	const { jwt_token, setUser } = useUserStore()
+	const axiosAuth = useAxiosInterceptor()
 	const onApprove = () => {
-		FetchWithAuth(
-			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}`,
-			{
-				method: 'POST',
-				credentials: 'include',
-				body: JSON.stringify({ status: 'approved' }),
-			},
-			jwt_token,
-			setUser,
-		)
+		axiosAuth(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}`, {
+			method: 'POST',
+			data: JSON.stringify({ status: 'approved' }),
+		})
 			.then(async (res) => {
-				const data = await res.json()
-				if (!res.ok) {
+				if (!res.status.toString().startsWith('2')) {
 					toast.error('failed to approve', {
-						description: data.error,
+						description: res.data.error,
 					})
 					return
 				}
@@ -51,21 +43,14 @@ export default function HandleDialog({ selectedClub, isOpen, onClose }: HandleDi
 
 	const onReject = () => {
 		onClose()
-		FetchWithAuth(
-			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}`,
-			{
-				method: 'POST',
-				credentials: 'include',
-				body: JSON.stringify({ status: 'rejected' }),
-			},
-			jwt_token,
-			setUser,
-		)
+		axiosAuth(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}`, {
+			method: 'POST',
+			data: JSON.stringify({ status: 'rejected' }),
+		})
 			.then(async (res) => {
-				const data = await res.json()
-				if (!res.ok) {
+				if (!res.status.toString().startsWith('2')) {
 					toast.error('failed to reject', {
-						description: data.error,
+						description: res.data.error,
 					})
 					return
 				}

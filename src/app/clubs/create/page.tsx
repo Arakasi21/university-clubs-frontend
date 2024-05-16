@@ -21,8 +21,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
-import { FetchWithAuth } from '@/helpers/fetch_api'
-import useUserStore from '@/store/user'
+import { useAxiosInterceptor } from '@/helpers/fetch_api'
 
 const formSchema = z.object({
 	name: z.string().min(2, {
@@ -42,28 +41,20 @@ export default function Page() {
 			description: '',
 		},
 	})
-	const { jwt_token, setUser } = useUserStore()
+	const axiosAuth = useAxiosInterceptor()
 
 	const handleSubmit = async (values: z.infer<typeof formSchema>) => {
 		const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs`
 		try {
-			const response = await FetchWithAuth(
-				apiUrl,
-				{
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					credentials: 'include',
-					body: JSON.stringify(values),
-				},
-				jwt_token,
-				setUser,
-			)
+			const response = await axiosAuth(apiUrl, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				data: JSON.stringify(values),
+			})
 
-			if (!response.ok) {
-				let errorData = await response.json()
-
+			if (!response.status.toString().startsWith('2')) {
 				toast.error('Failed to make request to create club', {
-					description: errorData.error,
+					description: response.data.error,
 				})
 			}
 
