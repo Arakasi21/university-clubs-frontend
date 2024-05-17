@@ -25,7 +25,7 @@ export default function Clubs() {
 	const fetchClubs = debounce((search, page, setClubs) => {
 		axios
 			.get(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/?query=${search}&page=${page}&page_size=25&club_types=`,
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/?query=${search}&page=${page}&page_size=10&club_types=`,
 			)
 			.then((response) => {
 				console.log('Fetched clubs:', response.data.clubs)
@@ -88,7 +88,7 @@ export default function Clubs() {
 									/>
 								)}
 							</PaginationItem>
-							{[...Array(5)].map((_, index) => {
+							{[...Array(3)].map((_, index) => {
 								const pageNumber = index + 1
 								return (
 									<PaginationItem key={pageNumber}>

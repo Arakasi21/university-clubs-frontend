@@ -1,5 +1,5 @@
 import { TableCell, TableRow } from '@/components/ui/table'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import {
 	DropdownMenu,
@@ -9,6 +9,16 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Club } from '@/types/club'
+import { toast } from 'sonner'
+import { useAxiosInterceptor } from '@/helpers/fetch_api'
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 
 export type ClubsRowProps = {
 	onUpdate: () => void
@@ -16,10 +26,44 @@ export type ClubsRowProps = {
 }
 
 function ClubsRow({ onUpdate, club }: ClubsRowProps) {
+	const axiosAuth = useAxiosInterceptor()
+
 	const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
+	const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+	const [clubToDelete, setClubToDelete] = useState<number | null>(null)
+
+	const handleDeleteClub = (clubId: number) => {
+		setClubToDelete(clubId)
+		setIsDeleteDialogOpen(true)
+	}
+
+	const confirmDeleteClub = async () => {
+		if (clubToDelete !== null) {
+			await deleteClub(clubToDelete || 0)
+		}
+		setIsDeleteDialogOpen(false)
+	}
+
+	const deleteClub = async (clubId: number) => {
+		const response = await axiosAuth(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubId}`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+
+		if (!response.status.toString().startsWith('2')) {
+			toast.error('Failed to delete club', { description: response.data.error })
+			return
+		}
+		onUpdate()
+	}
 
 	console.log('Rendering club:', club)
 
+	useEffect(() => {
+		console.log('Rendering club:', club)
+	}, [club])
 	return (
 		<TableRow
 			key={club.id}
@@ -45,10 +89,24 @@ function ClubsRow({ onUpdate, club }: ClubsRowProps) {
 						<Link href={`/clubs/${club.id}`}>{club.name}</Link>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
-					<p>Details</p>
+					<DropdownMenuItem onClick={() => handleDeleteClub(club.id)}>
+						<p style={{ color: 'red' }}>DeleteClub</p>
+					</DropdownMenuItem>
 				</DropdownMenuContent>
 				<DropdownMenuTrigger></DropdownMenuTrigger>
 			</DropdownMenu>
+			<Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>Are you absolutely sure?</DialogTitle>
+						<DialogDescription>This will permanently delete the club.</DialogDescription>
+					</DialogHeader>
+					<Button variant={'destructive'} onClick={confirmDeleteClub}>
+						Yes, delete the club
+					</Button>
+					<Button onClick={() => setIsDeleteDialogOpen(false)}>No, cancel</Button>
+				</DialogContent>
+			</Dialog>
 		</TableRow>
 	)
 }
