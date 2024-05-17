@@ -91,7 +91,7 @@ export default function Students() {
 									/>
 								)}
 							</PaginationItem>
-							{[...Array(5)].map((_, index) => {
+							{[...Array(3)].map((_, index) => {
 								const pageNumber = index + 1
 								return (
 									<PaginationItem key={pageNumber}>
