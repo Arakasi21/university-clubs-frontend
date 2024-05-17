@@ -104,7 +104,10 @@ function MemberRolesRow({
 	}
 
 	const [isKickDialogOpen, setIsKickDialogOpen] = useState(false)
+	const [isBanDialogOpen, setIsBanDialogOpen] = useState(false)
 	const [memberToKick, setMemberToKick] = useState<number | null>(null)
+	const [memberToBan, setMemberToBan] = useState<number | null>(null)
+	const [banReason, setBanReason] = useState('')
 
 	const handleKickMember = (memberId: number) => {
 		setMemberToKick(memberId)
@@ -131,6 +134,40 @@ function MemberRolesRow({
 
 		if (!response.status.toString().startsWith('2')) {
 			toast.error('Failed to kick member', { description: response.data.error })
+			return
+		}
+		onUpdate()
+	}
+
+	const handleBanMember = (memberId: number) => {
+		setMemberToBan(memberId)
+		setIsBanDialogOpen(true)
+	}
+
+	const confirmBanMember = async () => {
+		if (typeof memberToBan === 'number' && typeof clubId === 'number') {
+			await banMember(memberToBan, clubId, banReason)
+		} else {
+			console.error('Invalid clubId or memberId')
+		}
+		setIsBanDialogOpen(false)
+		setBanReason('')
+	}
+
+	const banMember = async (memberId: number, clubId: number, banReason: string) => {
+		const response = await axiosAuth(
+			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubId}/members/${memberId}/ban`,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				data: JSON.stringify({ reason: banReason || 'No reason provided' }),
+			},
+		)
+
+		if (!response.status.toString().startsWith('2')) {
+			toast.error('Failed to ban member', { description: response.data.error })
 			return
 		}
 		onUpdate()
@@ -196,7 +233,7 @@ function MemberRolesRow({
 								<p style={{ color: 'orange' }}>Kick</p>
 							</DropdownMenuItem>
 							{hasPermission(permissions, Permissions.ban_member) && (
-								<DropdownMenuItem>
+								<DropdownMenuItem onClick={() => handleBanMember(member.id)}>
 									<p style={{ color: 'red' }}>Ban</p>
 								</DropdownMenuItem>
 							)}
@@ -217,6 +254,24 @@ function MemberRolesRow({
 						Yes, kick the user
 					</Button>
 					<Button onClick={() => setIsKickDialogOpen(false)}>No, cancel</Button>
+				</DialogContent>
+			</Dialog>
+			<Dialog open={isBanDialogOpen} onOpenChange={setIsBanDialogOpen}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>Are you absolutely sure?</DialogTitle>
+						<DialogDescription>This will permanently ban the user from the club.</DialogDescription>
+					</DialogHeader>
+					<input
+						type="text"
+						value={banReason}
+						onChange={(e) => setBanReason(e.target.value)}
+						placeholder="Enter ban reason"
+					/>
+					<Button variant={'destructive'} onClick={confirmBanMember}>
+						Yes, ban the user
+					</Button>
+					<Button onClick={() => setIsBanDialogOpen(false)}>No, cancel</Button>
 				</DialogContent>
 			</Dialog>
 		</TableRow>
