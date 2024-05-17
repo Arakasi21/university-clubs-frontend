@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from '@/components/ui/table'
 import UserAvatar from '@/components/userAvatar'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import {
 	DropdownMenu,
@@ -11,18 +11,40 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { User } from '@/types/user'
+import AdminRoleCheckboxDropdown, { UserRole } from '@/components/st/AdminRolesDropdownMenu'
 
 export type StudentsRowProps = {
 	onUpdate: () => void
 	student: User
 }
-
 function StudentsRow({ onUpdate, student }: StudentsRowProps) {
 	const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
 	const axiosAuth = useAxiosInterceptor()
 
-	console.log('Rendering student:', student)
+	const roles: UserRole[] = ['ADMIN', 'MODER']
 
+	// TODO WRITE USE EFFECT TO UPDATE STUDENT ROLES AND ETC...
+
+	const assignRole = async (role: UserRole, assign: boolean) => {
+		try {
+			const roleToAssign = assign ? role : 'USER'
+			const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${student.id}/roles?role=${roleToAssign}`
+
+			const response = await axiosAuth.patch(url)
+
+			if (!response.status.toString().startsWith('2')) {
+				console.error('Failed to update role:', response.data.error)
+				return
+			}
+
+			onUpdate()
+		} catch (error) {
+			console.error('Error updating role:', error)
+		}
+	}
+	useEffect(() => {
+		onUpdate()
+	}, [])
 	return (
 		<TableRow
 			key={student.id}
@@ -52,9 +74,15 @@ function StudentsRow({ onUpdate, student }: StudentsRowProps) {
 						<Link href={`/user/${student.id}`}>{student.first_name}</Link>
 					</DropdownMenuItem>
 					<DropdownMenuSeparator />
-					<p>something</p>
+					<AdminRoleCheckboxDropdown
+						roles={roles}
+						assignRole={assignRole}
+						userRoles={student.role !== 'USER' ? [student.role as UserRole] : []}
+					/>
+					<DropdownMenuSeparator />
+					<p>Additional actions can be added here.</p>
 				</DropdownMenuContent>
-				<DropdownMenuTrigger></DropdownMenuTrigger>
+				<DropdownMenuTrigger />
 			</DropdownMenu>
 		</TableRow>
 	)

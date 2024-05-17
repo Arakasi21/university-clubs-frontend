@@ -28,6 +28,7 @@ import { Permissions } from '@/types/permissions'
 import Error from 'next/error'
 import { toast } from 'sonner'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
+import { Input } from '@/components/ui/input'
 
 export type MemberRolesRowProps = {
 	onUpdate: () => void
@@ -262,7 +263,7 @@ function MemberRolesRow({
 						<DialogTitle>Are you absolutely sure?</DialogTitle>
 						<DialogDescription>This will permanently ban the user from the club.</DialogDescription>
 					</DialogHeader>
-					<input
+					<Input
 						type="text"
 						value={banReason}
 						onChange={(e) => setBanReason(e.target.value)}

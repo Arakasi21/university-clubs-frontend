@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import StudentsRow, { StudentsRowProps } from '@/components/studentsRow'
@@ -20,36 +20,38 @@ export default function Students() {
 	const [searchTerm, setSearchTerm] = useState('')
 	const [currentPage, setCurrentPage] = useState(1)
 
-	const fetchStudents = debounce((search, page, setStudents) => {
-		console.log('Fetching students with search term:', search, 'and page:', page)
-		fetch(
-			`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/search?query=${search}&page=${page}&page_size=10`,
-		)
-			.then((response) => response.json())
-			.then((data) => {
-				console.log('Fetched students:', data.users)
-				setStudents(data.users || [])
-			})
-			.catch((error) => console.error('Error fetching students:', error))
-	}, 300)
+	const fetchStudents = useCallback(
+		debounce((search: string, page: number, updateStudents: typeof setStudents) => {
+			console.log('Fetching students with search term:', search, 'and page:', page)
+			fetch(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/search?query=${search}&page=${page}&page_size=10`,
+			)
+				.then((response) => response.json())
+				.then((data) => {
+					console.log('Fetched students:', data.users)
+					updateStudents(data.users || [])
+				})
+				.catch((error) => console.error('Error fetching students:', error))
+		}, 300),
+		[],
+	)
 
 	useEffect(() => {
 		fetchStudents(searchTerm, currentPage, setStudents)
 
-		// Cleanup debounce on unmount
 		return () => {
 			fetchStudents.cancel()
 		}
-	}, [searchTerm, currentPage])
+	}, [searchTerm, currentPage, fetchStudents])
 
-	const handleSearch = (value: string) => {
+	const handleSearch = useCallback((value: string) => {
 		setSearchTerm(value)
-		setCurrentPage(1) // Reset to the first page on new search
-	}
+		setCurrentPage(1)
+	}, [])
 
-	const handlePageChange = (newPage: number) => {
+	const handlePageChange = useCallback((newPage: number) => {
 		setCurrentPage(newPage)
-	}
+	}, [])
 
 	return (
 		<div>
