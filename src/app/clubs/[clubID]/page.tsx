@@ -27,7 +27,6 @@ function Page({ params }: { params: { clubID: number } }) {
 		const memberRole = club?.roles.find((role) => role.id === member.roles[1])
 		return memberRole?.name !== 'President'
 	})
-
 	const membersCount = membersWithoutPresident?.length
 
 	const { permissions } = useUserRolesStore()

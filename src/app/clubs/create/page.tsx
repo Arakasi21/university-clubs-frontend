@@ -121,11 +121,13 @@ export default function Page() {
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
-											<SelectItem value="Volunteer">Volunteer</SelectItem>
-											<SelectItem value="Gaming">Gaming</SelectItem>
-											<SelectItem value="Athletic">Athletic</SelectItem>
-											<SelectItem value="Dance & Music">Dance & Music</SelectItem>
-											<SelectItem value="Speaking">Speaking</SelectItem>
+											<SelectItem value="Sport">Sport</SelectItem>
+											<SelectItem value="Cultural">Cultural</SelectItem>
+											<SelectItem value="Media">Media</SelectItem>
+											<SelectItem value="Intellectual">Intellectual</SelectItem>
+											<SelectItem value="Creative">Creative</SelectItem>
+											<SelectItem value="Entertainment">Entertainment</SelectItem>
+											<SelectItem value="SocialActivity">Social Activity</SelectItem>
 										</SelectContent>
 									</Select>
 									<FormMessage />

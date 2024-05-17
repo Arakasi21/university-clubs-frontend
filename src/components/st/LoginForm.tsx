@@ -77,7 +77,7 @@ export default function Login() {
 			const data = await response.json()
 
 			if (!response.ok) {
-				// If the response is not OK, handle the error
+				// If the response is not OK, dashboard the error
 				toast.error('ERROR', { description: data.error })
 				return
 			}
