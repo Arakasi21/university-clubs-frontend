@@ -8,7 +8,6 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import Layout from '@/components/Layout'
 import UserAvatar from '@/components/userAvatar'
 
@@ -19,35 +18,34 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 	const [clubs, setClubs] = useState<Club[]>()
 	const router = useRouter()
 
-	const axiosAuth = useAxiosInterceptor()
-
 	const fetchUserInfo = useCallback(() => {
-		axiosAuth(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${params.userID}`, {
-			method: 'GET',
-		})
-			.then((res) => {
-				if (!res.status.toString().startsWith('2')) {
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${params.userID}`)
+			.then(async (res) => {
+				const data = await res.json()
+				if (!res.ok) {
 					toast.error('not found', {
-						description: res.data.error,
+						description: data.error,
 					})
 					return
 				}
-				setPageowner(res.data.user)
-				if (user?.id === res.data.user.id) {
+
+				setPageowner(data.user)
+				if (user?.id === data.user.id) {
 					setIsOwner(true)
 				}
 			})
 			.catch((error) => console.log(error.message))
 
-		axiosAuth(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${params.userID}/clubs`, {
-			method: 'GET',
-		})
-			.then((res) => {
-				if (!res.status.toString().startsWith('2')) throw new Error('Failed to fetch user clubs')
-				setClubs(res.data.clubs)
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${params.userID}/clubs`)
+			.then(async (res) => {
+				const data = await res.json()
+				if (!res.ok) {
+					throw new Error(data.error || 'Failed to fetch user clubs')
+				}
+				setClubs(data.clubs)
 			})
 			.catch((error) => console.log(error.message))
-	}, [axiosAuth, params.userID, user?.id])
+	}, [params.userID, user?.id])
 
 	useEffect(() => {
 		fetchUserInfo()

@@ -41,7 +41,7 @@ export const useDragDrop = ({ club, fetchClubInfo }: UseDragDropProps) => {
 				fetchClubInfo()
 			}
 		},
-		[axiosAuth, club?.id, fetchClubInfo],
+		[club?.id, fetchClubInfo],
 	)
 
 	return { handleDragStart, handleDragOver, handleDrop }

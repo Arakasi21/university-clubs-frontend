@@ -97,7 +97,7 @@ function Page() {
 				setTotalRecords(res.data.metadata.total_records)
 			})
 			.catch((error) => console.log(error.message))
-	}, [axiosAuth, page, pageSize])
+	}, [page, pageSize])
 
 	useEffect(() => {
 		fetchPendingClubs()

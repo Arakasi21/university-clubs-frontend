@@ -22,7 +22,7 @@ export default function usePendingJoinRequests(clubID: number) {
 		}
 
 		fetchPendingRequests()
-	}, [axiosAuth, clubID, userStore.jwt_token])
+	}, [clubID, userStore.jwt_token])
 
 	return pendingRequests
 }

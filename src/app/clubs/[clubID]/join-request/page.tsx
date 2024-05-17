@@ -84,7 +84,7 @@ function Page({ params }: { params: { clubID: number } }) {
 				setTotalRecords(res.data.metadata.total_records)
 			})
 			.catch((error) => console.log(error.message))
-	}, [params.clubID, axiosAuth, page, pageSize])
+	}, [params.clubID, page, pageSize])
 
 	const onHandle = (userID: number, status: 'approved' | 'rejected') => {
 		axiosAuth(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club?.id}/members`, {

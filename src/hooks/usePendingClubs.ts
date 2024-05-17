@@ -25,7 +25,7 @@ export default function usePendingClubs() {
 		}
 
 		fetchPendingClubs()
-	}, [axiosAuth, userStore.jwt_token])
+	}, [userStore.jwt_token])
 
 	return pendingClubs
 }

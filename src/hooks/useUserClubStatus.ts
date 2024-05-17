@@ -27,7 +27,7 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 		} catch (error) {
 			console.error(error)
 		}
-	}, [axiosAuth, clubID])
+	}, [clubID])
 
 	const handleJoinRequest = useCallback(async () => {
 		try {
@@ -55,7 +55,7 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 			console.error(error)
 		}
 		await fetchUserClubStatus()
-	}, [fetchUserClubStatus, jwt_token, clubID, axiosAuth])
+	}, [fetchUserClubStatus, jwt_token, clubID])
 
 	const handleLeaveClub = useCallback(async () => {
 		try {
@@ -74,7 +74,7 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 			console.error(error)
 		}
 		await fetchUserClubStatus()
-	}, [axiosAuth, clubID, fetchUserClubStatus])
+	}, [clubID, fetchUserClubStatus])
 
 	useEffect(() => {
 		fetchUserClubStatus()
