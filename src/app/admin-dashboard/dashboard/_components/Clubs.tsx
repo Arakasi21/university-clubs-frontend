@@ -24,24 +24,15 @@ export default function Clubs() {
 
 	const fetchClubs = debounce((search, page, setClubs) => {
 		axios
-			.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs?page=1&page_size=25`)
+			.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/?query=${search}&page=${page}&page_size=25&club_types=`,
+			)
 			.then((response) => {
-				console.log('Fetched clubs:', response.data.club)
-				setClubs(response.data.club || [])
+				console.log('Fetched clubs:', response.data.clubs)
+				setClubs(response.data.clubs || [])
 			})
 			.catch((error) => console.error('Error fetching clubs:', error))
 	}, 300)
-
-	// const fetchClubs = debounce((search, page, setClubs) => {
-	// 	console.log('Fetching clubs with search term:', search, 'and page:', page)
-	// 	fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs?page=${page}&page_size=10`)
-	// 		.then((response) => response.json())
-	// 		.then((data) => {
-	// 			console.log('Fetched students:', data.club)
-	// 			setClubs(data.club || [])
-	// 		})
-	// 		.catch((error) => console.error('Error fetching students:', error))
-	// }, 300)
 
 	useEffect(() => {
 		fetchClubs(searchTerm, currentPage, setClubs)
@@ -71,11 +62,11 @@ export default function Clubs() {
 					<Table>
 						<TableHeader>
 							<TableRow>
-								{/*<TableHead className="hidden md:table-cell">Logo</TableHead>*/}
+								<TableHead className="hidden md:table-cell">Logo</TableHead>
 								<TableHead className="hidden md:table-cell">Name</TableHead>
-								{/*<TableHead className="hidden md:table-cell">Description</TableHead>*/}
-								{/*<TableHead className="hidden md:table-cell">Type</TableHead>*/}
-								{/*<TableHead className="hidden md:table-cell">Members</TableHead>*/}
+								<TableHead className="hidden md:table-cell">Description</TableHead>
+								<TableHead className="hidden md:table-cell">Type</TableHead>
+								<TableHead className="hidden md:table-cell">Members</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>

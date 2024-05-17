@@ -7,7 +7,7 @@ export type Club = {
 	club_type: string
 	logo_url: string
 	banner_url: string
-	number_of_members: number
+	num_of_members: number
 	roles: ClubRole[]
 }
 
