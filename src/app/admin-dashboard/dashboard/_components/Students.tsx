@@ -8,7 +8,6 @@ import SearchAdmin from '@/components/st/SearchAdmin'
 import {
 	Pagination,
 	PaginationContent,
-	PaginationEllipsis,
 	PaginationItem,
 	PaginationLink,
 	PaginationNext,
@@ -19,25 +18,35 @@ export default function Students() {
 	const [students, setStudents] = useState<StudentsRowProps['student'][]>([])
 	const [searchTerm, setSearchTerm] = useState('')
 	const [currentPage, setCurrentPage] = useState(1)
+	const [hasMorePages, setHasMorePages] = useState(true)
 
 	const fetchStudents = useCallback(
-		debounce((search: string, page: number, updateStudents: typeof setStudents) => {
-			console.log('Fetching students with search term:', search, 'and page:', page)
-			fetch(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/search?query=${search}&page=${page}&page_size=10`,
-			)
-				.then((response) => response.json())
-				.then((data) => {
-					console.log('Fetched students:', data.users)
-					updateStudents(data.users || [])
-				})
-				.catch((error) => console.error('Error fetching students:', error))
-		}, 300),
+		debounce(
+			(
+				search: string,
+				page: number,
+				updateStudents: typeof setStudents,
+				updateHasMorePages: typeof setHasMorePages,
+			) => {
+				console.log('Fetching students with search term:', search, 'and page:', page)
+				fetch(
+					`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/search?query=${search}&page=${page}&page_size=10`,
+				)
+					.then((response) => response.json())
+					.then((data) => {
+						console.log('Fetched students:', data.users)
+						updateStudents(data.users || [])
+						updateHasMorePages(data.users && data.users.length > 0)
+					})
+					.catch((error) => console.error('Error fetching students:', error))
+			},
+			300,
+		),
 		[],
 	)
 
 	useEffect(() => {
-		fetchStudents(searchTerm, currentPage, setStudents)
+		fetchStudents(searchTerm, currentPage, setStudents, setHasMorePages)
 
 		return () => {
 			fetchStudents.cancel()
@@ -52,6 +61,32 @@ export default function Students() {
 	const handlePageChange = useCallback((newPage: number) => {
 		setCurrentPage(newPage)
 	}, [])
+
+	const renderPaginationItems = () => {
+		let pages = []
+		if (currentPage < 3) {
+			pages = [1, 2, 3].filter((pageNumber) => pageNumber <= currentPage || hasMorePages)
+		} else {
+			pages = [currentPage - 1, currentPage, currentPage + 1].filter(
+				(pageNumber) =>
+					pageNumber <= currentPage || (pageNumber === currentPage + 1 && hasMorePages),
+			)
+		}
+		return pages.map((pageNumber) => (
+			<PaginationItem key={pageNumber}>
+				<PaginationLink
+					href="#"
+					onClick={(e) => {
+						e.preventDefault()
+						handlePageChange(pageNumber)
+					}}
+					isActive={pageNumber === currentPage}
+				>
+					{pageNumber}
+				</PaginationLink>
+			</PaginationItem>
+		))
+	}
 
 	return (
 		<div>
@@ -93,35 +128,18 @@ export default function Students() {
 									/>
 								)}
 							</PaginationItem>
-							{[...Array(3)].map((_, index) => {
-								const pageNumber = index + 1
-								return (
-									<PaginationItem key={pageNumber}>
-										<PaginationLink
-											href="#"
-											onClick={(e) => {
-												e.preventDefault()
-												handlePageChange(pageNumber)
-											}}
-											isActive={pageNumber === currentPage}
-										>
-											{pageNumber}
-										</PaginationLink>
-									</PaginationItem>
-								)
-							})}
-							<PaginationItem>
-								<PaginationEllipsis />
-							</PaginationItem>
-							<PaginationItem>
-								<PaginationNext
-									href="#"
-									onClick={(e) => {
-										e.preventDefault()
-										handlePageChange(currentPage + 1)
-									}}
-								/>
-							</PaginationItem>
+							{renderPaginationItems()}
+							{hasMorePages && (
+								<PaginationItem>
+									<PaginationNext
+										href="#"
+										onClick={(e) => {
+											e.preventDefault()
+											handlePageChange(currentPage + 1)
+										}}
+									/>
+								</PaginationItem>
+							)}
 						</PaginationContent>
 					</Pagination>
 				</CardContent>

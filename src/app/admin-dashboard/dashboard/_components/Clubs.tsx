@@ -7,7 +7,6 @@ import ClubsRow, { ClubsRowProps } from '@/components/clubsRow'
 import {
 	Pagination,
 	PaginationContent,
-	PaginationEllipsis,
 	PaginationItem,
 	PaginationLink,
 	PaginationNext,
@@ -20,9 +19,9 @@ export default function Clubs() {
 	const [clubs, setClubs] = useState<ClubsRowProps['club'][]>([])
 	const [searchTerm, setSearchTerm] = useState('')
 	const [currentPage, setCurrentPage] = useState(1)
-	// const [totalPages, setTotalPages] = useState
+	const [hasMorePages, setHasMorePages] = useState(true)
 
-	const fetchClubs = debounce((search, page, setClubs) => {
+	const fetchClubs = debounce((search, page, setClubs, setHasMorePages) => {
 		axios
 			.get(
 				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/?query=${search}&page=${page}&page_size=10&club_types=`,
@@ -30,12 +29,13 @@ export default function Clubs() {
 			.then((response) => {
 				console.log('Fetched clubs:', response.data.clubs)
 				setClubs(response.data.clubs || [])
+				setHasMorePages(response.data.clubs && response.data.clubs.length > 0)
 			})
 			.catch((error) => console.error('Error fetching clubs:', error))
 	}, 300)
 
 	useEffect(() => {
-		fetchClubs(searchTerm, currentPage, setClubs)
+		fetchClubs(searchTerm, currentPage, setClubs, setHasMorePages)
 
 		return () => {
 			fetchClubs.cancel()
@@ -49,6 +49,32 @@ export default function Clubs() {
 
 	const handlePageChange = (newPage: number) => {
 		setCurrentPage(newPage)
+	}
+
+	const renderPaginationItems = () => {
+		let pages = []
+		if (currentPage < 2) {
+			pages = [1, 2, 3].filter((pageNumber) => pageNumber <= currentPage || hasMorePages)
+		} else {
+			pages = [currentPage - 1, currentPage, currentPage + 1].filter(
+				(pageNumber) =>
+					pageNumber <= currentPage || (pageNumber === currentPage + 1 && hasMorePages),
+			)
+		}
+		return pages.map((pageNumber) => (
+			<PaginationItem key={pageNumber}>
+				<PaginationLink
+					href="#"
+					onClick={(e) => {
+						e.preventDefault()
+						handlePageChange(pageNumber)
+					}}
+					isActive={pageNumber === currentPage}
+				>
+					{pageNumber}
+				</PaginationLink>
+			</PaginationItem>
+		))
 	}
 
 	return (
@@ -88,35 +114,18 @@ export default function Clubs() {
 									/>
 								)}
 							</PaginationItem>
-							{[...Array(3)].map((_, index) => {
-								const pageNumber = index + 1
-								return (
-									<PaginationItem key={pageNumber}>
-										<PaginationLink
-											href="#"
-											onClick={(e) => {
-												e.preventDefault()
-												handlePageChange(pageNumber)
-											}}
-											isActive={pageNumber === currentPage}
-										>
-											{pageNumber}
-										</PaginationLink>
-									</PaginationItem>
-								)
-							})}
-							<PaginationItem>
-								<PaginationEllipsis />
-							</PaginationItem>
-							<PaginationItem>
-								<PaginationNext
-									href="#"
-									onClick={(e) => {
-										e.preventDefault()
-										handlePageChange(currentPage + 1)
-									}}
-								/>
-							</PaginationItem>
+							{renderPaginationItems()}
+							{hasMorePages && (
+								<PaginationItem>
+									<PaginationNext
+										href="#"
+										onClick={(e) => {
+											e.preventDefault()
+											handlePageChange(currentPage + 1)
+										}}
+									/>
+								</PaginationItem>
+							)}
 						</PaginationContent>
 					</Pagination>
 				</CardContent>
