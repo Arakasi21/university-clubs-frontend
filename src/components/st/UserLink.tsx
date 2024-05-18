@@ -10,9 +10,9 @@ interface UserLinkProps {
 const UserLink: React.FC<UserLinkProps> = ({ user }) => {
 	return (
 		<Link
-			href={`/user/${user.user_id}`}
+			href={`/user/${user.id}`}
 			className="flex w-full flex-row items-center space-x-3.5 px-2"
-			key={user.user_id}
+			key={user.id}
 		>
 			<UserAvatar user={user} />
 			<p
