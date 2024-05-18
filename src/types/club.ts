@@ -9,6 +9,7 @@ export type Club = {
 	banner_url: string
 	num_of_members: number
 	roles: ClubRole[]
+	members?: ClubMember[]
 }
 
 export type ClubMember = {
