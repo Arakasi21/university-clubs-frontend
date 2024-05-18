@@ -32,10 +32,10 @@ function PendingClubsDropdownItem() {
 			>
 				<LayoutDashboard />
 				<p>
-					Admin Dashboard{' '}
-					{pendingClubs > 0 && (
-						<span className={pendingClubs > 0 ? 'text-red-500' : ''}>{`(+${pendingClubs})`}</span>
-					)}
+					Admin Dashboard
+					{/*{pendingClubs > 0 && (*/}
+					{/*		<span className={pendingClubs > 0 ? 'text-red-500' : ''}>{`(+${pendingClubs})`}</span>*/}
+					{/*	)}*/}
 				</p>
 			</DropdownMenuItem>
 		</>
