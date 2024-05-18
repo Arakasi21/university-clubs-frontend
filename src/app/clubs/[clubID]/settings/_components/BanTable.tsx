@@ -20,6 +20,7 @@ import {
 	DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 function BanTable({ clubID }: { clubID: number }) {
 	const axiosAuth = useAxiosInterceptor()
@@ -72,7 +73,7 @@ function BanTable({ clubID }: { clubID: number }) {
 			toast.error('Failed to unban member', { description: response.data.error })
 			return
 		}
-		fetchBannedUsers()
+		await fetchBannedUsers()
 	}
 
 	const handleUnbanMember = (memberId: number) => {
@@ -94,50 +95,58 @@ function BanTable({ clubID }: { clubID: number }) {
 	}, [fetchBannedUsers])
 	return (
 		<div>
-			<Table>
-				<TableCaption>List of banned users</TableCaption>
-				<TableHeader>
-					<TableRow>
-						<TableHead className="w-[100px]">User</TableHead>
-						<TableHead>Date</TableHead>
-						<TableHead>By who</TableHead>
-						<TableHead className="text-right">Reason</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{BanList == null ? (
-						<TableCaption>No bans(yet)</TableCaption>
-					) : (
-						BanList.map((ban) => (
-							<TableRow key={ban.user.id}>
-								<TableCell className="font-medium">
-									<UserLink user={ban.user} />
-								</TableCell>
-								<TableCell>{new Date(ban.banned_at).toLocaleDateString()}</TableCell>
-								<TableCell>
-									<UserLink user={ban.admin} />
-								</TableCell>
-								<TableCell className="text-right">{ban.reason}</TableCell>
-								<TableCell className="text-right">
-									<Button onClick={() => handleUnbanMember(ban.user.id)}>Unban</Button>
-								</TableCell>
+			<Card>
+				<CardHeader className="px-7">
+					<CardTitle className="pb-4">Banned Users</CardTitle>
+					<CardDescription>List of banned users</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<Table>
+						<TableHeader>
+							<TableRow>
+								<TableHead className="w-[100px]">User</TableHead>
+								<TableHead>Date</TableHead>
+								<TableHead>By who</TableHead>
+								<TableHead className="text-right">Reason</TableHead>
+								<TableHead className="text-right">Action</TableHead>
 							</TableRow>
-						))
-					)}
-				</TableBody>
-				<Dialog open={isUnbanDialogOpen} onOpenChange={setIsUnbanDialogOpen}>
-					<DialogContent>
-						<DialogHeader>
-							<DialogTitle>Are you absolutely sure?</DialogTitle>
-							<DialogDescription>This will unban the user from the club.</DialogDescription>
-						</DialogHeader>
-						<Button variant={'destructive'} onClick={confirmUnbanMember}>
-							Yes, unban the user
-						</Button>
-						<Button onClick={() => setIsUnbanDialogOpen(false)}>No, cancel</Button>
-					</DialogContent>
-				</Dialog>
-			</Table>
+						</TableHeader>
+						<TableBody>
+							{BanList == null ? (
+								<TableCaption>No bans(yet)</TableCaption>
+							) : (
+								BanList.map((ban) => (
+									<TableRow key={ban.user.id}>
+										<TableCell className="font-medium">
+											<UserLink user={ban.user} />
+										</TableCell>
+										<TableCell>{new Date(ban.banned_at).toLocaleDateString()}</TableCell>
+										<TableCell>
+											<UserLink user={ban.admin} />
+										</TableCell>
+										<TableCell className="text-right">{ban.reason}</TableCell>
+										<TableCell className="text-right">
+											<Button onClick={() => handleUnbanMember(ban.user.id)}>Unban</Button>
+										</TableCell>
+									</TableRow>
+								))
+							)}
+						</TableBody>
+						<Dialog open={isUnbanDialogOpen} onOpenChange={setIsUnbanDialogOpen}>
+							<DialogContent>
+								<DialogHeader>
+									<DialogTitle>Are you absolutely sure?</DialogTitle>
+									<DialogDescription>This will unban the user from the club.</DialogDescription>
+								</DialogHeader>
+								<Button variant={'destructive'} onClick={confirmUnbanMember}>
+									Yes, unban the user
+								</Button>
+								<Button onClick={() => setIsUnbanDialogOpen(false)}>No, cancel</Button>
+							</DialogContent>
+						</Dialog>
+					</Table>
+				</CardContent>
+			</Card>
 		</div>
 	)
 }

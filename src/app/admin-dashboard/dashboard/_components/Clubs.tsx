@@ -40,7 +40,7 @@ export default function Clubs() {
 		return () => {
 			fetchClubs.cancel()
 		}
-	}, [searchTerm, currentPage])
+	}, [fetchClubs, searchTerm, currentPage])
 
 	const handleSearch = (value: string) => {
 		setSearchTerm(value)

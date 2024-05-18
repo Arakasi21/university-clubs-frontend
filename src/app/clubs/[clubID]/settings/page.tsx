@@ -112,7 +112,7 @@ function Page({ params }: { params: { clubID: number } }) {
 						</TabsTrigger>
 					)}
 					{hasPermission(permissions, Permissions.manage_club) ? (
-						<TabsTrigger value="banList">Black list</TabsTrigger>
+						<TabsTrigger value="banList">BanList</TabsTrigger>
 					) : (
 						<TabsTrigger value="banList" disabled>
 							Black list
