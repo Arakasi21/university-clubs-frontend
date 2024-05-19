@@ -10,7 +10,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Club, ClubMember } from '@/types/club'
 import { Separator } from '@/components/ui/separator'
-import ClubImage from '@/components/st/ClubImage'
+import ClubImage from '@/components/clubs/ClubImage'
 import React from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -24,10 +24,6 @@ import {
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import Students from '@/app/admin-dashboard/dashboard/_components/Students'
-import Clubs from '@/app/admin-dashboard/dashboard/_components/Clubs'
-import Events from '@/app/admin-dashboard/dashboard/_components/Events'
-import Reports from '@/app/admin-dashboard/dashboard/_components/Reports'
 
 type DetailedClubDialogProps = {
 	club: Club | null

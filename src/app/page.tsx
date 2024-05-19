@@ -1,14 +1,13 @@
 'use client'
 import Layout from '@/components/Layout'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Club } from '@/types/club'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import Sceleton from '@/components/st/Sceleton'
+import Sceleton from '@/components/user/Sceleton'
 import { CalendarCheck, GraduationCap, Users } from 'lucide-react'
-import ClubImage from '@/components/st/ClubImage'
+import ClubImage from '@/components/clubs/ClubImage'
 
 export default function Home() {
 	const [clubs, setClubs] = useState<Club[]>()

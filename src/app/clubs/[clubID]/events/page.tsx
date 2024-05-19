@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import Nav from '@/components/NavBar'
-import BackgroundClubImage from '@/components/st/BackgroundClubImage'
+import BackgroundClubImage from '@/components/clubs/BackgroundClubImage'
 import React from 'react'
 import useClub from '@/hooks/useClub'
 import Link from 'next/link'

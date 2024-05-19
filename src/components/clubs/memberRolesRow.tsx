@@ -1,5 +1,5 @@
 import { TableCell, TableRow } from '@/components/ui/table'
-import UserAvatar from '@/components/userAvatar'
+import UserAvatar from '@/components/user/userAvatar'
 import { decimalToRgb } from '@/helpers/helper'
 import { ClubMember, ClubRole } from '@/types/club'
 import { useEffect, useState } from 'react'
@@ -20,7 +20,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import RoleCheckboxDropdown from '@/components/st/RoleCheckboxDropdown'
+import RoleCheckboxDropdown from '@/components/clubs/RoleCheckboxDropdown'
 import useUserStore from '@/store/user'
 import { hasPermission } from '@/helpers/permissions'
 import useUserRolesStore from '@/store/useUserRoles'

@@ -2,9 +2,9 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import StudentsRow, { StudentsRowProps } from '@/components/studentsRow'
+import StudentsRow, { StudentsRowProps } from '@/components/admin/studentsRow'
 import debounce from 'lodash.debounce'
-import SearchAdmin from '@/components/st/SearchAdmin'
+import SearchAdmin from '@/components/admin/SearchAdmin'
 import {
 	Pagination,
 	PaginationContent,

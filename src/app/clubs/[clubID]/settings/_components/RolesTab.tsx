@@ -4,9 +4,9 @@ import { ClubRole } from '@/types/club'
 import { decimalToRgb } from '@/helpers/helper'
 import { permissionsToStringArr } from '@/helpers/permissions'
 import { Badge } from '@/components/ui/badge'
-import RolesDropdownMenu from '@/components/st/RolesDropdownMenu'
+import RolesDropdownMenu from '@/components/clubs/RolesDropdownMenu'
 import React from 'react'
-import { DialogCreateClubRole } from '@/components/DialogCreateClubRole'
+import { DialogCreateClubRole } from '@/components/clubs/DialogCreateClubRole'
 import { useDragDrop } from '@/hooks/useDragDrop'
 
 interface RolesTabProps {

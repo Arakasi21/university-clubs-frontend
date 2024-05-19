@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { MoreHorizontal } from 'lucide-react'
-import { DialogUpdateClubRole } from '@/components/DialogUpdateClubRole'
+import { DialogUpdateClubRole } from '@/components/clubs/DialogUpdateClubRole'
 
 export default function RolesDropdownMenu(props: {
 	role: ClubRole

@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import UserAvatar from '@/components/userAvatar'
+import UserAvatar from '@/components/user/userAvatar'
 import { ClubMember } from '@/types/club' // replace with your actual User type
 
 interface UserLinkProps {

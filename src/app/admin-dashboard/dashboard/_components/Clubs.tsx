@@ -1,9 +1,9 @@
 'use client'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import debounce from 'lodash.debounce'
-import ClubsRow, { ClubsRowProps } from '@/components/clubsRow'
+import ClubsRow, { ClubsRowProps } from '@/components/admin/clubsRow'
 import {
 	Pagination,
 	PaginationContent,
@@ -12,7 +12,7 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from '@/components/ui/pagination'
-import SearchAdmin from '@/components/st/SearchAdmin'
+import SearchAdmin from '@/components/admin/SearchAdmin'
 import axios from 'axios'
 
 export default function Clubs() {

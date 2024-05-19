@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import Layout from '@/components/Layout'
-import UserAvatar from '@/components/userAvatar'
+import UserAvatar from '@/components/user/userAvatar'
 
 const UserPage = ({ params }: { params: { userID: number } }) => {
 	const { user } = useUserStore()

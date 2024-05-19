@@ -11,7 +11,7 @@ import {
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { toast } from 'sonner'
 import { Ban } from '@/types/BAN'
-import UserLink from '@/components/st/UserLink'
+import UserLink from '@/components/user/UserLink'
 import {
 	Dialog,
 	DialogContent,

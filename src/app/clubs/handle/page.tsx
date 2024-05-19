@@ -9,7 +9,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table'
-import UserAvatar from '@/components/userAvatar'
+import UserAvatar from '@/components/user/userAvatar'
 import { Club, ClubMember } from '@/types/club'
 import {
 	ColumnDef,
@@ -27,7 +27,7 @@ import { ArrowUpDown } from 'lucide-react'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import HandleDialog from '../../../components/st/HandleDialog'
+import HandleDialog from '@/components/user/HandleDialog'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'

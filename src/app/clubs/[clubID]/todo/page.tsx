@@ -7,8 +7,8 @@ import Link from 'next/link'
 import { Dispatch, DragEvent, FormEvent, SetStateAction, useState } from 'react'
 import { FaFire } from 'react-icons/fa'
 import { FiPlus, FiTrash } from 'react-icons/fi'
-import BackgroundClubImage from '@/components/st/BackgroundClubImage'
-import ClubImage from '@/components/st/ClubImage'
+import BackgroundClubImage from '@/components/clubs/BackgroundClubImage'
+import ClubImage from '@/components/clubs/ClubImage'
 import { undefined } from 'zod'
 
 const CustomKanban = ({ params }: { params: { clubID: number } }) => {

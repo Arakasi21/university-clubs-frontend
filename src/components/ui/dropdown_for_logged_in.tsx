@@ -10,12 +10,12 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { DarkThemeMenuToggle } from '@/components/ui/toggle-mode'
-import UserAvatar from '@/components/userAvatar'
+import UserAvatar from '@/components/user/userAvatar'
 import { User } from '@/types/user'
 import { LogOutIcon, PlusCircleIcon, SettingsIcon, UserRoundIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
-import PendingClubsDropdownItem from '@/components/PendingClubsDropdownItem'
+import PendingClubsDropdownItem from '@/components/clubs/PendingClubsDropdownItem'
 
 const DropdownForLoggedIn = ({ user, logout }: { user: User; logout: () => void }) => {
 	const router = useRouter()

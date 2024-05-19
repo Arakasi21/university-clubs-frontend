@@ -1,5 +1,5 @@
 import { TableCell, TableRow } from '@/components/ui/table'
-import UserAvatar from '@/components/userAvatar'
+import UserAvatar from '@/components/user/userAvatar'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import {
@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { User } from '@/types/user'
-import AdminRoleCheckboxDropdown, { UserRole } from '@/components/st/AdminRolesDropdownMenu'
+import AdminRoleCheckboxDropdown, { UserRole } from '@/components/admin/AdminRolesDropdownMenu'
 
 export type StudentsRowProps = {
 	onUpdate: () => void

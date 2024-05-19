@@ -1,4 +1,4 @@
-import SignUp from '@/components/st/SignUpForm'
+import SignUp from '@/components/user/SignUpForm'
 import Nav from '@/components/NavBar'
 
 export default function SignUpPage() {

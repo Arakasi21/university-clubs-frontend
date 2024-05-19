@@ -2,8 +2,8 @@
 import React, { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { EventDialog } from '@/components/DialogViewMonthEvent'
-import { DetailedEventDialog } from '@/components/DetailedEventDialog'
+import { EventDialog } from '@/components/admin/DialogViewMonthEvent'
+import { DetailedEventDialog } from '@/components/admin/DetailedEventDialog'
 import { Event } from '@/types/event'
 
 export default function Reports() {
