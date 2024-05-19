@@ -1,9 +1,18 @@
 import { TableCell, TableRow } from '@/components/ui/table'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Club } from '@/types/club'
 import { toast } from 'sonner'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { DetailedClubDialog } from './DetailedClubDialog'
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import Image from 'next/image'
 
 export type ClubsRowProps = {
 	onUpdate: () => void
@@ -14,6 +23,7 @@ function ClubsRow({ onUpdate, club }: ClubsRowProps) {
 	const axiosAuth = useAxiosInterceptor()
 
 	const [isDetailedDialogOpen, setIsDetailedDialogOpen] = useState(false)
+	const [isDeleteConfirmationDialogOpen, setIsDeleteConfirmationDialogOpen] = useState(false)
 	const [selectedClub, setSelectedClub] = useState<Club | null>(null)
 
 	const handleRowClick = () => {
@@ -41,7 +51,13 @@ function ClubsRow({ onUpdate, club }: ClubsRowProps) {
 		<>
 			<TableRow key={club.id} onClick={handleRowClick} className="cursor-pointer">
 				<TableCell>
-					<img src={club.logo_url} alt={club.name} className="h-10 w-10 rounded-full" />
+					<Image
+						src={club.logo_url}
+						alt={club.name}
+						className="h-10 w-10 rounded-full"
+						width={43}
+						height={43}
+					/>
 				</TableCell>
 				<TableCell>{club.name}</TableCell>
 				<TableCell>{club.description}</TableCell>
@@ -54,9 +70,28 @@ function ClubsRow({ onUpdate, club }: ClubsRowProps) {
 					club={selectedClub}
 					isOpen={isDetailedDialogOpen}
 					onClose={() => setIsDetailedDialogOpen(false)}
-					onDelete={() => handleDeleteClub(selectedClub.id)}
+					onDelete={() => setIsDeleteConfirmationDialogOpen(true)}
 				/>
 			)}
+
+			<Dialog
+				open={isDeleteConfirmationDialogOpen}
+				onOpenChange={setIsDeleteConfirmationDialogOpen}
+			>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>Are you absolutely sure?</DialogTitle>
+						<DialogDescription>This will permanently delete the club.</DialogDescription>
+					</DialogHeader>
+					<Button
+						onClick={() => selectedClub && handleDeleteClub(selectedClub.id)}
+						variant={'destructive'}
+					>
+						Yes, delete the club
+					</Button>
+					<Button onClick={() => setIsDeleteConfirmationDialogOpen(false)}>No, cancel</Button>
+				</DialogContent>
+			</Dialog>
 		</>
 	)
 }

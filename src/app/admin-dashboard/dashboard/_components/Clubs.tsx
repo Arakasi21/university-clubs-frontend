@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import debounce from 'lodash.debounce'
@@ -52,7 +52,7 @@ export default function Clubs() {
 	}
 
 	const renderPaginationItems = () => {
-		let pages = []
+		let pages: any[]
 		if (currentPage < 2) {
 			pages = [1, 2, 3].filter((pageNumber) => pageNumber <= currentPage || hasMorePages)
 		} else {
