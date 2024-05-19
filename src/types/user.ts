@@ -11,3 +11,5 @@ export type User = {
 	group_name: string
 	year: number
 }
+
+// TODO add about me , phone number, hobbies , skills, interests, social media links

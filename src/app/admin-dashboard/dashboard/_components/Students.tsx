@@ -35,19 +35,29 @@ export default function Students() {
 					.then((response) => response.json())
 					.then((data) => {
 						console.log('Fetched students:', data.users)
-						updateStudents(data.users || [])
+						const sortedStudents = data.users.sort(
+							(a: StudentsRowProps['student'], b: StudentsRowProps['student']) => {
+								const rolePriority: { [key: string]: number } = {
+									DSVR: 1,
+									ADMIN: 2,
+									MODER: 3,
+									USER: 4,
+								}
+								return rolePriority[a.role] - rolePriority[b.role]
+							},
+						)
+						updateStudents(sortedStudents || [])
 						updateHasMorePages(data.users && data.users.length > 0)
 					})
 					.catch((error) => console.error('Error fetching students:', error))
 			},
-			300,
+			100,
 		),
-		[],
+		[currentPage, searchTerm],
 	)
 
 	useEffect(() => {
 		fetchStudents(searchTerm, currentPage, setStudents, setHasMorePages)
-
 		return () => {
 			fetchStudents.cancel()
 		}
@@ -111,7 +121,13 @@ export default function Students() {
 						</TableHeader>
 						<TableBody>
 							{students.map((student) => (
-								<StudentsRow key={student.id} student={student} onUpdate={() => {}} />
+								<StudentsRow
+									key={student.id}
+									student={student}
+									onUpdate={() => {
+										fetchStudents(searchTerm, currentPage, setStudents, setHasMorePages)
+									}}
+								/>
 							))}
 						</TableBody>
 					</Table>

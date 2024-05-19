@@ -72,7 +72,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 											</div>
 										) : (
 											<div className=" overflow-hidden rounded-full border-4 border-white">
-												<UserAvatar user={pageowner} size={270} />
+												<UserAvatar user={pageowner} size={250} />
 											</div>
 										)}
 										<p>

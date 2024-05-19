@@ -17,13 +17,12 @@ export type StudentsRowProps = {
 	onUpdate: () => void
 	student: User
 }
+
 function StudentsRow({ onUpdate, student }: StudentsRowProps) {
 	const [isContextMenuOpen, setIsContextMenuOpen] = useState(false)
 	const axiosAuth = useAxiosInterceptor()
 
 	const roles: UserRole[] = ['ADMIN', 'MODER']
-
-	// TODO WRITE USE EFFECT TO UPDATE STUDENT ROLES AND ETC...
 
 	const assignRole = async (role: UserRole, assign: boolean) => {
 		try {
@@ -42,9 +41,24 @@ function StudentsRow({ onUpdate, student }: StudentsRowProps) {
 			console.error('Error updating role:', error)
 		}
 	}
+
 	useEffect(() => {
 		onUpdate()
 	}, [])
+
+	const getRoleColor = (role: UserRole) => {
+		switch (role) {
+			case 'DSVR':
+				return 'text-red-600'
+			case 'ADMIN':
+				return 'text-blue-300'
+			case 'MODER':
+				return 'text-yellow-500'
+			default:
+				return ''
+		}
+	}
+
 	return (
 		<TableRow
 			key={student.id}
@@ -61,7 +75,14 @@ function StudentsRow({ onUpdate, student }: StudentsRowProps) {
 				<TableCell>
 					<UserAvatar user={student} />
 				</TableCell>
-				<TableCell>{student.first_name}</TableCell>
+				<TableCell>
+					{student.role !== 'USER' && (
+						<span className={`font-bold ${getRoleColor(student.role as UserRole)}`}>
+							{student.role}
+						</span>
+					)}{' '}
+					{student.first_name}
+				</TableCell>
 				<TableCell>{student.last_name}</TableCell>
 				<TableCell>{student.email}</TableCell>
 				<TableCell>{student.barcode}</TableCell>

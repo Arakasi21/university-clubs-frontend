@@ -56,76 +56,80 @@ export function DetailedClubDialog({
 						<DialogTitle>{club.name}</DialogTitle>
 						<DialogDescription>{club.club_type}</DialogDescription>
 					</DialogHeader>
-					<Card className="m-4 bg-muted/70">
-						<CardHeader className="pb-3">
-							<CardTitle className="text-center text-lg">{club.name}</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<Card>
+					<Tabs defaultValue="info" className="pt-4 " activationMode="manual">
+						<TabsList className="grid w-full grid-cols-3">
+							<TabsTrigger value="info">Club Info</TabsTrigger>
+							<TabsTrigger value="members">Club Members</TabsTrigger>
+							<TabsTrigger value="events">Club Events</TabsTrigger>
+						</TabsList>
+
+						<TabsContent value="info">
+							<Card className=" bg-muted/70">
+								<CardHeader className="pb-3">
+									<CardTitle className="text-center text-lg">{club.name}</CardTitle>
+								</CardHeader>
 								<CardContent>
-									<div className="flex flex-row items-center py-4">
-										<ClubImage club={club} height={150} width={150} />
-										<p className="py w-80 pl-10">
-											{club.description || 'No description provided.'}
-										</p>
-									</div>
-
-									<p className="py-4">
-										Club Type:{' '}
-										<Badge variant="default" className=" text-md px-1.5">
-											{club.club_type}
-										</Badge>
-									</p>
-									<Separator />
-
-									<p className="items-center py-4">
-										Number of Members:{' '}
-										<Badge variant="default" className="px-1.5 text-sm">
-											{club.num_of_members}
-										</Badge>
-									</p>
-								</CardContent>
-							</Card>
-
-							<Tabs defaultValue="students" className="pt-4 " activationMode="manual">
-								<TabsList className="grid w-full grid-cols-2">
-									<TabsTrigger value="members">Club Members</TabsTrigger>
-									<TabsTrigger value="events">Club Events</TabsTrigger>
-								</TabsList>
-								<TabsContent value="members">
 									<Card>
-										<CardHeader>
-											<CardTitle>Club Members</CardTitle>
-										</CardHeader>
 										<CardContent>
-											<Table>
-												<TableHeader>
-													<TableRow>
-														<TableHead>Username</TableHead>
-														<TableHead>LastName</TableHead>
-														<TableHead>Barcode</TableHead>
-													</TableRow>
-												</TableHeader>
-												<TableBody>
-													{clubMembers.map((member) => (
-														<TableRow key={member.id}>
-															<TableCell>{member.first_name}</TableCell>
-															<TableCell>{member.last_name}</TableCell>
-															<TableCell>{member.barcode}</TableCell>
-														</TableRow>
-													))}
-												</TableBody>
-											</Table>
+											<div className="flex flex-row items-center py-4">
+												<ClubImage club={club} height={150} width={150} />
+												<p className="py w-80 pl-10">
+													{club.description || 'No description provided.'}
+												</p>
+											</div>
+
+											<p className="py-4">
+												Club Type:{' '}
+												<Badge variant="default" className=" text-md px-1.5">
+													{club.club_type}
+												</Badge>
+											</p>
+											<Separator />
+
+											<p className="items-center py-4">
+												Number of Members:{' '}
+												<Badge variant="default" className="px-1.5 text-sm">
+													{club.num_of_members}
+												</Badge>
+											</p>
 										</CardContent>
 									</Card>
-								</TabsContent>
+								</CardContent>
+							</Card>
+						</TabsContent>
 
-								<TabsContent value="events">
-									<p>Future Events</p>
-								</TabsContent>
-							</Tabs>
-						</CardContent>
-					</Card>
+						<TabsContent value="members">
+							<Card className="bg-muted/70">
+								<CardHeader>
+									<CardTitle>Club Members</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<Table>
+										<TableHeader>
+											<TableRow>
+												<TableHead>Username</TableHead>
+												<TableHead>LastName</TableHead>
+												<TableHead>Barcode</TableHead>
+											</TableRow>
+										</TableHeader>
+										<TableBody>
+											{clubMembers.map((member) => (
+												<TableRow key={member.id}>
+													<TableCell>{member.first_name}</TableCell>
+													<TableCell>{member.last_name}</TableCell>
+													<TableCell>{member.barcode}</TableCell>
+												</TableRow>
+											))}
+										</TableBody>
+									</Table>
+								</CardContent>
+							</Card>
+						</TabsContent>
+
+						<TabsContent value="events">
+							<p>Future Events</p>
+						</TabsContent>
+					</Tabs>
 					<DialogFooter>
 						{/* link to the club */}
 						<Link href={`/clubs/${club.id}`} target="_blank">
