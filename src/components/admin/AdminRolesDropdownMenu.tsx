@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
-import { decimalToRgb } from '@/helpers/helper'
 import {
 	DropdownMenuPortal,
 	DropdownMenuSub,

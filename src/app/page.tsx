@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 import Sceleton from '@/components/user/Sceleton'
 import { CalendarCheck, GraduationCap, Users } from 'lucide-react'
 import ClubImage from '@/components/clubs/ClubImage'
+import Image from 'next/image'
 
 export default function Home() {
 	const [clubs, setClubs] = useState<Club[]>()
@@ -128,7 +129,7 @@ export default function Home() {
 								</CardContent>
 							</Card>
 							{clubs?.map((club) => (
-								<div className="flex justify-center">
+								<div className="flex justify-center" key={club.id}>
 									<Card
 										className="max-w-1xl flex cursor-pointer flex-col space-y-1 rounded-xl transition-transform"
 										key={club.id}
@@ -137,11 +138,11 @@ export default function Home() {
 										}}
 									>
 										<CardTitle>
-											<img
+											<Image
 												src={club.banner_url ?? '/main_photo.jpeg'}
-												width="100%"
-												height="auto"
 												alt={`banner image of club ${club.name}`}
+												width={5000}
+												height={200}
 												className=" rounded-xl"
 											/>
 										</CardTitle>

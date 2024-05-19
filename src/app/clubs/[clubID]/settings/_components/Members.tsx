@@ -26,7 +26,7 @@ export default function Members({
 				<TabsContent value="week">
 					<Card x-chunk="dashboard-05-chunk-3">
 						<CardHeader className="px-7">
-							<CardTitle>Members</CardTitle>
+							<CardTitle className="pb-4">Members</CardTitle>
 							{/*todo button to right side, show the number of new requests in the button */}
 
 							{hasPermission(memberPerms, Permissions.manage_membership) ? (

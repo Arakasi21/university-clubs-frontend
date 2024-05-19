@@ -3,7 +3,6 @@ import { GavelIcon, LayoutDashboard } from 'lucide-react'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import usePendingClubs from '@/hooks/usePendingClubs'
 import { useRouter } from 'next/navigation'
-import { GrUserAdmin } from 'react-icons/gr'
 
 function PendingClubsDropdownItem() {
 	const router = useRouter()

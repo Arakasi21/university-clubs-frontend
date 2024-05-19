@@ -6,7 +6,14 @@ export enum Permissions {
 	kick_member = 1 << 3, // 001000 8
 	ban_member = 1 << 4, // 010000  16
 	manage_roles = 1 << 5, // 100000 32
-	ALL = administrator | manage_roles | manage_membership | kick_member | ban_member | manage_club, //1111111 63
+	manage_events = 1 << 6,
+	ALL = administrator |
+		manage_roles |
+		manage_membership |
+		kick_member |
+		ban_member |
+		manage_club |
+		manage_events, //1111111 63
 }
 
 export type PermissionsListItem = {
@@ -45,5 +52,10 @@ export const PermissionsList: PermissionsListItem[] = [
 		id: 'manage_roles',
 		label: 'Manage Roles',
 		hex: Permissions.manage_roles,
+	},
+	{
+		id: 'manage_events',
+		label: 'Manage Events',
+		hex: Permissions.manage_events,
 	},
 ]
