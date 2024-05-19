@@ -1,8 +1,5 @@
 import React from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import Students from '@/app/admin-dashboard/dashboard/_components/Students'
-import Clubs from '@/app/admin-dashboard/dashboard/_components/Clubs'
-import Reports from '@/app/admin-dashboard/dashboard/_components/Reports'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 

@@ -20,7 +20,7 @@ const CreateEventsPage = ({ params }: { params: { clubID: number } }) => {
 	// @ts-ignore
 	const { club } = useClub({ clubID: params.clubID })
 	return (
-		<>
+		<main className="overflow-hidden">
 			<Nav />
 			<BackgroundClubImage club={club} />
 			<div className="flex w-full justify-center gap-3 py-4">
@@ -105,7 +105,7 @@ const CreateEventsPage = ({ params }: { params: { clubID: number } }) => {
 					</div>
 				</div>
 			</div>
-		</>
+		</main>
 	)
 }
 export default CreateEventsPage

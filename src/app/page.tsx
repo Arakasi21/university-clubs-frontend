@@ -59,7 +59,7 @@ export default function Home() {
 	}, [fetchClubs, fetchTotalUsers])
 
 	return (
-		<main className="overflow-hidden">
+		<main>
 			<Layout>
 				{loading ? (
 					<Sceleton />

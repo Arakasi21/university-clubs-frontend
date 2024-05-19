@@ -76,13 +76,12 @@ function Page({ params }: { params: { clubID: number } }) {
 		[params.clubID, fetchClubInfo],
 	)
 
-	// TODO CHECK THIS
 	if (!club) {
 		return <div>Club not found</div>
 	}
 
 	return (
-		<>
+		<main className="overflow-hidden scroll-smooth" style={{ scrollBehavior: 'smooth' }}>
 			<Nav />
 			<BackgroundClubImage club={club} />
 			<Tabs
@@ -159,7 +158,7 @@ function Page({ params }: { params: { clubID: number } }) {
 					<BanTable clubID={params.clubID} />
 				</TabsContent>
 			</Tabs>
-		</>
+		</main>
 	)
 }
 
