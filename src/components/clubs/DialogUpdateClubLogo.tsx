@@ -96,7 +96,7 @@ const ClubLogoEditForm: React.FC<ClubLogoFormProps> = ({ club, ...props }) => {
 										<Image
 											src={imagePreview ? imagePreview : '/main_photo.jpeg'}
 											alt={`${club.name}'s logo`}
-											width={200}
+											width={250}
 											height={200}
 										/>
 									</FormLabel>
@@ -136,7 +136,9 @@ export function DialogUpdateClubLogo({ club }: DialogUpdateClubLogoProps) {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button variant="secondary">Update Club Logo</Button>
+				<Button className="w-40" variant="secondary">
+					Update Club Logo
+				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-md">
 				<DialogHeader>

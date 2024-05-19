@@ -96,7 +96,7 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 										<Image
 											src={imagePreview ? imagePreview : '/main_photo.jpeg'}
 											alt={`${club.name}'s banner`}
-											width={200}
+											width={400}
 											height={200}
 										/>
 									</FormLabel>
@@ -136,7 +136,9 @@ export function DialogUpdateClubBanner({ club }: DialogUpdateClubBannerProps) {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button variant="secondary">Update Club banner</Button>
+				<Button className="w-40" variant="secondary">
+					Update Club banner
+				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-md">
 				<DialogHeader>
