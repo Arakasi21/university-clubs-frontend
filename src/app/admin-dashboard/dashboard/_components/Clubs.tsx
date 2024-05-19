@@ -21,32 +21,32 @@ export default function Clubs() {
 	const [currentPage, setCurrentPage] = useState(1)
 	const [hasMorePages, setHasMorePages] = useState(true)
 
-	// const fetchClubs = debounce((search, page, setClubs, setHasMorePages) => {
-	// 	axios
-	// 		.get(
-	// 			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/?query=${search}&page=${page}&page_size=10&club_types=`,
-	// 		)
-	// 		.then((response) => {
-	// 			console.log('Fetched clubs:', response.data.clubs)
-	// 			setClubs(response.data.clubs || [])
-	// 			setHasMorePages(response.data.clubs && response.data.clubs.length > 0)
-	// 		})
-	// 		.catch((error) => console.error('Error fetching clubs:', error))
-	// }, 300)
-
-	const fetchClubs = debounce((search: string, page: number, setClubs, setHasMorePages) => {
-		console.log('Fetching clubs with search term:', search, 'and page:', page)
-		fetch(
-			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/?query=${search}&page=${page}&page_size=10&club_types=`,
-		)
-			.then((response) => response.json())
-			.then((data) => {
-				console.log('Fetched students:', data.users)
-				setClubs(data.clubs || [])
-				setHasMorePages(data.clubs && data.clubs.length > 0)
+	const fetchClubs = debounce((search, page, setClubs, setHasMorePages) => {
+		axios
+			.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/?query=${search}&page=${page}&page_size=10&club_types=`,
+			)
+			.then((response) => {
+				console.log('Fetched clubs:', response.data.clubs)
+				setClubs(response.data.clubs || [])
+				setHasMorePages(response.data.clubs && response.data.clubs.length > 0)
 			})
-			.catch((error) => console.error('Error fetching students:', error))
+			.catch((error) => console.error('Error fetching clubs:', error))
 	}, 300)
+
+	// const fetchClubs = debounce((search: string, page: number, setClubs, setHasMorePages) => {
+	// 	console.log('Fetching clubs with search term:', search, 'and page:', page)
+	// 	fetch(
+	// 		`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/?query=${search}&page=${page}&page_size=10&club_types=`,
+	// 	)
+	// 		.then((response) => response.json())
+	// 		.then((data) => {
+	// 			console.log('Fetched students:', data.users)
+	// 			setClubs(data.clubs || [])
+	// 			setHasMorePages(data.clubs && data.clubs.length > 0)
+	// 		})
+	// 		.catch((error) => console.error('Error fetching students:', error))
+	// }, 300)
 
 	useEffect(() => {
 		fetchClubs(searchTerm, currentPage, setClubs, setHasMorePages)

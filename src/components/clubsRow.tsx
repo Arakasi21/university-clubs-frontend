@@ -25,9 +25,23 @@ function ClubsRow({ onUpdate, club }: ClubsRowProps) {
 	const [isDetailedDialogOpen, setIsDetailedDialogOpen] = useState(false)
 	const [isDeleteConfirmationDialogOpen, setIsDeleteConfirmationDialogOpen] = useState(false)
 	const [selectedClub, setSelectedClub] = useState<Club | null>(null)
+	const [clubMembers, setClubMembers] = useState<any[]>([])
 
-	const handleRowClick = () => {
-		setSelectedClub(club)
+	const handleRowClick = async () => {
+		try {
+			const clubResponse = await axiosAuth.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}`,
+			)
+			setSelectedClub(clubResponse.data.club)
+
+			const membersResponse = await axiosAuth.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}/members?page=1&page_size=25`,
+			)
+			setClubMembers(membersResponse.data.members)
+		} catch (error) {
+			console.error('Failed to fetch club info:', error)
+		}
+
 		setIsDetailedDialogOpen(true)
 	}
 
@@ -58,9 +72,9 @@ function ClubsRow({ onUpdate, club }: ClubsRowProps) {
 					<Image
 						src={club.logo_url}
 						alt={club.name}
-						className="h-10 w-10 rounded-full"
-						width={43}
-						height={43}
+						className="rounded-full"
+						width={73}
+						height={23}
 					/>
 				</TableCell>
 				<TableCell>{club.name}</TableCell>
@@ -75,6 +89,7 @@ function ClubsRow({ onUpdate, club }: ClubsRowProps) {
 					isOpen={isDetailedDialogOpen}
 					onClose={() => setIsDetailedDialogOpen(false)}
 					onDelete={() => setIsDeleteConfirmationDialogOpen(true)}
+					clubMembers={clubMembers}
 				/>
 			)}
 

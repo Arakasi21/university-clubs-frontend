@@ -14,10 +14,12 @@ import { Permissions } from '@/types/permissions'
 import BackgroundClubImage from '@/components/st/BackgroundClubImage'
 import ClubImage from '@/components/st/ClubImage'
 import Nav from '@/components/NavBar'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Separator } from '@/components/ui/separator'
 
 function Page({ params }: { params: { clubID: number } }) {
+	const [isLoading, setIsLoading] = useState(true)
+
 	const { user } = useUserStore()
 	const { club, clubMembers, isOwner } = useClub({ clubID: params.clubID, user: user })
 	const { memberStatus, handleJoinRequest, handleLeaveClub } = useUserClubStatus({
@@ -37,6 +39,16 @@ function Page({ params }: { params: { clubID: number } }) {
 		userStatus: memberStatus,
 		shouldFetch: memberStatus === 'MEMBER',
 	})
+
+	useEffect(() => {
+		if (club) {
+			setIsLoading(false)
+		}
+	}, [club])
+
+	if (isLoading) {
+		return <div>Loading...</div>
+	}
 
 	return (
 		<>

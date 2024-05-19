@@ -140,7 +140,9 @@ export default function Page() {
 										</FormItem>
 									)}
 								/>
-								<Button type="submit">Create</Button>
+								<Button className="w-full" type="submit">
+									Create
+								</Button>
 							</form>
 						</Form>
 					</CardContent>
