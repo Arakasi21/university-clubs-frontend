@@ -111,16 +111,24 @@ export default function Settings(props: {
 								<CardTitle>Danger Zone</CardTitle>
 								<CardDescription className="pb-2">Your responsibility</CardDescription>
 								<Separator />
-								<div className="flex flex-row py-2">
-									<p>Transfer ownership of the club</p>
-									<Button className="ml-auto" variant="secondary">
+								<div className="flex items-center py-2">
+									<Label className="text-sm text-muted-foreground">
+										Transfer ownership of the club
+									</Label>
+									<Button
+										className="ml-auto text-red-500 hover:bg-red-500 hover:text-white"
+										variant="secondary"
+									>
 										Transfer
 									</Button>
 								</div>
 								<Separator />
-								<div className="flex flex-row py-2">
-									<p>Delete Club</p>
-									<Button className="ml-auto" variant="destructive">
+								<div className="flex items-center py-2">
+									<Label className="text-sm text-muted-foreground ">Delete Club</Label>
+									<Button
+										className="ml-auto  text-red-500 hover:bg-red-500 hover:text-white"
+										variant="secondary"
+									>
 										Delete Club
 									</Button>
 								</div>
