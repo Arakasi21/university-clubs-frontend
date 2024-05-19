@@ -22,6 +22,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const formSchema = z.object({
 	name: z.string().min(2, {
@@ -76,67 +77,74 @@ export default function Page() {
 		<>
 			<Nav />
 			<div className="flex min-h-screen flex-col items-center justify-between p-24">
-				<Form {...form}>
-					<form onSubmit={form.handleSubmit(handleSubmit)} className="w-60">
-						<div className="mb-6 text-center">
-							{' '}
-							<p className="break-words text-sm text-gray-400">
-								You need to wait some time for an admin approval after submitting this form
-							</p>
-						</div>
+				<Card className="bg-black/5">
+					<CardHeader>
+						<CardTitle>Create Club</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<Form {...form}>
+							<form onSubmit={form.handleSubmit(handleSubmit)} className="w-100">
+								<div className="mb-6 text-center">
+									{' '}
+									<p className="break-words text-sm text-gray-400">
+										You need to wait some time for an admin approval after submitting this form
+									</p>
+								</div>
 
-						<FormField
-							name="name"
-							render={({ field }) => (
-								<FormItem className="mb-4">
-									<FormLabel>Club Name</FormLabel>
-									<FormControl>
-										<Input placeholder="name" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							name="description"
-							render={({ field }) => (
-								<FormItem className="mb-4">
-									<FormLabel>Description</FormLabel>
-									<FormControl>
-										<Input placeholder="description" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							name="club_type"
-							render={({ field }) => (
-								<FormItem className="mb-8">
-									<FormLabel>Type</FormLabel>
-									<Select onValueChange={field.onChange} defaultValue={field.value}>
-										<FormControl>
-											<SelectTrigger className="w-[180px]">
-												<SelectValue placeholder="Select club type" />
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											<SelectItem value="Sport">Sport</SelectItem>
-											<SelectItem value="Cultural">Cultural</SelectItem>
-											<SelectItem value="Media">Media</SelectItem>
-											<SelectItem value="Intellectual">Intellectual</SelectItem>
-											<SelectItem value="Creative">Creative</SelectItem>
-											<SelectItem value="Entertainment">Entertainment</SelectItem>
-											<SelectItem value="SocialActivity">Social Activity</SelectItem>
-										</SelectContent>
-									</Select>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<Button type="submit">Create</Button>
-					</form>
-				</Form>
+								<FormField
+									name="name"
+									render={({ field }) => (
+										<FormItem className="mb-4">
+											<FormLabel>Club Name</FormLabel>
+											<FormControl>
+												<Input placeholder="name" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									name="description"
+									render={({ field }) => (
+										<FormItem className="mb-4">
+											<FormLabel>Description</FormLabel>
+											<FormControl>
+												<Input placeholder="description" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									name="club_type"
+									render={({ field }) => (
+										<FormItem className="mb-8">
+											<FormLabel>Type</FormLabel>
+											<Select onValueChange={field.onChange} defaultValue={field.value}>
+												<FormControl>
+													<SelectTrigger className="w-[180px]">
+														<SelectValue placeholder="Select club type" />
+													</SelectTrigger>
+												</FormControl>
+												<SelectContent>
+													<SelectItem value="Sport">Sport</SelectItem>
+													<SelectItem value="Cultural">Cultural</SelectItem>
+													<SelectItem value="Media">Media</SelectItem>
+													<SelectItem value="Intellectual">Intellectual</SelectItem>
+													<SelectItem value="Creative">Creative</SelectItem>
+													<SelectItem value="Entertainment">Entertainment</SelectItem>
+													<SelectItem value="SocialActivity">Social Activity</SelectItem>
+												</SelectContent>
+											</Select>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button type="submit">Create</Button>
+							</form>
+						</Form>
+					</CardContent>
+				</Card>
 			</div>
 		</>
 	)

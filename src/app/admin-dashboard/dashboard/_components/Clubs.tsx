@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import debounce from 'lodash.debounce'
@@ -21,18 +21,35 @@ export default function Clubs() {
 	const [currentPage, setCurrentPage] = useState(1)
 	const [hasMorePages, setHasMorePages] = useState(true)
 
-	const fetchClubs = debounce((search, page, setClubs, setHasMorePages) => {
-		axios
-			.get(
+	// const fetchClubs = debounce((search, page, setClubs, setHasMorePages) => {
+	// 	axios
+	// 		.get(
+	// 			`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/?query=${search}&page=${page}&page_size=10&club_types=`,
+	// 		)
+	// 		.then((response) => {
+	// 			console.log('Fetched clubs:', response.data.clubs)
+	// 			setClubs(response.data.clubs || [])
+	// 			setHasMorePages(response.data.clubs && response.data.clubs.length > 0)
+	// 		})
+	// 		.catch((error) => console.error('Error fetching clubs:', error))
+	// }, 300)
+
+	const fetchClubs = useCallback(
+		debounce((search: string, page: number, setClubs, setHasMorePages) => {
+			console.log('Fetching clubs with search term:', search, 'and page:', page)
+			fetch(
 				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/?query=${search}&page=${page}&page_size=10&club_types=`,
 			)
-			.then((response) => {
-				console.log('Fetched clubs:', response.data.clubs)
-				setClubs(response.data.clubs || [])
-				setHasMorePages(response.data.clubs && response.data.clubs.length > 0)
-			})
-			.catch((error) => console.error('Error fetching clubs:', error))
-	}, 300)
+				.then((response) => response.json())
+				.then((data) => {
+					console.log('Fetched students:', data.users)
+					setClubs(data.clubs || [])
+					setHasMorePages(data.clubs && data.clubs.length > 0)
+				})
+				.catch((error) => console.error('Error fetching students:', error))
+		}, 300),
+		[],
+	)
 
 	useEffect(() => {
 		fetchClubs(searchTerm, currentPage, setClubs, setHasMorePages)
@@ -40,7 +57,7 @@ export default function Clubs() {
 		return () => {
 			fetchClubs.cancel()
 		}
-	}, [fetchClubs, searchTerm, currentPage])
+	}, [searchTerm, currentPage, fetchClubs])
 
 	const handleSearch = (value: string) => {
 		setSearchTerm(value)

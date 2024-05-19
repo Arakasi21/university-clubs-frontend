@@ -22,6 +22,7 @@ type DetailedClubDialogProps = {
 
 export function DetailedClubDialog({ club, isOpen, onClose, onDelete }: DetailedClubDialogProps) {
 	if (!club) return null
+	console.log(club)
 
 	return (
 		<div>
