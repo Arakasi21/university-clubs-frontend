@@ -88,7 +88,7 @@ function Page({ params }: { params: { clubID: number } }) {
 				className="grid flex-1 items-start gap-4 p-4 sm:px-64 sm:py-8 md:gap-8"
 				defaultValue="members"
 			>
-				<TabsList className="grid w-full grid-cols-5">
+				<TabsList className="grid w-full grid-cols-4">
 					<Link
 						className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background"
 						href={`/clubs/${club?.id}`}
@@ -103,18 +103,11 @@ function Page({ params }: { params: { clubID: number } }) {
 							Roles
 						</TabsTrigger>
 					)}
-					{hasPermission(permissions, Permissions.manage_club) ? (
+					{hasPermission(permissions, Permissions.ALL) ? (
 						<TabsTrigger value="settings">Settings</TabsTrigger>
 					) : (
 						<TabsTrigger value="settings" disabled>
 							Settings
-						</TabsTrigger>
-					)}
-					{hasPermission(permissions, Permissions.manage_club) ? (
-						<TabsTrigger value="banList">BanList</TabsTrigger>
-					) : (
-						<TabsTrigger value="banList" disabled>
-							Black list
 						</TabsTrigger>
 					)}
 				</TabsList>
@@ -152,10 +145,6 @@ function Page({ params }: { params: { clubID: number } }) {
 
 				<TabsContent value="settings">
 					<Settings memberPerms={permissions} club={club} clubMembers={clubMembers} />
-				</TabsContent>
-
-				<TabsContent value="banList">
-					<BanTable clubID={params.clubID} />
 				</TabsContent>
 			</Tabs>
 		</main>

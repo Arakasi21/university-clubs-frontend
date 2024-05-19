@@ -97,14 +97,13 @@ function BanTable({ clubID }: { clubID: number }) {
 		<div>
 			<Card>
 				<CardHeader className="px-7">
-					<CardTitle className="pb-4">Banned Users</CardTitle>
 					<CardDescription>List of banned users</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<Table>
 						<TableHeader>
 							<TableRow>
-								<TableHead className="w-[100px]">User</TableHead>
+								<TableHead className="">User</TableHead>
 								<TableHead>Date</TableHead>
 								<TableHead>By who</TableHead>
 								<TableHead className="text-right">Reason</TableHead>
