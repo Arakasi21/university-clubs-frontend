@@ -1,13 +1,14 @@
 'use client'
 import Layout from '@/components/Layout'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Club } from '@/types/club'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import Sceleton from '@/components/st/Sceleton'
 import { CalendarCheck, GraduationCap, Users } from 'lucide-react'
+import ClubImage from '@/components/st/ClubImage'
 
 export default function Home() {
 	const [clubs, setClubs] = useState<Club[]>()
@@ -145,16 +146,15 @@ export default function Home() {
 												className=" rounded-xl"
 											/>
 										</CardTitle>
-										<CardContent className="flex flex-row space-x-2 pt-5">
-											<Image
-												src={club.logo_url ?? '/main_photo.jpeg'}
-												width="75"
-												height="20"
-												alt={`banner image of club ${club.name}`}
-											/>
-											<div className="flex flex-col">
-												<p>{club.name}</p>
-												<p>{club.description}</p>
+										<CardContent className="grid grid-cols-[auto,1fr] items-center gap-4 pt-4">
+											<div>
+												<ClubImage club={club} width={100} height={20} />
+											</div>
+											<div>
+												<h1 className="font-bold" style={{ fontSize: '1vw' }}>
+													{club?.name}
+												</h1>
+												<p style={{ fontSize: '0.9vw' }}>{club?.description}</p>
 											</div>
 										</CardContent>
 									</Card>
