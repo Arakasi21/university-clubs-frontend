@@ -39,6 +39,10 @@ function ClubsRow({ onUpdate, club }: ClubsRowProps) {
 			},
 		})
 
+		if (response.status.toString().startsWith('2')) {
+			toast.success('Club deleted successfully')
+		}
+
 		if (!response.status.toString().startsWith('2')) {
 			toast.error('Failed to delete club', { description: response.data.error })
 			return

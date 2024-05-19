@@ -138,10 +138,10 @@ export default function Home() {
 										}}
 									>
 										<CardTitle>
-											<Image
+											<img
 												src={club.banner_url ?? '/main_photo.jpeg'}
-												width="600"
-												height="50"
+												width="100%"
+												height="auto"
 												alt={`banner image of club ${club.name}`}
 												className=" rounded-xl"
 											/>
@@ -150,11 +150,13 @@ export default function Home() {
 											<div>
 												<ClubImage club={club} width={100} height={20} />
 											</div>
-											<div>
-												<h1 className="font-bold" style={{ fontSize: '1vw' }}>
+											<div className="w-full">
+												<h1 className="font-bold" style={{ fontSize: '1vw', objectFit: 'contain' }}>
 													{club?.name}
 												</h1>
-												<p style={{ fontSize: '0.9vw' }}>{club?.description}</p>
+												<p style={{ fontSize: '0.9vw', objectFit: 'contain' }}>
+													{club?.description}
+												</p>
 											</div>
 										</CardContent>
 									</Card>
