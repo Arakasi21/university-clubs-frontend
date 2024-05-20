@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import GeneralSettings from '@/components/clubs/settings/GeneralSettings'
 import BanSection from '@/components/clubs/settings/BanSection'
-import PluginDirectory from '@/components/clubs/settings/PluginDirectory'
+import EventCreationComponent from '@/components/clubs/settings/EventCreationComponent'
 import DangerZone from '@/components/clubs/settings/DangerZone'
 import useUserRolesStore from '@/store/useUserRoles'
 import useClub from '@/hooks/useClub'
@@ -50,7 +50,7 @@ export default function Settings({ memberPerms, club, onUpdate, clubMembers }: S
 				<GeneralSettings club={club} permissions={permissions} />
 				<div className="grid gap-6">
 					<BanSection clubID={club.id} permissions={permissions} />
-					<PluginDirectory />
+					<EventCreationComponent clubID={club.id} />
 					<DangerZone
 						isOwner={isOwner}
 						isDeleteDialogOpen={isDeleteDialogOpen}
