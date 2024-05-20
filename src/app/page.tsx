@@ -1,6 +1,6 @@
 'use client'
 import Layout from '@/components/Layout'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Club } from '@/types/club'
 import { useRouter } from 'next/navigation'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -9,6 +9,7 @@ import Sceleton from '@/components/user/Sceleton'
 import { CalendarCheck, GraduationCap, Users } from 'lucide-react'
 import ClubImage from '@/components/clubs/ClubImage'
 import Image from 'next/image'
+import { StatsComponent } from '@/components/StatsComponent'
 
 export default function Home() {
 	const [clubs, setClubs] = useState<Club[]>()
@@ -66,68 +67,8 @@ export default function Home() {
 				) : (
 					<>
 						<div className="mx-40 grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-							<Card x-chunk="dashboard-01-chunk-1">
-								<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-									<CardTitle className="text-sm font-medium">Number of UCMS Users</CardTitle>
-									<Users className="h-4 w-4 text-muted-foreground" />
-								</CardHeader>
-								<CardContent>
-									<div
-										style={{
-											display: 'flex',
-											flexDirection: 'column',
-											justifyContent: 'center',
-											alignItems: 'center',
-										}}
-										className="text-2xl font-bold"
-									>
-										{totalUsers}
-									</div>
-									<p className="mt-3 text-xs text-green-500 text-muted-foreground">{`+${0}% from last month`}</p>
-								</CardContent>
-							</Card>
-							<Card x-chunk="dashboard-01-chunk-2">
-								<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-									<CardTitle className="text-sm font-medium">Number of Clubs</CardTitle>
-									<GraduationCap className="h-4 w-4 text-muted-foreground" />
-								</CardHeader>
-								<CardContent>
-									<div
-										style={{
-											display: 'flex',
-											flexDirection: 'column',
-											justifyContent: 'center',
-											alignItems: 'center',
-										}}
-										className="text-2xl font-bold"
-									>
-										{totalClubs}
-									</div>
-									<p className="mt-3 text-xs text-green-500 text-muted-foreground">
-										+0% from last year
-									</p>
-								</CardContent>
-							</Card>
-							<Card x-chunk="dashboard-01-chunk-3">
-								<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-									<CardTitle className="text-sm font-medium">Active Events</CardTitle>
-									<CalendarCheck className="h-4 w-4 text-muted-foreground" />
-								</CardHeader>
-								<CardContent>
-									<div
-										style={{
-											display: 'flex',
-											flexDirection: 'column',
-											justifyContent: 'center',
-											alignItems: 'center',
-										}}
-										className="text-2xl font-bold"
-									>
-										0
-									</div>
-									<p className="mt-3 text-xs text-muted-foreground">+0 since last week</p>
-								</CardContent>
-							</Card>
+							<StatsComponent totalUsers={totalUsers} totalClubs={totalClubs} />
+
 							{clubs?.map((club) => (
 								<div className="flex justify-center" key={club.id}>
 									<Card
@@ -146,17 +87,24 @@ export default function Home() {
 												className=" rounded-xl"
 											/>
 										</CardTitle>
-										<CardContent className="grid grid-cols-[auto,1fr] items-center gap-4 pt-4">
+										<CardContent className="relative grid grid-cols-[auto,1fr] items-center gap-4 pt-4 ">
 											<div>
-												<ClubImage club={club} width={100} height={20} />
+												<img
+													src={club.logo_url ?? '/main_photo.jpeg'}
+													alt={`banner image of club ${club.name}`}
+													width={80}
+													height={50}
+													className="aspect-square"
+												/>
+												{/*<ClubImage club={club} width={100} height={20} />*/}
 											</div>
 											<div className="w-full">
 												<h1 className="font-bold" style={{ fontSize: '1vw', objectFit: 'contain' }}>
 													{club?.name}
 												</h1>
-												<p style={{ fontSize: '0.9vw', objectFit: 'contain' }}>
+												<CardDescription style={{ fontSize: '0.9vw', objectFit: 'contain' }}>
 													{club?.description}
-												</p>
+												</CardDescription>
 											</div>
 										</CardContent>
 									</Card>

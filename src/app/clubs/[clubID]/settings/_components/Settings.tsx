@@ -10,6 +10,7 @@ import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { Permissions } from '@/types/permissions'
 import { toast } from 'sonner'
 import { Club, ClubMember } from '@/types/club'
+import GetEventComponent from '@/components/clubs/settings/GetEventComponent'
 
 interface SettingsProps {
 	memberPerms: Permissions
@@ -51,6 +52,7 @@ export default function Settings({ memberPerms, club, onUpdate, clubMembers }: S
 				<div className="grid gap-6">
 					<BanSection clubID={club.id} permissions={permissions} />
 					<EventCreationComponent clubID={club.id} />
+					<GetEventComponent />
 					<DangerZone
 						isOwner={isOwner}
 						isDeleteDialogOpen={isDeleteDialogOpen}

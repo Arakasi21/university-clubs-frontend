@@ -18,6 +18,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
+import { Progress } from '@radix-ui/react-progress'
 
 const MAX_FILE_SIZE = 5000000 // ~5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -41,6 +42,7 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 		club ? club.banner_url : '/main_photo.jpeg',
 	)
 
+	const [uploadProgress, setUploadProgress] = useState(0)
 	const axiosAuth = useAxiosInterceptor()
 
 	useEffect(() => {
@@ -68,6 +70,14 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 				{
 					method: 'PATCH',
 					data: formData,
+					onUploadProgress: (progressEvent) => {
+						if (progressEvent.total) {
+							const percentCompleted = Math.round(
+								(progressEvent.loaded * 100) / progressEvent.total,
+							)
+							setUploadProgress(percentCompleted)
+						}
+					},
 				},
 			)
 
@@ -101,6 +111,7 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 										/>
 									</FormLabel>
 									<FormControl>
+										{uploadProgress > 0 && <Progress value={uploadProgress} />}
 										<Input
 											type="file"
 											ref={field.ref}

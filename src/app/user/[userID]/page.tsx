@@ -53,26 +53,26 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 
 	return (
 		<Layout>
-			<div className="overflow-hidden">
+			<div className="n">
 				{pageowner ? (
 					<div className="flex flex-col items-center justify-between p-16">
-						<Card x-chunk="dashboard-01-chunk-2" className="border-0">
+						<Card x-chunk="dashboard-01-chunk-2" className="border-0 ">
 							<CardContent>
-								<div className="grid gap-3 sm:grid-cols-2">
-									<div className="grid gap-3">
+								<div className="grid gap-3  sm:grid-cols-2">
+									<div className="grid gap-3 ">
 										{pageowner.avatar_url ? (
-											<div className="overflow-hidden rounded-full border-4 border-white">
+											<div className="relative h-[300px] w-[300px]">
 												<Image
-													className="rounded-full"
+													className=" rounded-full border-2 border-white"
 													src={pageowner.avatar_url}
 													alt={`${pageowner.first_name} profile picture`}
-													width={300}
-													height={300}
+													fill={true}
+													objectFit={'cover'}
 												/>
 											</div>
 										) : (
-											<div className=" overflow-hidden rounded-full border-4 border-white">
-												<UserAvatar user={pageowner} size={250} />
+											<div className="w-fit rounded-full border-2 border-white">
+												<UserAvatar user={pageowner} size={350} />
 											</div>
 										)}
 										<p>

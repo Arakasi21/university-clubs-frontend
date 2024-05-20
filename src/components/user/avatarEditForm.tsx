@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const MAX_FILE_SIZE = 5000000 // ~5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -77,48 +78,55 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 	}
 
 	return (
-		<div {...props}>
-			<Form {...form}>
-				<form onSubmit={form.handleSubmit(updateUserAvatar)}>
-					{user ? (
-						<FormField
-							control={form.control}
-							name="avatar"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										<Image
-											src={imagePreview ? imagePreview : ''}
-											alt={`${user.first_name}'s avatar`}
-											width={200}
-											height={200}
-										/>
-									</FormLabel>
-									<FormControl>
-										<Input
-											type="file"
-											ref={field.ref}
-											name={field.name}
-											onBlur={field.onBlur}
-											onChange={(e) => {
-												const file = e.target.files?.[0]
-												field.onChange(file)
-												setImagePreview(file ? URL.createObjectURL(file) : user?.avatar_url)
-												setIsDialogOpen(true)
-											}}
-										/>
-									</FormControl>
-									<Button type="submit" className="w-full">
-										Set new profile picture
-									</Button>
-								</FormItem>
+		<div {...props} className="overflow-hidden">
+			<Card>
+				<CardHeader>
+					<CardTitle>Change Avatar</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<Form {...form}>
+						<form onSubmit={form.handleSubmit(updateUserAvatar)}>
+							{user ? (
+								<FormField
+									control={form.control}
+									name="avatar"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>
+												<Image
+													src={imagePreview ? imagePreview : ''}
+													alt={`${user.first_name}'s avatar`}
+													width={400}
+													height={100}
+												/>
+											</FormLabel>
+											<FormControl>
+												<Input
+													type="file"
+													ref={field.ref}
+													name={field.name}
+													onBlur={field.onBlur}
+													onChange={(e) => {
+														const file = e.target.files?.[0]
+														field.onChange(file)
+														setImagePreview(file ? URL.createObjectURL(file) : user?.avatar_url)
+														setIsDialogOpen(true)
+													}}
+												/>
+											</FormControl>
+											<Button type="submit" className="w-full">
+												Set new profile picture
+											</Button>
+										</FormItem>
+									)}
+								/>
+							) : (
+								<Skeleton className="h-12 w-12 rounded-full" />
 							)}
-						/>
-					) : (
-						<Skeleton className="h-12 w-12 rounded-full" />
-					)}
-				</form>
-			</Form>
+						</form>
+					</Form>
+				</CardContent>
+			</Card>
 		</div>
 	)
 }
