@@ -20,6 +20,7 @@ import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { Permissions } from '@/types/permissions'
 import { hasPermission } from '@/helpers/permissions'
 import BanTable from '@/app/clubs/[clubID]/settings/_components/BanTable'
+import { Club } from '@/types/club'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
@@ -33,7 +34,7 @@ function Page({ params }: { params: { clubID: number } }) {
 		clubID: params.clubID,
 	})
 	useMemberRoles({
-		clubID: params.clubID,
+		club: club || null,
 		user: user,
 		userStatus: memberStatus,
 		shouldFetch: memberStatus === 'MEMBER',

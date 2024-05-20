@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react'
-import { UserClubStatus } from '@/types/club'
+import { Club, UserClubStatus } from '@/types/club'
 import { toast } from 'sonner'
 import { accumulateMemberPermissions, membersHighestRole } from '@/helpers/permissions'
 import { User } from '@/types/user'
@@ -9,18 +9,18 @@ import useUserRolesStore from '@/store/useUserRoles'
 export type UseMemberRolesProps = {
 	userStatus: UserClubStatus
 	user: User | null
-	clubID: number
+	club: Club | null
 	shouldFetch: boolean
 }
 
-function useMemberRoles({ clubID, user, userStatus, shouldFetch }: UseMemberRolesProps) {
+function useMemberRoles({ club, user, userStatus, shouldFetch }: UseMemberRolesProps) {
 	const { setUserRoles } = useUserRolesStore()
 
 	const fetchMemberRoles = useCallback(() => {
-		if (!shouldFetch) {
+		if (!shouldFetch || !club || !user?.id) {
 			return
 		}
-		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/members/${user?.id}/roles`)
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}/members/${user?.id}/roles`)
 			.then(async (res) => {
 				const data = await res.json()
 				if (!res.ok) {
@@ -35,10 +35,10 @@ function useMemberRoles({ clubID, user, userStatus, shouldFetch }: UseMemberRole
 					? Permissions.ALL
 					: accumulateMemberPermissions(data.roles)
 
-				setUserRoles(data.roles, membersHighestRole(data.roles), permissions)
+				setUserRoles(data.roles, membersHighestRole(data.roles), permissions, club)
 			})
 			.catch((error) => console.log(error.message))
-	}, [clubID, user?.id, setUserRoles, shouldFetch])
+	}, [club, user?.id, setUserRoles, shouldFetch])
 
 	useEffect(() => {
 		fetchMemberRoles()

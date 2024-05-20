@@ -47,7 +47,7 @@ function Page({ params }: { params: { clubID: number } }) {
 		clubID: params.clubID,
 	})
 	useMemberRoles({
-		clubID: params.clubID,
+		club: club || null,
 		user: user,
 		userStatus: memberStatus,
 		shouldFetch: memberStatus === 'MEMBER',

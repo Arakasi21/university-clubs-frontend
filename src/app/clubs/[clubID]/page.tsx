@@ -16,6 +16,7 @@ import ClubImage from '@/components/clubs/ClubImage'
 import Nav from '@/components/NavBar'
 import React, { useEffect, useState } from 'react'
 import { Separator } from '@/components/ui/separator'
+import { Club } from '@/types/club'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const [isLoading, setIsLoading] = useState(true)
@@ -34,7 +35,7 @@ function Page({ params }: { params: { clubID: number } }) {
 	const { permissions } = useUserRolesStore()
 	const { isLoggedIn } = useUserStore()
 	useMemberRoles({
-		clubID: params.clubID,
+		club: club || null,
 		user: user,
 		userStatus: memberStatus,
 		shouldFetch: memberStatus === 'MEMBER',

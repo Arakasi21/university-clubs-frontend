@@ -1,20 +1,30 @@
 import { Permissions } from '@/types/permissions'
 import { create } from 'zustand'
-import { ClubRole } from '@/types/club'
+import { Club, ClubRole } from '@/types/club'
 
 interface useUserRolesStore {
 	roles: ClubRole[]
 	highestRole?: ClubRole
 	permissions: Permissions
-
-	setUserRoles: (roles: ClubRole[], highestRole: ClubRole, permissions: Permissions) => void
+	club?: Club
+	setUserRoles: (
+		roles: ClubRole[],
+		highestRole: ClubRole,
+		permissions: Permissions,
+		club: Club,
+	) => void
 }
 
 const useUserRolesStore = create<useUserRolesStore>()((set) => ({
 	roles: [],
 	permissions: Permissions.none,
-	setUserRoles: (roles: ClubRole[], highestRole: ClubRole, permissions: Permissions) => {
-		set({ roles, highestRole, permissions })
+	setUserRoles: (
+		roles: ClubRole[],
+		highestRole: ClubRole,
+		permissions: Permissions,
+		club: Club,
+	) => {
+		set({ roles, highestRole, permissions, club })
 	},
 }))
 
