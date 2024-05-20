@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Club } from '@/types/club'
 import { toast } from 'sonner'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
-import { DetailedClubDialog } from '../clubs/DetailedClubDialog'
+import { DetailedClubDialog } from './DetailedClubDialog'
 import {
 	Dialog,
 	DialogContent,

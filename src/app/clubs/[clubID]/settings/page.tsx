@@ -1,7 +1,7 @@
 'use client'
 import Nav from '@/components/NavBar'
 
-import MemberRolesRow from '@/components/clubs/memberRolesRow'
+import MemberRolesRow from '@/components/clubs/members/memberRolesRow'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import useClub from '@/hooks/useClub'
 import useUserStore from '@/store/user'
@@ -75,6 +75,9 @@ function Page({ params }: { params: { clubID: number } }) {
 		},
 		[params.clubID, fetchClubInfo],
 	)
+	const onUpdate = () => {
+		fetchClubInfo()
+	}
 
 	if (!club) {
 		return <div>Club not found</div>
@@ -144,7 +147,12 @@ function Page({ params }: { params: { clubID: number } }) {
 				</TabsContent>
 
 				<TabsContent value="settings">
-					<Settings memberPerms={permissions} club={club} clubMembers={clubMembers} />
+					<Settings
+						onUpdate={onUpdate}
+						memberPerms={permissions}
+						club={club}
+						clubMembers={clubMembers || []}
+					/>
 				</TabsContent>
 			</Tabs>
 		</main>

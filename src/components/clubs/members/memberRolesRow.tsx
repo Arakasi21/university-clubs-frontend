@@ -20,7 +20,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import RoleCheckboxDropdown from '@/components/clubs/RoleCheckboxDropdown'
+import RoleCheckboxDropdown from '@/components/clubs/roles/RoleCheckboxDropdown'
 import useUserStore from '@/store/user'
 import { hasPermission } from '@/helpers/permissions'
 import useUserRolesStore from '@/store/useUserRoles'
