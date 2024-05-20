@@ -19,15 +19,11 @@ export type UseEventCreateProps = {
 
 export default function EventCreationComponent({ clubID }: UseEventCreateProps) {
 	const axiosAuth = useAxiosInterceptor()
-	const { jwt_token } = useUserStore()
 	const [responseData, setResponseData] = useState(null)
 	const [isOpen, setIsOpen] = useState(false)
 
 	const handleCreateEvent = useCallback(async () => {
 		try {
-			if (!jwt_token) {
-				throw new Error('JWT token is missing')
-			}
 			const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/events`
 			const response = await axiosAuth(apiUrl, {
 				method: 'POST',
@@ -45,7 +41,7 @@ export default function EventCreationComponent({ clubID }: UseEventCreateProps) 
 						onClick: () => {},
 					},
 				})
-				setResponseData(response.data)
+				setResponseData(response.data.event)
 				setIsOpen(false)
 			}
 		} catch (e) {
@@ -54,7 +50,7 @@ export default function EventCreationComponent({ clubID }: UseEventCreateProps) 
 			})
 			console.log(e)
 		}
-	}, [jwt_token, clubID])
+	}, [clubID])
 
 	const toggleData = () => {
 		setIsOpen(!isOpen)

@@ -37,7 +37,7 @@ export function EventDialog({ month, events, isOpen, onClose, onEventClick }: Ev
 								<CardTitle className="text-center text-lg">{event.title}</CardTitle>
 							</CardHeader>
 							<CardContent>
-								<p className="text-center">{event.enddate}</p>
+								<p className="text-center">{event.end_date}</p>
 							</CardContent>
 						</Card>
 					))}

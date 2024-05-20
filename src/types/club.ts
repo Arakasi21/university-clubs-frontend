@@ -3,12 +3,12 @@ import { Permissions } from './permissions'
 export type Club = {
 	id: number
 	name: string
-	description: string
-	club_type: string
-	logo_url: string
-	banner_url: string
-	num_of_members: number
-	roles: ClubRole[]
+	description?: string
+	club_type?: string
+	logo_url?: string
+	banner_url?: string
+	num_of_members?: number
+	roles?: ClubRole[]
 }
 
 export type ClubMember = {

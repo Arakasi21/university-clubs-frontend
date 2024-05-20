@@ -1,41 +1,49 @@
+import { Club } from '@/types/club'
+
 export type Event = {
-	_id: string
+	id: string
 	club_id: number
-	user_id: number
+	owner_id: number
+	collaborator_clubs: Club[]
+	organizers: Organizer[]
 	status: string
 	is_approve: boolean
 	created_at: string
 	updated_at: string
 	deleted_at: string
-	attachedfiles: string[]
-	attachedimages: string[]
-	club: {
-		_id: number
+	attached_files: {
+		url: string
 		name: string
-		logo_url: string
-	}
-	collaboratorclubs: string | null
-	coverimages: string[]
-	createdat: string
-	deletedat: string
-	description: string
-	enddate: string
-	id: string
-	locationlink: string
-	locationuniversity: string
-	maxparticipants: number
-	organizers: string | null
-	participantscount: number
-	startdate: string
+		type: string
+	}[]
+	attached_images: {
+		url: string
+		name: string
+		type: string
+	}[]
+	cover_images: {
+		filemongo: {
+			url: string
+			name: string
+			type: string
+		}
+		position: number
+	}[]
+	end_date: string
+	location_link: string
+	max_participants: number
+	start_date: string
 	tags: string[]
 	title: string
 	type: string
-	updatedat: string
-	user: {
-		_id: number
-		first_name: string
-		last_name: string
-		barcode: string
-		avatar_url: string
-	}
+}
+
+export type Organizer = {
+	id: number
+	first_name: string
+	last_name: string
+	avatar_url: string
+	barcode: number
+	club_id: number
+	by_who_id?: number
 }
