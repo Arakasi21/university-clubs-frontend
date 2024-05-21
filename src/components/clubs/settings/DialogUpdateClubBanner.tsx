@@ -39,14 +39,14 @@ export type ClubBannerFormProps = {
 
 const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) => {
 	const [imagePreview, setImagePreview] = useState<string | null>(
-		club ? club.banner_url : '/main_photo.jpeg',
+		club.banner_url ? club.banner_url : '/main_photo.jpeg',
 	)
 
 	const [uploadProgress, setUploadProgress] = useState(0)
 	const axiosAuth = useAxiosInterceptor()
 
 	useEffect(() => {
-		setImagePreview(club ? club.banner_url : null)
+		setImagePreview(club.banner_url ? club.banner_url : null)
 	}, [club])
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -120,7 +120,9 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 											onChange={(e) => {
 												const file = e.target.files?.[0]
 												field.onChange(file)
-												setImagePreview(file ? URL.createObjectURL(file) : club?.banner_url)
+												setImagePreview(
+													file ? URL.createObjectURL(file) : club?.banner_url || '/main_photo.jpeg',
+												)
 											}}
 										/>
 									</FormControl>

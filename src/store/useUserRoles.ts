@@ -2,7 +2,7 @@ import { Permissions } from '@/types/permissions'
 import { create } from 'zustand'
 import { Club, ClubRole } from '@/types/club'
 
-interface useUserRolesStore {
+export interface userRolesStore {
 	roles: ClubRole[]
 	highestRole?: ClubRole
 	permissions: Permissions
@@ -15,7 +15,7 @@ interface useUserRolesStore {
 	) => void
 }
 
-const useUserRolesStore = create<useUserRolesStore>()((set) => ({
+const useUserRolesStore = create<userRolesStore>()((set) => ({
 	roles: [],
 	permissions: Permissions.none,
 	setUserRoles: (

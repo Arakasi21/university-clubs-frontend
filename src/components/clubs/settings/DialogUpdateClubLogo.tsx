@@ -37,13 +37,13 @@ export type ClubLogoFormProps = {
 
 const ClubLogoEditForm: React.FC<ClubLogoFormProps> = ({ club, ...props }) => {
 	const [imagePreview, setImagePreview] = useState<string | null>(
-		club ? club.logo_url : '/main_photo.jpeg',
+		club.logo_url ? club.logo_url : '/main_photo.jpeg',
 	)
 
 	const axiosAuth = useAxiosInterceptor()
 
 	useEffect(() => {
-		setImagePreview(club ? club.logo_url : null)
+		setImagePreview(club.logo_url ? club.logo_url : '/main_photo.jpeg')
 	}, [club])
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -109,7 +109,9 @@ const ClubLogoEditForm: React.FC<ClubLogoFormProps> = ({ club, ...props }) => {
 											onChange={(e) => {
 												const file = e.target.files?.[0]
 												field.onChange(file)
-												setImagePreview(file ? URL.createObjectURL(file) : club?.logo_url)
+												setImagePreview(
+													file ? URL.createObjectURL(file) : club?.logo_url || '/main_photo.jpeg',
+												)
 											}}
 										/>
 									</FormControl>

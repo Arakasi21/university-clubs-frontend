@@ -70,7 +70,7 @@ function ClubsRow({ onUpdate, club }: ClubsRowProps) {
 			<TableRow key={club.id} onClick={handleRowClick} className="cursor-pointer">
 				<TableCell>
 					<Image
-						src={club.logo_url}
+						src={club?.logo_url || '/main_photo.jpeg'}
 						alt={club.name}
 						className="rounded-full"
 						width={73}

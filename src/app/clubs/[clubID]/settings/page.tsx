@@ -148,12 +148,7 @@ function Page({ params }: { params: { clubID: number } }) {
 				</TabsContent>
 
 				<TabsContent value="settings">
-					<Settings
-						onUpdate={onUpdate}
-						memberPerms={permissions}
-						club={club}
-						clubMembers={clubMembers || []}
-					/>
+					<Settings />
 				</TabsContent>
 			</Tabs>
 		</main>

@@ -27,7 +27,7 @@ function Page({ params }: { params: { clubID: number } }) {
 		clubID: params.clubID,
 	})
 	const membersWithoutPresident = clubMembers?.filter((member) => {
-		const memberRole = club?.roles.find((role) => role.id === member.roles[1])
+		const memberRole = club?.roles?.find((role) => role.id === member.roles[1])
 		return memberRole?.name !== 'President'
 	})
 	const membersCount = membersWithoutPresident?.length
@@ -128,12 +128,12 @@ function Page({ params }: { params: { clubID: number } }) {
 													{clubMembers &&
 														clubMembers
 															.sort((a, b) => {
-																const roleA = club?.roles.find((role) => role.id === a.roles[1])
-																const roleB = club?.roles.find((role) => role.id === b.roles[1])
+																const roleA = club?.roles?.find((role) => role.id === a.roles[1])
+																const roleB = club?.roles?.find((role) => role.id === b.roles[1])
 																return (roleB?.position ?? 0) - (roleA?.position ?? 0)
 															})
 															.map((member) => {
-																const memberRole = club?.roles.find(
+																const memberRole = club?.roles?.find(
 																	(role) => role.id === member.roles[1],
 																)
 																if (memberRole?.name === 'President') {

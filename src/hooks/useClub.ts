@@ -3,6 +3,7 @@ import { Club, ClubMember } from '@/types/club'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { User } from '@/types/user'
+import useClubStore from '@/store/club'
 
 export type useClubProps = {
 	clubID: number
@@ -14,6 +15,8 @@ export default function useClub({ clubID, user }: useClubProps) {
 	const [clubMembers, setClubMembers] = useState<ClubMember[]>()
 	const [loading, setLoading] = useState(true)
 	const [isOwner, setIsOwner] = useState(false)
+
+	const { setClubStore } = useClubStore()
 
 	const fetchClubInfo = useCallback(() => {
 		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}`)
@@ -30,6 +33,7 @@ export default function useClub({ clubID, user }: useClubProps) {
 				setClub(data.club)
 				setIsOwner(data.club.owner_id == user?.id)
 				setLoading(false)
+				setClubStore(data.club, data.club.owner_id == user?.id, fetchClubInfo)
 			})
 			.catch((error) => console.log(error.message))
 
