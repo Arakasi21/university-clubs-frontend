@@ -25,7 +25,7 @@ export const useAxiosInterceptor = () => {
 				if (refreshRes.status === 200) {
 					setUser(refreshRes.data.user, refreshRes.data.jwt_token)
 					error.config.headers['Authorization'] = `Bearer ${refreshRes.data.jwt_token}`
-					return instance(error.config)
+					return axios(error.config)
 				}
 			}
 			return Promise.reject(error)
