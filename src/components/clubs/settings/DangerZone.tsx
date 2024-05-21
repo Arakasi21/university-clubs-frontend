@@ -67,6 +67,7 @@ export default function DangerZone() {
 					</Button>
 				</div>
 			</CardHeader>
+
 			<DialogDeleteClub
 				open={isDeleteDialogOpen}
 				onOpenChange={setIsDeleteDialogOpen}

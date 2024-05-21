@@ -6,6 +6,7 @@ import DangerZone from '@/components/clubs/settings/DangerZone'
 import useUserRolesStore from '@/store/useUserRoles'
 import useClubStore from '@/store/club'
 import { Loader } from 'lucide-react'
+import GetEventComponent from '@/components/clubs/settings/GetEventComponent'
 
 export default function Settings() {
 	const { club, isOwner } = useClubStore()
@@ -24,6 +25,7 @@ export default function Settings() {
 				<div className="grid gap-6">
 					<BanSection clubID={club.id} permissions={permissions} />
 					<EventCreationComponent clubID={club.id} />
+					<GetEventComponent />
 					<DangerZone />
 				</div>
 			</div>

@@ -14,6 +14,15 @@ import { ClubMember } from '@/types/club'
 import UserAvatar from '@/components/user/userAvatar'
 import useUserStore from '@/store/user'
 import axios from 'axios'
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '@/components/ui/table'
+import { Check } from 'lucide-react'
 
 export default function DialogClubOwnershipTransfer({
 	open,
@@ -32,6 +41,7 @@ export default function DialogClubOwnershipTransfer({
 
 	const [members, setMembers] = useState<ClubMember[]>([])
 	const [selectedMember, setSelectedMember] = useState<ClubMember | null>(null)
+	const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false)
 
 	const transferOwnership = async (member: ClubMember | null) => {
 		if (!member) {
@@ -52,6 +62,8 @@ export default function DialogClubOwnershipTransfer({
 		}
 
 		toast.success('Approved!')
+		setIsConfirmDialogOpen(false)
+		onOpenChange(false)
 	}
 
 	const fetchMembers = useCallback(() => {
@@ -78,42 +90,89 @@ export default function DialogClubOwnershipTransfer({
 	return (
 		<div>
 			<Dialog open={open} onOpenChange={onOpenChange}>
-				<DialogContent>
+				<DialogContent className="sm:max-w-[625px]">
 					<DialogHeader>
 						<DialogTitle>Are you absolutely sure?</DialogTitle>
 						<DialogDescription>
 							This will give ownership to member you have chosen.
 						</DialogDescription>
 					</DialogHeader>
-					{members.map((member) => (
-						<div className="flex flex-row" key={member.id}>
-							<UserAvatar user={member} />
-							<p>{member.id}</p>
-							<p>
-								{member.first_name} {member.last_name}
-							</p>
-							<p>{member.barcode}</p>
-							<p>{member.email}</p>
-							<Button
-								onClick={() => {
-									setSelectedMember(member)
-								}}
-								disabled={member.id === user?.id}
-							>
-								{member.id == selectedMember?.id && <p>V</p>}
-							</Button>
-						</div>
-					))}
+					<Table>
+						<TableHeader>
+							<TableRow>
+								<TableHead>id</TableHead>
+								<TableHead>ava</TableHead>
+								<TableHead>name</TableHead>
+								<TableHead>barcode</TableHead>
+								<TableHead className="w-10">action</TableHead>
+							</TableRow>
+						</TableHeader>
+						<TableBody>
+							{members
+								.sort((a, b) => a.id - b.id)
+								.map((member) => (
+									<TableRow key={member.id}>
+										<TableCell>{member.id}</TableCell>
+										<TableCell>
+											<UserAvatar user={member} />
+										</TableCell>
+										<TableCell>
+											{member.first_name} {member.last_name}
+										</TableCell>
+										<TableCell>{member.barcode}</TableCell>
+										<TableCell>
+											<Button
+												className={`h-6 w-6  ${member.id == selectedMember?.id ? 'selected' : ''}`}
+												onClick={() => {
+													if (selectedMember?.id === member.id) {
+														setSelectedMember(null) // Unselect the member if it's already selected
+													} else {
+														setSelectedMember(member) // Select the member
+													}
+												}}
+												disabled={member.id === user?.id}
+											>
+												{member.id == selectedMember?.id && (
+													<span>
+														<Check className="w-3.5" />
+													</span>
+												)}
+											</Button>
+										</TableCell>
+									</TableRow>
+								))}
+						</TableBody>
+					</Table>
 
 					<Button
 						onClick={() => {
-							transferOwnership(selectedMember)
+							setIsConfirmDialogOpen(true)
 						}}
 						variant={'destructive'}
 					>
 						Yes, transfer the ownership
 					</Button>
 					<Button onClick={onClick1}>No, cancel</Button>
+				</DialogContent>
+			</Dialog>
+
+			<Dialog open={isConfirmDialogOpen} onOpenChange={setIsConfirmDialogOpen}>
+				<DialogContent className="w-[380px]">
+					<DialogHeader>
+						<DialogTitle>Are you 100% sure?</DialogTitle>
+						<DialogDescription>
+							This will give ownership to the member you have chosen.
+						</DialogDescription>
+					</DialogHeader>
+					<Button
+						onClick={() => {
+							transferOwnership(selectedMember)
+						}}
+						variant={'destructive'}
+					>
+						Yes, I'm sure
+					</Button>
+					<Button onClick={() => setIsConfirmDialogOpen(false)}>No, cancel</Button>
 				</DialogContent>
 			</Dialog>
 		</div>
