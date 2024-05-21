@@ -9,7 +9,6 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Club } from '@/types/club'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
@@ -17,6 +16,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
+import useClubStore from '@/store/club'
 
 const MAX_FILE_SIZE = 5000000 // ~5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -31,19 +31,17 @@ const formSchema = z.object({
 		),
 })
 
-export type ClubLogoFormProps = {
-	club: Club
-}
+const ClubLogoEditForm: React.FC = () => {
+	const { club } = useClubStore()
 
-const ClubLogoEditForm: React.FC<ClubLogoFormProps> = ({ club, ...props }) => {
 	const [imagePreview, setImagePreview] = useState<string | null>(
-		club.logo_url ? club.logo_url : '/main_photo.jpeg',
+		club?.logo_url ? club.logo_url : '/main_photo.jpeg',
 	)
 
 	const axiosAuth = useAxiosInterceptor()
 
 	useEffect(() => {
-		setImagePreview(club.logo_url ? club.logo_url : '/main_photo.jpeg')
+		setImagePreview(club?.logo_url ? club.logo_url : '/main_photo.jpeg')
 	}, [club])
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -83,7 +81,7 @@ const ClubLogoEditForm: React.FC<ClubLogoFormProps> = ({ club, ...props }) => {
 		}
 	}
 	return (
-		<div {...props}>
+		<div>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(updateClubLogo)}>
 					{club ? (
@@ -130,11 +128,7 @@ const ClubLogoEditForm: React.FC<ClubLogoFormProps> = ({ club, ...props }) => {
 	)
 }
 
-export type DialogUpdateClubLogoProps = {
-	club: Club
-}
-
-export function DialogUpdateClubLogo({ club }: DialogUpdateClubLogoProps) {
+export function DialogUpdateClubLogo() {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
@@ -147,7 +141,7 @@ export function DialogUpdateClubLogo({ club }: DialogUpdateClubLogoProps) {
 					<DialogTitle>Update Club Logo</DialogTitle>
 				</DialogHeader>
 				<div className="flex items-center space-x-2">
-					<ClubLogoEditForm club={club} />
+					<ClubLogoEditForm />
 				</div>
 			</DialogContent>
 		</Dialog>

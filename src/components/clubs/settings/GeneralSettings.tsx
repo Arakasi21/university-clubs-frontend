@@ -7,6 +7,7 @@ import { hasPermission } from '@/helpers/permissions'
 
 import { Club } from '@/types/club'
 import { Permissions } from '@/types/permissions'
+import { DialogUpdateClubInfo } from '@/components/clubs/settings/DialogClubUpdateInfo'
 
 export default function GeneralSettings({
 	club,
@@ -20,8 +21,9 @@ export default function GeneralSettings({
 			<p className="text-lg font-semibold">General</p>
 			{hasPermission(permissions, Permissions.manage_club) ? (
 				<div className="grid gap-4">
-					{club && <DialogUpdateClubLogo club={club} />}
-					{club && <DialogUpdateClubBanner club={club} />}
+					{club && <DialogUpdateClubLogo />}
+					{club && <DialogUpdateClubBanner />}
+					{club && <DialogUpdateClubInfo />}
 					<Link className="w-40" href={`/clubs/${club?.id}/events`}>
 						<Button className="w-40">Create Event</Button>
 					</Link>
@@ -36,6 +38,9 @@ export default function GeneralSettings({
 					</Button>
 					<Button className="w-40" variant="outline" disabled>
 						Create Event
+					</Button>
+					<Button className="w-40" variant="outline" disabled>
+						Update Club Info
 					</Button>
 				</div>
 			)}

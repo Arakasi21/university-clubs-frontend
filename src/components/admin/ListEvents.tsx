@@ -56,7 +56,7 @@ export default function ListEvents() {
 		<div className="grid grid-cols-4">
 			{events?.map((event) => (
 				<div key={event.id} className="m-4 cursor-pointer">
-					<Card className="w-[300px] rounded-lg bg-muted/40" onClick={() => handleCardClick(event)}>
+					<Card className="w-[250px] rounded-lg bg-muted/40" onClick={() => handleCardClick(event)}>
 						<CardHeader>
 							<CardTitle>
 								{event.collaborator_clubs.map((club) => {

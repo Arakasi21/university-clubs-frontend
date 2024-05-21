@@ -9,7 +9,6 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Club } from '@/types/club'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
@@ -17,6 +16,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
+import useClubStore from '@/store/club'
 
 const MAX_FILE_SIZE = 5000000 // ~5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -31,18 +31,15 @@ const formSchema = z.object({
 		),
 })
 
-export type ClubBannerFormProps = {
-	club: Club
-}
-
-const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) => {
+const ClubBannerEditForm: React.FC = (props) => {
+	const { club } = useClubStore()
 	const [imagePreview, setImagePreview] = useState<string | null>(
-		club.banner_url ? club.banner_url : '/main_photo.jpeg',
+		club?.banner_url ? club.banner_url : '/main_photo.jpeg',
 	)
 	const axiosAuth = useAxiosInterceptor()
 
 	useEffect(() => {
-		setImagePreview(club.banner_url ? club.banner_url : '/main_photo.jpeg')
+		setImagePreview(club?.banner_url ? club.banner_url : '/main_photo.jpeg')
 	}, [club])
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -76,7 +73,6 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 			} else {
 				toast.success('Club banner successfully have changed!')
 			}
-			toast.success('Club banner successfully have changed!')
 		} catch (e) {
 			console.log(e)
 		}
@@ -137,11 +133,7 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 	)
 }
 
-export type DialogUpdateClubBannerProps = {
-	club: Club
-}
-
-export function DialogUpdateClubBanner({ club }: DialogUpdateClubBannerProps) {
+export function DialogUpdateClubBanner() {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
@@ -154,7 +146,7 @@ export function DialogUpdateClubBanner({ club }: DialogUpdateClubBannerProps) {
 					<DialogTitle>Update Club Banner</DialogTitle>
 				</DialogHeader>
 				<div className="flex items-center space-x-2">
-					<ClubBannerEditForm club={club} />
+					<ClubBannerEditForm />
 				</div>
 			</DialogContent>
 		</Dialog>
