@@ -7,7 +7,7 @@ interface userStore {
 	jwt_token: string | null
 	isLoggedIn: boolean
 
-	setUser: (user: User, jwt_token: string) => void
+	setUser: (user: User, jwt_token: string | null) => void
 	purgeUser: () => void
 }
 
@@ -17,7 +17,7 @@ const useUserStore = create<userStore>()(
 			isLoggedIn: false,
 			user: null,
 			jwt_token: null,
-			setUser: (user: User, jwt_token: string) =>
+			setUser: (user: User, jwt_token: string | null) =>
 				set(() => ({
 					isLoggedIn: true,
 					user: user,

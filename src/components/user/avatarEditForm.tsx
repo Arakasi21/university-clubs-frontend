@@ -32,7 +32,7 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
 	const [imagePreview, setImagePreview] = useState<string | null>(user ? user.avatar_url : null)
 	const axiosAuth = useAxiosInterceptor()
-	const { setUser } = useUserStore()
+	const { setUser, jwt_token } = useUserStore()
 
 	useEffect(() => {
 		setImagePreview(user ? user.avatar_url : null)
@@ -69,7 +69,7 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 				})
 			}
 
-			setUser(response.data.user, response.data.jwt_token)
+			setUser(response.data.user, jwt_token)
 
 			toast.success('Your avatar have changed!')
 		} catch (e) {
