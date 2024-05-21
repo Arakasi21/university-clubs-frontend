@@ -20,12 +20,8 @@ export default function GeneralSettings({
 			<p className="text-lg font-semibold">General</p>
 			{hasPermission(permissions, Permissions.manage_club) ? (
 				<div className="grid gap-4">
-					<Link className="w-40" href="#">
-						{club && <DialogUpdateClubLogo club={club} />}
-					</Link>
-					<Link className="w-40" href="#">
-						{club && <DialogUpdateClubBanner club={club} />}
-					</Link>
+					{club && <DialogUpdateClubLogo club={club} />}
+					{club && <DialogUpdateClubBanner club={club} />}
 					<Link className="w-40" href={`/clubs/${club?.id}/events`}>
 						<Button className="w-40">Create Event</Button>
 					</Link>

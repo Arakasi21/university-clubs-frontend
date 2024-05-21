@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button'
 import {
 	Dialog,
 	DialogContent,
-	DialogDescription,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
@@ -18,7 +17,6 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
-import { Progress } from '@radix-ui/react-progress'
 
 const MAX_FILE_SIZE = 5000000 // ~5MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -41,13 +39,12 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 	const [imagePreview, setImagePreview] = useState<string | null>(
 		club.banner_url ? club.banner_url : '/main_photo.jpeg',
 	)
-
-	const [uploadProgress, setUploadProgress] = useState(0)
 	const axiosAuth = useAxiosInterceptor()
 
 	useEffect(() => {
-		setImagePreview(club.banner_url ? club.banner_url : null)
+		setImagePreview(club.banner_url ? club.banner_url : '/main_photo.jpeg')
 	}, [club])
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -61,7 +58,6 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 				toast.error('Select image')
 				return
 			}
-
 			const formData = new FormData()
 			formData.append('banner', values.banner)
 
@@ -70,14 +66,6 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 				{
 					method: 'PATCH',
 					data: formData,
-					onUploadProgress: (progressEvent) => {
-						if (progressEvent.total) {
-							const percentCompleted = Math.round(
-								(progressEvent.loaded * 100) / progressEvent.total,
-							)
-							setUploadProgress(percentCompleted)
-						}
-					},
 				},
 			)
 
@@ -85,8 +73,9 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 				toast.error('Change banner error', {
 					description: response.data.error,
 				})
+			} else {
+				toast.success('Club banner successfully have changed!')
 			}
-
 			toast.success('Club banner successfully have changed!')
 		} catch (e) {
 			console.log(e)
@@ -106,12 +95,11 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 										<Image
 											src={imagePreview ? imagePreview : '/main_photo.jpeg'}
 											alt={`${club.name}'s banner`}
-											width={400}
+											width={250}
 											height={200}
 										/>
 									</FormLabel>
 									<FormControl>
-										{uploadProgress > 0 && <Progress value={uploadProgress} />}
 										<Input
 											type="file"
 											ref={field.ref}
@@ -119,6 +107,14 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 											onBlur={field.onBlur}
 											onChange={(e) => {
 												const file = e.target.files?.[0]
+												if (file && file.size > MAX_FILE_SIZE) {
+													toast.warning('File size should not exceed 5MB', {
+														style: {
+															background: 'red',
+														},
+													})
+													return
+												}
 												field.onChange(file)
 												setImagePreview(
 													file ? URL.createObjectURL(file) : club?.banner_url || '/main_photo.jpeg',
@@ -127,7 +123,7 @@ const ClubBannerEditForm: React.FC<ClubBannerFormProps> = ({ club, ...props }) =
 										/>
 									</FormControl>
 									<Button type="submit" className="w-full">
-										Set new banner picture
+										Set new club banner
 									</Button>
 								</FormItem>
 							)}
@@ -150,13 +146,12 @@ export function DialogUpdateClubBanner({ club }: DialogUpdateClubBannerProps) {
 		<Dialog>
 			<DialogTrigger asChild>
 				<Button className="w-40" variant="secondary">
-					Update Club banner
+					Update Club Banner
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-md">
 				<DialogHeader>
-					<DialogTitle>Update Club banner</DialogTitle>
-					<DialogDescription>Anyone who has this link will be able to view this.</DialogDescription>
+					<DialogTitle>Update Club Banner</DialogTitle>
 				</DialogHeader>
 				<div className="flex items-center space-x-2">
 					<ClubBannerEditForm club={club} />
