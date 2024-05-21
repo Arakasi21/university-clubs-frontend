@@ -34,27 +34,9 @@ export default function Clubs() {
 			.catch((error) => console.error('Error fetching clubs:', error))
 	}, 300)
 
-	// const fetchClubs = debounce((search: string, page: number, setClubs, setHasMorePages) => {
-	// 	console.log('Fetching clubs with search term:', search, 'and page:', page)
-	// 	fetch(
-	// 		`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/?query=${search}&page=${page}&page_size=10&club_types=`,
-	// 	)
-	// 		.then((response) => response.json())
-	// 		.then((data) => {
-	// 			console.log('Fetched students:', data.users)
-	// 			setClubs(data.clubs || [])
-	// 			setHasMorePages(data.clubs && data.clubs.length > 0)
-	// 		})
-	// 		.catch((error) => console.error('Error fetching students:', error))
-	// }, 300)
-
 	useEffect(() => {
 		fetchClubs(searchTerm, currentPage, setClubs, setHasMorePages)
-
-		return () => {
-			fetchClubs.cancel()
-		}
-	}, [searchTerm, currentPage, fetchClubs])
+	}, [searchTerm, currentPage])
 
 	const handleSearch = (value: string) => {
 		setSearchTerm(value)
@@ -111,7 +93,13 @@ export default function Clubs() {
 						</TableHeader>
 						<TableBody>
 							{clubs.map((club) => (
-								<ClubsRow key={club.id} club={club} onUpdate={() => {}} />
+								<ClubsRow
+									key={club.id}
+									club={club}
+									onUpdate={() => {
+										fetchClubs(searchTerm, currentPage, setClubs, setHasMorePages)
+									}}
+								/>
 							))}
 						</TableBody>
 					</Table>

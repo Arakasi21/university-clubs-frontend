@@ -12,7 +12,7 @@ import React from 'react'
 import { Event } from '@/types/event'
 import Link from 'next/link'
 
-export function EventInfo({ data }: { data: Event }) {
+export function EventInfo({ event }: { event: Event }) {
 	return (
 		<>
 			<Card className="mt-4 p-4 text-sm">
@@ -28,13 +28,13 @@ export function EventInfo({ data }: { data: Event }) {
 							</CardHeader>
 							<CardContent>
 								<p>
-									<span className="font-medium">Event Id: {data.id}</span>
+									<span className="font-medium">Event Id: {event.id}</span>
 								</p>
 								<p>
-									<span className="font-medium">Club Id: {data.club_id}</span>
+									<span className="font-medium">Club Id: {event.club_id}</span>
 								</p>
 								<p>
-									<span className="font-medium">Owner Id: {data.owner_id}</span>
+									<span className="font-medium">Owner Id: {event.owner_id}</span>
 								</p>
 							</CardContent>
 						</Card>
@@ -43,7 +43,7 @@ export function EventInfo({ data }: { data: Event }) {
 								<CardTitle>Collaborators</CardTitle>
 							</CardHeader>
 							<CardContent>
-								{data.collaborator_clubs.map((club) => (
+								{event.collaborator_clubs.map((club) => (
 									<div key={club.id} className="flex items-center space-x-4 pb-2">
 										<Avatar>
 											<Link href={`/clubs/${club.id}`}>
@@ -56,7 +56,7 @@ export function EventInfo({ data }: { data: Event }) {
 												<span className="font-medium">{club.name}</span>{' '}
 											</Link>
 										</p>
-										{club.id === data.club_id && <Badge variant="default">Owner</Badge>}
+										{club.id === event.club_id && <Badge variant="default">Owner</Badge>}
 									</div>
 								))}
 							</CardContent>
@@ -67,7 +67,7 @@ export function EventInfo({ data }: { data: Event }) {
 								<CardTitle>Organizers</CardTitle>
 							</CardHeader>
 							<CardContent>
-								{data.organizers.map((organizer) => (
+								{event.organizers.map((organizer) => (
 									<div key={organizer.id} className="flex items-center space-x-4 pb-2">
 										<Avatar>
 											<Link href={`/user/${organizer.id}`}>
@@ -82,7 +82,7 @@ export function EventInfo({ data }: { data: Event }) {
 												</Link>
 											</span>
 										</p>
-										{organizer.club_id === data.club_id && organizer.id === data.owner_id && (
+										{organizer.club_id === event.club_id && organizer.id === event.owner_id && (
 											<Badge variant="default">Owner</Badge>
 										)}
 									</div>
@@ -96,20 +96,20 @@ export function EventInfo({ data }: { data: Event }) {
 							</CardHeader>
 							<CardContent>
 								<p>
-									<span className="font-medium">Created At Date:</span> {data.created_at}
+									<span className="font-medium">Created At Date:</span> {event.created_at}
 								</p>
 								<p>
-									<span className="font-medium">Start Date:</span> {data.start_date}
+									<span className="font-medium">Start Date:</span> {event.start_date}
 								</p>
 								<p>
-									<span className="font-medium">End Date:</span> {data.end_date}
+									<span className="font-medium">End Date:</span> {event.end_date}
 								</p>
 							</CardContent>
 						</Card>
 					</div>
 				</CardContent>
 				<CardFooter>
-					<Badge variant="default">Status: {data.status}</Badge>
+					<Badge variant="default">Status: {event.status}</Badge>
 				</CardFooter>
 			</Card>
 		</>

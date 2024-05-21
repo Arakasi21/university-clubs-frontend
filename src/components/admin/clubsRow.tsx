@@ -63,6 +63,7 @@ function ClubsRow({ onUpdate, club }: ClubsRowProps) {
 		}
 		onUpdate()
 		setIsDetailedDialogOpen(false)
+		setIsDeleteConfirmationDialogOpen(false)
 	}
 
 	return (
