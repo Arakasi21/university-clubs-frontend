@@ -97,7 +97,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 						<div className="mt-6 md:mt-8">
 							{isOwner && (
 								<Button
-									className="w-full bg-white text-black dark:bg-white dark:text-black"
+									className="w-full bg-white text-black hover:bg-muted/50 dark:bg-white dark:text-black"
 									variant="default"
 									onClick={() => router.push('/user/edit')}
 								>
