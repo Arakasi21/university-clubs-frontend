@@ -52,12 +52,12 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 
 	return (
 		<Layout>
-			<div className="md:py -12 flex flex-col items-center justify-center bg-[#020817] px-4 py-8 text-white md:px-8">
+			<div className="flex flex-col items-center justify-center px-4 py-8 text-white dark:bg-[#020817] md:px-8 md:py-12">
 				{pageowner ? (
 					<div className="w-full max-w-xl rounded-lg bg-[#0c1125] p-6 shadow-lg md:p-8">
 						<div className="flex items-center space-x-4">
 							<div className="flex-shrink-0">
-								<div className="h-176 w-176 overflow-hidden ">
+								<div className="h-24 w-24 overflow-hidden rounded-full ">
 									{pageowner.avatar_url ? (
 										<Image
 											className="object-cover"
@@ -97,7 +97,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 						<div className="mt-6 md:mt-8">
 							{isOwner && (
 								<Button
-									className="w-full"
+									className="w-full bg-white text-black dark:bg-white dark:text-black"
 									variant="default"
 									onClick={() => router.push('/user/edit')}
 								>
@@ -110,7 +110,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 					<p>Loading user info...</p>
 				)}
 				<div className="mt-6 w-full max-w-xl md:mt-8">
-					<h2 className="mb-4 text-lg font-bold">Clubs</h2>
+					<h2 className="mb-4 text-lg font-bold text-gray-800 dark:text-white">Clubs</h2>
 					<div className="rounded-lg bg-[#0c1125] p-6 shadow-lg md:p-8">
 						{Number(clubs?.length) > 0 ? (
 							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">

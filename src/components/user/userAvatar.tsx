@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ClubMember } from '@/types/club'
 import { User } from '@/types/user'
 
-const UserAvatar = ({ user, size = 50 }: { user: User | ClubMember; size?: number }) => {
+const UserAvatar = ({ user, size = 43 }: { user: User | ClubMember; size?: number }) => {
 	return (
 		<Avatar style={{ width: size, height: size }}>
 			<AvatarImage src={user?.avatar_url} alt={`${user?.first_name}'s profile picture`} />

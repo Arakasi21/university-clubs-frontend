@@ -34,12 +34,12 @@ export default function Clubs() {
 		<>
 			<Layout />
 
-			<main className="flex flex-col items-center bg-[#020817] text-white">
+			<main className="flex flex-col items-center dark:bg-[#020817]">
 				<div className="container w-full max-w-6xl px-4 md:px-6 lg:px-8">
-					<h1 className="mb-8 text-center text-3xl font-bold md:text-4xl lg:text-5xl">
+					<h1 className="mb-8 text-center text-3xl font-bold dark:text-white md:text-4xl lg:text-5xl">
 						Discover Clubs
 					</h1>
-					<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
+					<div className="grid grid-cols-1 gap-6 text-white sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
 						{clubs?.map((club) => (
 							<div
 								key={club.id}
@@ -56,7 +56,7 @@ export default function Clubs() {
 										style={{ aspectRatio: '60/60', objectFit: 'cover' }}
 									/>
 									<div>
-										<h2 className="mb-2 text-xl font-semibold">{club.name}</h2>
+										<h2 className="mb-0 text-xl font-semibold">{club.name}</h2>
 										<p className="line-clamp-2 text-gray-400">{club.description}</p>
 									</div>
 								</div>

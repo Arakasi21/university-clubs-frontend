@@ -100,7 +100,7 @@ export default function Students() {
 
 	return (
 		<div>
-			<Card x-chunk="dashboard-05-chunk-3">
+			<Card className="bg-muted/40" x-chunk="dashboard-05-chunk-3">
 				<CardHeader className="px-7">
 					<CardTitle className="pb-4">Students</CardTitle>
 					<SearchAdmin onSearch={handleSearch} />

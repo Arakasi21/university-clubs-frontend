@@ -58,7 +58,7 @@ function Page({ params }: { params: { clubID: number } }) {
 					<div className=" rounded-lg bg-[#0c1125]">
 						<div
 							style={{ backgroundImage: `url(${club?.banner_url ?? '/main_photo.jpeg'})` }}
-							className="relative h-40 bg-cover"
+							className="h-40 w-full rounded-t-lg bg-cover bg-center"
 						/>
 						<div className="flex items-center justify-between gap-4 p-6">
 							<div className="flex items-center">

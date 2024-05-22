@@ -85,72 +85,71 @@ function Page({ params }: { params: { clubID: number } }) {
 	}
 
 	return (
-		<main className=" scroll-smooth" style={{ scrollBehavior: 'smooth' }}>
+		<main className="scroll-smooth" style={{ scrollBehavior: 'smooth' }}>
 			<Nav />
-			<BackgroundClubImage club={club} />
-			<Tabs
-				className="grid flex-1 items-start gap-4 p-4 sm:px-64 sm:py-8 md:gap-8"
-				defaultValue="members"
-			>
-				<TabsList className="grid w-full grid-cols-4">
-					<Link
-						className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background"
-						href={`/clubs/${club?.id}`}
-					>
-						Return
-					</Link>
-					<TabsTrigger value="members">Members</TabsTrigger>
-					{hasPermission(permissions, Permissions.manage_roles) ? (
-						<TabsTrigger value="roles">Roles</TabsTrigger>
-					) : (
-						<TabsTrigger value="roles" disabled>
-							Roles
-						</TabsTrigger>
-					)}
-					{hasPermission(permissions, Permissions.ALL) ? (
-						<TabsTrigger value="settings">Settings</TabsTrigger>
-					) : (
-						<TabsTrigger value="settings" disabled>
-							Settings
-						</TabsTrigger>
-					)}
-				</TabsList>
-
-				<TabsContent value="members">
-					<Members
-						memberPerms={permissions}
-						club={club}
-						clubMembers={clubMembers}
-						callbackfn={(member) => (
-							<MemberRolesRow
-								onUpdate={() => fetchClubInfo()}
-								member={member}
-								roles={club?.roles ?? []}
-								clubId={club?.id ?? 0}
-								key={member.id}
-								addRoleMember={async () => {}}
-							/>
+			<div className="mx-auto max-w-6xl">
+				<BackgroundClubImage club={club} />
+				<Tabs className="grid flex-1 items-start gap-4  sm:pb-4 md:gap-8" defaultValue="members">
+					<TabsList className="grid w-full grid-cols-4">
+						<Link
+							className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3  text-sm font-medium ring-offset-background"
+							href={`/clubs/${club?.id}`}
+						>
+							Return
+						</Link>
+						<TabsTrigger value="members">Members</TabsTrigger>
+						{hasPermission(permissions, Permissions.manage_roles) ? (
+							<TabsTrigger value="roles">Roles</TabsTrigger>
+						) : (
+							<TabsTrigger value="roles" disabled>
+								Roles
+							</TabsTrigger>
 						)}
-					/>
-				</TabsContent>
+						{hasPermission(permissions, Permissions.ALL) ? (
+							<TabsTrigger value="settings">Settings</TabsTrigger>
+						) : (
+							<TabsTrigger value="settings" disabled>
+								Settings
+							</TabsTrigger>
+						)}
+					</TabsList>
 
-				<TabsContent value="roles">
-					<RolesTab
-						club={club}
-						handleDragStart={handleDragStart}
-						handleDragOver={handleDragOver}
-						handleDrop={handleDrop}
-						highestRole={highestRole}
-						isOwner={isOwner}
-						handleDeleteRole={handleDeleteRole}
-						fetchClubInfo={fetchClubInfo}
-					/>
-				</TabsContent>
+					<TabsContent value="members">
+						<Members
+							memberPerms={permissions}
+							club={club}
+							clubMembers={clubMembers}
+							callbackfn={(member) => (
+								<MemberRolesRow
+									onUpdate={() => fetchClubInfo()}
+									member={member}
+									roles={club?.roles ?? []}
+									clubId={club?.id ?? 0}
+									key={member.id}
+									addRoleMember={async () => {}}
+								/>
+							)}
+						/>
+					</TabsContent>
 
-				<TabsContent value="settings">
-					<Settings />
-				</TabsContent>
-			</Tabs>
+					<TabsContent value="roles">
+						<RolesTab
+							club={club}
+							handleDragStart={handleDragStart}
+							handleDragOver={handleDragOver}
+							handleDrop={handleDrop}
+							highestRole={highestRole}
+							isOwner={isOwner}
+							handleDeleteRole={handleDeleteRole}
+							fetchClubInfo={fetchClubInfo}
+						/>
+					</TabsContent>
+
+					<TabsContent value="settings">
+						<Settings />
+					</TabsContent>
+				</Tabs>
+			</div>
 		</main>
 	)
 }

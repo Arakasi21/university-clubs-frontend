@@ -1,25 +1,14 @@
 'use client'
 import Layout from '@/components/Layout'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Club } from '@/types/club'
 import { useRouter } from 'next/navigation'
 import React, { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import Sceleton from '@/components/user/Sceleton'
-import {
-	CalendarCheck,
-	CalendarIcon,
-	GraduationCap,
-	GroupIcon,
-	Users,
-	UsersIcon,
-} from 'lucide-react'
-import ClubImage from '@/components/clubs/ClubImage'
+import { CalendarIcon, GroupIcon, UsersIcon } from 'lucide-react'
 import Image from 'next/image'
-import { StatsComponent } from '@/components/StatsComponent'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import DropdownForLoggedIn from '@/components/ui/dropdown_for_logged_in'
 import useUserStore from '@/store/user'
 
 export default function Home() {
@@ -78,7 +67,7 @@ export default function Home() {
 					<Sceleton />
 				) : (
 					<>
-						<section className="bg-[#020817] pb-10 pt-10 text-gray-50">
+						<section className="pb-10 pt-10 dark:bg-[#020817] dark:text-gray-50">
 							<div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
 								<div className="grid grid-cols-1 gap-8 md:grid-cols-2">
 									<div className="space-y-6">
@@ -91,20 +80,29 @@ export default function Home() {
 											events, and connect with like- minded individuals.
 										</p>
 										<div className="flex gap-4">
-											{/*if logged in then join now button should appear*/}
 											{isLoggedIn ? (
 												<Link href={'explore/clubs'}>
-													<Button variant="secondary">Explore Clubs</Button>
+													<Button
+														className="invert-[.2] dark:text-white dark:invert-0"
+														variant={'secondary'}
+													>
+														Explore Clubs
+													</Button>
 												</Link>
 											) : (
 												<>
 													<Link href={'/sign-in'}>
-														<Button className="hidden sm:inline-flex" variant="default">
+														<Button
+															className="hidden invert dark:text-white dark:invert-0 sm:inline-flex"
+															variant={'secondary'}
+														>
 															Join Now
 														</Button>
 													</Link>
 													<Link href={'explore/clubs'}>
-														<Button variant="secondary">Explore Clubs</Button>
+														<Button variant={'dark' ? 'secondary' : 'default'}>
+															Explore Clubs
+														</Button>
 													</Link>
 												</>
 											)}
@@ -113,7 +111,7 @@ export default function Home() {
 									<div className="flex items-center justify-center">
 										<Image
 											alt="AITU LOGO"
-											className="rounded-lg"
+											className="rounded-lg invert dark:invert-0"
 											height="400"
 											src="/aitu-logo_white.png"
 											style={{
@@ -129,9 +127,9 @@ export default function Home() {
 						<section className="pt-20">
 							<div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
 								<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-									<div className="space-y-4 rounded-lg bg-[#040a2f] p-6 shadow-md">
+									<div className="hover: space-y-4 rounded-lg bg-[#0c1125] p-6 shadow-md transition duration-300 hover:bg-[#0c1125]/80">
 										<UsersIcon className="h-8 w-8 text-gray-50" />
-										<h3 className="text-xl font-semibold">Discover Clubs</h3>
+										<h3 className="text-xl font-semibold text-white">Discover Clubs</h3>
 										<p className="pb-4 text-gray-400">
 											Explore a diverse range of clubs that cater to your interests, hobbies, and
 											passions.
@@ -140,9 +138,9 @@ export default function Home() {
 											Browse Clubs
 										</Link>
 									</div>
-									<div className="space-y-4 rounded-lg bg-[#040a2f] p-6 shadow-md">
+									<div className="space-y-4 rounded-lg bg-[#0c1125] p-6 shadow-md transition duration-300 hover:bg-[#0c1125]/80">
 										<CalendarIcon className="h-8 w-8 text-gray-50" />
-										<h3 className="text-xl font-semibold">Attend Events</h3>
+										<h3 className="text-xl font-semibold text-white">Attend Events</h3>
 										<p className="pb-4 text-gray-400">
 											Stay up-to-date with the latest club events and activities, and participate in
 											them.
@@ -151,9 +149,9 @@ export default function Home() {
 											View Events
 										</Link>
 									</div>
-									<div className="space-y-4 rounded-lg bg-[#040a2f] p-6 shadow-md">
+									<div className="space-y-4 rounded-lg bg-[#0c1125] p-6 shadow-md transition duration-300 hover:bg-[#0c1125]/80">
 										<GroupIcon className="h-8 w-8 text-gray-50" />
-										<h3 className="text-xl font-semibold">Connect with Members</h3>
+										<h3 className="text-xl font-semibold text-white">Connect with Members</h3>
 										<p className="pb-4 text-gray-400">
 											Engage with other club members, share ideas, and build meaningful connections.
 										</p>

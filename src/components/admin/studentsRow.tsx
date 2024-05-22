@@ -101,7 +101,9 @@ function StudentsRow({ onUpdate, student }: StudentsRowProps) {
 						userRoles={student.role !== 'USER' ? [student.role as UserRole] : []}
 					/>
 					<DropdownMenuSeparator />
-					<p>Additional actions can be added here.</p>
+					<DropdownMenuItem>
+						<p>Additional actions can be added here.</p>
+					</DropdownMenuItem>
 				</DropdownMenuContent>
 				<DropdownMenuTrigger />
 			</DropdownMenu>

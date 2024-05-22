@@ -25,14 +25,14 @@ export default function Nav() {
 	}
 
 	return (
-		<header className="sticky top-0 z-50 border-b backdrop-blur-sm dark:bg-gray-900">
+		<header className="sticky top-0 z-50 border-b bg-gray-900 text-white backdrop-blur-sm dark:bg-gray-900">
 			<div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
 				<Link className="flex items-center gap-2" href="/">
 					<span className="text-lg font-semibold tracking-tight text-gray-50">UCMS AITU</span>
 				</Link>
 				<nav className="hidden space-x-4 sm:flex">
 					<Link
-						className="text-grey-50 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
+						className="text-grey-50 rounded-md px-3 py-2 text-sm font-medium transition duration-300 hover:bg-accent/80"
 						href={'/explore/clubs'}
 					>
 						Clubs
