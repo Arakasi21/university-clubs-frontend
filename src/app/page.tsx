@@ -4,7 +4,7 @@ import { Club } from '@/types/club'
 import { useRouter } from 'next/navigation'
 import React, { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import Sceleton from '@/components/user/Sceleton'
+import SceletonMain from '@/components/Sceletons/SkeletonMain'
 import { CalendarIcon, GroupIcon, UsersIcon } from 'lucide-react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
@@ -64,7 +64,7 @@ export default function Home() {
 		<main>
 			<Layout>
 				{loading ? (
-					<Sceleton />
+					<SceletonMain />
 				) : (
 					<>
 						<section className="pb-10 pt-10 dark:bg-[#020817] dark:text-gray-50">

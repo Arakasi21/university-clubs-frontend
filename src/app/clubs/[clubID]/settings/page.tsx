@@ -19,8 +19,8 @@ import Members from '@/app/clubs/[clubID]/settings/_components/Members'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { Permissions } from '@/types/permissions'
 import { hasPermission } from '@/helpers/permissions'
-import BanTable from '@/app/clubs/[clubID]/settings/_components/BanTable'
-import { Club } from '@/types/club'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
@@ -90,7 +90,7 @@ function Page({ params }: { params: { clubID: number } }) {
 			<div className="mx-auto max-w-6xl">
 				<BackgroundClubImage club={club} />
 				<Tabs className="grid flex-1 items-start gap-4  sm:pb-4 md:gap-8" defaultValue="members">
-					<TabsList className="grid w-full grid-cols-4">
+					<TabsList className="grid w-full grid-cols-5">
 						<Link
 							className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3  text-sm font-medium ring-offset-background"
 							href={`/clubs/${club?.id}`}
@@ -103,6 +103,13 @@ function Page({ params }: { params: { clubID: number } }) {
 						) : (
 							<TabsTrigger value="roles" disabled>
 								Roles
+							</TabsTrigger>
+						)}
+						{hasPermission(permissions, Permissions.manage_events) ? (
+							<TabsTrigger value="events">Events</TabsTrigger>
+						) : (
+							<TabsTrigger value="events" disabled>
+								Events
 							</TabsTrigger>
 						)}
 						{hasPermission(permissions, Permissions.ALL) ? (
@@ -147,6 +154,51 @@ function Page({ params }: { params: { clubID: number } }) {
 
 					<TabsContent value="settings">
 						<Settings />
+					</TabsContent>
+
+					<TabsContent value="events">
+						<div>
+							<Card className="bg-muted/40">
+								<CardHeader>
+									<div className="flex justify-between">
+										<CardTitle>Events</CardTitle>
+										<Button className="w-40" variant="default">
+											Create Event
+										</Button>
+									</div>
+								</CardHeader>
+								<CardContent>
+									<p className="pb-8">Events will be here</p>
+
+									<div className="grid grid-cols-3 gap-10 pb-4">
+										<Card>
+											<CardHeader>
+												<CardTitle>Event Info</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<p>Event info will be here</p>
+											</CardContent>
+										</Card>
+										<Card>
+											<CardHeader>
+												<CardTitle>Event Info</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<p>Event info will be here</p>
+											</CardContent>
+										</Card>
+										<Card>
+											<CardHeader>
+												<CardTitle>Event Info</CardTitle>
+											</CardHeader>
+											<CardContent>
+												<p>Event info will be here</p>
+											</CardContent>
+										</Card>
+									</div>
+								</CardContent>
+							</Card>
+						</div>
 					</TabsContent>
 				</Tabs>
 			</div>

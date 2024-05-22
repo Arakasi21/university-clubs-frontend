@@ -50,13 +50,20 @@ export type Organizer = {
 	club_id: number
 	by_who_id?: number
 }
+type User = {
+	id: number
+	first_name: string
+	last_name: string
+	barcode: string
+	avatar_url: string
+}
 
 export type ApprovedMetadata = {
-	approved_by: Organizer[]
+	approved_by: User
 	approved_at: string
 }
 
 export type RejectMetadata = {
-	rejected_by: Organizer[]
+	rejected_by: User
 	rejected_at: string
 }

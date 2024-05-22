@@ -106,70 +106,11 @@ export function EventInfo({ data }: { data: Event }) {
 								</p>
 							</CardContent>
 						</Card>
-
-						{/*// 	id: string*/}
-						{/*// 	club_id: number*/}
-						{/*// 	owner_id: number*/}
-						{/*// 	collaborator_clubs: Club[]*/}
-						{/*// 	organizers: Organizer[]*/}
-						{/*// 	status: string*/}
-						{/*// 	is_approve: boolean*/}
-						{/*// 	created_at: string*/}
-						{/*// 	updated_at: string*/}
-						{/*// 	deleted_at: string*/}
-						{/*// 	attached_files: {*/}
-						{/*// 		url: string*/}
-						{/*// 		name: string*/}
-						{/*// 		type: string*/}
-						{/*// 	}[]*/}
-						{/*// 	attached_images: {*/}
-						{/*// 		url: string*/}
-						{/*// 		name: string*/}
-						{/*// 		type: string*/}
-						{/*// 	}[]*/}
-						{/*// 	cover_images: {*/}
-						{/*// 		filemongo: {*/}
-						{/*// 			url: string*/}
-						{/*// 			name: string*/}
-						{/*// 			type: string*/}
-						{/*// 		}*/}
-						{/*// 		position: number*/}
-						{/*// 	}[]*/}
-						{/*// 	end_date: string*/}
-						{/*// 	location_link: string*/}
-						{/*// 	max_participants: number*/}
-						{/*// 	start_date: string*/}
-						{/*// 	tags: string[]*/}
-						{/*// 	title: string*/}
-						{/*// 	type: string*/}
-						{/*// }*/}
-						{/*//*/}
-						{/*// export type Organizer = {*/}
-						{/*// 	id: number*/}
-						{/*// 	first_name: string*/}
-						{/*// 	last_name: string*/}
-						{/*// 	avatar_url: string*/}
-						{/*// 	barcode: number*/}
-						{/*// 	club_id: number*/}
-						{/*// 	by_who_id?: number*/}
-						{/*// }*/}
 						<Card>
 							<CardHeader>
 								<CardTitle>Event Description</CardTitle>
 							</CardHeader>
-							<CardContent>
-								<p>{data.title}</p>
-								<p>{data.location_link}</p>
-								<p>{data.max_participants}</p>
-								<p>{data.type}</p>
-								<p>
-									{data.approved_metadata?.approved_by.map((organizer) => (
-										<span key={organizer.id}>
-											{organizer.first_name} {organizer.last_name}
-										</span>
-									))}
-								</p>
-							</CardContent>
+							<CardContent>{data.approved_metadata?.approved_by.first_name}</CardContent>
 						</Card>
 					</div>
 				</CardContent>

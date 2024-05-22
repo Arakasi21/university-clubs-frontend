@@ -9,6 +9,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import Layout from '@/components/Layout'
 import UserAvatar from '@/components/user/userAvatar'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const UserPage = ({ params }: { params: { userID: number } }) => {
 	const { user } = useUserStore()
@@ -107,7 +108,11 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 						</div>
 					</div>
 				) : (
-					<p>Loading user info...</p>
+					<div>
+						<div className="flex justify-center">
+							<Skeleton className="h-56 w-[580px]" />
+						</div>
+					</div>
 				)}
 				<div className="mt-6 w-full max-w-xl md:mt-8">
 					<h2 className="mb-4 text-lg font-bold text-gray-800 dark:text-white">Clubs</h2>
