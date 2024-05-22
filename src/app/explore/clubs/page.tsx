@@ -34,7 +34,7 @@ export default function Clubs() {
 		<>
 			<Layout />
 
-			<main className="flex min-h-screen flex-col items-center bg-[#020817] py-0 text-white md:py-0 lg:py-0">
+			<main className="flex flex-col items-center bg-[#020817] text-white">
 				<div className="container w-full max-w-6xl px-4 md:px-6 lg:px-8">
 					<h1 className="mb-8 text-center text-3xl font-bold md:text-4xl lg:text-5xl">
 						Discover Clubs
@@ -52,7 +52,7 @@ export default function Clubs() {
 										alt={`Logo of club ${club.name}`}
 										width={60}
 										height={60}
-										className="w-15 h-15 object-contain"
+										className="w-15 h-15 rounded-full object-contain"
 										style={{ aspectRatio: '60/60', objectFit: 'cover' }}
 									/>
 									<div>

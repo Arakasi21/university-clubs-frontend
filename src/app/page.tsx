@@ -78,7 +78,7 @@ export default function Home() {
 					<Sceleton />
 				) : (
 					<>
-						<section className="bg-[#020817] pb-10 pt-20 text-gray-50">
+						<section className="bg-[#020817] pb-10 pt-10 text-gray-50">
 							<div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
 								<div className="grid grid-cols-1 gap-8 md:grid-cols-2">
 									<div className="space-y-6">
@@ -126,7 +126,7 @@ export default function Home() {
 								</div>
 							</div>
 						</section>
-						<section className="py-20">
+						<section className="pt-20">
 							<div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
 								<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 									<div className="space-y-4 rounded-lg bg-[#040a2f] p-6 shadow-md">
@@ -164,51 +164,6 @@ export default function Home() {
 								</div>
 							</div>
 						</section>
-						<div className="mx-40 grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
-							<StatsComponent totalUsers={totalUsers} totalClubs={totalClubs} />
-
-							{clubs?.map((club) => (
-								<div className="flex justify-center" key={club.id}>
-									<Card
-										className="max-w-1xl flex cursor-pointer flex-col space-y-1 rounded-xl transition-transform"
-										key={club.id}
-										onClick={() => {
-											router.push(`/clubs/${club.id}`)
-										}}
-									>
-										<CardTitle>
-											<Image
-												src={club.banner_url ?? '/main_photo.jpeg'}
-												alt={`banner image of club ${club.name}`}
-												width={5000}
-												height={200}
-												className=" rounded-xl"
-											/>
-										</CardTitle>
-										<CardContent className="relative grid grid-cols-[auto,1fr] items-center gap-4 pt-4 ">
-											<div>
-												<img
-													src={club.logo_url ?? '/main_photo.jpeg'}
-													alt={`banner image of club ${club.name}`}
-													width={80}
-													height={50}
-													className="aspect-square"
-												/>
-												{/*<ClubImage club={club} width={100} height={20} />*/}
-											</div>
-											<div className="w-full">
-												<h1 className="font-bold" style={{ fontSize: '1vw', objectFit: 'contain' }}>
-													{club?.name}
-												</h1>
-												<CardDescription style={{ fontSize: '0.9vw', objectFit: 'contain' }}>
-													{club?.description}
-												</CardDescription>
-											</div>
-										</CardContent>
-									</Card>
-								</div>
-							))}
-						</div>
 					</>
 				)}
 			</Layout>

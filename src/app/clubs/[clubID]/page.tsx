@@ -55,51 +55,54 @@ function Page({ params }: { params: { clubID: number } }) {
 			<Nav />
 			<div className="bg-[#020817] px-6 py-12">
 				<div className="mx-auto max-w-6xl">
-					<div className=" rounded-lg bg-[#030a23]">
+					<div className=" rounded-lg bg-[#0c1125]">
 						<div
 							style={{ backgroundImage: `url(${club?.banner_url ?? '/main_photo.jpeg'})` }}
 							className="relative h-40 bg-cover"
 						/>
-						<div className="flex items-center gap-4 p-6">
-							<div className="flex shrink-0">
-								<ClubImage club={club} width={64} height={64} />
-							</div>
-							<div>
-								<CardTitle>{club?.name}</CardTitle>
-								<CardDescription>{club?.description}</CardDescription>
-								<div className="mt-4 flex ">
-									{isLoggedIn && (
-										<>
-											{memberStatus === 'NOT_MEMBER' && (
-												<Button onClick={handleJoinRequest}>Join Club</Button>
-											)}
-											{memberStatus === 'PENDING' && <Button disabled>Pending</Button>}
-											{memberStatus === 'BANNED' && (
-												<Button disabled variant="destructive">
-													You are banned
-												</Button>
-											)}
-											{memberStatus === 'MEMBER' && !isOwner && (
-												<Button variant="destructive" onClick={handleLeaveClub}>
-													Leave Club
-												</Button>
-											)}
-										</>
-									)}
-									{hasPermission(permissions, Permissions.ALL) && (
-										<div className="flex gap-3">
-											<Link href={`/clubs/${club?.id}/settings`}>
-												<Button>Settings</Button>
-											</Link>
-											<Link href={`/clubs/${club?.id}/todo`}>
-												<Button>Notion Link</Button>
-											</Link>
-										</div>
-									)}
+						<div className="flex items-center justify-between gap-4 p-6">
+							<div className="flex items-center">
+								<div className="flex shrink-0">
+									<ClubImage club={club} width={84} height={84} />
 								</div>
+								<div className="pl-4">
+									<CardTitle>{club?.name}</CardTitle>
+									<CardDescription>{club?.description}</CardDescription>
+								</div>
+							</div>
+							<div className="flex flex-row gap-3 ">
+								{hasPermission(permissions, Permissions.ALL) && (
+									<div className="flex gap-3">
+										<Link href={`/clubs/${club?.id}/settings`}>
+											<Button variant="default">Settings</Button>
+										</Link>
+										<Link href={`/clubs/${club?.id}/todo`}>
+											<Button>Notion Link</Button>
+										</Link>
+									</div>
+								)}
+								{isLoggedIn && (
+									<>
+										{memberStatus === 'NOT_MEMBER' && (
+											<Button onClick={handleJoinRequest}>Join Club</Button>
+										)}
+										{memberStatus === 'PENDING' && <Button disabled>Pending</Button>}
+										{memberStatus === 'BANNED' && (
+											<Button disabled variant="destructive">
+												You are banned
+											</Button>
+										)}
+										{memberStatus === 'MEMBER' && !isOwner && (
+											<Button variant="destructive" onClick={handleLeaveClub}>
+												Leave Club
+											</Button>
+										)}
+									</>
+								)}
 							</div>
 						</div>
 					</div>
+
 					<div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 						<Card>
 							<CardHeader>
