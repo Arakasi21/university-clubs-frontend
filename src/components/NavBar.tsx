@@ -3,9 +3,10 @@ import { Button } from '@/components/ui/button'
 import DropdownForLoggedIn from '@/components/ui/dropdown_for_logged_in'
 import { Input } from '@/components/ui/input'
 import useUserStore from '@/store/user'
-import { Search } from 'lucide-react'
+import { MenuIcon, Search } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 export default function Nav() {
 	const { isLoggedIn, user, purgeUser } = useUserStore()
@@ -24,41 +25,96 @@ export default function Nav() {
 	}
 
 	return (
-		<header className="sticky top-0 isolate z-50  order-last">
-			<nav className="border-b border-solid bg-background ">
-				{/* <nav className="bg-white border-gray-200 dark:bg-gray-900 ">*/}
-				<div className="mx-auto flex max-w-full flex-wrap items-center justify-between p-3">
-					<Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-						<Image src="" className="h-8" alt="" />
-						<span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-							UCMS AITU
-						</span>
-					</Link>
-
-					<div
-						className="hidden w-full max-w-xl items-center justify-items-stretch md:order-1 md:flex"
-						id="navbar-cta"
+		<header className="sticky top-0 z-50 border-b backdrop-blur-sm dark:bg-gray-900">
+			<div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+				<Link className="flex items-center gap-2" href="/">
+					{/*<MountainIcon className="h-6 w-6 text-gray-50" />*/}
+					<span className="text-lg font-semibold tracking-tight text-gray-50">UCMS AITU</span>
+				</Link>
+				<nav className="hidden space-x-4 sm:flex">
+					<Link
+						className="text-grey-50 rounded-md px-3 py-2 text-sm font-medium hover:bg-rose-500"
+						href="#"
 					>
-						<div className="relative flex w-full max-w-[700px] items-center ">
-							<Search size={20} className=" absolute left-3  text-muted-foreground" />
-							<Input
-								className=" w-full rounded-full pl-10 focus-visible:ring-blue-600"
-								placeholder="Search"
-							/>
-						</div>
-					</div>
-
-					<div className="flex space-x-3 md:order-2 md:space-x-0 rtl:space-x-reverse">
-						{isLoggedIn ? (
-							<DropdownForLoggedIn user={user!} logout={logOutHandle} />
-						) : (
+						Explore
+					</Link>
+					<Link
+						className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
+						href="#"
+					>
+						Events
+					</Link>
+					<Link
+						className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
+						href="#"
+					>
+						Community
+					</Link>
+					<Link
+						className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
+						href="#"
+					>
+						About
+					</Link>
+				</nav>
+				<div className="flex items-center gap-2">
+					{isLoggedIn ? (
+						<DropdownForLoggedIn user={user!} logout={logOutHandle} />
+					) : (
+						<>
 							<Link href={'/sign-in'}>
-								<Button variant={'default'}>Sign in</Button>
+								<Button className="hidden sm:inline-flex" variant="secondary">
+									Sign In
+								</Button>
 							</Link>
-						)}
-					</div>
+						</>
+					)}
+					<Sheet>
+						<SheetTrigger asChild>
+							<Button className="sm:hidden" size="icon" variant="outline">
+								<MenuIcon className="h-6 w-6" />
+								<span className="sr-only">Toggle navigation menu</span>
+							</Button>
+						</SheetTrigger>
+						<SheetContent className="w-full max-w-xs" side="right">
+							<div className="grid gap-4 p-4">
+								<Link
+									className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
+									href="#"
+								>
+									Explore
+								</Link>
+								<Link
+									className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
+									href="#"
+								>
+									Events
+								</Link>
+								<Link
+									className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
+									href="#"
+								>
+									Community
+								</Link>
+								<Link
+									className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
+									href="#"
+								>
+									About
+								</Link>
+								<div className="flex flex-col gap-2">
+									<Button className="w-full" variant="secondary">
+										Sign In
+									</Button>
+									<Button className="w-full" variant="default">
+										Join Now
+									</Button>
+								</div>
+							</div>
+						</SheetContent>
+					</Sheet>
 				</div>
-			</nav>
+			</div>
 		</header>
 	)
 }

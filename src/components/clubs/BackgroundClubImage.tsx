@@ -5,7 +5,7 @@ export default function BackgroundClubImage(props: { club: Club | undefined }) {
 	return (
 		<div
 			style={{ backgroundImage: `url(${props.club?.banner_url ?? '/main_photo.jpeg'})` }}
-			className="relative h-40 w-screen bg-center bg-no-repeat"
+			className="relative h-40 bg-cover bg-center bg-no-repeat"
 		/>
 	)
 }

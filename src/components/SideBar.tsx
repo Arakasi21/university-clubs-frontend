@@ -12,7 +12,7 @@ const Sidebar: FC<SidebarProps> = ({ children }) => {
 
 	return (
 		<aside className="h-screen">
-			<nav className="flex h-full flex-col border-r bg-background shadow-sm">
+			<nav className="flex h-full flex-col border-r bg-background shadow-sm ">
 				<div className="flex items-center justify-between p-4 pb-2">
 					<div
 						className={`justify-center overflow-hidden transition-all ${expanded ? 'w-32' : 'w-0'}`}
