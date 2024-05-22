@@ -1,6 +1,5 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import useUserStore from '@/store/user'
 import { Club } from '@/types/club'
 import { User } from '@/types/user'
@@ -10,7 +9,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import Layout from '@/components/Layout'
 import UserAvatar from '@/components/user/userAvatar'
-import { Badge } from '@/components/ui/badge'
 
 const UserPage = ({ params }: { params: { userID: number } }) => {
 	const { user } = useUserStore()
@@ -59,7 +57,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 					<div className="w-full max-w-xl rounded-lg bg-[#0c1125] p-6 shadow-lg md:p-8">
 						<div className="flex items-center space-x-4">
 							<div className="flex-shrink-0">
-								<div className="h-24 w-24 overflow-hidden rounded-full">
+								<div className="h-176 w-176 overflow-hidden ">
 									{pageowner.avatar_url ? (
 										<Image
 											className="object-cover"
@@ -119,7 +117,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 								{clubs?.map((club) => (
 									<div
 										key={club.id}
-										className="flex cursor-pointer items-center space-x-4 rounded-lg  bg-gray-800 p-4 shadow-lg shadow-lg transition-transform duration-300 hover:scale-105 md:p-6 "
+										className="flex cursor-pointer items-center space-x-4 rounded-lg  bg-gray-800 p-4 shadow-lg transition-transform duration-300 hover:scale-105 md:p-6 "
 										onClick={() => router.push(`/clubs/${club.id}`)}
 									>
 										<div className="flex-shrink-0">
