@@ -73,9 +73,9 @@ function ClubsRow({ onUpdate, club }: ClubsRowProps) {
 					<Image
 						src={club?.logo_url || '/main_photo.jpeg'}
 						alt={club.name}
-						className="rounded-full"
+						className=""
 						width={73}
-						height={23}
+						height={43}
 					/>
 				</TableCell>
 				<TableCell>{club.name}</TableCell>

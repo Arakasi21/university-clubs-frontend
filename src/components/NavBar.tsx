@@ -28,30 +28,29 @@ export default function Nav() {
 		<header className="sticky top-0 z-50 border-b backdrop-blur-sm dark:bg-gray-900">
 			<div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
 				<Link className="flex items-center gap-2" href="/">
-					{/*<MountainIcon className="h-6 w-6 text-gray-50" />*/}
 					<span className="text-lg font-semibold tracking-tight text-gray-50">UCMS AITU</span>
 				</Link>
 				<nav className="hidden space-x-4 sm:flex">
 					<Link
-						className="text-grey-50 rounded-md px-3 py-2 text-sm font-medium hover:bg-rose-500"
-						href="#"
+						className="text-grey-50 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
+						href={'/explore/clubs'}
 					>
-						Explore
+						Clubs
 					</Link>
 					<Link
-						className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
+						className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-accent"
 						href="#"
 					>
 						Events
 					</Link>
 					<Link
-						className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
+						className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-accent"
 						href="#"
 					>
 						Community
 					</Link>
 					<Link
-						className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
+						className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-accent"
 						href="#"
 					>
 						About
@@ -103,12 +102,17 @@ export default function Nav() {
 									About
 								</Link>
 								<div className="flex flex-col gap-2">
-									<Button className="w-full" variant="secondary">
-										Sign In
-									</Button>
-									<Button className="w-full" variant="default">
-										Join Now
-									</Button>
+									{isLoggedIn ? (
+										<DropdownForLoggedIn user={user!} logout={logOutHandle} />
+									) : (
+										<>
+											<Link href={'/sign-in'}>
+												<Button className="hidden sm:inline-flex" variant="secondary">
+													Sign In
+												</Button>
+											</Link>
+										</>
+									)}
 								</div>
 							</div>
 						</SheetContent>

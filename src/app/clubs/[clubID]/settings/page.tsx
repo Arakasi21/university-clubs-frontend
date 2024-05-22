@@ -85,7 +85,7 @@ function Page({ params }: { params: { clubID: number } }) {
 	}
 
 	return (
-		<main className="overflow-hidden scroll-smooth" style={{ scrollBehavior: 'smooth' }}>
+		<main className=" scroll-smooth" style={{ scrollBehavior: 'smooth' }}>
 			<Nav />
 			<BackgroundClubImage club={club} />
 			<Tabs

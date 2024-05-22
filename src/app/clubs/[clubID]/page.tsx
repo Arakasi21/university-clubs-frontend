@@ -55,7 +55,7 @@ function Page({ params }: { params: { clubID: number } }) {
 			<Nav />
 			<div className="bg-[#020817] px-6 py-12">
 				<div className="mx-auto max-w-6xl">
-					<div className="overflow-hidden rounded-lg bg-[#030a23]">
+					<div className=" rounded-lg bg-[#030a23]">
 						<div
 							style={{ backgroundImage: `url(${club?.banner_url ?? '/main_photo.jpeg'})` }}
 							className="relative h-40 bg-cover"
