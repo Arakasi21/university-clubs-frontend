@@ -126,16 +126,20 @@ function Page({ params }: { params: { clubID: number } }) {
 														<UserAvatar user={member} />
 														<div>
 															<Link
+																style={{
+																	color: `${decimalToRgb(memberRole?.color ?? 0)}`,
+																	textDecoration: 'none',
+																}}
 																href={`/user/${member.id}`}
 																className="font-medium hover:underline"
 															>
 																{member.last_name} {member.first_name}
 															</Link>
 															<p
-																style={{
-																	color: `${decimalToRgb(memberRole?.color ?? 0)}`,
-																}}
-																className="font-semibold"
+																// style={{
+																// 	color: `${decimalToRgb(memberRole?.color ?? 0)}`,
+																// }}
+																className="font-medium text-gray-400 text-muted-foreground"
 															>
 																{memberRole?.name}
 															</p>

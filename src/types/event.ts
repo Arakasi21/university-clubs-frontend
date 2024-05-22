@@ -31,6 +31,9 @@ export type Event = {
 	}[]
 	end_date: string
 	location_link: string
+	location_university: string
+	approved_metadata?: ApprovedMetadata
+	reject_metadata?: RejectMetadata
 	max_participants: number
 	start_date: string
 	tags: string[]
@@ -46,4 +49,14 @@ export type Organizer = {
 	barcode: number
 	club_id: number
 	by_who_id?: number
+}
+
+export type ApprovedMetadata = {
+	approved_by: Organizer[]
+	approved_at: string
+}
+
+export type RejectMetadata = {
+	rejected_by: Organizer[]
+	rejected_at: string
 }

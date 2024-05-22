@@ -20,7 +20,7 @@ export default function Home() {
 	const { isLoggedIn, user, purgeUser } = useUserStore()
 
 	const fetchTotalUsers = useCallback(() => {
-		fetch('http://localhost:5000/users/search?query=&page=1&page_size=50')
+		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/search?query=&page=1&page_size=50`)
 			.then(async (res) => {
 				const data = await res.json()
 				if (!res.ok) {

@@ -34,7 +34,7 @@ export default function Clubs() {
 		<>
 			<Layout />
 
-			<main className="flex flex-col items-center dark:bg-[#020817]">
+			<main className="flex min-h-screen flex-col items-center overflow-hidden dark:bg-[#020817]">
 				<div className="container w-full max-w-6xl px-4 md:px-6 lg:px-8">
 					<h1 className="mb-8 text-center text-3xl font-bold dark:text-white md:text-4xl lg:text-5xl">
 						Discover Clubs
