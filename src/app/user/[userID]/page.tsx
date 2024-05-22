@@ -6,10 +6,11 @@ import { Club } from '@/types/club'
 import { User } from '@/types/user'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import Layout from '@/components/Layout'
 import UserAvatar from '@/components/user/userAvatar'
+import { Badge } from '@/components/ui/badge'
 
 const UserPage = ({ params }: { params: { userID: number } }) => {
 	const { user } = useUserStore()
@@ -53,84 +54,98 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 
 	return (
 		<Layout>
-			<div className="n">
+			<div className="md:py -12 flex flex-col items-center justify-center bg-[#020817] px-4 py-8 text-white md:px-8">
 				{pageowner ? (
-					<div className="flex flex-col items-center justify-between p-16">
-						<Card x-chunk="dashboard-01-chunk-2" className="border-0 ">
-							<CardContent>
-								<div className="grid gap-3  sm:grid-cols-2">
-									<div className="grid gap-3 ">
-										{pageowner.avatar_url ? (
-											<div className="relative h-[300px] w-[300px]">
-												<Image
-													className=" rounded-full border-2 border-white"
-													src={pageowner.avatar_url}
-													alt={`${pageowner.first_name} profile picture`}
-													fill={true}
-													objectFit={'cover'}
-												/>
-											</div>
-										) : (
-											<div className="w-fit rounded-full border-2 border-white">
-												<UserAvatar user={pageowner} size={350} />
-											</div>
-										)}
-										<p>
-											{pageowner.first_name} {pageowner.last_name}
-										</p>
-										{isOwner && (
-											<div className="w-32">
-												<Button onClick={() => router.push('/user/edit')}>Edit Profile</Button>
-											</div>
-										)}
-										<p>Barcode: {pageowner.barcode}</p>
-										<p>Email: {pageowner.email}</p>
-										<p>Group: {pageowner.group_name}</p>
-										<p>User ID: {params.userID}</p>
+					<div className="w-full max-w-xl rounded-lg bg-[#0c1125] p-6 shadow-lg md:p-8">
+						<div className="flex items-center space-x-4">
+							<div className="flex-shrink-0">
+								<div className="h-24 w-24 overflow-hidden rounded-full">
+									{pageowner.avatar_url ? (
+										<Image
+											className="object-cover"
+											src={pageowner.avatar_url}
+											alt={`${pageowner.first_name} profile picture`}
+											width={250}
+											height={80}
+											style={{ aspectRatio: '200/200', objectFit: 'cover' }}
+										/>
+									) : (
+										<UserAvatar user={pageowner} />
+									)}
+								</div>
+							</div>
+							<div className="flex-1">
+								<h1 className="text-2xl font-bold">
+									{pageowner.first_name} {pageowner.last_name}
+								</h1>
+								<p className="text-sm text-gray-400">{pageowner.email}</p>
+								<div className="mt-2 flex items-center space-x-2">
+									<div className="rounded-md bg-gray-700 px-2 py-1 text-xs">
+										{pageowner.group_name}
 									</div>
-									<div className="grid gap-3">
-										<div>
-											<br />
-											<Button variant={'secondary'} disabled={true}>
-												Clubs
-											</Button>
-											{Number(clubs?.length) > 0 ? (
-												<ul className="border-1">
-													{clubs?.map((club) => (
-														<li
-															key={club?.id}
-															onClick={() => {
-																router.push(`/clubs/${club.id}`)
-															}}
-															className="border-r-1 relative my-4 cursor-pointer rounded-3xl hover:bg-accent"
-														>
-															<div className="flex flex-row items-center space-x-2 ">
-																<Image
-																	src={club?.logo_url ?? '/main_photo.jpeg'}
-																	width={64}
-																	height={64}
-																	alt={`banner of ${club?.name}`}
-																	className="rounded-md"
-																/>
-																<p>
-																	{club?.name} - {club?.club_type}
-																</p>
-															</div>
-														</li>
-													))}
-												</ul>
-											) : (
-												<p>User is not the member of any clubs.</p>
-											)}
-										</div>
+									<div className="rounded-md bg-gray-700 px-2 py-1 text-xs">
+										User ID: {params.userID}
 									</div>
 								</div>
-							</CardContent>
-						</Card>
+							</div>
+							<div className="flex-shrink-0">
+								<div className="w-15 h-20 overflow-hidden rounded">
+									<div className="rounded-md bg-gray-700 px-2 py-1 text-xs">
+										{pageowner.barcode}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div className="mt-6 md:mt-8">
+							{isOwner && (
+								<Button
+									className="w-full"
+									variant="default"
+									onClick={() => router.push('/user/edit')}
+								>
+									Edit Profile
+								</Button>
+							)}
+						</div>
 					</div>
 				) : (
 					<p>Loading user info...</p>
 				)}
+				<div className="mt-6 w-full max-w-xl md:mt-8">
+					<h2 className="mb-4 text-lg font-bold">Clubs</h2>
+					<div className="rounded-lg bg-[#0c1125] p-6 shadow-lg md:p-8">
+						{Number(clubs?.length) > 0 ? (
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+								{clubs?.map((club) => (
+									<div
+										key={club.id}
+										className="flex cursor-pointer items-center space-x-4 rounded-lg  bg-gray-800 p-4 shadow-lg shadow-lg transition-transform duration-300 hover:scale-105 md:p-6 "
+										onClick={() => router.push(`/clubs/${club.id}`)}
+									>
+										<div className="flex-shrink-0">
+											<div className="h-12 w-12 overflow-hidden rounded-full">
+												<Image
+													src={club.logo_url ?? '/main_photo.jpeg'}
+													alt={`Logo of ${club.name}`}
+													width={48}
+													height={48}
+													className="object-cover"
+													style={{ aspectRatio: '48/48', objectFit: 'cover' }}
+												/>
+											</div>
+										</div>
+										<div className="flex-1">
+											<h3 className="text-lg font-bold">{club.name}</h3>
+											<p className="text-sm text-gray-400">{club.club_type}</p>
+										</div>
+									</div>
+								))}
+							</div>
+						) : (
+							<p className="text-gray-400">User is not a member of any clubs.</p>
+						)}
+					</div>
+				</div>
 			</div>
 		</Layout>
 	)
