@@ -19,8 +19,16 @@ import Members from '@/app/clubs/[clubID]/settings/_components/Members'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { Permissions } from '@/types/permissions'
 import { hasPermission } from '@/helpers/permissions'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import EventsContent from '@/app/clubs/[clubID]/settings/_components/Events'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
@@ -158,44 +166,9 @@ function Page({ params }: { params: { clubID: number } }) {
 
 					<TabsContent value="events">
 						<div>
-							<Card className="bg-muted/40">
-								<CardHeader>
-									<div className="flex justify-between">
-										<CardTitle>Events</CardTitle>
-										<Button className="w-40" variant="default">
-											Create Event
-										</Button>
-									</div>
-								</CardHeader>
-								<CardContent>
-									<p className="pb-8">Events will be here</p>
-
-									<div className="grid grid-cols-3 gap-10 pb-4">
-										<Card>
-											<CardHeader>
-												<CardTitle>Event Info</CardTitle>
-											</CardHeader>
-											<CardContent>
-												<p>Event info will be here</p>
-											</CardContent>
-										</Card>
-										<Card>
-											<CardHeader>
-												<CardTitle>Event Info</CardTitle>
-											</CardHeader>
-											<CardContent>
-												<p>Event info will be here</p>
-											</CardContent>
-										</Card>
-										<Card>
-											<CardHeader>
-												<CardTitle>Event Info</CardTitle>
-											</CardHeader>
-											<CardContent>
-												<p>Event info will be here</p>
-											</CardContent>
-										</Card>
-									</div>
+							<Card>
+								<CardContent style={{ backgroundColor: '#0D1525' }}>
+									<EventsContent />
 								</CardContent>
 							</Card>
 						</div>

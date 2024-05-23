@@ -136,7 +136,7 @@ function Page({ params }: { params: { clubID: number } }) {
 																<div>
 																	<Link
 																		style={{
-																			color: `${decimalToRgb(memberRole?.color ?? 0)}`,
+																			color: `${decimalToRgb(memberRole?.color ?? 16777215)}`,
 																			textDecoration: 'none',
 																		}}
 																		href={`/user/${member.id}`}
