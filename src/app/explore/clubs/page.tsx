@@ -3,8 +3,8 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { Club } from '@/types/club'
 import { useRouter } from 'next/navigation'
-import Layout from '@/components/Layout'
 import SkeletonClubs from '@/components/Sceletons/SkeletonClubs'
+import Nav from '@/components/NavBar'
 
 export default function Clubs() {
 	const [clubs, setClubs] = useState<Club[]>()
@@ -35,13 +35,13 @@ export default function Clubs() {
 
 	return (
 		<>
-			<Layout />
+			<Nav />
 
 			{loading ? (
 				<SkeletonClubs />
 			) : (
 				<main className="flex min-h-screen flex-col items-center overflow-hidden dark:bg-[#020817]">
-					<div className="container w-full max-w-6xl px-4 md:px-6 lg:px-8">
+					<div className="container w-full max-w-6xl px-4 pt-20 md:px-6 lg:px-8">
 						<h1 className="mb-8 text-center text-3xl font-bold dark:text-white md:text-4xl lg:text-5xl">
 							Discover Clubs
 						</h1>
