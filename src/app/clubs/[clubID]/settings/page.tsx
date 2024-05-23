@@ -9,7 +9,7 @@ import useUserClubStatus from '@/hooks/useUserClubStatus'
 import useUserRolesStore from '@/store/useUserRoles'
 import useMemberRoles from '@/hooks/useMemberRoles'
 import BackgroundClubImage from '@/components/clubs/BackgroundClubImage'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import RolesTab from './_components/RolesTab'
 import Settings from '@/app/clubs/[clubID]/settings/_components/Settings'
@@ -29,6 +29,8 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import EventsContent from '@/app/clubs/[clubID]/settings/_components/Events'
+import ClubImage from '@/components/clubs/ClubImage'
+import SceletonMain from '@/components/Sceletons/SkeletonMain'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
@@ -50,7 +52,6 @@ function Page({ params }: { params: { clubID: number } }) {
 	const { permissions, highestRole } = useUserRolesStore()
 	const axiosAuth = useAxiosInterceptor()
 	const { handleDragStart, handleDragOver, handleDrop } = useDragDrop({ club, fetchClubInfo })
-
 	const handleDeleteRole = useCallback(
 		async (roleID: number) => {
 			const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${params.clubID}/roles/${roleID}`
@@ -95,9 +96,23 @@ function Page({ params }: { params: { clubID: number } }) {
 	return (
 		<main className="scroll-smooth" style={{ scrollBehavior: 'smooth' }}>
 			<Nav />
-			<div className="mx-auto max-w-6xl">
+
+			<div className="mx-auto max-w-6xl py-12 ">
 				<BackgroundClubImage club={club} />
-				<Tabs className="grid flex-1 items-start gap-4  sm:pb-4 md:gap-8" defaultValue="members">
+				<div className=" rounded-lg bg-[#0c1125]">
+					<div className="flex items-center justify-between gap-4 p-6">
+						<div className="flex items-center">
+							<div className="flex shrink-0">
+								<ClubImage club={club} width={84} height={84} />
+							</div>
+							<div className="pl-4">
+								<CardTitle>{club?.name}</CardTitle>
+								<CardDescription>{club?.description}</CardDescription>
+							</div>
+						</div>
+					</div>
+				</div>
+				<Tabs className="grid flex-1 items-start" defaultValue="members">
 					<TabsList className="grid w-full grid-cols-5">
 						<Link
 							className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3  text-sm font-medium ring-offset-background"
