@@ -20,7 +20,7 @@ const ClubMembersCard = ({ club, clubMembers }) => {
 			</CardHeader>
 			<CardContent>
 				<div
-					className="grid gap-1"
+					className="grid"
 					style={{
 						gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', // Responsive grid
 					}}
@@ -29,7 +29,7 @@ const ClubMembersCard = ({ club, clubMembers }) => {
 						clubMembers.slice(0, numMembersToShow).map((member) => {
 							const memberRole = club?.roles?.find((role) => role.id === member.roles[1])
 							return (
-								<div key={member.id} className="flex items-center gap-4">
+								<div key={member.id} className="flex items-center gap-2">
 									<UserAvatar user={member} />
 									<div>
 										<Link
@@ -42,7 +42,7 @@ const ClubMembersCard = ({ club, clubMembers }) => {
 										>
 											{member.first_name}
 										</Link>
-										<p className="font-medium text-gray-400 text-muted-foreground">
+										<p className="text-xs font-normal text-gray-400 text-muted-foreground">
 											{memberRole ? memberRole?.name : 'Member'}
 										</p>
 									</div>
