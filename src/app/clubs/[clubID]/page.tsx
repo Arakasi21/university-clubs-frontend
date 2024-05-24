@@ -136,56 +136,6 @@ function Page({ params }: { params: { clubID: number } }) {
 									</div>
 								</div>
 							</div>
-
-							<Card className="mt-8  bg-[#0c1125]">
-								<CardHeader>
-									<CardTitle>
-										Club Members <span className="text-base"> - {club?.num_of_members}</span>
-									</CardTitle>
-								</CardHeader>
-								<CardContent>
-									<div className="flex flex-col gap-4">
-										{clubMembers &&
-											clubMembers
-												.sort((a, b) => {
-													const roleA = club?.roles?.find((role) => role.id === a.roles[1])
-													const roleB = club?.roles?.find((role) => role.id === b.roles[1])
-													return (roleB?.position ?? 0) - (roleA?.position ?? 0)
-												})
-												.map((member) => {
-													const memberRole = club?.roles?.find(
-														(role) => role.id === member.roles[1],
-													)
-													return (
-														<div key={member.id} className="flex items-center gap-4">
-															<UserAvatar user={member} />
-															<div>
-																<Link
-																	style={{
-																		color: `${decimalToRgb(memberRole?.color ?? 16777215)}`,
-																		textDecoration: 'none',
-																	}}
-																	href={`/user/${member.id}`}
-																	className="font-medium hover:underline"
-																>
-																	{member.last_name} {member.first_name}
-																</Link>
-																<p
-																	// style={{
-																	// 	color: `${decimalToRgb(memberRole?.color ?? 0)}`,
-																	// }}
-																	className="font-medium text-gray-400 text-muted-foreground"
-																>
-																	{memberRole?.name}
-																</p>
-															</div>
-														</div>
-													)
-												})}
-									</div>
-								</CardContent>
-							</Card>
-
 							<div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 ">
 								<Card className=" bg-[#0c1125]">
 									<CardHeader>
@@ -245,6 +195,54 @@ function Page({ params }: { params: { clubID: number } }) {
 									</CardContent>
 								</Card>
 							</div>
+							<Card className="mt-8  bg-[#0c1125]">
+								<CardHeader>
+									<CardTitle>
+										Club Members <span className="text-base"> - {club?.num_of_members}</span>
+									</CardTitle>
+								</CardHeader>
+								<CardContent>
+									<div className="flex flex-col gap-4">
+										{clubMembers &&
+											clubMembers
+												.sort((a, b) => {
+													const roleA = club?.roles?.find((role) => role.id === a.roles[1])
+													const roleB = club?.roles?.find((role) => role.id === b.roles[1])
+													return (roleB?.position ?? 0) - (roleA?.position ?? 0)
+												})
+												.map((member) => {
+													const memberRole = club?.roles?.find(
+														(role) => role.id === member.roles[1],
+													)
+													return (
+														<div key={member.id} className="flex items-center gap-4">
+															<UserAvatar user={member} />
+															<div>
+																<Link
+																	style={{
+																		color: `${decimalToRgb(memberRole?.color ?? 16777215)}`,
+																		textDecoration: 'none',
+																	}}
+																	href={`/user/${member.id}`}
+																	className="font-medium hover:underline"
+																>
+																	{member.last_name} {member.first_name}
+																</Link>
+																<p
+																	// style={{
+																	// 	color: `${decimalToRgb(memberRole?.color ?? 0)}`,
+																	// }}
+																	className="font-medium text-gray-400 text-muted-foreground"
+																>
+																	{memberRole?.name}
+																</p>
+															</div>
+														</div>
+													)
+												})}
+									</div>
+								</CardContent>
+							</Card>
 						</div>
 					</div>
 				)}

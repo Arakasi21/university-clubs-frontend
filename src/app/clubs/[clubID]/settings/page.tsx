@@ -9,7 +9,7 @@ import useUserClubStatus from '@/hooks/useUserClubStatus'
 import useUserRolesStore from '@/store/useUserRoles'
 import useMemberRoles from '@/hooks/useMemberRoles'
 import BackgroundClubImage from '@/components/clubs/BackgroundClubImage'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback } from 'react'
 import { toast } from 'sonner'
 import RolesTab from './_components/RolesTab'
 import Settings from '@/app/clubs/[clubID]/settings/_components/Settings'
@@ -19,18 +19,9 @@ import Members from '@/app/clubs/[clubID]/settings/_components/Members'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { Permissions } from '@/types/permissions'
 import { hasPermission } from '@/helpers/permissions'
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 import EventsContent from '@/app/clubs/[clubID]/settings/_components/Events'
 import ClubImage from '@/components/clubs/ClubImage'
-import SceletonMain from '@/components/Sceletons/SkeletonMain'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 

@@ -1,7 +1,7 @@
 'use client'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Search } from 'lucide-react'
+import { AlertTriangle, Search } from 'lucide-react'
 import DropdownMenuEvent from '@/components/clubs/events/DropdownMenuEvent'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Event } from '@/types/event'
@@ -65,23 +65,26 @@ export default function EventsContent() {
 						key={event.id}
 						className="rounded-lg border border-gray-200 p-4 shadow-sm dark:border-gray-800"
 					>
-						<h3 className="text-lg font-medium">{event.title || event.status}</h3>
+						<h3 className="text-lg font-medium">{event.title || 'No Title'}</h3>
 						<p className="text-sm text-gray-500 dark:text-gray-400">
 							{new Date(event.created_at).toLocaleString()}
 						</p>
-						{event.status == 'DRAFT' ? (
-							<div className="my-2 flex  items-center space-x-2 text-xs">
-								<div className="rounded-md bg-gray-700 px-2 py-1 text-xs">{event.status}</div>
+						{event.status === 'DRAFT' ? (
+							<div className="my-2 flex items-center space-x-2 text-xs">
+								<div className="rounded-md bg-yellow-500 px-2 py-1 text-xs text-white">
+									{event.status}
+								</div>
+								<AlertTriangle className="h-4 w-4 text-yellow-500" />
 							</div>
 						) : (
-							<div className="my-2 flex  items-center space-x-2 text-xs">
+							<div className="my-2 flex items-center space-x-2 text-xs">
 								<div className="rounded-md bg-green-900 px-2 py-1 text-xs text-white">
 									{event.status}
 								</div>
 							</div>
 						)}
 
-						<div className=" flex items-center justify-between">
+						<div className="flex items-center justify-between">
 							<DialogViewClubEvent event={event} />
 							<Button size="sm" variant="outline">
 								Edit
