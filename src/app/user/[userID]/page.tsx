@@ -99,7 +99,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 								<p className="text-sm text-gray-400">{pageowner.email}</p>
 								<div className="mt-2 flex items-center space-x-2">
 									<div className="rounded-md bg-gray-700 px-2 py-1 text-xs">
-										{pageowner.group_name}
+										{pageowner.major}-{pageowner.group_name}
 									</div>
 									<div className="rounded-md bg-gray-700 px-2 py-1 text-xs">
 										User ID: {params.userID}
