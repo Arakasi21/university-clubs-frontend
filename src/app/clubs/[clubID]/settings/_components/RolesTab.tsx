@@ -30,12 +30,22 @@ export default function RolesTab({
 	const { handleDragStart, handleDragOver, handleDrop } = useDragDrop({ club, fetchClubInfo })
 	return (
 		<Card className="bg-muted/40">
-			<CardHeader>
-				<CardTitle>Club Roles</CardTitle>
-				<CardDescription className="flex items-center justify-between">
-					Manage club roles. You can edit roles, create new one, delete and etc.
-					<DialogCreateClubRole club={club} onCreateSuccess={fetchClubInfo} />
-				</CardDescription>
+			<CardHeader className="flex gap-4">
+				<div className="flex items-center justify-between gap-4">
+					<div className="flex items-center">
+						<div>
+							<CardTitle>Club Roles</CardTitle>
+							<CardDescription className="flex items-center justify-between">
+								Manage club roles. You can edit roles, create new one, delete and etc.
+							</CardDescription>
+						</div>
+					</div>
+					<div className="flex flex-row gap-3 ">
+						<div className="flex gap-3">
+							<DialogCreateClubRole club={club} onCreateSuccess={fetchClubInfo} />
+						</div>
+					</div>
+				</div>
 			</CardHeader>
 			<CardContent>
 				<Table>
