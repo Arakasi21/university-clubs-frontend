@@ -17,6 +17,24 @@ export default function EventsContent() {
 	const { club } = useClubStore()
 	const axiosAuth = useAxiosInterceptor()
 
+	async function updateEvent(eventId: number, updatedEvent: any) {
+		try {
+			const response = await axiosAuth(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${eventId}`,
+				updatedEvent,
+			)
+
+			if (response.status !== 200) {
+				console.error('Update event error', response.data.error)
+				return
+			}
+
+			console.log('Event successfully updated!')
+		} catch (error) {
+			console.error('An error occurred while updating the event:', error)
+		}
+	}
+
 	const fetchClubEvents = useCallback(async () => {
 		try {
 			const response = await axiosAuth(
@@ -34,7 +52,7 @@ export default function EventsContent() {
 		} catch (err) {
 			setError('Network Error: Unable to fetch events')
 		}
-	}, [])
+	}, [club?.id])
 
 	useEffect(() => {
 		fetchClubEvents()
@@ -86,9 +104,9 @@ export default function EventsContent() {
 
 						<div className="flex items-center justify-between">
 							<DialogViewClubEvent event={event} />
-							<Button size="sm" variant="outline">
-								Edit
-							</Button>
+							{/*<Button size="sm" variant="outline">*/}
+							{/*	Edit*/}
+							{/*</Button>*/}
 						</div>
 					</div>
 				))}

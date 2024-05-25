@@ -1,4 +1,4 @@
-'use client'
+import React, { useState } from 'react'
 import {
 	Dialog,
 	DialogContent,
@@ -9,13 +9,13 @@ import {
 	DialogTrigger,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import React, { useState } from 'react'
 import { Event } from '@/types/event'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { File, XIcon } from 'lucide-react'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
+import { useAxiosInterceptor } from '@/helpers/fetch_api'
+import { Input } from '@/components/ui/input'
 
 type DialogViewClubEventProps = {
 	event: Event
@@ -23,9 +23,58 @@ type DialogViewClubEventProps = {
 
 export function DialogViewClubEvent({ event }: DialogViewClubEventProps) {
 	const [isOpen, setIsOpen] = useState(false)
+	const [isEditing, setIsEditing] = useState(false)
+	const [editedEvent, setEditedEvent] = useState(event)
+	const axiosAuth = useAxiosInterceptor()
+
+	async function updateEvent(eventId: string, updatedEvent: any) {
+		try {
+			const changes = Object.keys(updatedEvent).reduce((acc, key) => {
+				if (updatedEvent[key as keyof Event] !== event[key as keyof Event]) {
+					acc[key as keyof typeof acc] = updatedEvent[key as keyof Event]
+				}
+				return acc
+			}, {} as Partial<Event>)
+			const response = await axiosAuth(`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${eventId}`, {
+				method: 'PATCH',
+				data: JSON.stringify(changes),
+			})
+
+			if (response.status !== 200) {
+				console.error('Update event error', response.data.error)
+				return
+			}
+
+			console.log('Event successfully updated!')
+		} catch (error) {
+			console.error('An error occurred while updating the event:', error)
+		}
+	}
+
+	const saveChanges = async () => {
+		try {
+			const response = await updateEvent(event.id, editedEvent)
+			setIsEditing(false)
+		} catch (error) {
+			console.error('An error occurred while saving the changes:', error)
+		}
+	}
+
 	const toggleDialog = () => {
 		setIsOpen(!isOpen)
 	}
+
+	const toggleEditing = () => {
+		setIsEditing(!isEditing)
+	}
+
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setEditedEvent({
+			...editedEvent,
+			[e.target.name]: e.target.value,
+		})
+	}
+
 	const closeDialog = () => {
 		setIsOpen(false)
 	}
@@ -52,22 +101,70 @@ export function DialogViewClubEvent({ event }: DialogViewClubEventProps) {
 					<div className="grid grid-cols-2 gap-4">
 						<div>
 							<p className="text-sm font-medium text-gray-500 dark:text-gray-400">Start Date</p>
-							<p className="text-base font-medium">{new Date(event.start_date).toLocaleString()}</p>
+							{isEditing ? (
+								<Input
+									type="datetime-local"
+									value={new Date(editedEvent.start_date).toISOString().substring(0, 16)}
+									onChange={(e) =>
+										setEditedEvent({
+											...editedEvent,
+											start_date: new Date(e.target.value).toISOString(),
+										})
+									}
+								/>
+							) : (
+								<p className="text-base font-medium">
+									{new Date(event.start_date).toLocaleString()}
+								</p>
+							)}
 						</div>
 						<div>
 							<p className="text-sm font-medium text-gray-500 dark:text-gray-400">End Date</p>
-							<p className="text-base font-medium">{new Date(event.end_date).toLocaleString()}</p>
+							{isEditing ? (
+								<Input
+									type="datetime-local"
+									value={new Date(editedEvent.end_date).toISOString().substring(0, 16)}
+									onChange={(e) =>
+										setEditedEvent({
+											...editedEvent,
+											end_date: new Date(e.target.value).toISOString(),
+										})
+									}
+								/>
+							) : (
+								<p className="text-base font-medium">{new Date(event.end_date).toLocaleString()}</p>
+							)}
 						</div>
 					</div>
 					<div>
 						<p className="text-sm font-medium text-gray-500 dark:text-gray-400">Location</p>
-						<p className="text-base font-medium">
-							{event.location_university || event.location_link || 'no location'}
-						</p>
+						{isEditing ? (
+							<Input
+								type="text"
+								value={editedEvent.location_university || editedEvent.location_link || ''}
+								onChange={(e) =>
+									setEditedEvent({ ...editedEvent, location_university: e.target.value })
+								}
+							/>
+						) : (
+							<p className="text-base font-medium">
+								{event.location_university || event.location_link || 'no location'}
+							</p>
+						)}
 					</div>
 					<div>
 						<p className="text-sm font-medium text-gray-500 dark:text-gray-400">Participants</p>
-						<p className="text-base font-medium">{event.max_participants || '0'}</p>
+						{isEditing ? (
+							<Input
+								type="number"
+								value={editedEvent.max_participants || 0}
+								onChange={(e) =>
+									setEditedEvent({ ...editedEvent, max_participants: parseInt(e.target.value, 10) })
+								}
+							/>
+						) : (
+							<p className="text-base font-medium">{event.max_participants || '0'}</p>
+						)}
 					</div>
 					<div>
 						<p className="text-sm font-medium text-gray-500 dark:text-gray-400">Organizer</p>
@@ -131,10 +228,24 @@ export function DialogViewClubEvent({ event }: DialogViewClubEventProps) {
 					</div>
 				</div>
 				<DialogFooter className="flex justify-end gap-2 rounded-lg bg-gray-900 px-6 py-4 text-white">
-					<Button className="text-white hover:bg-white/10" variant="outline">
-						Reject
-					</Button>
-					<Button className="bg-white text-[#020817] hover:bg-gray-100">Approve</Button>
+					{isEditing ? (
+						<>
+							<Button
+								className="text-white hover:bg-white/10"
+								variant="outline"
+								onClick={toggleEditing}
+							>
+								Cancel
+							</Button>
+							<Button className="bg-white text-[#020817] hover:bg-gray-100" onClick={saveChanges}>
+								Save Changes
+							</Button>
+						</>
+					) : (
+						<Button className="bg-white text-[#020817] hover:bg-gray-100" onClick={toggleEditing}>
+							Edit
+						</Button>
+					)}
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
