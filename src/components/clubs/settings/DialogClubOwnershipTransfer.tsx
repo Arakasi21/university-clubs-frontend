@@ -170,7 +170,7 @@ export default function DialogClubOwnershipTransfer({
 						}}
 						variant={'destructive'}
 					>
-						Yes, I'm sure
+						Yes, I am sure
 					</Button>
 					<Button onClick={() => setIsConfirmDialogOpen(false)}>No, cancel</Button>
 				</DialogContent>

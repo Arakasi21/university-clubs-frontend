@@ -1,3 +1,4 @@
+'use client'
 import React, { useCallback, useState } from 'react'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'

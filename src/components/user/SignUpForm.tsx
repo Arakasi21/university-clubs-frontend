@@ -185,7 +185,7 @@ export default function SignUp() {
 										<FormItem>
 											<FormLabel>Major</FormLabel>
 											<FormControl>
-												<Input type="text" placeholder="Your major" {...field} />
+												<Input type="text" placeholder="[IT,SE,CS,MT and etc...]" {...field} />
 											</FormControl>
 											<FormMessage />
 										</FormItem>
@@ -198,7 +198,7 @@ export default function SignUp() {
 										<FormItem>
 											<FormLabel>Group Name</FormLabel>
 											<FormControl>
-												<Input type="text" placeholder="Your group name" {...field} />
+												<Input type="text" placeholder="1111" {...field} />
 											</FormControl>
 											<FormMessage />
 										</FormItem>

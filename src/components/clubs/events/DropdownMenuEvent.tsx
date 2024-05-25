@@ -36,7 +36,7 @@ export default function DropdownMenuEvent() {
 						<Label className="text-sm font-medium" htmlFor="tags">
 							Tags
 						</Label>
-						<Select id="tags" multiple>
+						<Select>
 							<SelectTrigger className="h-auto">
 								<SelectValue placeholder="Select tags" />
 							</SelectTrigger>
@@ -54,7 +54,7 @@ export default function DropdownMenuEvent() {
 						<Label className="text-sm font-medium" htmlFor="status">
 							Status
 						</Label>
-						<Select id="status">
+						<Select>
 							<SelectTrigger className="h-auto">
 								<SelectValue placeholder="Select status" />
 							</SelectTrigger>
@@ -100,7 +100,7 @@ export default function DropdownMenuEvent() {
 						<Label className="text-sm font-medium" htmlFor="sort-by">
 							Sort By
 						</Label>
-						<Select id="sort-by">
+						<Select>
 							<SelectTrigger className="h-auto">
 								<SelectValue placeholder="Select sort by" />
 							</SelectTrigger>
@@ -118,7 +118,7 @@ export default function DropdownMenuEvent() {
 						<Label className="text-sm font-medium" htmlFor="sort-order">
 							Sort Order
 						</Label>
-						<Select id="sort-order">
+						<Select>
 							<SelectTrigger className="h-auto">
 								<SelectValue placeholder="Select sort order" />
 							</SelectTrigger>
@@ -134,7 +134,7 @@ export default function DropdownMenuEvent() {
 						<Label className="text-sm font-medium" htmlFor="user">
 							User
 						</Label>
-						<Select id="user">
+						<Select>
 							<SelectTrigger className="h-auto">
 								<SelectValue placeholder="Select user" />
 							</SelectTrigger>

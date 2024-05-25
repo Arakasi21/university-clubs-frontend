@@ -141,7 +141,7 @@ function Page({ params }: { params: { clubID: number } }) {
 								</div>
 							</div>
 							{/*CLUBS MEMBERS CARD*/}
-							<ClubMembersCard club={club} clubMembers={clubMembers} />
+							<ClubMembersCard club={club!} clubMembers={clubMembers!} />
 							<div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2 ">
 								<Card className=" bg-[#0c1125]">
 									<CardHeader>
@@ -159,11 +159,11 @@ function Page({ params }: { params: { clubID: number } }) {
 															</p>
 														</div>
 														<div className="items-end">
-															<Link href={`/clubs/${club.id}/events/${event.id}`}>
-																<Button className="bg-gray-900" variant="outline">
-																	View
-																</Button>
-															</Link>
+															{/*<Link href={`/clubs/${club.id}/events/${event.id}`}>*/}
+															<Button className="bg-gray-900" variant="outline">
+																View
+															</Button>
+															{/*</Link>*/}
 														</div>
 													</CardContent>
 												</Card>

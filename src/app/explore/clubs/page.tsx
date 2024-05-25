@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import SkeletonClubs from '@/components/Sceletons/SkeletonClubs'
 import Nav from '@/components/NavBar'
 import { Badge } from '@/components/ui/badge'
+import Image from 'next/image'
 
 export default function Clubs() {
 	const [clubs, setClubs] = useState<Club[]>()
@@ -53,7 +54,7 @@ export default function Clubs() {
 									className="cursor-pointer overflow-hidden rounded-lg bg-gray-900 shadow-lg transition-transform duration-300 hover:scale-105"
 									onClick={() => router.push(`/clubs/${club.id}`)}
 								>
-									<img
+									<Image
 										src={club.banner_url ?? '/main_photo.jpeg'}
 										alt={`Banner image of club ${club.name}`}
 										className=" w-full object-cover"
@@ -63,7 +64,7 @@ export default function Clubs() {
 									/>
 									<div className="space-y-2 p-4">
 										<div className="flex items-center gap-2">
-											<img
+											<Image
 												src={club.logo_url ?? '/main_photo.jpeg'}
 												alt={`Logo of club ${club.name}`}
 												width={60}

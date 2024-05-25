@@ -60,8 +60,7 @@ export default function Login() {
 			const data = await response.json()
 
 			setUser(data.user, data.jwt_token)
-
-      toast('You Signed In successfully!')
+			toast('You Signed In successfully!')
 			router.push('/')
 		} catch (error) {
 			toast.error('ERROR', { description: 'An error occurred while trying to log in.' })

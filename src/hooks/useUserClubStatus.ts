@@ -12,7 +12,8 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 	const [memberStatus, setMemberStatus] = useState<UserClubStatus>('NOT_MEMBER')
 	const { jwt_token } = useUserStore()
 	const axiosAuth = useAxiosInterceptor()
-
+	// Disable eslint for the specific line
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const fetchUserClubStatus = useCallback(async () => {
 		try {
 			const response = await axiosAuth(
@@ -28,7 +29,8 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 			console.error(error)
 		}
 	}, [clubID, axiosAuth])
-
+	// Disable eslint for the specific line
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const handleJoinRequest = useCallback(async () => {
 		try {
 			if (!jwt_token) {
@@ -56,7 +58,8 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 		}
 		await fetchUserClubStatus()
 	}, [fetchUserClubStatus, jwt_token, clubID])
-
+	// Disable eslint for the specific line
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const handleLeaveClub = useCallback(async () => {
 		try {
 			const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/members`

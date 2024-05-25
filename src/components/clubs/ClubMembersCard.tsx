@@ -3,14 +3,18 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import UserAvatar from '@/components/user/userAvatar'
 import Link from 'next/link'
 import { decimalToRgb } from '@/helpers/helper'
+import { Club, ClubMember, ClubRole } from '@/types/club'
 
-const ClubMembersCard = ({ club, clubMembers }) => {
+interface ClubMembersCardProps {
+	club: Club
+	clubMembers: ClubMember[]
+}
+
+const ClubMembersCard: React.FC<ClubMembersCardProps> = ({ club, clubMembers }) => {
 	const [numMembersToShow, setNumMembersToShow] = useState(10) // Display 10 members initially
-
-	const handleNumMembersChange = (newNumMembers) => {
+	const handleNumMembersChange = (newNumMembers: number) => {
 		setNumMembersToShow(newNumMembers)
 	}
-
 	return (
 		<Card className="mt-8 bg-[#0c1125]">
 			<CardHeader>

@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
-	DialogTrigger,
-	DialogTitle,
-	DialogDescription,
-	DialogHeader,
-	DialogFooter,
-	DialogContent,
 	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
@@ -74,8 +74,8 @@ function ViewEventDetails() {
 		<>
 			<DetailRow label="Title" value="Annual Charity Gala" />
 			<DetailRow
-				label="Description"
-				value="Join us for our annual charity gala to support local organizations."
+				label={'Description'}
+				value={'Join us for our annual charity gala to support local organizations.'}
 			/>
 			<DetailRow label="Start Date" value="2023-06-15" />
 			<DetailRow label="End Date" value="2023-06-16" />
@@ -108,7 +108,12 @@ function EditEventDetails() {
 	)
 }
 
-function DetailRow({ label, value }) {
+interface DetailRowProps {
+	label: string
+	value: string
+}
+
+function DetailRow({ label, value }: DetailRowProps) {
 	return (
 		<div className="grid grid-cols-4 items-center gap-4">
 			<Label className="text-right">{label}</Label>
@@ -117,7 +122,14 @@ function DetailRow({ label, value }) {
 	)
 }
 
-function EditRow({ label, defaultValue, id, type = 'text' }) {
+interface EditRowProps {
+	label: string
+	defaultValue: string
+	id: string
+	type?: string
+}
+
+function EditRow({ label, defaultValue, id, type = 'text' }: EditRowProps) {
 	return (
 		<div className="grid grid-cols-4 items-center gap-4">
 			<Label className="text-right" htmlFor={id}>
@@ -128,7 +140,13 @@ function EditRow({ label, defaultValue, id, type = 'text' }) {
 	)
 }
 
-function EditTextarea({ label, defaultValue, id }) {
+interface EditTextareaProps {
+	label: string
+	defaultValue: string
+	id: string
+}
+
+function EditTextarea({ label, defaultValue, id }: EditTextareaProps) {
 	return (
 		<div className="grid grid-cols-4 items-center gap-4">
 			<Label className="text-right" htmlFor={id}>
@@ -151,7 +169,11 @@ function DetailFiles() {
 	)
 }
 
-function FileDetail({ name }) {
+interface FileDetailProps {
+	name: string
+}
+
+function FileDetail({ name }: FileDetailProps) {
 	return (
 		<div className="flex items-center gap-2">
 			<FileIcon className="h-4 w-4" />
