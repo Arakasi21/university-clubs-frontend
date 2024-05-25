@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 export default function SceletonMain() {
 	return (
 		<>
-			<div className="mx-96 grid grid-cols-1 gap-8 pt-14 md:grid-cols-2 lg:grid-cols-2">
+			<div className="mx-96 grid grid-cols-1 gap-8  pt-14 md:grid-cols-2 lg:grid-cols-2">
 				<div className="flex flex-col space-y-3">
 					<Skeleton className="h-10 w-[480px]" />
 					<Skeleton className="h-10 w-[250px] pb-4" />

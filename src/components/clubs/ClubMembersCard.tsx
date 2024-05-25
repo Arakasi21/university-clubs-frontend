@@ -38,7 +38,7 @@ const ClubMembersCard: React.FC<ClubMembersCardProps> = ({ club, clubMembers }) 
 									<div>
 										<Link
 											style={{
-												color: `${decimalToRgb(memberRole?.color ?? 16777215)}`,
+												color: `${decimalToRgb(memberRole?.color ?? 9539985)}`,
 												textDecoration: 'none',
 											}}
 											href={`/user/${member.id}`}

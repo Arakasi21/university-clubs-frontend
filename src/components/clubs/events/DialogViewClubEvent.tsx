@@ -90,10 +90,40 @@ export function DialogViewClubEvent({ event }: DialogViewClubEventProps) {
 				<DialogHeader className="rounded-lg bg-gray-900 px-6 py-4 text-white">
 					<div className="flex flex-col">
 						<DialogTitle>
-							<h1>{event.title || event.id}</h1>
+							{isEditing ? (
+								<Input
+									type="text"
+									value={editedEvent.title || ''}
+									className="w-60 "
+									placeholder={event.title || 'Event Title'}
+									onChange={(e) =>
+										setEditedEvent({
+											...editedEvent,
+											title: e.target.value,
+										})
+									}
+								/>
+							) : (
+								<p>{event.title || event.id}</p>
+							)}
 						</DialogTitle>
 						<DialogDescription>
-							<p>{event.description || 'No event description provided'}</p>
+							{isEditing ? (
+								<Input
+									type="text"
+									value={editedEvent.description || ''}
+									className="mt-1 w-full"
+									placeholder={event.description || 'Event Description'}
+									onChange={(e) =>
+										setEditedEvent({
+											...editedEvent,
+											description: e.target.value,
+										})
+									}
+								/>
+							) : (
+								<p>{event.description || 'No event description provided'}</p>
+							)}
 						</DialogDescription>
 					</div>
 				</DialogHeader>
