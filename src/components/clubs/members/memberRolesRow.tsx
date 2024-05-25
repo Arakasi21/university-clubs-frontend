@@ -198,7 +198,7 @@ function MemberRolesRow({
 		>
 			<DropdownMenu open={isContextMenuOpen} onOpenChange={setIsContextMenuOpen} modal={true}>
 				<TableCell>
-					<UserAvatar user={member} />
+					<UserAvatar user={member} size={44} />
 				</TableCell>
 				<TableCell>{member.first_name}</TableCell>
 				<TableCell>{member.last_name}</TableCell>

@@ -27,7 +27,7 @@ const DropdownForLoggedIn = ({ user, logout }: { user: User; logout: () => void 
 				<DropdownMenuTrigger asChild>
 					<Button variant="ghost" className="flex items-center space-x-2.5 ">
 						<p>{user?.first_name}</p>
-						<UserAvatar user={user} />
+						<UserAvatar user={user} size={44} />
 					</Button>
 				</DropdownMenuTrigger>
 

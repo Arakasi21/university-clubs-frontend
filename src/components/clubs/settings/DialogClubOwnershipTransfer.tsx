@@ -114,7 +114,7 @@ export default function DialogClubOwnershipTransfer({
 									<TableRow key={member.id}>
 										<TableCell>{member.id}</TableCell>
 										<TableCell>
-											<UserAvatar user={member} />
+											<UserAvatar user={member} size={44} />
 										</TableCell>
 										<TableCell>
 											{member.first_name} {member.last_name}

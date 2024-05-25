@@ -171,7 +171,7 @@ function Page() {
 													href={`/user/${c.owner.id}`}
 													className="flex flex-row items-center space-x-2.5"
 												>
-													<UserAvatar user={c.owner} />
+													<UserAvatar user={c.owner} size={44} />
 													<p>
 														{c.owner.last_name} {c.owner.first_name}
 													</p>

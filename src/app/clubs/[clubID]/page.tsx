@@ -2,7 +2,6 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import UserAvatar from '@/components/user/userAvatar'
 import useClub from '@/hooks/useClub'
 import useUserClubStatus from '@/hooks/useUserClubStatus'
 import useMemberRoles from '@/hooks/useMemberRoles'
@@ -13,12 +12,12 @@ import { Permissions } from '@/types/permissions'
 import ClubImage from '@/components/clubs/ClubImage'
 import Nav from '@/components/NavBar'
 import React, { useEffect, useState } from 'react'
-import { decimalToRgb } from '@/helpers/helper'
 import SceletonClub from '@/components/Sceletons/SkeletonClub'
 import SceletonMain from '@/components/Sceletons/SkeletonMain'
-import { Calendar, CalendarIcon, Inbox, Medal } from 'lucide-react'
+import { Calendar, Inbox, Medal } from 'lucide-react'
 import { Event } from '@/types/event'
 import ClubMembersCard from '@/components/clubs/ClubMembersCard'
+import ClubMembersDialog from '@/components/clubs/ClubMembersDialog' // Import the new dialog component
 
 function Page({ params }: { params: { clubID: number } }) {
 	const [isLoading, setIsLoading] = useState(true)
@@ -31,11 +30,10 @@ function Page({ params }: { params: { clubID: number } }) {
 	const { permissions } = useUserRolesStore()
 	const { isLoggedIn } = useUserStore()
 
-	const membersWithoutPresident = clubMembers?.filter((member) => {
-		const memberRole = club?.roles?.find((role) => role.id === member.roles[1])
-		return memberRole?.name !== 'President'
-	})
-	const membersCount = membersWithoutPresident?.length
+	const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+	const openClubMembersDialog = () => setIsDialogOpen(true)
+	const closeDialog = () => setIsDialogOpen(false)
 
 	const [clubEvents, setClubEvents] = useState<Event[] | null>()
 
@@ -103,7 +101,10 @@ function Page({ params }: { params: { clubID: number } }) {
 										<div className="pl-4">
 											<CardTitle>{club?.name}</CardTitle>
 											<CardDescription>{club?.description}</CardDescription>
-											<CardDescription className="pt-2">
+											<CardDescription
+												className="cursor-pointer pt-2"
+												onClick={openClubMembersDialog}
+											>
 												{club?.num_of_members} members
 											</CardDescription>
 										</div>
@@ -203,6 +204,12 @@ function Page({ params }: { params: { clubID: number } }) {
 					</div>
 				)}
 			</div>
+			<ClubMembersDialog
+				isOpen={isDialogOpen}
+				onClose={closeDialog}
+				club={club}
+				clubMembers={clubMembers}
+			/>
 		</>
 	)
 }

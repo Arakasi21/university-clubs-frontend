@@ -14,7 +14,7 @@ const UserLink: React.FC<UserLinkProps> = ({ user }) => {
 			className="flex w-full flex-row items-center space-x-3.5 px-2"
 			key={user.id}
 		>
-			<UserAvatar user={user} />
+			<UserAvatar user={user} size={44} />
 			<p
 				style={{
 					color: '#fff',

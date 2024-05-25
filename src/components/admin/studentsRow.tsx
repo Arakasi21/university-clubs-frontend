@@ -73,7 +73,7 @@ function StudentsRow({ onUpdate, student }: StudentsRowProps) {
 		>
 			<DropdownMenu open={isContextMenuOpen} onOpenChange={setIsContextMenuOpen} modal={true}>
 				<TableCell>
-					<UserAvatar user={student} />
+					<UserAvatar user={student} size={44} />
 				</TableCell>
 				<TableCell>
 					{student.role !== 'USER' && (

@@ -7,11 +7,9 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import Layout from '@/components/Layout'
 import UserAvatar from '@/components/user/userAvatar'
 import { Skeleton } from '@/components/ui/skeleton'
 import Nav from '@/components/NavBar'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const UserPage = ({ params }: { params: { userID: number } }) => {
 	const { user } = useUserStore()
@@ -62,34 +60,7 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 						<div className="flex items-center space-x-4">
 							<div className="flex-shrink-0">
 								<div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full">
-									{pageowner.avatar_url ? (
-										<Image
-											className="object-cover"
-											src={pageowner.avatar_url}
-											alt={`${pageowner.first_name} profile picture`}
-											width={250}
-											height={80}
-											style={{ aspectRatio: '200/200', objectFit: 'cover' }}
-										/>
-									) : (
-										<Avatar
-											style={{
-												width: 95,
-												height: 95,
-												display: 'flex',
-												alignItems: 'center',
-												justifyContent: 'center',
-												padding: 0,
-												margin: 0,
-											}}
-										>
-											<AvatarFallback
-												style={{ fontSize: 60 / 2, verticalAlign: 'middle', padding: 0, margin: 0 }}
-											>
-												{pageowner?.first_name.slice(0, 1)}
-											</AvatarFallback>
-										</Avatar>
-									)}
+									<UserAvatar user={pageowner} size={95} />
 								</div>
 							</div>
 							<div className="flex-1">

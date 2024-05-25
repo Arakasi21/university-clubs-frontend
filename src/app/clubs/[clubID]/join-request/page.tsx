@@ -190,7 +190,7 @@ function Page({ params }: { params: { clubID: number } }) {
 													href={`/user/${c.id}`}
 													className="flex flex-row items-center space-x-2.5"
 												>
-													<UserAvatar user={c} />
+													<UserAvatar user={c} size={44} />
 													<p>
 														{c.last_name} {c.first_name}
 													</p>
