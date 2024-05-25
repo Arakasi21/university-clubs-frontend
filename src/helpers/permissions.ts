@@ -61,6 +61,9 @@ export const permissionsToStringArr = (permissions: Permissions) => {
 	if ((permissions & Permissions.manage_roles) !== 0) {
 		arr.push(PermissionsList[5])
 	}
+	if ((permissions & Permissions.manage_events) !== 0) {
+		arr.push(PermissionsList[6])
+	}
 	return arr
 }
 

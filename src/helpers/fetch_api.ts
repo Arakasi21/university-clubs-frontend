@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import useUserStore from '@/store/user'
-
 // Create an axios instance
 export const useAxiosInterceptor = () => {
 	const { setUser, jwt_token } = useUserStore()
@@ -12,7 +11,6 @@ export const useAxiosInterceptor = () => {
 			if (error.response.status === 401) {
 				const options: AxiosRequestConfig<any> = {
 					method: 'POST',
-
 					headers: {
 						// prettier-ignore
 						'Authorization': `Bearer ${jwt_token}`,
@@ -43,6 +41,5 @@ export const useAxiosInterceptor = () => {
 			return Promise.reject(error)
 		},
 	)
-
 	return instance
 }

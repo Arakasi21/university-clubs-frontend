@@ -21,14 +21,13 @@ import ClubMembersDialog from '@/components/clubs/ClubMembersDialog' // Import t
 
 function Page({ params }: { params: { clubID: number } }) {
 	const [isLoading, setIsLoading] = useState(true)
+	const { isLoggedIn, user } = useUserStore()
 
-	const { user } = useUserStore()
 	const { club, clubMembers, isOwner } = useClub({ clubID: params.clubID, user })
 	const { memberStatus, handleJoinRequest, handleLeaveClub } = useUserClubStatus({
 		clubID: params.clubID,
 	})
 	const { permissions } = useUserRolesStore()
-	const { isLoggedIn } = useUserStore()
 
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
 
@@ -82,11 +81,11 @@ function Page({ params }: { params: { clubID: number } }) {
 		<>
 			<Nav />
 
-			<div className="flex min-h-screen flex-col bg-[#020817] text-white">
+			<div className="flex min-h-screen flex-col bg-white text-white dark:bg-[#020817]">
 				{isLoading ? (
 					<SceletonMain />
 				) : (
-					<div className="bg-[#020817] px-6 py-12">
+					<div className="px-6 py-12">
 						<div className="mx-auto max-w-6xl">
 							<div className=" rounded-lg bg-[#0c1125]">
 								<div
@@ -121,7 +120,7 @@ function Page({ params }: { params: { clubID: number } }) {
 											</div>
 										)}
 										{isLoggedIn && (
-											<>
+											<div>
 												{memberStatus === 'NOT_MEMBER' && (
 													<Button onClick={handleJoinRequest}>Join Club</Button>
 												)}
@@ -136,7 +135,7 @@ function Page({ params }: { params: { clubID: number } }) {
 														Leave Club
 													</Button>
 												)}
-											</>
+											</div>
 										)}
 									</div>
 								</div>

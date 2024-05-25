@@ -128,7 +128,7 @@ export function DialogCreateClubRole({
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogTrigger asChild>
-				<Button variant={'default'} className="right-0 w-60" onClick={toggleDialog}>
+				<Button variant={'default'} className="right-0 w-40" onClick={toggleDialog}>
 					Create Role
 				</Button>
 			</DialogTrigger>

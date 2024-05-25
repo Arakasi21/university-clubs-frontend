@@ -33,7 +33,8 @@ const ClubMembersDialog = ({ isOpen, onClose, club, clubMembers }: ClubMembersDi
 								<div className="text-center">
 									<div className="text-sm font-medium">
 										<Link href={`/user/${member.id}`} className="hover:underline">
-											{member.first_name}
+											{member.first_name} <br />
+											{member.last_name}
 										</Link>
 									</div>
 								</div>

@@ -8,6 +8,7 @@ import { Event } from '@/types/event'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import useClubStore from '@/store/club'
 import { DialogViewClubEvent } from '@/components/clubs/events/DialogViewClubEvent'
+import Link from 'next/link'
 
 export default function EventsContent() {
 	const [events, setEvents] = useState<Event[]>()
@@ -103,7 +104,10 @@ export default function EventsContent() {
 						)}
 
 						<div className="flex items-center justify-between">
-							<DialogViewClubEvent event={event} />
+							<Link href={`/events/${event.id}`}>
+								<Button>View Event</Button>
+							</Link>
+							{/*<DialogViewClubEvent event={event} />*/}
 							{/*<Button size="sm" variant="outline">*/}
 							{/*	Edit*/}
 							{/*</Button>*/}
