@@ -16,6 +16,7 @@ import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { Input } from '@/components/ui/input'
+import { toast } from 'sonner'
 
 type DialogViewClubEventProps = {
 	event: Event
@@ -29,23 +30,24 @@ export function DialogViewClubEvent({ event }: DialogViewClubEventProps) {
 
 	async function updateEvent(eventId: string, updatedEvent: any) {
 		try {
-			const changes = Object.keys(updatedEvent).reduce((acc, key) => {
-				if (updatedEvent[key as keyof Event] !== event[key as keyof Event]) {
-					acc[key as keyof typeof acc] = updatedEvent[key as keyof Event]
-				}
-				return acc
-			}, {} as Partial<Event>)
+			// const changes = Object.keys(updatedEvent).reduce((acc, key) => {
+			// 	if (updatedEvent[key as keyof Event] !== event[key as keyof Event]) {
+			// 		acc[key as keyof typeof acc] = updatedEvent[key as keyof Event]
+			// 	}
+			// 	return acc
+			// }, {} as Partial<Event>)
 			const response = await axiosAuth(`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${eventId}`, {
 				method: 'PATCH',
-				data: JSON.stringify(changes),
+				data: JSON.stringify(updatedEvent),
 			})
 
-			if (response.status !== 200) {
-				console.error('Update event error', response.data.error)
-				return
+			if (!response.status.toString().startsWith('2')) {
+				toast.error('Update event info error', {
+					description: response.data.error,
+				})
+			} else {
+				toast.success('Event info successfully updated!')
 			}
-
-			console.log('Event successfully updated!')
 		} catch (error) {
 			console.error('An error occurred while updating the event:', error)
 		}
@@ -60,19 +62,19 @@ export function DialogViewClubEvent({ event }: DialogViewClubEventProps) {
 		}
 	}
 
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setEditedEvent({
+			...editedEvent,
+			[e.target.name]: e.target.value,
+		})
+	}
+
 	const toggleDialog = () => {
 		setIsOpen(!isOpen)
 	}
 
 	const toggleEditing = () => {
 		setIsEditing(!isEditing)
-	}
-
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setEditedEvent({
-			...editedEvent,
-			[e.target.name]: e.target.value,
-		})
 	}
 
 	const closeDialog = () => {
@@ -87,33 +89,36 @@ export function DialogViewClubEvent({ event }: DialogViewClubEventProps) {
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[600px]">
-				<DialogHeader className="rounded-lg bg-gray-900 px-6 py-4 text-white">
-					<div className="flex flex-col">
-						<DialogTitle>
+				{/*<DialogHeader className="rounded-lg bg-gray-900 px-6 py-4 text-white">*/}
+				{/*	<div className="flex flex-col">*/}
+				{/*		<DialogTitle>*/}
+				{/*			<h1>{event.title || event.id}</h1>*/}
+				{/*		</DialogTitle>*/}
+				{/*		<DialogDescription>*/}
+				{/*			<p>{event.description || 'No event description provided'}</p>*/}
+				{/*		</DialogDescription>*/}
+				{/*	</div>*/}
+				{/*</DialogHeader>*/}
+				<div className="space-y-4 p-6">
+					<div className="grid grid-cols-2 gap-4">
+						<div>
+							<p className="text-lg font-medium text-gray-500 dark:text-gray-400">Title</p>
 							{isEditing ? (
 								<Input
 									type="text"
 									value={editedEvent.title || ''}
-									className="w-60 "
-									placeholder={event.title || 'Event Title'}
-									onChange={(e) =>
-										setEditedEvent({
-											...editedEvent,
-											title: e.target.value,
-										})
-									}
+									onChange={(e) => setEditedEvent({ ...editedEvent, title: e.target.value })}
 								/>
 							) : (
-								<p>{event.title || event.id}</p>
+								<p className="text-base font-medium">{event.title || 'no title'}</p>
 							)}
-						</DialogTitle>
-						<DialogDescription>
+						</div>
+						<div>
+							<p className="text-lg font-medium text-gray-500 dark:text-gray-400">Description</p>
 							{isEditing ? (
 								<Input
 									type="text"
 									value={editedEvent.description || ''}
-									className="mt-1 w-full"
-									placeholder={event.description || 'Event Description'}
 									onChange={(e) =>
 										setEditedEvent({
 											...editedEvent,
@@ -122,13 +127,9 @@ export function DialogViewClubEvent({ event }: DialogViewClubEventProps) {
 									}
 								/>
 							) : (
-								<p>{event.description || 'No event description provided'}</p>
+								<p className="text-base font-medium">{event.description || 'no description'}</p>
 							)}
-						</DialogDescription>
-					</div>
-				</DialogHeader>
-				<div className="space-y-4 p-6">
-					<div className="grid grid-cols-2 gap-4">
+						</div>
 						<div>
 							<p className="text-sm font-medium text-gray-500 dark:text-gray-400">Start Date</p>
 							{isEditing ? (
@@ -187,7 +188,7 @@ export function DialogViewClubEvent({ event }: DialogViewClubEventProps) {
 						{isEditing ? (
 							<Input
 								type="number"
-								value={editedEvent.max_participants || 0}
+								value={editedEvent.max_participants}
 								onChange={(e) =>
 									setEditedEvent({ ...editedEvent, max_participants: parseInt(e.target.value, 10) })
 								}
@@ -221,6 +222,30 @@ export function DialogViewClubEvent({ event }: DialogViewClubEventProps) {
 								)}
 							</div>
 						))}
+					</div>
+					<div>
+						<p className="text-sm font-medium text-gray-500 dark:text-gray-400">Tags</p>
+						{isEditing ? (
+							<Input
+								type="text"
+								value={editedEvent.tags}
+								onChange={(e) => setEditedEvent({ ...editedEvent, tags: [e.target.value] })}
+							/>
+						) : (
+							<p className="text-base font-medium">{event.tags || 'no tags'}</p>
+						)}
+					</div>
+					<div>
+						<p className="text-sm font-medium text-gray-500 dark:text-gray-400">Type</p>
+						{isEditing ? (
+							<Input
+								type="text"
+								value={editedEvent.type}
+								onChange={(e) => setEditedEvent({ ...editedEvent, type: e.target.value })}
+							/>
+						) : (
+							<p className="text-base font-medium">{event.type || 'no type'}</p>
+						)}
 					</div>
 					<div>
 						<p className="text-sm font-medium text-gray-500 dark:text-gray-400">Attached Files</p>

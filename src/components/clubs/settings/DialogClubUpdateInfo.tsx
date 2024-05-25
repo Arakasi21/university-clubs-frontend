@@ -55,7 +55,7 @@ const ClubInfoEditForm: React.FC = (props) => {
 				data: values,
 			})
 
-			if (response.status !== 200) {
+			if (!response.status.toString().startsWith('2')) {
 				toast.error('Update club info error', {
 					description: response.data.error,
 				})
