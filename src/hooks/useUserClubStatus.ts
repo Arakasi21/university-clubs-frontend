@@ -27,7 +27,7 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 		} catch (error) {
 			console.error(error)
 		}
-	}, [clubID])
+	}, [clubID, axiosAuth])
 
 	const handleJoinRequest = useCallback(async () => {
 		try {

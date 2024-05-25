@@ -19,8 +19,9 @@ import Members from '@/app/clubs/[clubID]/settings/_components/Members'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { Permissions } from '@/types/permissions'
 import { hasPermission } from '@/helpers/permissions'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
+import EventsContent from '@/app/clubs/[clubID]/settings/_components/Events'
+import ClubImage from '@/components/clubs/ClubImage'
 
 // TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
 
@@ -42,7 +43,6 @@ function Page({ params }: { params: { clubID: number } }) {
 	const { permissions, highestRole } = useUserRolesStore()
 	const axiosAuth = useAxiosInterceptor()
 	const { handleDragStart, handleDragOver, handleDrop } = useDragDrop({ club, fetchClubInfo })
-
 	const handleDeleteRole = useCallback(
 		async (roleID: number) => {
 			const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${params.clubID}/roles/${roleID}`
@@ -87,9 +87,23 @@ function Page({ params }: { params: { clubID: number } }) {
 	return (
 		<main className="scroll-smooth" style={{ scrollBehavior: 'smooth' }}>
 			<Nav />
-			<div className="mx-auto max-w-6xl">
+
+			<div className="mx-auto max-w-6xl py-12 ">
 				<BackgroundClubImage club={club} />
-				<Tabs className="grid flex-1 items-start gap-4  sm:pb-4 md:gap-8" defaultValue="members">
+				<div className=" rounded-lg bg-[#0c1125]">
+					<div className="flex items-center justify-between gap-4 p-6">
+						<div className="flex items-center">
+							<div className="flex shrink-0">
+								<ClubImage club={club} width={84} height={84} />
+							</div>
+							<div className="pl-4">
+								<CardTitle>{club?.name}</CardTitle>
+								<CardDescription>{club?.description}</CardDescription>
+							</div>
+						</div>
+					</div>
+				</div>
+				<Tabs className="grid flex-1 items-start" defaultValue="members">
 					<TabsList className="grid w-full grid-cols-5">
 						<Link
 							className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3  text-sm font-medium ring-offset-background"
@@ -158,44 +172,9 @@ function Page({ params }: { params: { clubID: number } }) {
 
 					<TabsContent value="events">
 						<div>
-							<Card className="bg-muted/40">
-								<CardHeader>
-									<div className="flex justify-between">
-										<CardTitle>Events</CardTitle>
-										<Button className="w-40" variant="default">
-											Create Event
-										</Button>
-									</div>
-								</CardHeader>
-								<CardContent>
-									<p className="pb-8">Events will be here</p>
-
-									<div className="grid grid-cols-3 gap-10 pb-4">
-										<Card>
-											<CardHeader>
-												<CardTitle>Event Info</CardTitle>
-											</CardHeader>
-											<CardContent>
-												<p>Event info will be here</p>
-											</CardContent>
-										</Card>
-										<Card>
-											<CardHeader>
-												<CardTitle>Event Info</CardTitle>
-											</CardHeader>
-											<CardContent>
-												<p>Event info will be here</p>
-											</CardContent>
-										</Card>
-										<Card>
-											<CardHeader>
-												<CardTitle>Event Info</CardTitle>
-											</CardHeader>
-											<CardContent>
-												<p>Event info will be here</p>
-											</CardContent>
-										</Card>
-									</div>
+							<Card>
+								<CardContent style={{ backgroundColor: '#0D1525' }}>
+									<EventsContent />
 								</CardContent>
 							</Card>
 						</div>

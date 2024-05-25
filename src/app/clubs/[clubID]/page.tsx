@@ -10,14 +10,15 @@ import useUserStore from '@/store/user'
 import useUserRolesStore from '@/store/useUserRoles'
 import { hasPermission } from '@/helpers/permissions'
 import { Permissions } from '@/types/permissions'
-import BackgroundClubImage from '@/components/clubs/BackgroundClubImage'
 import ClubImage from '@/components/clubs/ClubImage'
 import Nav from '@/components/NavBar'
 import React, { useEffect, useState } from 'react'
-import { Separator } from '@/components/ui/separator'
 import { decimalToRgb } from '@/helpers/helper'
 import SceletonClub from '@/components/Sceletons/SkeletonClub'
 import SceletonMain from '@/components/Sceletons/SkeletonMain'
+import { Calendar, CalendarIcon, Inbox, Medal } from 'lucide-react'
+import { Event } from '@/types/event'
+import ClubMembersCard from '@/components/clubs/ClubMembersCard'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const [isLoading, setIsLoading] = useState(true)
@@ -35,6 +36,32 @@ function Page({ params }: { params: { clubID: number } }) {
 		return memberRole?.name !== 'President'
 	})
 	const membersCount = membersWithoutPresident?.length
+
+	const [clubEvents, setClubEvents] = useState<Event[] | null>()
+
+	const fetchClubEvents = async () => {
+		try {
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${params.clubID}/events?page=1&page_size=30`,
+				{
+					method: 'GET',
+				},
+			)
+
+			if (response.ok) {
+				const data = await response.json()
+				setClubEvents(data.events)
+			} else {
+				console.error('Failed to fetch events')
+			}
+		} catch (err) {
+			console.error('Network Error: Unable to fetch events')
+		}
+	}
+
+	useEffect(() => {
+		fetchClubEvents()
+	}, [])
 
 	useMemberRoles({
 		club: club || null,
@@ -56,6 +83,7 @@ function Page({ params }: { params: { clubID: number } }) {
 	return (
 		<>
 			<Nav />
+
 			<div className="flex min-h-screen flex-col bg-[#020817] text-white">
 				{isLoading ? (
 					<SceletonMain />
@@ -68,13 +96,16 @@ function Page({ params }: { params: { clubID: number } }) {
 									className="h-40 w-full rounded-t-lg bg-cover bg-center"
 								/>
 								<div className="flex items-center justify-between gap-4 p-6">
-									<div className="flex items-center">
-										<div className="flex shrink-0">
+									<div className="flex items-center gap-2">
+										<div className="flex shrink-0 overflow-hidden rounded-full ">
 											<ClubImage club={club} width={84} height={84} />
 										</div>
 										<div className="pl-4">
 											<CardTitle>{club?.name}</CardTitle>
 											<CardDescription>{club?.description}</CardDescription>
+											<CardDescription className="pt-2">
+												{club?.num_of_members} members
+											</CardDescription>
 										</div>
 									</div>
 									<div className="flex flex-row gap-3 ">
@@ -99,7 +130,7 @@ function Page({ params }: { params: { clubID: number } }) {
 														You are banned
 													</Button>
 												)}
-												{memberStatus === 'MEMBER' && !isOwner && (
+												{!isOwner && memberStatus === 'MEMBER' && (
 													<Button variant="destructive" onClick={handleLeaveClub}>
 														Leave Club
 													</Button>
@@ -109,83 +140,62 @@ function Page({ params }: { params: { clubID: number } }) {
 									</div>
 								</div>
 							</div>
-
-							<div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-								<Card>
-									<CardHeader>
-										<CardTitle>
-											Club Members <span className="text-base"> - {club?.num_of_members}</span>
-										</CardTitle>
-									</CardHeader>
-									<CardContent>
-										<div className="flex flex-col gap-4">
-											{clubMembers &&
-												clubMembers
-													.sort((a, b) => {
-														const roleA = club?.roles?.find((role) => role.id === a.roles[1])
-														const roleB = club?.roles?.find((role) => role.id === b.roles[1])
-														return (roleB?.position ?? 0) - (roleA?.position ?? 0)
-													})
-													.map((member) => {
-														const memberRole = club?.roles?.find(
-															(role) => role.id === member.roles[1],
-														)
-														return (
-															<div key={member.id} className="flex items-center gap-4">
-																<UserAvatar user={member} />
-																<div>
-																	<Link
-																		style={{
-																			color: `${decimalToRgb(memberRole?.color ?? 0)}`,
-																			textDecoration: 'none',
-																		}}
-																		href={`/user/${member.id}`}
-																		className="font-medium hover:underline"
-																	>
-																		{member.last_name} {member.first_name}
-																	</Link>
-																	<p
-																		// style={{
-																		// 	color: `${decimalToRgb(memberRole?.color ?? 0)}`,
-																		// }}
-																		className="font-medium text-gray-400 text-muted-foreground"
-																	>
-																		{memberRole?.name}
-																	</p>
-																</div>
-															</div>
-														)
-													})}
-										</div>
-									</CardContent>
-								</Card>
-								<Card>
+							<ClubMembersCard club={club} clubMembers={clubMembers} />
+							<div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 ">
+								<Card className=" bg-[#0c1125]">
 									<CardHeader>
 										<CardTitle>Club Events</CardTitle>
 									</CardHeader>
-									<CardContent>
-										<p className="text-gray-400 text-muted-foreground">
-											There are no events for this club yet.
-										</p>
+									<CardContent className="overflow-hidden">
+										{clubEvents?.length ? (
+											clubEvents.map((event) => (
+												<Card key={event.id}>
+													<CardContent className="flex w-full items-center justify-between gap-4 overflow-hidden rounded-lg bg-gray-900 p-4">
+														<div className="flex flex-col">
+															<h3 className="text-nd font-medium text-white">{event.title}</h3>
+															<p className="text-sm font-normal text-muted-foreground">
+																{new Date(event.start_date).toLocaleString()}
+															</p>
+														</div>
+														<div className="items-end">
+															{/*<Link href={`/clubs/${club.id}/events/${event.id}`}>*/}
+															<Button className="bg-gray-900" variant="outline">
+																View
+															</Button>
+															{/*</Link>*/}
+														</div>
+													</CardContent>
+												</Card>
+											))
+										) : (
+											<p className="flex flex-col items-center justify-items-center text-gray-400 text-muted-foreground">
+												<Calendar className="h-14 w-14 border-gray-400 pb-2" />
+												No events.
+											</p>
+										)}
 									</CardContent>
 								</Card>
-								<Card>
+
+								<Card className=" bg-[#0c1125]">
 									<CardHeader>
 										<CardTitle>Club Posts</CardTitle>
 									</CardHeader>
 									<CardContent>
-										<p className="text-gray-400 text-muted-foreground">
-											There are no posts for this club yet.
+										<p className="flex flex-col items-center justify-items-center text-gray-400 text-muted-foreground">
+											<Inbox className="h-14 w-14 border-gray-400 pb-2" />
+											No posts
 										</p>
 									</CardContent>
 								</Card>
-								<Card>
+
+								<Card className=" bg-[#0c1125]">
 									<CardHeader>
 										<CardTitle>Club Achievements</CardTitle>
 									</CardHeader>
 									<CardContent>
-										<p className="text-gray-400 text-muted-foreground">
-											There are no achievements for this club yet.
+										<p className="flex flex-col items-center justify-items-center text-gray-400 text-muted-foreground">
+											<Medal className="h-14 w-14 border-gray-400 pb-2" />
+											No achievements
 										</p>
 									</CardContent>
 								</Card>
