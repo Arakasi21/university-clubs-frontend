@@ -1,5 +1,4 @@
 'use client'
-import Layout from '@/components/Layout'
 import { Club } from '@/types/club'
 import { useRouter } from 'next/navigation'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -13,29 +12,8 @@ import useUserStore from '@/store/user'
 import Nav from '@/components/NavBar'
 
 export default function Home() {
-	const [clubs, setClubs] = useState<Club[]>()
 	const [loading, setLoading] = useState(true)
-	const [totalUsers, setTotalUsers] = useState(0)
-	const [totalClubs, setTotalClubs] = useState(0)
-	const router = useRouter()
 	const { isLoggedIn, user, purgeUser } = useUserStore()
-
-	const fetchTotalUsers = useCallback(() => {
-		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/search?query=&page=1&page_size=50`)
-			.then(async (res) => {
-				const data = await res.json()
-				if (!res.ok) {
-					toast.error('Failed to fetch users', {
-						description: data.error,
-					})
-				}
-
-				setTotalUsers(data.metadata.total_records)
-			})
-			.catch((error) => {
-				console.log(error)
-			})
-	}, [])
 
 	const fetchClubs = useCallback(() => {
 		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/?page=1&page_size=30`, { method: 'GET' })
@@ -46,9 +24,6 @@ export default function Home() {
 						description: data.error,
 					})
 				}
-
-				setClubs(data.clubs)
-				setTotalClubs(data.metadata.total_records)
 				setLoading(false)
 			})
 			.catch((error) => {
@@ -58,8 +33,7 @@ export default function Home() {
 
 	useEffect(() => {
 		fetchClubs()
-		fetchTotalUsers()
-	}, [fetchClubs, fetchTotalUsers])
+	}, [])
 
 	return (
 		<main>

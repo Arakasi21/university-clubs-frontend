@@ -67,7 +67,7 @@ export default function RolesTab({
 								})
 								.map((role: ClubRole) => (
 									<TableRow
-										key={role.position}
+										key={role.id} // use unique id here
 										draggable={role.name !== 'member'}
 										onDragStart={(e) => handleDragStart(e, role)}
 										onDragOver={handleDragOver}

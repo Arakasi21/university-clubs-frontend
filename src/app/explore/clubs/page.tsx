@@ -65,8 +65,9 @@ export default function Clubs() {
 										src={club.banner_url ?? '/main_photo.jpeg'}
 										alt={`Banner image of club ${club.name}`}
 										className="w-full object-cover"
-										height={300}
+										height={400}
 										width={600}
+										priority={true}
 										style={{ aspectRatio: '30/20', objectFit: 'cover' }}
 									/>
 									<div className="space-y-2 p-4">
@@ -74,11 +75,12 @@ export default function Clubs() {
 											<Image
 												src={club.logo_url ?? '/main_photo.jpeg'}
 												alt={`Logo of club ${club.name}`}
-												width={60}
-												height={60}
-												className="w-15 h-15 rounded-full object-contain"
+												width={70}
+												height={70}
+												priority={true}
+												className="rounded-full object-contain"
 												style={{
-													aspectRatio: '40/40',
+													aspectRatio: '70/70',
 													objectFit: 'cover',
 												}}
 											/>

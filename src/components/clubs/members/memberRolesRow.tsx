@@ -204,9 +204,9 @@ function MemberRolesRow({
 				<TableCell>{member.last_name}</TableCell>
 				<TableCell>
 					{memberRoles?.map((role) => (
-						<>
+						<div key={role.id}>
 							<p style={{ color: `${decimalToRgb(role.color)}` }}>{role.name}</p>
-						</>
+						</div>
 					))}
 				</TableCell>
 				<TableCell>{member.email}</TableCell>
