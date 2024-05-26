@@ -12,10 +12,10 @@ import {
 	PaginationPrevious,
 } from '@/components/ui/pagination'
 import debounce from 'lodash.debounce'
-import axios from 'axios'
 import EventsRow, { EventsRowProps } from '@/components/admin/eventsRow'
 import { EventFilters } from '@/types/event'
 import { useRouter } from 'next/navigation'
+import { useAxiosInterceptor } from '@/helpers/fetch_api'
 
 export default function Events() {
 	const router = useRouter()
@@ -25,6 +25,7 @@ export default function Events() {
 	const [page, setPage] = useState(10)
 	const [hasMorePages, setHasMorePages] = useState(true)
 	const [filter, setFilter] = useState<EventFilters>({} as EventFilters)
+	const axiosAuth = useAxiosInterceptor()
 
 	function createQueryString(filters: EventFilters) {
 		const params = new URLSearchParams()
@@ -49,10 +50,11 @@ export default function Events() {
 		return params.toString()
 	}
 
+	// /events/admin?&page=1&page_size=10&clubId=${filter?.clubId}&userId=${filter?.userId}&status${filter?.status}=&tags=${filter?.tags}&from_date=${filter?.from_date}&till_date=${filter?.till_date}&sort_by=${filter?.sort_by}&sort_order=${filter?.sort_order}`
 	const fetchEvents = debounce((search, page, setEvents, setHasMorePages) => {
-		axios
+		axiosAuth
 			.get(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/admin?&page=10&page_size=10&clubId=${filter?.clubId}&userId=${filter?.userId}&status${filter?.status}=&tags=${filter?.tags}&from_date=${filter?.from_date}&till_date=${filter?.till_date}&sort_by=${filter?.sort_by}&sort_order=${filter?.sort_order}`,
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/admin?page=1&page_size=30&type=&clubId=&userId=&status=&tags=`,
 			)
 			.then((response) => {
 				console.log('Fetched events:', response.data.events)
@@ -66,10 +68,10 @@ export default function Events() {
 		fetchEvents(searchTerm, currentPage, setEvents, setHasMorePages)
 	}, [searchTerm, currentPage])
 
-	useEffect(() => {
-		const queryString = createQueryString(filter)
-		router.push(`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/admin?${queryString}`, undefined)
-	}, [filter])
+	// useEffect(() => {
+	// 	const queryString = createQueryString(filter)
+	// 	router.push(`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/admin?${queryString}`, undefined)
+	// }, [filter])
 
 	const handleSearch = (value: string) => {
 		setSearchTerm(value)
