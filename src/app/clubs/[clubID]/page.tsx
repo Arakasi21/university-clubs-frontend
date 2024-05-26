@@ -8,7 +8,7 @@ import useUserStore from '@/store/user'
 import useUserRolesStore from '@/store/useUserRoles'
 import ClubImage from '@/components/clubs/ClubImage'
 import Nav from '@/components/NavBar'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import SceletonClub from '@/components/Skeletons/SkeletonClub'
 import { Calendar, Inbox, Medal } from 'lucide-react'
 import { Event } from '@/types/event'
@@ -17,23 +17,27 @@ import ClubMembersDialog from '@/components/clubs/ClubMembersDialog'
 import ClubPageButtons from '@/components/clubs/ClubPageButtons'
 
 function Page({ params }: { params: { clubID: number } }) {
-	const [isLoading, setIsLoading] = useState(true)
 	const { isLoggedIn, user } = useUserStore()
-
-	const { club, clubMembers, isOwner } = useClub({ clubID: params.clubID, user })
+	const { club, clubMembers, isOwner, loading } = useClub({ clubID: params.clubID, user })
 	const { memberStatus, handleJoinRequest, handleLeaveClub } = useUserClubStatus({
 		clubID: params.clubID,
 	})
-	const { permissions } = useUserRolesStore()
+
+	const { permissions, setUserRoles } = useUserRolesStore()
+
+	useMemberRoles({
+		club: club || null,
+		user: user,
+		userStatus: memberStatus,
+		shouldFetch: memberStatus === 'MEMBER',
+	})
 
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
-
 	const openClubMembersDialog = () => setIsDialogOpen(true)
 	const closeDialog = () => setIsDialogOpen(false)
+	const [clubEvents, setClubEvents] = useState<Event[] | null>([])
 
-	const [clubEvents, setClubEvents] = useState<Event[] | null>()
-
-	const fetchClubEvents = async () => {
+	const fetchClubEvents = useCallback(async () => {
 		try {
 			const response = await fetch(
 				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${params.clubID}/events?page=1&page_size=30`,
@@ -51,31 +55,18 @@ function Page({ params }: { params: { clubID: number } }) {
 		} catch (err) {
 			console.error('Network Error: Unable to fetch events')
 		}
-	}
+	}, [params.clubID])
 
 	useEffect(() => {
 		fetchClubEvents()
 	}, [])
-
-	useMemberRoles({
-		club: club || null,
-		user: user,
-		userStatus: memberStatus,
-		shouldFetch: memberStatus === 'MEMBER',
-	})
-
-	useEffect(() => {
-		if (club) {
-			setIsLoading(false)
-		}
-	}, [club])
 
 	return (
 		<>
 			<Nav />
 
 			<div className="flex min-h-screen flex-col bg-white text-white dark:bg-[#020817]">
-				{isLoading ? (
+				{loading ? (
 					<SceletonClub />
 				) : (
 					<div className="px-6 py-12">
@@ -105,7 +96,7 @@ function Page({ params }: { params: { clubID: number } }) {
 										memberPerms={permissions}
 										club={club as any}
 										loggedIn={isLoggedIn}
-										loading={isLoading}
+										loading={loading}
 										memberStatus={memberStatus}
 										onClick={handleJoinRequest}
 										owner={isOwner}
@@ -132,11 +123,9 @@ function Page({ params }: { params: { clubID: number } }) {
 															</p>
 														</div>
 														<div className="items-end">
-															{/*<Link href={`/clubs/${club.id}/events/${event.id}`}>*/}
 															<Button className="bg-gray-900" variant="outline">
 																View
 															</Button>
-															{/*</Link>*/}
 														</div>
 													</CardContent>
 												</Card>

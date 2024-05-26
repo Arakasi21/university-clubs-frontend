@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import useUserStore from '@/store/user'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
+import { useRouter } from 'next/navigation'
 
 export type UseUserClubStatusProps = {
 	clubID: number
@@ -12,6 +13,7 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 	const [memberStatus, setMemberStatus] = useState<UserClubStatus>('NOT_MEMBER')
 	const { jwt_token } = useUserStore()
 	const axiosAuth = useAxiosInterceptor()
+	const router = useRouter()
 	// Disable eslint for the specific line
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const fetchUserClubStatus = useCallback(async () => {
@@ -71,6 +73,7 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 				toast.error('Failed to leave club', { description: response.data.error })
 			} else {
 				toast.success('Left club successfully')
+				router.push('/explore/clubs')
 			}
 		} catch (error) {
 			toast.error('ERROR', { description: 'An error occurred while trying to leave the club.' })

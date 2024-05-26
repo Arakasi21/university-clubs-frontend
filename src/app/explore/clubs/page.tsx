@@ -7,11 +7,13 @@ import SkeletonClubs from '@/components/Skeletons/SkeletonClubs'
 import Nav from '@/components/NavBar'
 import { Badge } from '@/components/ui/badge'
 import Image from 'next/image'
+import useUserRolesStore from '@/store/useUserRoles'
 
 export default function Clubs() {
 	const [clubs, setClubs] = useState<Club[]>()
 	const [loading, setLoading] = useState(true)
 	const router = useRouter()
+	const { resetUserRoles } = useUserRolesStore()
 
 	const fetchClubs = useCallback(() => {
 		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/?page=1&page_size=30`, { method: 'GET' })
@@ -21,8 +23,8 @@ export default function Clubs() {
 					toast.error('not found', {
 						description: data.error,
 					})
+					return
 				}
-
 				setClubs(data.clubs)
 				setLoading(false)
 			})
@@ -34,6 +36,11 @@ export default function Clubs() {
 	useEffect(() => {
 		fetchClubs()
 	}, [fetchClubs])
+
+	const handleClubClick = (clubID: number) => {
+		resetUserRoles()
+		router.push(`/clubs/${clubID}`)
+	}
 
 	return (
 		<>
@@ -52,12 +59,12 @@ export default function Clubs() {
 								<div
 									key={club.id}
 									className="cursor-pointer overflow-hidden rounded-lg bg-gray-900 shadow-lg transition-transform duration-300 hover:scale-105"
-									onClick={() => router.push(`/clubs/${club.id}`)}
+									onClick={() => handleClubClick(club.id)}
 								>
 									<Image
 										src={club.banner_url ?? '/main_photo.jpeg'}
 										alt={`Banner image of club ${club.name}`}
-										className=" w-full object-cover"
+										className="w-full object-cover"
 										height={300}
 										width={600}
 										style={{ aspectRatio: '30/20', objectFit: 'cover' }}

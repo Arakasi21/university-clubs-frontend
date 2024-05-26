@@ -103,7 +103,7 @@ function Page({ params }: { params: { clubID: number } }) {
 						</div>
 					</div>
 				</div>
-				<Tabs className="grid flex-1 items-start" defaultValue="members">
+				<Tabs className="grid flex-1 items-start">
 					<TabsList className="grid w-full grid-cols-5">
 						<Link
 							className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3  text-sm font-medium ring-offset-background"
@@ -111,7 +111,14 @@ function Page({ params }: { params: { clubID: number } }) {
 						>
 							Return
 						</Link>
-						<TabsTrigger value="members">Members</TabsTrigger>
+						{hasPermission(permissions, Permissions.ALL) ? (
+							<TabsTrigger value="members">Members</TabsTrigger>
+						) : (
+							<TabsTrigger value="members" disabled>
+								Members
+							</TabsTrigger>
+						)}
+
 						{hasPermission(permissions, Permissions.manage_roles) ? (
 							<TabsTrigger value="roles">Roles</TabsTrigger>
 						) : (

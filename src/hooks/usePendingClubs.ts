@@ -23,7 +23,6 @@ export default function usePendingClubs() {
 				}
 			}
 		}
-
 		fetchPendingClubs()
 	}, [userStore.jwt_token])
 

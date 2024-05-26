@@ -14,12 +14,15 @@ export type UseMemberRolesProps = {
 }
 
 function useMemberRoles({ club, user, userStatus, shouldFetch }: UseMemberRolesProps) {
-	const { setUserRoles } = useUserRolesStore()
+	const { setUserRoles, resetUserRoles } = useUserRolesStore()
 
 	const fetchMemberRoles = useCallback(() => {
 		if (!shouldFetch || !club || !user?.id) {
 			return
 		}
+
+		resetUserRoles()
+
 		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club.id}/members/${user?.id}/roles`)
 			.then(async (res) => {
 				const data = await res.json()
@@ -28,9 +31,8 @@ function useMemberRoles({ club, user, userStatus, shouldFetch }: UseMemberRolesP
 						description: data.error,
 					})
 
-					throw new Error(data.error || 'Failed to Fetch member roles ')
+					throw new Error(data.error || 'Failed to fetch member roles')
 				}
-				// do not touch
 				const permissions = data.is_owner
 					? Permissions.ALL
 					: accumulateMemberPermissions(data.roles)
@@ -42,6 +44,7 @@ function useMemberRoles({ club, user, userStatus, shouldFetch }: UseMemberRolesP
 
 	useEffect(() => {
 		fetchMemberRoles()
-	}, [fetchMemberRoles])
+	}, [fetchMemberRoles, club?.id])
 }
+
 export default useMemberRoles

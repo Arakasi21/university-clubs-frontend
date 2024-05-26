@@ -3,7 +3,7 @@ import { create } from 'zustand'
 import { Club, ClubRole } from '@/types/club'
 
 export interface userRolesStore {
-	roles: ClubRole[]
+	roles: ClubRole[] | []
 	highestRole?: ClubRole
 	permissions: Permissions
 	club?: Club
@@ -13,6 +13,7 @@ export interface userRolesStore {
 		permissions: Permissions,
 		club: Club,
 	) => void
+	resetUserRoles: () => void
 }
 
 const useUserRolesStore = create<userRolesStore>()((set) => ({
@@ -25,6 +26,14 @@ const useUserRolesStore = create<userRolesStore>()((set) => ({
 		club: Club,
 	) => {
 		set({ roles, highestRole, permissions, club })
+	},
+	resetUserRoles: () => {
+		set({
+			roles: [],
+			highestRole: undefined,
+			permissions: Permissions.none,
+			club: undefined,
+		})
 	},
 }))
 

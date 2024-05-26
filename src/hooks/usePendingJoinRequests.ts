@@ -13,11 +13,17 @@ export default function usePendingJoinRequests(clubID: number) {
 				console.error('JWT token is missing')
 				return
 			}
-			const response = await axiosAuth(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/join?page=1&page_size=25`,
-			)
-			if (response.status.toString().startsWith('2')) {
-				setPendingRequests(response.data.metadata.total_records)
+			try {
+				const response = await axiosAuth(
+					`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/join?page=1&page_size=25`,
+				)
+				if (response.status.toString().startsWith('2')) {
+					setPendingRequests(response.data.metadata.total_records)
+				} else {
+					console.error('Failed to fetch pending requests, status code:', response.status)
+				}
+			} catch (error) {
+				console.error('Error fetching pending requests:', error)
 			}
 		}
 
