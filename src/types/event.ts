@@ -68,11 +68,9 @@ export type AttachedImage = {
 }
 
 export type CoverImage = {
-	filemongo: {
-		url: string
-		name: string
-		type: string
-	}
+	url: string
+	name: string
+	type: string
 	position: number
 }
 
