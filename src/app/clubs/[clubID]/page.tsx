@@ -12,8 +12,8 @@ import { Permissions } from '@/types/permissions'
 import ClubImage from '@/components/clubs/ClubImage'
 import Nav from '@/components/NavBar'
 import React, { useEffect, useState } from 'react'
-import SceletonClub from '@/components/Sceletons/SkeletonClub'
-import SceletonMain from '@/components/Sceletons/SkeletonMain'
+import SceletonClub from '@/components/Skeletons/SkeletonClub'
+import SceletonMain from '@/components/Skeletons/SkeletonMain'
 import { Calendar, Inbox, Medal } from 'lucide-react'
 import { Event } from '@/types/event'
 import ClubMembersCard from '@/components/clubs/ClubMembersCard'
@@ -73,17 +73,13 @@ function Page({ params }: { params: { clubID: number } }) {
 		}
 	}, [club])
 
-	if (isLoading) {
-		return <SceletonClub />
-	}
-
 	return (
 		<>
 			<Nav />
 
 			<div className="flex min-h-screen flex-col bg-white text-white dark:bg-[#020817]">
 				{isLoading ? (
-					<SceletonMain />
+					<SceletonClub />
 				) : (
 					<div className="px-6 py-12">
 						<div className="mx-auto max-w-6xl">
@@ -119,7 +115,7 @@ function Page({ params }: { params: { clubID: number } }) {
 												</Link>
 											</div>
 										)}
-										{isLoggedIn && (
+										{isLoggedIn && !isLoading && (
 											<div>
 												{memberStatus === 'NOT_MEMBER' && (
 													<Button onClick={handleJoinRequest}>Join Club</Button>
