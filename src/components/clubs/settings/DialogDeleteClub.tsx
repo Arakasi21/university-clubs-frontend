@@ -8,6 +8,7 @@ import {
 import { Button } from '@/components/ui/button'
 import React, { useState } from 'react'
 import { Input } from '@/components/ui/input'
+import useClubStore from '@/store/club'
 
 export default function DialogDeleteClub({
 	open,
@@ -20,14 +21,14 @@ export default function DialogDeleteClub({
 	onAccept: () => void
 	onCancel: () => void
 }) {
-	const [password, setPassword] = useState('') // State to hold the password
+	const { club } = useClubStore()
+	const [clubName, setClubName] = useState('')
 
 	const handleAccept = () => {
-		if (password === 'expectedPassword') {
-			// Replace 'expectedPassword' with the actual password
+		if (clubName === club?.name) {
 			onAccept()
 		} else {
-			alert('Incorrect password')
+			alert('Incorrect club name')
 		}
 	}
 	return (
@@ -39,10 +40,10 @@ export default function DialogDeleteClub({
 						<DialogDescription>This will permanently delete the club.</DialogDescription>
 					</DialogHeader>
 					<Input
-						type="password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-						placeholder="Enter password to confirm"
+						type="text"
+						value={clubName}
+						onChange={(e) => setClubName(e.target.value)}
+						placeholder="Enter club name to confirm"
 					/>
 					<Button onClick={handleAccept} variant={'destructive'}>
 						Yes, delete the club

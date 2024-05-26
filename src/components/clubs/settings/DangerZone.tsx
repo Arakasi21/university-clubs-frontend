@@ -9,10 +9,13 @@ import { toast } from 'sonner'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import useClubStore from '@/store/club'
 import DialogClubOwnershipTransfer from '@/components/clubs/settings/DialogClubOwnershipTransfer'
+import { useRouter } from 'next/navigation'
 
 export default function DangerZone() {
 	const clubStore = useClubStore()
 	const { club, isOwner } = clubStore
+
+	const router = useRouter()
 
 	const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 	const [isTransferOwnershipDialogOpen, setIsTransferOwnershipDialogOpen] = useState(false)
@@ -28,6 +31,7 @@ export default function DangerZone() {
 		if (response.status.toString().startsWith('2')) {
 			toast.success('Club deleted successfully')
 			toast.info('Redirect to main page')
+			router.push('/')
 		} else {
 			toast.error('Failed to delete club', { description: response.data.error })
 		}
