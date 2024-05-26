@@ -1,5 +1,4 @@
 'use client'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import useClub from '@/hooks/useClub'
@@ -7,17 +6,15 @@ import useUserClubStatus from '@/hooks/useUserClubStatus'
 import useMemberRoles from '@/hooks/useMemberRoles'
 import useUserStore from '@/store/user'
 import useUserRolesStore from '@/store/useUserRoles'
-import { hasPermission } from '@/helpers/permissions'
-import { Permissions } from '@/types/permissions'
 import ClubImage from '@/components/clubs/ClubImage'
 import Nav from '@/components/NavBar'
 import React, { useEffect, useState } from 'react'
 import SceletonClub from '@/components/Skeletons/SkeletonClub'
-import SceletonMain from '@/components/Skeletons/SkeletonMain'
 import { Calendar, Inbox, Medal } from 'lucide-react'
 import { Event } from '@/types/event'
 import ClubMembersCard from '@/components/clubs/ClubMembersCard'
-import ClubMembersDialog from '@/components/clubs/ClubMembersDialog' // Import the new dialog component
+import ClubMembersDialog from '@/components/clubs/ClubMembersDialog'
+import ClubPageButtons from '@/components/clubs/ClubPageButtons'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const [isLoading, setIsLoading] = useState(true)
@@ -104,36 +101,16 @@ function Page({ params }: { params: { clubID: number } }) {
 											</CardDescription>
 										</div>
 									</div>
-									<div className="flex flex-row gap-3 ">
-										{hasPermission(permissions, Permissions.ALL) && (
-											<div className="flex gap-3">
-												<Link href={`/clubs/${club?.id}/settings`}>
-													<Button variant="default">Settings</Button>
-												</Link>
-												<Link href={`/clubs/${club?.id}/todo`}>
-													<Button>Notion Link</Button>
-												</Link>
-											</div>
-										)}
-										{isLoggedIn && !isLoading && (
-											<div>
-												{memberStatus === 'NOT_MEMBER' && (
-													<Button onClick={handleJoinRequest}>Join Club</Button>
-												)}
-												{memberStatus === 'PENDING' && <Button disabled>Pending</Button>}
-												{memberStatus === 'BANNED' && (
-													<Button disabled variant="destructive">
-														You are banned
-													</Button>
-												)}
-												{!isOwner && memberStatus === 'MEMBER' && (
-													<Button variant="destructive" onClick={handleLeaveClub}>
-														Leave Club
-													</Button>
-												)}
-											</div>
-										)}
-									</div>
+									<ClubPageButtons
+										memberPerms={permissions}
+										club={club as any}
+										loggedIn={isLoggedIn}
+										loading={isLoading}
+										memberStatus={memberStatus}
+										onClick={handleJoinRequest}
+										owner={isOwner}
+										onClick1={handleLeaveClub}
+									/>
 								</div>
 							</div>
 							{/*CLUBS MEMBERS CARD*/}
