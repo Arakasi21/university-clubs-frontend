@@ -75,3 +75,23 @@ export type CoverImage = {
 	}
 	position: number
 }
+
+export type EventFilters = {
+	clubId: number
+	userId: number
+	status:
+		| ''
+		| 'DRAFT'
+		| 'PENDING'
+		| 'APPROVED'
+		| 'REJECTED'
+		| 'IN_PROGRESS'
+		| 'FINISHED'
+		| 'CANCELLED'
+		| 'ARCHIVED'
+	tags: string[]
+	from_date: Date
+	till_date: Date
+	sort_by: '' | 'date' | 'participants' | 'type'
+	sort_order: '' | 'asc' | 'desc'
+}
