@@ -9,12 +9,18 @@ import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import useClubStore from '@/store/club'
 import Link from 'next/link'
 import EventCreationComponent from '@/components/clubs/settings/EventCreationComponent'
+import useUserStore from '@/store/user'
 
 export default function EventsContent() {
+	const user = useUserStore()
 	const [events, setEvents] = useState<Event[]>()
 	const [dialogOpen, setDialogOpen] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 	const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
+	const isEventOwner = (event: Event) => {
+		return event.owner_id === user.user?.id
+	}
+
 	const { club } = useClubStore()
 	const axiosAuth = useAxiosInterceptor()
 
@@ -102,13 +108,12 @@ export default function EventsContent() {
 						)}
 
 						<div className="flex items-center justify-between">
-							<Link href={`/events/${event.id}`}>
-								<Button>View Event</Button>
-							</Link>
-							{/*<DialogViewClubEvent event={event} />*/}
-							{/*<Button size="sm" variant="outline">*/}
-							{/*	Edit*/}
-							{/*</Button>*/}
+							{/* TODO ADD CONDITION IF EVENT STATUS ! DRAFT, THE USER HAVE PERMISSIONS AND ETC	*/}
+							{isEventOwner(event) && (
+								<Link href={`/events/${event.id}`}>
+									<Button>View Event</Button>
+								</Link>
+							)}
 						</div>
 					</div>
 				))}
