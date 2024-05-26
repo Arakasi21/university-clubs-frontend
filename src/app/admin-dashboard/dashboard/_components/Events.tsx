@@ -54,7 +54,7 @@ export default function Events() {
 	const fetchEvents = debounce((search, page, setEvents, setHasMorePages) => {
 		axiosAuth
 			.get(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/admin?page=1&page_size=30&type=&clubId=&userId=&status=&tags=`,
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/admin?page=1&page_size=10&type=&clubId=&userId=&status=&tags=`,
 			)
 			.then((response) => {
 				console.log('Fetched events:', response.data.events)

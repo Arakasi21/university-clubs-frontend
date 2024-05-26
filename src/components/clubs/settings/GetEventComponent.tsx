@@ -1,6 +1,5 @@
 'use client'
-import React, { useCallback, useEffect, useState } from 'react'
-import useUserStore from '@/store/user'
+import React, { useCallback, useState } from 'react'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'

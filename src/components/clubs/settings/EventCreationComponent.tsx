@@ -1,20 +1,10 @@
 import React, { useCallback, useState } from 'react'
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { toast } from 'sonner'
-import useUserStore from '@/store/user'
-import { EventInfo } from '@/components/clubs/settings/EventInfo'
 
 export type UseEventCreateProps = {
-	clubID: number
+	clubID: number | undefined
 }
 
 export default function EventCreationComponent({ clubID }: UseEventCreateProps) {
@@ -35,7 +25,7 @@ export default function EventCreationComponent({ clubID }: UseEventCreateProps) 
 					description: response.data.error,
 				})
 			} else {
-				toast.success('Request to create event successfully made!', {
+				toast.success('Event successfully created!', {
 					action: {
 						label: 'X',
 						onClick: () => {},
@@ -57,26 +47,8 @@ export default function EventCreationComponent({ clubID }: UseEventCreateProps) 
 	}
 
 	return (
-		<Card>
-			<CardHeader>
-				<CardTitle>Event Handler</CardTitle>
-				<CardDescription>Click the button to create an event</CardDescription>
-			</CardHeader>
-			<CardContent>
-				{responseData && (
-					<>
-						<Button variant="secondary" onClick={toggleData}>
-							{isOpen ? 'Hide Event Info' : 'Show Event Info'}
-						</Button>
-						{isOpen && responseData && <EventInfo data={responseData} />}
-					</>
-				)}
-			</CardContent>
-			<CardFooter className="border-t px-6 py-4">
-				<Button onClick={handleCreateEvent} type="submit">
-					Create
-				</Button>
-			</CardFooter>
-		</Card>
+		<Button onClick={handleCreateEvent} type="submit">
+			Create
+		</Button>
 	)
 }

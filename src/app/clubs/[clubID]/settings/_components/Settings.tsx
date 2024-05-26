@@ -16,7 +16,7 @@ export default function Settings() {
 		return <Loader />
 	}
 	return (
-		<div className="flex min-h-[calc(100vh_-_theme(spacing.16))] w-full flex-1 flex-col gap-4 rounded-lg bg-muted/40 p-4 md:gap-8 md:p-10">
+		<div className="flex min-h-[calc(50vh_-_theme(spacing.16))] w-full flex-1 flex-col gap-4 rounded-lg bg-muted/40 p-4 md:gap-8 md:p-10">
 			<div className="mx-auto grid w-full max-w-6xl gap-2">
 				<h1 className="text-3xl font-semibold">Settings</h1>
 			</div>
@@ -24,8 +24,7 @@ export default function Settings() {
 				<GeneralSettings club={club} permissions={permissions} />
 				<div className="grid gap-6">
 					<BanSection clubID={club.id} permissions={permissions} />
-					<EventCreationComponent clubID={club.id} />
-					<GetEventComponent />
+
 					<DangerZone />
 				</div>
 			</div>

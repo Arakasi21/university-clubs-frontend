@@ -24,9 +24,6 @@ export default function GeneralSettings({
 					{club && <DialogUpdateClubLogo />}
 					{club && <DialogUpdateClubBanner />}
 					{club && <DialogUpdateClubInfo />}
-					<Link className="w-40" href={`/clubs/${club?.id}/events`}>
-						<Button className="w-40">Create Event</Button>
-					</Link>
 				</div>
 			) : (
 				<div className="grid gap-4">
@@ -35,9 +32,6 @@ export default function GeneralSettings({
 					</Button>
 					<Button className="w-40" variant="outline" disabled>
 						Update Club Banner
-					</Button>
-					<Button className="w-40" variant="outline" disabled>
-						Create Event
 					</Button>
 					<Button className="w-40" variant="outline" disabled>
 						Update Club Info

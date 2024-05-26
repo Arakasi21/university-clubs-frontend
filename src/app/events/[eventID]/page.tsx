@@ -61,6 +61,15 @@ export default function Page({ params }: { params: { eventID: string } }) {
 			<Nav />
 			<div className="mx-auto max-w-4xl pt-10">
 				<section className="mb-4">
+					{event.attached_images ? (
+						event.attached_images.map((image) => (
+							<div key={image.name} className="overflow-hidden rounded-lg">
+								<img className="h-[400px] w-full " src={image.url} />
+							</div>
+						))
+					) : (
+						<span>No images</span>
+					)}
 					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
 						<div className="mb-4 flex flex-col items-start justify-between sm:flex-row sm:items-center">
 							<div>
@@ -68,6 +77,15 @@ export default function Page({ params }: { params: { eventID: string } }) {
 								<p className="text-sm text-gray-400">
 									{event.description || 'No event description'}
 								</p>
+								{event.tags ? (
+									event.tags.map((tag) => (
+										<span key={tag} className="text-xs text-gray-400">
+											#{tag}
+										</span>
+									))
+								) : (
+									<span>No tags</span>
+								)}
 							</div>
 							<div className="mt-4 flex items-center gap-4 sm:mt-0">
 								<div className="flex items-center gap-2">
@@ -129,7 +147,7 @@ export default function Page({ params }: { params: { eventID: string } }) {
 				</section>
 				<section className="mb-4">
 					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
-						<h3 className="mb-4 text-xl font-semibold">Event Media</h3>
+						<h3 className="mb-4 text-xl font-semibold">Cover Image</h3>
 						<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 							<div className="grid grid-cols-2 gap-4">
 								{event.cover_images ? (

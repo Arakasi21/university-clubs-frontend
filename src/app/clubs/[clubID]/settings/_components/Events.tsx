@@ -7,8 +7,8 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Event } from '@/types/event'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import useClubStore from '@/store/club'
-import { DialogViewClubEvent } from '@/components/clubs/events/DialogViewClubEvent'
 import Link from 'next/link'
+import EventCreationComponent from '@/components/clubs/settings/EventCreationComponent'
 
 export default function EventsContent() {
 	const [events, setEvents] = useState<Event[]>()
@@ -73,9 +73,7 @@ export default function EventsContent() {
 						/>
 					</div>
 					<DropdownMenuEvent />
-					<Button className="ml-auto" size="sm">
-						Create Event
-					</Button>
+					<EventCreationComponent clubID={club?.id} />
 				</div>
 			</div>
 			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

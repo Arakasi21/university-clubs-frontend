@@ -38,11 +38,11 @@ export default function useEvent({ eventID, user }: useEventProps) {
 		} catch (err) {
 			setError('Network Error: Unable to fetch events')
 		}
-	}, [axiosAuth, eventID])
+	}, [eventID])
 
 	useEffect(() => {
 		fetchEventInfo()
-	}, [fetchEventInfo, eventID])
+	}, [fetchEventInfo])
 
 	return { event, loading, isOwner, fetchEventInfo }
 }

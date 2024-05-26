@@ -75,7 +75,7 @@ const ClubInfoEditForm: React.FC = (props) => {
 						control={form.control}
 						name="name"
 						render={({ field }) => (
-							<FormItem>
+							<FormItem className="pb-4">
 								<FormLabel>Club Name</FormLabel>
 								<FormControl>
 									<Input {...field} />
@@ -87,7 +87,7 @@ const ClubInfoEditForm: React.FC = (props) => {
 						control={form.control}
 						name="description"
 						render={({ field }) => (
-							<FormItem>
+							<FormItem className="pb-4">
 								<FormLabel>Club Description</FormLabel>
 								<FormControl>
 									<Input {...field} />
@@ -98,7 +98,7 @@ const ClubInfoEditForm: React.FC = (props) => {
 					<FormField
 						name="club_type"
 						render={({ field }) => (
-							<FormItem className="mb-8 w-full">
+							<FormItem className="mb-8 w-full ">
 								<FormLabel>Type</FormLabel>
 								<Select onValueChange={field.onChange} defaultValue={field.value}>
 									<FormControl>
