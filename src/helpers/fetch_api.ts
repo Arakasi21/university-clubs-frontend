@@ -10,11 +10,16 @@ export const useAxiosInterceptor = () => {
 		async (error) => {
 			if (error.response?.status === 401) {
 				try {
+					if (!jwt_token) {
+						await new Promise((resolve) => setTimeout(resolve, 500))
+						console.log(jwt_token)
+					}
 					const options: AxiosRequestConfig = {
 						method: 'POST',
 						headers: {
 							Authorization: `Bearer ${jwt_token}`,
 						},
+						withCredentials: true,
 					}
 					const refreshRes = await instance(
 						`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/refresh`,

@@ -61,8 +61,8 @@ export default function Page({ params }: { params: { eventID: string } }) {
 			<Nav />
 			<div className="mx-auto max-w-4xl pt-10">
 				<section className="mb-4">
-					{event.attached_images ? (
-						event.attached_images.map((image) => (
+					{event.cover_images ? (
+						event.cover_images.map((image) => (
 							<div key={image.name} className="overflow-hidden rounded-lg">
 								<img className="h-[400px] w-full " src={image.url} />
 							</div>
@@ -104,7 +104,7 @@ export default function Page({ params }: { params: { eventID: string } }) {
 									<div key={club.id} className="flex items-center space-x-4 pb-2">
 										<Avatar>
 											<Link href={`/clubs/${club.id}`}>
-												<AvatarImage src={club.logo_url} alt={club.name} />
+												<AvatarImage src={club.logo_url || '/main_photo.jpeg'} alt={club.name} />
 											</Link>
 											<AvatarFallback>{club.name.charAt(0)}</AvatarFallback>
 										</Avatar>

@@ -4,6 +4,7 @@ import { DropdownMenu, DropdownMenuTrigger } from '@/components/ui/dropdown-menu
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { Event } from '@/types/event'
 import { Button } from '@/components/ui/button'
+import { toast } from 'sonner'
 
 export type EventsRowProps = {
 	onUpdate: () => void
@@ -20,9 +21,10 @@ function EventsRow({ onUpdate, event }: EventsRowProps) {
 				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${event.id}`,
 			)
 			if (response.status.toString().startsWith('2')) {
+				toast.success('Event deleted successfully')
 				onUpdate()
 			} else {
-				console.error('Failed to delete event')
+				toast.error('Failed to delete event')
 			}
 		} catch (err) {
 			console.error('Network Error: Unable to delete event')

@@ -63,6 +63,7 @@ export default function EventsContent() {
 					</div>
 				</div>
 			</div>
+
 			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 				{events?.map((event) => (
 					<div
@@ -87,12 +88,11 @@ export default function EventsContent() {
 								</div>
 							</div>
 						)}
-
-						<div className="flex items-center justify-between">
+						<div className="flex  items-center justify-between	">
 							{/* TODO ADD CONDITION IF EVENT STATUS ! DRAFT, THE USER HAVE PERMISSIONS AND ETC	*/}
 							{isEventOwner(event) && (
 								<Link href={`/events/${event.id}`}>
-									<Button>View Event</Button>
+									<Button className=" w-22 h-8 p-4">View Event</Button>
 								</Link>
 							)}
 						</div>

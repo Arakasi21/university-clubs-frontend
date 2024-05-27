@@ -7,9 +7,11 @@ import { MenuIcon, Search } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { useRouter } from 'next/navigation'
 
 export default function Nav() {
 	const { isLoggedIn, user, purgeUser } = useUserStore()
+	const router = useRouter()
 
 	const logOutHandle = async () => {
 		await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`, {
@@ -18,6 +20,7 @@ export default function Nav() {
 		})
 			.then(() => {
 				purgeUser()
+				router.push('/')
 			})
 			.catch((error) => {
 				console.log(error)

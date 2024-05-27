@@ -14,6 +14,14 @@ import { Textarea } from '@/components/ui/textarea'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { toast } from 'sonner'
 import { format } from 'date-fns'
+import { CoverImage } from '@/types/event'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select'
 
 type FormData = {
 	title: string
@@ -22,18 +30,20 @@ type FormData = {
 	end_date: string
 	location_uni: string
 	location_link: string
-	// tags: string
 	max_participants: string
+	cover_images: CoverImage[]
+	type: string
 }
 
 export default function EditEventPage({ params }: { params: { eventID: string } }) {
 	const { user } = useUserStore()
 	const { event, fetchEventInfo } = useEvent({ eventID: params.eventID, user })
 	const isUserOrganizer = event?.organizers.some((organizer) => organizer.id === user?.id)
+	const [isPendingReview, setIsPendingReview] = useState(event?.status === 'PENDING')
+	const isEditable = ['DRAFT', 'REJECTED'].includes(event?.status || '')
 
 	const axiosAuth = useAxiosInterceptor()
 	const [imageFile, setImageFile] = useState<File | null>(null)
-
 	const [formData, setFormData] = useState<FormData>({
 		title: event?.title || '',
 		description: event?.description || '',
@@ -41,26 +51,48 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 		end_date: event?.end_date ? format(new Date(event.end_date), "yyyy-MM-dd'T'HH:mm") : '',
 		location_uni: event?.location_university || '',
 		location_link: event?.location_link || '',
-		// tags: event?.tags.join(', ') || '',
-		max_participants: event?.max_participants?.toString() || '', // ensure this is a string
+		max_participants: event?.max_participants?.toString() || '',
+		cover_images: event?.cover_images || [],
+		type: event?.type || '',
 	})
 
-	useEffect(() => {
-		if (event) {
-			setFormData({
-				title: event.title || '',
-				description: event.description || '',
-				start_date: event.start_date
-					? format(new Date(event.start_date), "yyyy-MM-dd'T'HH:mm")
-					: '',
-				end_date: event.end_date ? format(new Date(event.end_date), "yyyy-MM-dd'T'HH:mm") : '',
-				location_uni: event.location_university || '',
-				location_link: event.location_link || '',
-				// tags: event.tags.join(', ') || '',
-				max_participants: event.max_participants?.toString() || '',
-			})
-		}
-	}, [event])
+	const isEventReadyForReview =
+		event?.cover_images &&
+		event?.title &&
+		event.start_date &&
+		event.end_date &&
+		event.location_university &&
+		event.type
+
+	type EventStatusMapping = {
+		[key: string]: { color: string; label: string }
+	}
+
+	const eventStatusMapping: EventStatusMapping = {
+		DRAFT: { color: 'bg-gray-500', label: 'Draft' },
+		PENDING: { color: 'bg-yellow-500', label: 'Pending' },
+		APPROVED: { color: 'bg-blue-500', label: 'Approved' },
+		REJECTED: { color: 'bg-red-500', label: 'Rejected' },
+		IN_PROGRESS: { color: 'bg-green-500', label: 'In Progress' },
+	}
+
+	const eventStatus = eventStatusMapping[event?.status || 'DRAFT'] || {
+		color: 'bg-gray-500',
+		label: 'Unknown',
+	}
+
+	const startDate = event?.start_date ? new Date(event.start_date) : null
+
+	const options: DateTimeFormatOptions = {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+		hour: 'numeric',
+		minute: 'numeric',
+	}
+	const formattedStartDate = startDate
+		? startDate.toLocaleDateString(undefined, options)
+		: 'No start date available'
 
 	async function updateEvent(eventId: string, updatedEvent: any) {
 		try {
@@ -81,47 +113,91 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 		}
 	}
 
-	type EventStatusMapping = {
-		[key: string]: { color: string; label: string }
+	const handleSendToReview = async () => {
+		if (!event) {
+			toast.error('Event is not defined')
+			return
+		}
+
+		try {
+			const response = await axiosAuth.patch(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${event.id}/review`,
+			)
+
+			if (response.status === 200) {
+				toast.success('Event sent to review')
+				event.status = 'PENDING'
+				fetchEventInfo()
+				setIsPendingReview(true)
+			} else {
+				toast.error('Failed to send event to review')
+			}
+		} catch (error) {
+			console.error('There has been a problem with your fetch operation:', error)
+		}
 	}
 
-	const eventStatusMapping: EventStatusMapping = {
-		draft: { color: 'bg-gray-500', label: 'Draft' },
-		pending: { color: 'bg-yellow-500', label: 'Pending' },
-		'in progress': { color: 'bg-green-500', label: 'In Progress' },
-		archive: { color: 'bg-red-500', label: 'Archive' },
+	const handleRevokeReview = async () => {
+		if (!event) {
+			toast.error('Event is not defined')
+			return
+		}
+
+		try {
+			const response = await axiosAuth.delete(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${event.id}/review`,
+			)
+
+			if (response.status === 200) {
+				toast.success('Review successfully revoked')
+				event.status = 'DRAFT'
+				fetchEventInfo()
+				setIsPendingReview(false)
+			} else {
+				toast.error('Failed to revoke review')
+			}
+		} catch (error) {
+			console.error('There has been a problem with your fetch operation:', error)
+		}
 	}
 
-	const eventStatus = eventStatusMapping[event?.status || 'draft']
-
-	const startDate = event?.start_date ? new Date(event.start_date) : null
-
-	const options: DateTimeFormatOptions = {
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric',
-		hour: 'numeric',
-		minute: 'numeric',
-	}
-	const formattedStartDate = startDate
-		? startDate.toLocaleDateString(undefined, options)
-		: 'No start date available'
-
-	if (!event) {
-		return (
-			<>
-				<Nav />
-
-				<div className="flex h-24 flex-col items-center justify-center pt-20">
-					<span>Event not found / No access to view the event</span>
-				</div>
-			</>
-		)
+	const handleFileSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0]
+		if (!file) {
+			toast.error('No image selected')
+			return
+		}
+		setImageFile(file)
 	}
 
-	const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files && e.target.files.length > 0) {
-			setImageFile(e.target.files[0])
+	async function handleImageUpload() {
+		if (!imageFile) {
+			toast.error('No image selected')
+			return
+		}
+		const formData = new FormData()
+		formData.append('image', imageFile)
+
+		try {
+			const response = await axiosAuth.post(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${params.eventID}/upload/images`,
+				formData,
+				{
+					headers: {
+						'Content-Type': 'multipart/form-data',
+					},
+				},
+			)
+
+			if (response.status !== 200) {
+				toast.error('Failed to upload image')
+				return
+			}
+
+			toast.success('Image successfully uploaded!')
+			return response.data
+		} catch (error) {
+			toast.error('Failed to upload image')
 		}
 	}
 
@@ -133,16 +209,56 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 		})
 	}
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
+		let uploadedImage
+		if (imageFile) {
+			uploadedImage = await handleImageUpload()
+		}
 		const updatedEvent = {
 			...formData,
-
-			start_date: '2024-05-23 14:51:08.465 +0000 UTC', // Mock start_date
-			end_date: '2024-05-30 14:51:08.465 +0000 UTC', // Mock end_date
+			cover_images: uploadedImage
+				? [uploadedImage].map((image, index) => ({ ...image, position: index + 1 }))
+				: [],
+			start_date: '2024-05-23 14:51:08.465 +0000 UTC',
+			end_date: '2024-05-30 14:51:08.465 +0000 UTC',
 			max_participants: parseInt(formData.max_participants),
 		}
 		fetchEventInfo()
-		updateEvent(event.id, updatedEvent)
+		if (event) {
+			updateEvent(event.id, updatedEvent)
+		} else {
+			console.error('Event is null')
+		}
+	}
+
+	useEffect(() => {
+		if (event) {
+			setFormData({
+				title: event.title || '',
+				description: event.description || '',
+				start_date: event.start_date
+					? format(new Date(event.start_date), "yyyy-MM-dd'T'HH:mm")
+					: '',
+				end_date: event.end_date ? format(new Date(event.end_date), "yyyy-MM-dd'T'HH:mm") : '',
+				location_uni: event.location_university || '',
+				location_link: event.location_link || '',
+				max_participants: event.max_participants?.toString() || '',
+				cover_images: event.cover_images || [],
+				type: event.type || '',
+			})
+		}
+		setIsPendingReview(event?.status === 'PENDING')
+	}, [event, event?.status])
+
+	if (!event) {
+		return (
+			<>
+				<Nav />
+				<div className="flex h-24 flex-col items-center justify-center pt-20">
+					<span>Event not found / No access to view the event</span>
+				</div>
+			</>
+		)
 	}
 
 	return (
@@ -150,8 +266,8 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 			<Nav />
 			<div className="mx-auto max-w-4xl pt-10">
 				<section className="mb-4">
-					{event.attached_images ? (
-						event.attached_images.map((image) => (
+					{event.cover_images ? (
+						event.cover_images.map((image) => (
 							<div key={image.name} className="overflow-hidden rounded-lg">
 								<img className="h-[400px] w-full" src={image.url} />
 							</div>
@@ -160,64 +276,85 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 						<span>No images</span>
 					)}
 					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
-						<div className="mb-4 flex flex-col items-start justify-between sm:flex-row sm:items-center">
-							<div>
-								<h2 className="mb-1 text-2xl font-semibold">
-									<Input
-										type="text"
-										name="title"
-										value={formData.title}
-										onChange={handleInputChange}
-										className="w-full"
-									/>
-								</h2>
-								<p className="text-sm text-gray-400">
-									<Textarea
-										name="description"
-										value={formData.description}
-										onChange={handleInputChange}
-										className="w-full"
-									/>
-								</p>
-							</div>
-							<div className="mt-4 flex items-center gap-4 sm:mt-0">
-								<div className="flex items-center gap-2">
-									<Input
-										type="datetime-local"
-										name="start_date"
-										value={formData.start_date}
-										onChange={handleInputChange}
-										className="text-sm"
-									/>
-								</div>
-								<div className="flex items-center gap-2">
-									<Input
-										type="datetime-local"
-										name="end_date"
-										value={formData.end_date}
-										onChange={handleInputChange}
-										className="text-sm"
-									/>
-								</div>
-								<div className="flex items-center gap-2">
-									<LocateIcon className="h-5 w-5 text-gray-400" />
-									<Input
-										type="text"
-										name="location_uni"
-										value={formData.location_uni} // Make it a controlled input
-										onChange={handleInputChange}
-										className="text-sm"
-									/>
-								</div>
-							</div>
+						<div className="mb-4">
+							<label className="text-sm text-gray-400">Title:</label>
+							<Input
+								type="text"
+								name="title"
+								value={formData.title}
+								onChange={handleInputChange}
+								className="w-full"
+								disabled={!isEditable}
+							/>
 						</div>
-						<div className="flex items-center justify-between">
+						<div className="mb-4">
+							<label className="text-sm text-gray-400">Description:</label>
+							<Textarea
+								name="description"
+								value={formData.description}
+								onChange={handleInputChange}
+								className="w-full"
+								disabled={!isEditable}
+							/>
+						</div>
+						<div className="mb-4">
+							<label className="text-sm text-gray-400">Type:</label>
+							<Select
+								name="type"
+								value={formData.type}
+								disabled={!isEditable}
+								onValueChange={(value) => setFormData({ ...formData, type: value })}
+							>
+								<SelectTrigger className="w-[180px]">
+									<SelectValue placeholder="Type" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="UNIVERSITY">UNIVERSITY</SelectItem>
+									<SelectItem value="INTRA_CLUB">CLUB</SelectItem>
+								</SelectContent>
+							</Select>
+						</div>
+						<div className="mb-4">
+							<label className="text-sm text-gray-400">Start Date:</label>
+							<Input
+								type="datetime-local"
+								name="start_date"
+								value={formData.start_date}
+								onChange={handleInputChange}
+								className="w-full"
+								disabled={!isEditable}
+							/>
+						</div>
+						<div className="mb-4">
+							<label className="text-sm text-gray-400">End Date:</label>
+							<Input
+								type="datetime-local"
+								name="end_date"
+								value={formData.end_date}
+								onChange={handleInputChange}
+								className="w-full"
+								disabled={!isEditable}
+							/>
+						</div>
+						<div className="mb-4">
+							<label className="text-sm text-gray-400">Location:</label>
+							<Input
+								type="text"
+								name="location_uni"
+								value={formData.location_uni}
+								onChange={handleInputChange}
+								className="w-full"
+								disabled={!isEditable}
+							/>
+						</div>
+
+						<div className="flex flex-col items-center justify-between sm:flex-row">
 							<div className="flex items-center gap-2">
 								{event.collaborator_clubs.map((club) => (
 									<div key={club.id} className="flex items-center space-x-4 pb-2">
 										<Avatar>
 											<Link href={`/clubs/${club.id}`}>
-												<AvatarImage src={club.logo_url} alt={club.name} />
+												<AvatarImage src={club.logo_url || '/main_photo.jpeg'} alt={club.name} />
 											</Link>
 											<AvatarFallback>{club.name.charAt(0)}</AvatarFallback>
 										</Avatar>
@@ -248,9 +385,27 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 											</div>
 										</div>
 									)}
-									<Button className="h-8" variant="default" onClick={handleSubmit}>
-										Update Event
-									</Button>
+									{isUserOrganizer && event.status !== 'PENDING' && (
+										<Button className="h-8" variant="secondary" onClick={handleSubmit}>
+											Update Event
+										</Button>
+									)}
+
+									{isUserOrganizer && isEventReadyForReview && event.status !== 'PENDING' && (
+										<Button className="h-8" variant="default" onClick={handleSendToReview}>
+											Send to Review
+										</Button>
+									)}
+									{isPendingReview && (
+										<Button
+											className="h-8"
+											variant="destructive"
+											size="sm"
+											onClick={handleRevokeReview}
+										>
+											Revoke Review
+										</Button>
+									)}
 								</div>
 							)}
 						</div>
@@ -259,26 +414,29 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 				<section className="mb-4">
 					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
 						<h3 className="mb-4 text-xl font-semibold">Cover Image</h3>
-
-						{/* Image preview */}
 						{imageFile ? (
 							<img
 								src={URL.createObjectURL(imageFile)}
 								alt="Preview"
 								className="mb-4 h-[200px] w-full rounded-lg object-cover"
 							/>
-						) : event.attached_images?.length > 0 ? (
-							event.attached_images.map((image) => (
-								<div key={image.name} className="overflow-hidden rounded-lg">
-									<img className="h-[400px] w-full" src={image.url} />
-								</div>
-							))
+						) : event.cover_images ? (
+							event.cover_images
+								.sort((a, b) => a.position - b.position)
+								.map((image) => (
+									<div key={image.position} className="overflow-hidden rounded-lg">
+										<img className="h-40 w-full object-cover" src={image.url} />
+									</div>
+								))
 						) : (
 							<span>No images</span>
 						)}
-
-						{/* File input */}
-						<input type="file" accept="image/*" onChange={handleImageUpload} />
+						<Input
+							disabled={!isEditable}
+							type="file"
+							accept="image/*"
+							onChange={handleFileSelection}
+						/>
 					</div>
 				</section>
 			</div>
