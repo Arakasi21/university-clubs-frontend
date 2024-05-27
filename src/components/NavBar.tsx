@@ -79,7 +79,7 @@ export default function Nav() {
 							<div className="grid gap-4 p-4">
 								<Link
 									className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
-									href="#"
+									href={'/explore/clubs'}
 								>
 									Explore
 								</Link>
@@ -102,16 +102,14 @@ export default function Nav() {
 									About
 								</Link>
 								<div className="flex flex-col gap-2">
-									{isLoggedIn ? (
-										<DropdownForLoggedIn user={user!} logout={logOutHandle} />
+									{!isLoggedIn ? (
+										<Link href={'/sign-in'}>
+											<Button className="inline-flex" variant="secondary">
+												Sign In
+											</Button>
+										</Link>
 									) : (
-										<>
-											<Link href={'/sign-in'}>
-												<Button className="hidden sm:inline-flex" variant="secondary">
-													Sign In
-												</Button>
-											</Link>
-										</>
+										<DropdownForLoggedIn user={user!} logout={logOutHandle} />
 									)}
 								</div>
 							</div>

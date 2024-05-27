@@ -11,11 +11,10 @@ function Page() {
 	return (
 		<>
 			<Nav />
-
 			<div>
 				<Tabs
 					defaultValue="students"
-					className="grid flex-1 items-start gap-4 p-4 sm:px-64 sm:py-8 md:gap-8"
+					className="sm:px-50 grid flex-1 items-start gap-4 p-64 sm:py-8 md:gap-8"
 				>
 					<div>
 						<span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
@@ -28,13 +27,13 @@ function Page() {
 						<TabsTrigger value="events">Events</TabsTrigger>
 						<TabsTrigger value="reports">Reports</TabsTrigger>
 					</TabsList>
-					<TabsContent value="students">
+					<TabsContent value="students" className="w-full overflow-x-auto">
 						<Students />
 					</TabsContent>
-					<TabsContent value="clubs">
+					<TabsContent value="clubs" className="w-full overflow-x-auto">
 						<Clubs />
 					</TabsContent>
-					<TabsContent value="events">
+					<TabsContent value="events" className="w-full overflow-x-auto">
 						<Events />
 					</TabsContent>
 					<TabsContent value="reports">

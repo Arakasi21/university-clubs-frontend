@@ -100,7 +100,7 @@ export default function Students() {
 
 	return (
 		<div>
-			<Card className="bg-muted/40" x-chunk="dashboard-05-chunk-3">
+			<Card className="bg-muted/40 " x-chunk="dashboard-05-chunk-3">
 				<CardHeader className="px-7">
 					<CardTitle className="pb-4">Students</CardTitle>
 					<SearchAdmin onSearch={handleSearch} />
@@ -109,14 +109,14 @@ export default function Students() {
 					<Table>
 						<TableHeader>
 							<TableRow>
-								<TableHead className="hidden md:table-cell">Avatar</TableHead>
-								<TableHead className="hidden md:table-cell">Name</TableHead>
-								<TableHead className="hidden md:table-cell">Surname</TableHead>
-								<TableHead className="hidden md:table-cell">Email</TableHead>
-								<TableHead className="hidden md:table-cell">Barcode</TableHead>
-								<TableHead className="hidden md:table-cell">Major</TableHead>
-								<TableHead className="hidden md:table-cell">Group</TableHead>
-								<TableHead className="hidden md:table-cell">Year</TableHead>
+								<TableHead className="px-4 py-2">Avatar</TableHead>
+								<TableHead className="px-4 py-2">Name</TableHead>
+								<TableHead className="px-4 py-2">Surname</TableHead>
+								<TableHead className="px-4 py-2">Email</TableHead>
+								<TableHead className="px-4 py-2">Barcode</TableHead>
+								<TableHead className="px-4 py-2">Major</TableHead>
+								<TableHead className="px-4 py-2">Group</TableHead>
+								<TableHead className="px-4 py-2">Year</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
