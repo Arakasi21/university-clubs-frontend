@@ -93,19 +93,6 @@ export function DetailedEventDialog({
 
 	return (
 		<div>
-			{/*{event.cover_images ? (*/}
-			{/*	<img*/}
-			{/*		alt="Event Cover"*/}
-			{/*		className="  h-60 w-full rounded-xl object-cover"*/}
-			{/*		src={event.cover_images[0].url}*/}
-			{/*	/>*/}
-			{/*) : (*/}
-			{/*	<img*/}
-			{/*		alt="Event Cover"*/}
-			{/*		className="h-20 w-20 rounded-xl object-cover"*/}
-			{/*		src="/placeholder.svg"*/}
-			{/*	/>*/}
-			{/*)}*/}
 			<Dialog open={isOpen} onOpenChange={onClose}>
 				<DialogContent className="sm:max-w-[800px]">
 					<DialogHeader>
@@ -204,11 +191,13 @@ export function DetailedEventDialog({
 									event.cover_images.map((image) => (
 										<Card key={image.position}>
 											<CardContent className="py-6">
-												<img
-													alt="Event Cover"
-													className="h-96 w-full object-cover"
-													src={image.url}
-												/>
+												<>
+													<img
+														alt="Event Cover"
+														className="relative m-auto h-[400px] rounded-md object-scale-down drop-shadow-md"
+														src={event.cover_images[0].url}
+													/>
+												</>
 												<p className="text-center text-muted-foreground">cover image</p>
 											</CardContent>
 										</Card>

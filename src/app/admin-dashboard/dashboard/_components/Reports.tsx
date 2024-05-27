@@ -145,6 +145,7 @@ export default function Reports() {
 			<DetailedEventDialog
 				event={selectedEvent}
 				isOpen={eventDialogOpen}
+				onDelete={() => {}}
 				onClose={closeEventDialog}
 			/>
 		</div>
