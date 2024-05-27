@@ -21,7 +21,9 @@ export default function Settings() {
 			<div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
 				<GeneralSettings club={club} permissions={permissions} />
 				<div className="grid gap-6">
-					<BanSection clubID={club.id} permissions={permissions} />
+					<div className="w-full overflow-x-auto">
+						<BanSection clubID={club.id} permissions={permissions} />
+					</div>
 					<DangerZone />
 				</div>
 			</div>

@@ -23,7 +23,7 @@ export default function BanSection({
 				<CardTitle>Banned Users</CardTitle>
 			</CardHeader>
 			<CardFooter className="border-t px-6 py-4">
-				<Tabs className="w-full">
+				<Tabs className="w-full ">
 					<TabsList>
 						<TabsTrigger
 							value="ban"

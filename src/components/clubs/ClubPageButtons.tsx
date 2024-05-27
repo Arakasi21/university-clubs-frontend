@@ -16,11 +16,11 @@ export default function ClubPageButtons(props: {
 	onClick1: () => Promise<void>
 }) {
 	return (
-		<div className="flex flex-row gap-3 ">
+		<div className="flex flex-col gap-3 md:flex-row ">
 			{props.loggedIn && !props.loading && (
 				<>
 					{hasPermission(props.memberPerms, Permissions.ALL) && (
-						<div className="flex gap-3">
+						<div className=" flex flex-col gap-3 md:flex-row">
 							<Link href={`/clubs/${props.club?.id}/settings`}>
 								<Button variant="default">Settings</Button>
 							</Link>

@@ -14,7 +14,7 @@ function Page() {
 			<div>
 				<Tabs
 					defaultValue="students"
-					className="sm:px-50 grid flex-1 items-start gap-4 p-64 sm:py-8 md:gap-8"
+					className="grid flex-1 items-start gap-4 p-10 sm:px-20 sm:py-8 md:gap-8 md:px-32 lg:px-64"
 				>
 					<div>
 						<span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">

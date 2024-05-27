@@ -95,7 +95,7 @@ function BanTable({ clubID }: { clubID: number }) {
 	}, [fetchBannedUsers])
 	return (
 		<div>
-			<Card>
+			<Card className="w-full overflow-x-auto">
 				<CardHeader className="px-7">
 					<CardDescription>List of banned users</CardDescription>
 				</CardHeader>
