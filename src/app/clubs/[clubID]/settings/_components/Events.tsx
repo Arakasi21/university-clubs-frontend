@@ -21,6 +21,19 @@ export default function EventsContent() {
 	const { club } = useClubStore()
 	const axiosAuth = useAxiosInterceptor()
 
+	// COLOR
+	type EventStatusMapping = {
+		[key: string]: { color: string; label: string }
+	}
+
+	const eventStatusMapping: EventStatusMapping = {
+		DRAFT: { color: 'bg-gray-500', label: 'Draft' },
+		PENDING: { color: 'bg-yellow-500', label: 'Pending' },
+		APPROVED: { color: 'bg-green-500', label: 'Approved' },
+		REJECTED: { color: 'bg-red-500', label: 'Rejected' },
+		IN_PROGRESS: { color: 'bg-green-500', label: 'In Progress' },
+	}
+
 	const fetchClubEvents = useCallback(async () => {
 		try {
 			const response = await axiosAuth(
@@ -65,39 +78,47 @@ export default function EventsContent() {
 			</div>
 
 			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-				{events?.map((event) => (
-					<div
-						key={event.id}
-						className="rounded-lg border border-gray-200 p-4 shadow-sm dark:border-gray-800"
-					>
-						<h3 className="text-lg font-medium">{event.title || 'No Title'}</h3>
-						<p className="text-sm text-gray-500 dark:text-gray-400">
-							{new Date(event.created_at).toLocaleString()}
-						</p>
-						{event.status === 'DRAFT' ? (
-							<div className="my-2 flex items-center space-x-2 text-xs">
-								<div className="rounded-md bg-yellow-500 px-2 py-1 text-xs text-white">
-									{event.status}
+				{/* TODO EVENT STATUS COLOR*/}
+				{events?.map((event) => {
+					const eventStatus = eventStatusMapping[event.status] || {
+						color: 'bg-gray-500',
+						label: 'Unknown',
+					}
+
+					return (
+						<div
+							key={event.id}
+							className="rounded-lg border border-gray-200 p-4 shadow-sm dark:border-gray-800"
+						>
+							<h3 className="text-lg font-medium">{event.title || 'No Title'}</h3>
+							<p className="text-xs text-gray-500 dark:text-gray-400">
+								{new Date(event.created_at).toLocaleString()}
+							</p>
+
+							{event.status === 'DRAFT' ? (
+								<div className="my-2 flex items-center space-x-2 text-xs">
+									<AlertTriangle className="h-5 w-5 text-yellow-500" />
+									<div className="rounded-md bg-yellow-500 px-2 py-2 text-xs text-white">
+										{eventStatus.label}
+									</div>
 								</div>
-								<AlertTriangle className="h-4 w-4 text-yellow-500" />
-							</div>
-						) : (
-							<div className="my-2 flex items-center space-x-2 text-xs">
-								<div className="rounded-md bg-green-900 px-2 py-1 text-xs text-white">
-									{event.status}
+							) : (
+								<div className="my-2 flex items-center space-x-2 text-xs">
+									<div className={`rounded-md px-2 py-2 text-xs text-white ${eventStatus.color}`}>
+										{eventStatus.label}
+									</div>
 								</div>
-							</div>
-						)}
-						<div className="flex  items-center justify-between	">
-							{/* TODO ADD CONDITION IF EVENT STATUS ! DRAFT, THE USER HAVE PERMISSIONS AND ETC	*/}
-							{isEventOwner(event) && (
-								<Link href={`/events/${event.id}`}>
-									<Button className=" w-22 h-8 p-4">View Event</Button>
-								</Link>
 							)}
+							<div className="flex  items-center justify-between">
+								{isEventOwner(event) && (
+									<Link href={`/events/${event.id}`}>
+										<Button className=" w-22 h-8 p-4">View Event</Button>
+									</Link>
+								)}
+							</div>
 						</div>
-					</div>
-				))}
+					)
+				})}
 			</div>
 		</main>
 	)

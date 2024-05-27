@@ -475,15 +475,16 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 									</div>
 								))}
 							</div>
-							{isUserOrganizer && (
-								// EVENT STATUS
 
+							{/* =================== EVENT STATUS =================*/}
+
+							{isUserOrganizer && (
 								<div className="flex flex-row items-center gap-2">
 									{event.status === 'DRAFT' ? (
 										<div className="my-2 flex items-center space-x-2 text-xs">
 											<AlertTriangle className="h-5 w-5 text-yellow-500" />
 											<div className="rounded-md bg-yellow-500 px-2 py-2 text-xs text-white">
-												{event.status}
+												{eventStatus.label}
 											</div>
 										</div>
 									) : (

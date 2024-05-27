@@ -35,13 +35,10 @@ export default function Events() {
 			if (value !== undefined) {
 				// Check if value is not undefined
 				if (Array.isArray(value)) {
-					// If the value is an array, add each item as a separate param
 					value.forEach((item) => params.append(key, item))
 				} else if (value instanceof Date) {
-					// If the value is a Date, convert it to an ISO string
 					params.append(key, value.toISOString())
 				} else {
-					// Otherwise, just add the value as a string
 					params.append(key, value.toString())
 				}
 			}
