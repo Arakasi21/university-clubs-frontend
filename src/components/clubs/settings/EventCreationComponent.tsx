@@ -31,7 +31,6 @@ export default function EventCreationComponent({ clubID, onEventCreated }: UseEv
 					},
 				})
 
-				setIsOpen(false)
 				onEventCreated()
 			}
 		} catch (e) {

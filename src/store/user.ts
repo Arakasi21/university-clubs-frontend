@@ -31,7 +31,7 @@ const useUserStore = create<userStore>()(
 				})),
 		}),
 		{
-			name: 'user-storage', // Specify the name for the storage key
+			name: 'user-storage',
 		},
 	),
 )

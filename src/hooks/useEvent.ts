@@ -14,7 +14,6 @@ export default function useEvent({ eventID, user }: useEventProps) {
 	const [event, setEvent] = useState<Event | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [isOwner, setIsOwner] = useState(false)
-	const [error, setError] = useState<string | null>(null)
 
 	const axiosAuth = useAxiosInterceptor()
 	const { setEventStore } = useEventStore()
@@ -36,7 +35,7 @@ export default function useEvent({ eventID, user }: useEventProps) {
 				throw new Error(response.data.error || 'Failed to Fetch event info')
 			}
 		} catch (err) {
-			setError('Network Error: Unable to fetch events')
+			console.log(err)
 		}
 	}, [eventID])
 
