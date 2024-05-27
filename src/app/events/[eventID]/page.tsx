@@ -3,13 +3,22 @@
 import useEvent from '@/hooks/useEvent'
 import useUserStore from '@/store/user'
 import Nav from '@/components/NavBar'
-import { AlertTriangle, CalendarDaysIcon, FileIcon, LocateIcon } from 'lucide-react'
+import {
+	AlertTriangle,
+	CalendarDaysIcon,
+	CheckIcon,
+	FileIcon,
+	LocateIcon,
+	PlusIcon,
+} from 'lucide-react'
 import React from 'react'
 import { Organizer } from '@/types/event'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Link from 'next/link'
 import { DateTimeFormatOptions } from 'intl'
 import { Button } from '@/components/ui/button'
+import UserAvatar from '@/components/user/userAvatar'
+import useUserClubStatus from '@/hooks/useUserClubStatus'
 
 export default function Page({ params }: { params: { eventID: string } }) {
 	const { user } = useUserStore()
@@ -18,18 +27,29 @@ export default function Page({ params }: { params: { eventID: string } }) {
 		(organizer: Organizer) => organizer.id === user?.id,
 	)
 
+	const { memberStatus } = useUserClubStatus({
+		clubID: event?.club_id || 0,
+	})
+	const isMember = (clubId: number) => {
+		return memberStatus[clubId] === 'member'
+	}
+
 	type EventStatusMapping = {
 		[key: string]: { color: string; label: string }
 	}
 
 	const eventStatusMapping: EventStatusMapping = {
-		draft: { color: 'bg-gray-500', label: 'Draft' },
-		pending: { color: 'bg-yellow-500', label: 'Pending' },
-		'in progress': { color: 'bg-green-500', label: 'In Progress' },
-		archive: { color: 'bg-red-500', label: 'Archive' },
+		DRAFT: { color: 'bg-gray-500', label: 'Draft' },
+		PENDING: { color: 'bg-yellow-500', label: 'Pending' },
+		APPROVED: { color: 'bg-green-500', label: 'Approved' },
+		REJECTED: { color: 'bg-red-500', label: 'Rejected' },
+		IN_PROGRESS: { color: 'bg-green-500', label: 'In Progress' },
 	}
 
-	const eventStatus = eventStatusMapping[event?.status || 'draft']
+	const eventStatus = eventStatusMapping[event?.status || 'DRAFT'] || {
+		color: 'bg-gray-500',
+		label: 'Unknown',
+	}
 
 	const startDate = event?.start_date ? new Date(event.start_date) : null
 
@@ -48,8 +68,7 @@ export default function Page({ params }: { params: { eventID: string } }) {
 		return (
 			<>
 				<Nav />
-
-				<div className="flex h-24 flex-col items-center justify-center pt-20 ">
+				<div className="flex h-24 flex-col items-center justify-center pt-20">
 					<span>Event not found / No access to view the event</span>
 				</div>
 			</>
@@ -59,150 +78,146 @@ export default function Page({ params }: { params: { eventID: string } }) {
 	return (
 		<>
 			<Nav />
-			<div className="mx-auto max-w-4xl pt-10">
-				<section className="mb-4">
-					{event.cover_images ? (
-						event.cover_images.map((image) => (
-							<div key={image.name} className="overflow-hidden rounded-lg">
-								<img className="h-[600px] w-full " src={image.url} />
-							</div>
-						))
-					) : (
-						<span>No images</span>
-					)}
-					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
-						<div className="mb-4 flex flex-col items-start justify-between sm:flex-row sm:items-center">
-							<div>
-								<h2 className="mb-1 text-2xl font-semibold">{event.title || event.id}</h2>
-								<p className="text-sm text-gray-400">
-									{event.description || 'No event description'}
-								</p>
-								{event.tags ? (
-									event.tags.map((tag) => (
-										<span key={tag} className="text-xs text-gray-400">
-											{' '}
-											#{tag}
-										</span>
-									))
+			<div className="flex min-h-screen flex-col bg-[#030a20] text-gray-50">
+				<main className="container mx-auto flex-1 px-4 py-12 md:px-6 md:py-16 lg:px-8 lg:py-24">
+					<div className="grid gap-8 md:grid-cols-[1fr_300px] lg:gap-12">
+						<div>
+							<div className="relative">
+								{event.cover_images ? (
+									<>
+										<img
+											alt="Event Cover"
+											className="absolute inset-0 h-full w-full object-cover blur-lg filter"
+											src={event.cover_images[0].url}
+										/>
+										<img
+											alt="Event Cover"
+											className="relative m-auto h-[500px] rounded-md object-scale-down drop-shadow-md"
+											src={event.cover_images[0].url}
+										/>
+									</>
 								) : (
-									<span>No tags</span>
+									<img
+										alt="Event Cover"
+										className="aspect-[2/1] w-full rounded-xl object-cover"
+										src="/placeholder.svg"
+									/>
 								)}
 							</div>
-							<div className="mt-4 flex items-center gap-4 sm:mt-0">
-								<div className="flex items-center gap-2">
-									<CalendarDaysIcon className="h-5 w-5 text-gray-400" />
-									<span className="text-sm">{formattedStartDate}</span>
+							<div className="mt-8 space-y-2">
+								<h1 className="text-3xl font-bold md:text-4xl lg:text-5xl">
+									{event.title || event.id}
+								</h1>
+
+								<div className="flex flex-wrap gap-2 pb-2">
+									{event.tags ? (
+										event.tags.map((tag) => (
+											<div
+												key={tag}
+												className="rounded-full bg-gray-800 px-3 py-1 text-sm font-medium"
+											>
+												{tag}
+											</div>
+										))
+									) : (
+										<span>No tags</span>
+									)}
 								</div>
-								<div className="flex items-center gap-2">
-									<LocateIcon className="h-5 w-5 text-gray-400" />
-									<span className="text-sm">{event.location_university}</span>
+
+								<div className="prose max-w-[800px] text-gray-300">
+									<p>{event.description || 'No event description'}</p>
 								</div>
 							</div>
 						</div>
-						<div className="flex items-center justify-between">
-							<div className="flex items-center gap-2">
-								{event.collaborator_clubs.map((club) => (
-									<div key={club.id} className="flex items-center space-x-4 pb-2">
-										<Avatar>
-											<Link href={`/clubs/${club.id}`}>
-												<AvatarImage src={club.logo_url || '/main_photo.jpeg'} alt={club.name} />
-											</Link>
-											<AvatarFallback>{club.name.charAt(0)}</AvatarFallback>
-										</Avatar>
+						<div className="space-y-6 rounded-xl bg-gray-800 p-6">
+							<div className="space-y-2">
+								<div className="text-sm font-medium text-gray-400">When</div>
+								<div>
+									<div className="text-lg font-medium">{formattedStartDate}</div>
+									<div className="text-sm text-gray-400">9:00 AM - 5:00 PM</div>
+								</div>
+							</div>
+							<div className="space-y-2">
+								<div className="text-sm font-medium text-gray-400">Where</div>
+								<div>
+									<div className="text-lg font-medium">
+										{event.location_university || 'Location not specified'}
 									</div>
-								))}
-								<div className="text-sm text-gray-400">Organized by:</div>
-								{event.organizers.map((organizer: Organizer) => (
-									<div key={organizer.id}>
-										<div className="text-sm font-medium">
-											{organizer.first_name} {organizer.last_name}
+								</div>
+							</div>
+							<div className="space-y-2">
+								<div>
+									<div className="pb-2 text-sm font-medium text-gray-400">Club Collaborators</div>
+									{event.collaborator_clubs.map((club) => (
+										<div key={club.id} className="flex items-center gap-2 pb-2">
+											<div className="flex items-center justify-between rounded-full bg-gray-700 px-2 py-1">
+												<div className="flex-shrink-0  rounded-full">
+													<img
+														className="h-10 w-10 rounded-full object-cover"
+														src={club.logo_url || '/placeholder.svg'}
+														alt={club.name}
+													/>
+												</div>
+												<div className="ml-2 text-sm font-medium">{club.name}</div>
+												<Link href={`/clubs/${club.id}`}>
+													<Button
+														className="text-gray-400 hover:bg-gray-700 hover:text-gray-50"
+														size="icon"
+														variant="ghost"
+													>
+														{isMember(club.id) ? (
+															<PlusIcon className="h-4 w-4" />
+														) : (
+															<CheckIcon className="h-4 w-4 text-green-500" />
+														)}
+													</Button>
+												</Link>
+											</div>
+										</div>
+									))}
+								</div>
+								<div className="text-sm font-medium text-gray-400">Organizers</div>
+								<div className="flex items-center gap-4">
+									{event.organizers.map((organizer: Organizer) => (
+										<div key={organizer.id} className="flex items-center gap-2">
+											<UserAvatar user={organizer} size={44} />
+											<div className="text-sm font-medium">
+												{organizer.first_name} {organizer.last_name}
+											</div>
+										</div>
+									))}
+								</div>
+							</div>
+							<div className="space-y-2">
+								{event.status === 'DRAFT' ? (
+									<div className="my-2 flex items-center space-x-2 text-xs">
+										<AlertTriangle className="h-5 w-5 text-yellow-500" />
+										<div className="rounded-md bg-yellow-500 px-2 py-2 text-xs text-white">
+											{event.status}
 										</div>
 									</div>
-								))}
+								) : (
+									<div className="my-2 flex w-full items-center space-x-2 text-xs">
+										<div
+											className={`w-full items-center rounded-md px-2 py-2 text-xs text-white ${eventStatus.color}`}
+										>
+											{eventStatus.label}
+										</div>
+									</div>
+								)}
 							</div>
 							{isUserOrganizer && (
-								<div className="flex flex-row items-center gap-2">
-									{event.status === 'DRAFT' ? (
-										<div className="my-2 flex items-center space-x-2 text-xs">
-											<AlertTriangle className="h-5 w-5 text-yellow-500" />
-											<div className="rounded-md bg-yellow-500 px-2 py-2 text-xs text-white">
-												{event.status}
-											</div>
-										</div>
-									) : (
-										<div className="my-2 flex items-center space-x-2 text-xs">
-											<div className="rounded-md bg-green-900 px-2 py-1 text-xs text-white">
-												{event.status}
-											</div>
-										</div>
-									)}
+								<div className="flex gap-2">
 									<Link href={`/events/${event.id}/edit`}>
-										<Button className="h-8" variant="default">
-											Edit
+										<Button className="flex-1" variant="default">
+											Edit Event
 										</Button>
 									</Link>
 								</div>
 							)}
 						</div>
 					</div>
-				</section>
-				<section className="mb-4">
-					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
-						<h3 className="mb-4 text-xl font-semibold">Cover Image</h3>
-						<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-							<div className="grid grid-cols-2 gap-4">
-								{event.cover_images ? (
-									event.cover_images
-										.sort((a, b) => a.position - b.position)
-										.map((image) => (
-											<div key={image.position} className="overflow-hidden rounded-lg">
-												<img className="h-40 w-full object-cover" src={image.url} />
-											</div>
-										))
-								) : (
-									<span>No images</span>
-								)}
-							</div>
-						</div>
-					</div>
-				</section>
-				<section className="mb-4">
-					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
-						<h3 className="mb-4 text-xl font-semibold">Attached Images</h3>
-						<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-							{event.attached_images ? (
-								event.attached_images.map((image, index) => (
-									<div key={index} className="overflow-hidden rounded-lg">
-										<img className="h-40 w-full object-cover" src={image.url} />
-									</div>
-								))
-							) : (
-								<span>No attached images</span>
-							)}
-						</div>
-					</div>
-				</section>
-				<section className="mb-8">
-					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
-						<h3 className="mb-4 text-xl font-semibold">Attached Files</h3>
-						<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-							{event.attached_files ? (
-								event.attached_files.map((file, index) => (
-									<div key={index} className="w-20 overflow-hidden rounded-lg">
-										<a key={index} href={file.url} target="_blank" rel="noopener noreferrer">
-											<div className="flex flex-col items-center justify-center space-y-2 rounded-lg bg-gray-800 p-4">
-												<FileIcon className="h-8 w-8" />
-												{file.name}
-											</div>
-										</a>
-									</div>
-								))
-							) : (
-								<span>No attached files</span>
-							)}
-						</div>
-					</div>
-				</section>
+				</main>
 			</div>
 		</>
 	)

@@ -132,7 +132,7 @@ function Page() {
 			<Nav />
 
 			<Tabs
-				className="grid flex-1 items-start gap-4 p-8 sm:p-2 sm:px-16 sm:py-8 md:gap-8 "
+				className="mx-96 grid flex-1 items-start gap-4 p-8 sm:p-2 sm:px-16 sm:py-8 md:gap-8 "
 				defaultValue="all"
 			>
 				<TabsContent value="all">

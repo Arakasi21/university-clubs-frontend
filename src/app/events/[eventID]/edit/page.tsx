@@ -43,6 +43,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 	const { event, fetchEventInfo } = useEvent({ eventID: params.eventID, user })
 	const isUserOrganizer = event?.organizers.some((organizer) => organizer.id === user?.id)
 	const [isPendingReview, setIsPendingReview] = useState(event?.status === 'PENDING')
+	const [isApproved, setIsApproved] = useState(event?.status === 'APPROVED')
 	const isEditable = ['DRAFT', 'REJECTED'].includes(event?.status || '')
 
 	const axiosAuth = useAxiosInterceptor()
@@ -82,7 +83,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 	const eventStatusMapping: EventStatusMapping = {
 		DRAFT: { color: 'bg-gray-500', label: 'Draft' },
 		PENDING: { color: 'bg-yellow-500', label: 'Pending' },
-		APPROVED: { color: 'bg-blue-500', label: 'Approved' },
+		APPROVED: { color: 'bg-green-500', label: 'Approved' },
 		REJECTED: { color: 'bg-red-500', label: 'Rejected' },
 		IN_PROGRESS: { color: 'bg-green-500', label: 'In Progress' },
 	}
@@ -315,15 +316,28 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 			<Nav />
 			<div className="mx-auto max-w-4xl pt-10">
 				<section className="mb-4">
-					{event.cover_images ? (
-						event.cover_images.map((image) => (
-							<div key={image.name} className="overflow-hidden rounded-lg">
-								<img className="h-[600px] w-full" src={image.url} />
-							</div>
-						))
-					) : (
-						<span>No images</span>
-					)}
+					<div className="relative">
+						{event.cover_images ? (
+							<>
+								<img
+									alt="Event Cover"
+									className="absolute inset-0 h-full w-full object-cover blur-lg filter"
+									src={event.cover_images[0].url}
+								/>
+								<img
+									alt="Event Cover"
+									className="relative m-auto h-[500px] rounded-md object-scale-down drop-shadow-md"
+									src={event.cover_images[0].url}
+								/>
+							</>
+						) : (
+							<img
+								alt="Event Cover"
+								className="aspect-[2/1] w-full rounded-xl object-cover"
+								src="/placeholder.svg"
+							/>
+						)}
+					</div>
 					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
 						<CardTitle className="mb-2 flex items-center justify-center">EDIT EVENT</CardTitle>
 						{/*<Separator />*/}
@@ -462,6 +476,8 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 								))}
 							</div>
 							{isUserOrganizer && (
+								// EVENT STATUS
+
 								<div className="flex flex-row items-center gap-2">
 									{event.status === 'DRAFT' ? (
 										<div className="my-2 flex items-center space-x-2 text-xs">
@@ -472,11 +488,15 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 										</div>
 									) : (
 										<div className="my-2 flex items-center space-x-2 text-xs">
-											<div className="rounded-md bg-green-900 px-2 py-1 text-xs text-white">
-												{event.status}
+											<div
+												className={`rounded-md px-2 py-2 text-xs text-white ${eventStatus.color}`}
+											>
+												{eventStatus.label}
 											</div>
 										</div>
 									)}
+
+									{/*CHECKING */}
 									{isUserOrganizer && event.status !== 'PENDING' && (
 										<Button className="h-8" variant="secondary" onClick={handleSubmit}>
 											Update Event
