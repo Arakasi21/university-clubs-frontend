@@ -36,7 +36,11 @@ export default function Members({
 						<div className="flex flex-row gap-3 ">
 							{hasPermission(memberPerms, Permissions.manage_membership) ? (
 								<div className="flex gap-3">
-									<Button variant={`secondary`} className="w-30 right-0 sm:w-60">
+									<Button
+										variant={`secondary`}
+										className=" w-30 right-0 h-20 whitespace-normal sm:h-max sm:w-60"
+									>
+										{' '}
 										<Link
 											className="right-0 w-full font-bold"
 											href={`/clubs/${club?.id}/join-request`}

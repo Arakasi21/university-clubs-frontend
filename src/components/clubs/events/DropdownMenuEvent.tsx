@@ -23,7 +23,7 @@ export default function DropdownMenuEvent() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button size="sm" variant="outline">
+				<Button size="default" className="w-56 sm:w-full" variant="outline">
 					<FilterIcon className="mr-2 h-4 w-4" />
 					Filter
 				</Button>

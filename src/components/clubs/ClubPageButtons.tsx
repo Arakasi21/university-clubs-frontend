@@ -16,7 +16,7 @@ export default function ClubPageButtons(props: {
 	onClick1: () => Promise<void>
 }) {
 	return (
-		<div className="flex flex-col gap-3 md:flex-row ">
+		<div className="flex flex-col gap-3 md:flex-row">
 			{props.loggedIn && !props.loading && (
 				<>
 					{hasPermission(props.memberPerms, Permissions.ALL) && (

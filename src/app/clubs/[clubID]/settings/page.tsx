@@ -104,45 +104,53 @@ function Page({ params }: { params: { clubID: number } }) {
 					</div>
 				</div>
 				<Tabs className="grid flex-1 items-start py-2" defaultValue="settings">
-					<TabsList className="grid w-full grid-cols-5">
+					<TabsList className="grid w-full grid-cols-5 ">
 						<Link
-							className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3  text-sm font-medium ring-offset-background"
+							className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3  text-xs font-medium ring-offset-background sm:text-sm"
 							href={`/clubs/${club?.id}`}
 						>
 							Return
 						</Link>
 						{hasPermission(permissions, Permissions.ALL) ? (
-							<TabsTrigger value="members">Members</TabsTrigger>
+							<TabsTrigger value="members" className="text-xs sm:text-sm">
+								Members
+							</TabsTrigger>
 						) : (
-							<TabsTrigger value="members" disabled>
+							<TabsTrigger value="members" className="text-xs sm:text-sm" disabled>
 								Members
 							</TabsTrigger>
 						)}
 
 						{hasPermission(permissions, Permissions.manage_roles) ? (
-							<TabsTrigger value="roles">Roles</TabsTrigger>
+							<TabsTrigger value="roles" className="text-xs sm:text-sm">
+								Roles
+							</TabsTrigger>
 						) : (
-							<TabsTrigger value="roles" disabled>
+							<TabsTrigger value="roles" className="text-xs sm:text-sm" disabled>
 								Roles
 							</TabsTrigger>
 						)}
 						{hasPermission(permissions, Permissions.manage_events) ? (
-							<TabsTrigger value="events">Events</TabsTrigger>
+							<TabsTrigger value="events" className="text-xs sm:text-sm">
+								Events
+							</TabsTrigger>
 						) : (
-							<TabsTrigger value="events" disabled>
+							<TabsTrigger value="events" className="text-xs sm:text-sm" disabled>
 								Events
 							</TabsTrigger>
 						)}
 						{hasPermission(permissions, Permissions.ALL) ? (
-							<TabsTrigger value="settings">Settings</TabsTrigger>
+							<TabsTrigger value="settings" className="text-xs sm:text-sm">
+								Settings
+							</TabsTrigger>
 						) : (
-							<TabsTrigger value="settings" disabled>
+							<TabsTrigger value="settings" className="text-xs sm:text-sm" disabled>
 								Settings
 							</TabsTrigger>
 						)}
 					</TabsList>
 
-					<TabsContent value="members" className="w-full overflow-x-auto">
+					<TabsContent value="members" className="w-full overflow-x-auto ">
 						<Members
 							memberPerms={permissions}
 							club={club}
@@ -160,7 +168,7 @@ function Page({ params }: { params: { clubID: number } }) {
 						/>
 					</TabsContent>
 
-					<TabsContent value="roles">
+					<TabsContent value="roles" className="w-full overflow-x-auto">
 						<RolesTab
 							club={club}
 							handleDragStart={handleDragStart}
@@ -177,7 +185,7 @@ function Page({ params }: { params: { clubID: number } }) {
 						<Settings />
 					</TabsContent>
 
-					<TabsContent value="events">
+					<TabsContent value="events" className="w-full overflow-x-auto">
 						<div>
 							<Card>
 								<CardContent style={{ backgroundColor: '#0D1525' }}>

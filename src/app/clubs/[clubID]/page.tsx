@@ -78,7 +78,7 @@ function Page({ params }: { params: { clubID: number } }) {
 								/>
 								<div className="flex items-center justify-between gap-4 p-6">
 									<div className="flex items-center gap-2">
-										<div className="flex aspect-square shrink-0 overflow-hidden rounded-full">
+										<div className="hidden aspect-square shrink-0 overflow-hidden rounded-full sm:flex">
 											<ClubImage club={club} width={84} height={84} />
 										</div>
 										<div className="pl-4">

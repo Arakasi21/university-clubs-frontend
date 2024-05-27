@@ -67,9 +67,9 @@ export default function EventsContent() {
 
 	return (
 		<main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-			<div className="flex items-center">
+			<div className="flex flex-col items-center gap-4 sm:flex-row">
 				<h1 className="text-lg font-semibold md:text-2xl">Events</h1>
-				<div className="ml-auto flex items-center gap-4">
+				<div className="flex flex-col items-center gap-4 sm:ml-auto sm:flex-row">
 					<div className="relative w-full max-w-md">
 						<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
 						<Input
@@ -78,8 +78,10 @@ export default function EventsContent() {
 							type="search"
 						/>
 					</div>
-					<DropdownMenuEvent />
-					<EventCreationComponent clubID={club?.id} />
+					<div className="flex flex-col gap-4 sm:flex-row">
+						<DropdownMenuEvent />
+						<EventCreationComponent clubID={club?.id} />
+					</div>
 				</div>
 			</div>
 			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
