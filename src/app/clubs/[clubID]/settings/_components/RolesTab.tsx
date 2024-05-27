@@ -29,7 +29,7 @@ export default function RolesTab({
 }: RolesTabProps) {
 	const { handleDragStart, handleDragOver, handleDrop } = useDragDrop({ club, fetchClubInfo })
 	return (
-		<Card className="bg-muted/40">
+		<Card className="m-8 bg-muted/40 sm:m-12">
 			<CardHeader className="flex gap-4">
 				<div className="flex items-center justify-between gap-4">
 					<div className="flex items-center">

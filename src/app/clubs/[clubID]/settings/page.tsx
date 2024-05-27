@@ -103,7 +103,7 @@ function Page({ params }: { params: { clubID: number } }) {
 						</div>
 					</div>
 				</div>
-				<Tabs className="grid flex-1 items-start">
+				<Tabs className="grid flex-1 items-start py-2" defaultValue="settings">
 					<TabsList className="grid w-full grid-cols-5">
 						<Link
 							className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3  text-sm font-medium ring-offset-background"
@@ -142,7 +142,7 @@ function Page({ params }: { params: { clubID: number } }) {
 						)}
 					</TabsList>
 
-					<TabsContent value="members">
+					<TabsContent value="members" className="w-full overflow-x-auto">
 						<Members
 							memberPerms={permissions}
 							club={club}
