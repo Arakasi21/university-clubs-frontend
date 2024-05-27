@@ -54,8 +54,8 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 	const [formData, setFormData] = useState<FormData>({
 		title: event?.title || '',
 		description: event?.description || '',
-		start_date: event?.start_date ? format(new Date(event.start_date), "yyyy-MM-dd'T'HH:mm") : '',
-		end_date: event?.end_date ? format(new Date(event.end_date), "yyyy-MM-dd'T'HH:mm") : '',
+		start_date: event?.start_date ? event.start_date : '',
+		end_date: event?.end_date ? event.end_date : '',
 		location_uni: event?.location_university || '',
 		location_link: event?.location_link || '',
 		max_participants: event?.max_participants?.toString() || '',
@@ -266,8 +266,6 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 			cover_images: uploadedImage
 				? [uploadedImage].map((image, index) => ({ ...image, position: index + 1 }))
 				: [],
-			start_date: '2024-05-28 14:51:08.465 +0000 UTC',
-			end_date: '2024-06-05 14:51:08.465 +0000 UTC',
 			max_participants: parseInt(formData.max_participants),
 		}
 		fetchEventInfo()
@@ -285,10 +283,8 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 			setFormData({
 				title: event.title || '',
 				description: event.description || '',
-				start_date: event.start_date
-					? format(new Date(event.start_date), "yyyy-MM-dd'T'HH:mm")
-					: '',
-				end_date: event.end_date ? format(new Date(event.end_date), "yyyy-MM-dd'T'HH:mm") : '',
+				start_date: event.start_date ? event.start_date : '',
+				end_date: event.end_date ? event.end_date : '',
 				location_uni: event.location_university || '',
 				location_link: event.location_link || '',
 				max_participants: event.max_participants?.toString() || '',

@@ -47,19 +47,39 @@ function EventsRow({ onUpdate, event }: EventsRowProps) {
 		}
 	}
 
+	// COLOR
+	type EventStatusMapping = {
+		[key: string]: { color: string; label: string }
+	}
+
+	const eventStatusMapping: EventStatusMapping = {
+		DRAFT: { color: 'bg-gray-700 hover:bg-gray-900', label: 'Draft' },
+		PENDING: { color: 'bg-yellow-700 hover:bg-yellow-900', label: 'Pending' },
+		APPROVED: { color: 'bg-green-700 hover:bg-green-900', label: 'Approved' },
+		REJECTED: { color: 'bg-red-700 hover:bg-red-900', label: 'Rejected' },
+		IN_PROGRESS: { color: 'bg-blue-700 hover:bg-blue-700', label: 'In Progress' },
+	}
+
+	const eventStatus = eventStatusMapping[event?.status || 'DRAFT'] || {
+		color: 'bg-gray-500',
+		label: 'Unknown',
+	}
+
 	return (
 		<>
-			<TableRow key={event.id} onClick={handleRowClick} className="cursor-pointer">
+			<TableRow key={event.id} onClick={handleRowClick} className="cursor-default">
 				<TableCell>{event.id}</TableCell>
 				<TableCell>{event.title}</TableCell>
 				<TableCell>{event.description}</TableCell>
-				<TableCell>{event.start_date}</TableCell>
-				<TableCell>{event.end_date}</TableCell>
-				<TableCell>{event.location_link || event.location_university}</TableCell>
 				<TableCell>
 					{event.organizers.map((organizer) => (
 						<div key={organizer.id}>{organizer.first_name}</div>
 					))}
+				</TableCell>
+				<TableCell>
+					<div className={`${eventStatus.color} rounded-lg px-2 py-1 text-center`}>
+						{eventStatus.label}
+					</div>
 				</TableCell>
 			</TableRow>
 
