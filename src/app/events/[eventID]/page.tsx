@@ -3,21 +3,13 @@
 import useEvent from '@/hooks/useEvent'
 import useUserStore from '@/store/user'
 import Nav from '@/components/NavBar'
-import {
-	AlertTriangle,
-	CalendarDaysIcon,
-	CheckIcon,
-	FileIcon,
-	LocateIcon,
-	PlusIcon,
-} from 'lucide-react'
+import { AlertTriangle, CheckIcon, PlusIcon } from 'lucide-react'
 import React from 'react'
 import { Organizer } from '@/types/event'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Link from 'next/link'
 import { DateTimeFormatOptions } from 'intl'
 import { Button } from '@/components/ui/button'
-import UserAvatar from '@/components/user/userAvatar'
 import useUserClubStatus from '@/hooks/useUserClubStatus'
 
 export default function Page({ params }: { params: { eventID: string } }) {
@@ -180,7 +172,15 @@ export default function Page({ params }: { params: { eventID: string } }) {
 								<div className="flex items-center gap-4">
 									{event.organizers.map((organizer: Organizer) => (
 										<div key={organizer.id} className="flex items-center gap-2">
-											<UserAvatar user={organizer} size={44} />
+											<Avatar style={{ width: 44, height: 44 }}>
+												<AvatarImage
+													src={organizer?.avatar_url}
+													alt={`${organizer?.first_name}'s profile picture`}
+												/>
+												<AvatarFallback style={{ fontSize: 44 / 4 }}>
+													{organizer?.first_name.slice(0, 1)}
+												</AvatarFallback>
+											</Avatar>
 											<div className="text-sm font-medium">
 												{organizer.first_name} {organizer.last_name}
 											</div>
