@@ -23,7 +23,7 @@ function Page({ params }: { params: { clubID: number } }) {
 		clubID: params.clubID,
 	})
 
-	const { permissions, setUserRoles } = useUserRolesStore()
+	const { permissions } = useUserRolesStore()
 
 	useMemberRoles({
 		club: club || null,
@@ -69,7 +69,7 @@ function Page({ params }: { params: { clubID: number } }) {
 				{loading ? (
 					<SceletonClub />
 				) : (
-					<div className="px-6 py-12">
+					<div className="px-0 py-12 sm:px-6 ">
 						<div className="mx-auto max-w-6xl">
 							<div className=" rounded-lg bg-[#0c1125]">
 								<div

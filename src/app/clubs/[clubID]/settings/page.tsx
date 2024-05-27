@@ -76,9 +76,6 @@ function Page({ params }: { params: { clubID: number } }) {
 		},
 		[params.clubID, fetchClubInfo],
 	)
-	const onUpdate = () => {
-		fetchClubInfo()
-	}
 
 	if (!club) {
 		return <div>Club not found</div>
@@ -88,7 +85,7 @@ function Page({ params }: { params: { clubID: number } }) {
 		<main className="scroll-smooth" style={{ scrollBehavior: 'smooth' }}>
 			<Nav />
 
-			<div className="mx-10 max-w-6xl py-12 sm:mx-12 sm:p-12 md:mx-auto">
+			<div className=" max-w-6xl py-12 sm:p-12 md:mx-auto">
 				<BackgroundClubImage club={club} />
 				<div className=" rounded-lg bg-[#0c1125]">
 					<div className="flex items-center justify-between gap-4 p-6">

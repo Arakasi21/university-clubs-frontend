@@ -5,12 +5,11 @@ import { toast } from 'sonner'
 
 export type UseEventCreateProps = {
 	clubID: number | undefined
+	onEventCreated: () => void
 }
 
-export default function EventCreationComponent({ clubID }: UseEventCreateProps) {
+export default function EventCreationComponent({ clubID, onEventCreated }: UseEventCreateProps) {
 	const axiosAuth = useAxiosInterceptor()
-	const [responseData, setResponseData] = useState(null)
-	const [isOpen, setIsOpen] = useState(false)
 
 	const handleCreateEvent = useCallback(async () => {
 		try {
@@ -31,8 +30,9 @@ export default function EventCreationComponent({ clubID }: UseEventCreateProps) 
 						onClick: () => {},
 					},
 				})
-				setResponseData(response.data.event)
+
 				setIsOpen(false)
+				onEventCreated()
 			}
 		} catch (e) {
 			toast.error('ERROR', {
@@ -40,11 +40,7 @@ export default function EventCreationComponent({ clubID }: UseEventCreateProps) 
 			})
 			console.log(e)
 		}
-	}, [clubID])
-
-	const toggleData = () => {
-		setIsOpen(!isOpen)
-	}
+	}, [clubID, onEventCreated])
 
 	return (
 		<Button onClick={handleCreateEvent} type="submit">

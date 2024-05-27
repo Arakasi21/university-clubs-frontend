@@ -1,6 +1,5 @@
 import React from 'react'
 import Nav from '@/components/NavBar'
-import Layout from '@/components/Layout'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Students from '@/app/admin-dashboard/dashboard/_components/Students'
 import Clubs from '@/app/admin-dashboard/dashboard/_components/Clubs'
@@ -14,7 +13,7 @@ function Page() {
 			<div>
 				<Tabs
 					defaultValue="students"
-					className="grid flex-1 items-start gap-4 p-10 sm:px-20 sm:py-8 md:gap-8 md:px-32 lg:px-64"
+					className="grid flex-1 items-start gap-4 p-0 py-4 sm:px-10 sm:py-8 md:gap-8 md:px-10 lg:px-32 xl:px-64 2xl:px-96"
 				>
 					<div>
 						<span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">

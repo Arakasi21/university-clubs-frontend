@@ -14,33 +14,12 @@ import useUserStore from '@/store/user'
 export default function EventsContent() {
 	const user = useUserStore()
 	const [events, setEvents] = useState<Event[]>()
-	const [dialogOpen, setDialogOpen] = useState(false)
-	const [error, setError] = useState<string | null>(null)
-	const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
 	const isEventOwner = (event: Event) => {
 		return event.owner_id === user.user?.id
 	}
 
 	const { club } = useClubStore()
 	const axiosAuth = useAxiosInterceptor()
-
-	async function updateEvent(eventId: number, updatedEvent: any) {
-		try {
-			const response = await axiosAuth(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${eventId}`,
-				updatedEvent,
-			)
-
-			if (response.status !== 200) {
-				console.error('Update event error', response.data.error)
-				return
-			}
-
-			console.log('Event successfully updated!')
-		} catch (error) {
-			console.error('An error occurred while updating the event:', error)
-		}
-	}
 
 	const fetchClubEvents = useCallback(async () => {
 		try {
@@ -54,10 +33,10 @@ export default function EventsContent() {
 			if (response.status.toString().startsWith('2')) {
 				setEvents(response.data.events)
 			} else {
-				setError('Failed to fetch events')
+				console.log('Failed to fetch events')
 			}
 		} catch (err) {
-			setError('Network Error: Unable to fetch events')
+			console.log('Network Error: Unable to fetch events')
 		}
 	}, [club?.id])
 
@@ -80,7 +59,7 @@ export default function EventsContent() {
 					</div>
 					<div className="flex flex-col gap-4 sm:flex-row">
 						<DropdownMenuEvent />
-						<EventCreationComponent clubID={club?.id} />
+						<EventCreationComponent clubID={club?.id} onEventCreated={fetchClubEvents} />
 					</div>
 				</div>
 			</div>
