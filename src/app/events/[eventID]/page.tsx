@@ -121,12 +121,11 @@ export default function Page({ params }: { params: { eventID: string } }) {
 								</div>
 							</div>
 						</div>
-						<div className="space-y-6 rounded-xl bg-gray-800 p-6">
+						<div className="flex h-fit flex-col  space-y-6 rounded-xl bg-gray-800 p-6">
 							<div className="space-y-2">
 								<div className="text-sm font-medium text-gray-400">When</div>
 								<div>
 									<div className="text-lg font-medium">{formattedStartDate}</div>
-									<div className="text-sm text-gray-400">9:00 AM - 5:00 PM</div>
 								</div>
 							</div>
 							<div className="space-y-2">
@@ -169,7 +168,23 @@ export default function Page({ params }: { params: { eventID: string } }) {
 									))}
 								</div>
 								<div className="text-sm font-medium text-gray-400">Organizers</div>
-								<div className="flex items-center gap-4">
+								<div className="flex-col items-center gap-4">
+									{event.organizers.map((organizer: Organizer) => (
+										<div key={organizer.id} className="flex items-center gap-2 pb-2">
+											<Avatar style={{ width: 44, height: 44 }}>
+												<AvatarImage
+													src={organizer?.avatar_url}
+													alt={`${organizer?.first_name}'s profile picture`}
+												/>
+												<AvatarFallback style={{ fontSize: 44 / 4 }}>
+													{organizer?.first_name.slice(0, 1)}
+												</AvatarFallback>
+											</Avatar>
+											<div className="text-sm font-medium">
+												{organizer.first_name} {organizer.last_name}
+											</div>
+										</div>
+									))}
 									{event.organizers.map((organizer: Organizer) => (
 										<div key={organizer.id} className="flex items-center gap-2">
 											<Avatar style={{ width: 44, height: 44 }}>
@@ -188,33 +203,26 @@ export default function Page({ params }: { params: { eventID: string } }) {
 									))}
 								</div>
 							</div>
-							<div className="space-y-2">
-								{event.status === 'DRAFT' ? (
+							<div className="inline-block align-bottom">
+								<div className="space-y-2">
 									<div className="my-2 flex items-center space-x-2 text-xs">
-										<AlertTriangle className="h-5 w-5 text-yellow-500" />
-										<div className="rounded-md bg-yellow-500 px-2 py-2 text-xs text-white">
-											{event.status}
-										</div>
-									</div>
-								) : (
-									<div className="my-2 flex w-full items-center space-x-2 text-xs">
 										<div
-											className={`w-full items-center rounded-md px-2 py-2 text-xs text-white ${eventStatus.color}`}
+											className={`rounded-md  px-2 py-2 text-xs text-white ${eventStatus.color}`}
 										>
 											{eventStatus.label}
 										</div>
 									</div>
+								</div>
+								{isUserOrganizer && (
+									<div className="flex gap-2">
+										<Link href={`/events/${event.id}/edit`}>
+											<Button className="flex-1" variant="default">
+												Edit Event
+											</Button>
+										</Link>
+									</div>
 								)}
 							</div>
-							{isUserOrganizer && (
-								<div className="flex gap-2">
-									<Link href={`/events/${event.id}/edit`}>
-										<Button className="flex-1" variant="default">
-											Edit Event
-										</Button>
-									</Link>
-								</div>
-							)}
 						</div>
 					</div>
 				</main>

@@ -44,7 +44,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 	const isUserOrganizer = event?.organizers.some((organizer) => organizer.id === user?.id)
 	const [isPendingReview, setIsPendingReview] = useState(event?.status === 'PENDING')
 	const [isApproved, setIsApproved] = useState(event?.status === 'APPROVED')
-	const isEditable = ['DRAFT', 'REJECTED'].includes(event?.status || '')
+	const isEditable = ['DRAFT', 'REJECTED', 'APPROVED'].includes(event?.status || '')
 
 	const axiosAuth = useAxiosInterceptor()
 	const [imageFile, setImageFile] = useState<File | null>(null)
@@ -266,8 +266,8 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 			cover_images: uploadedImage
 				? [uploadedImage].map((image, index) => ({ ...image, position: index + 1 }))
 				: [],
-			start_date: '2024-05-23 14:51:08.465 +0000 UTC',
-			end_date: '2024-05-30 14:51:08.465 +0000 UTC',
+			start_date: '2024-05-28 14:51:08.465 +0000 UTC',
+			end_date: '2024-06-05 14:51:08.465 +0000 UTC',
 			max_participants: parseInt(formData.max_participants),
 		}
 		fetchEventInfo()
@@ -503,11 +503,14 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 										</Button>
 									)}
 
-									{isUserOrganizer && isEventReadyForReview && event.status !== 'PENDING' && (
-										<Button className="h-8" variant="default" onClick={handleSendToReview}>
-											Send to Review
-										</Button>
-									)}
+									{isUserOrganizer &&
+										isEventReadyForReview &&
+										event.status !== 'PENDING' &&
+										event.status !== 'APPROVED' && (
+											<Button className="h-8" variant="default" onClick={handleSendToReview}>
+												Send to Review
+											</Button>
+										)}
 									{isPendingReview && (
 										<Button
 											className="h-8"
