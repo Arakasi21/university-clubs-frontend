@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import useEvent from '@/hooks/useEvent'
 import useUserStore from '@/store/user'
 import Nav from '@/components/NavBar'
-import { AlertTriangle, CalendarDaysIcon, FileIcon, LocateIcon } from 'lucide-react'
+import { AlertTriangle } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Link from 'next/link'
 import { DateTimeFormatOptions } from 'intl'
@@ -22,6 +22,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select'
+import { Label } from '@/components/ui/label'
+import { CardTitle } from '@/components/ui/card'
 
 type FormData = {
 	title: string
@@ -33,6 +35,7 @@ type FormData = {
 	max_participants: string
 	cover_images: CoverImage[]
 	type: string
+	tags: string[]
 }
 
 export default function EditEventPage({ params }: { params: { eventID: string } }) {
@@ -44,6 +47,9 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 
 	const axiosAuth = useAxiosInterceptor()
 	const [imageFile, setImageFile] = useState<File | null>(null)
+
+	// ======== ПОЛЯ ФОРМЫ =========
+
 	const [formData, setFormData] = useState<FormData>({
 		title: event?.title || '',
 		description: event?.description || '',
@@ -54,7 +60,10 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 		max_participants: event?.max_participants?.toString() || '',
 		cover_images: event?.cover_images || [],
 		type: event?.type || '',
+		tags: event?.tags || [],
 	})
+
+	// ======== ПРОВЕРКА НА ЗАПОЛНЕННОСТЬ ПОЛЕЙ (условно если ли это и может ли SEND TO REVIEW) =========
 
 	const isEventReadyForReview =
 		event?.cover_images &&
@@ -63,6 +72,8 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 		event.end_date &&
 		event.location_university &&
 		event.type
+
+	//  ==================== ТУТ МЫ ПРОСТО ЗАДАЕМ EVENT STATUS ЦВЕТА  ====================
 
 	type EventStatusMapping = {
 		[key: string]: { color: string; label: string }
@@ -81,6 +92,8 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 		label: 'Unknown',
 	}
 
+	// ==================== ФОРМАТИРОВАНИЕ	ДАТЫ В ФОРМАТЕ 23 мая 2024 г. в 19:51 ====================
+
 	const startDate = event?.start_date ? new Date(event.start_date) : null
 
 	const options: DateTimeFormatOptions = {
@@ -94,6 +107,38 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 		? startDate.toLocaleDateString(undefined, options)
 		: 'No start date available'
 
+	// ====================	ДОБАВЛЯЕМ ТЕГИ ====================
+
+	const [tags, setTags] = useState<string[]>(event?.tags || [])
+	const [newTagInput, setNewTagInput] = useState<string>('')
+
+	const handleAddTag = () => {
+		if (newTagInput.trim() !== '') {
+			setFormData((prevState) => ({
+				...prevState,
+				tags: [...prevState.tags, newTagInput],
+			}))
+			setNewTagInput('') // Очищаем ввод для следующего тега
+		}
+	}
+
+	const handleRemoveTag = (tagToRemove: string) => {
+		setFormData((prevState) => ({
+			...prevState,
+			tags: prevState.tags.filter((tag) => tag !== tagToRemove),
+		}))
+	}
+
+	// ========  ПРИ ИЗМЕНЕНИИ ТЕГОВ В ФОРМЕ, МЕНЯЕМ ИХ В СТЕЙТЕ  =========
+
+	useEffect(() => {
+		setFormData((prevState) => ({
+			...prevState,
+			tags: tags,
+		}))
+	}, [tags])
+
+	// ==================== ВСЕ ФУНКЦИИ ====================
 	async function updateEvent(eventId: string, updatedEvent: any) {
 		try {
 			const response = await axiosAuth.patch(
@@ -161,6 +206,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 		}
 	}
 
+	// ==================== HANDLE Функции ====================
 	const handleFileSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0]
 		if (!file) {
@@ -231,6 +277,8 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 		}
 	}
 
+	//  ======== ПОЛУЧАЕМ ДАННЫЕ ИЗ БЭКЕНДА И ЗАПОЛНЯЕМ ПОЛЯ ФОРМЫ  =========
+
 	useEffect(() => {
 		if (event) {
 			setFormData({
@@ -245,6 +293,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 				max_participants: event.max_participants?.toString() || '',
 				cover_images: event.cover_images || [],
 				type: event.type || '',
+				tags: event.tags || [],
 			})
 		}
 		setIsPendingReview(event?.status === 'PENDING')
@@ -269,14 +318,16 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 					{event.cover_images ? (
 						event.cover_images.map((image) => (
 							<div key={image.name} className="overflow-hidden rounded-lg">
-								<img className="h-[400px] w-full" src={image.url} />
+								<img className="h-[600px] w-full" src={image.url} />
 							</div>
 						))
 					) : (
 						<span>No images</span>
 					)}
 					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
-						<div className="mb-4">
+						<CardTitle className="mb-2 flex items-center justify-center">EDIT EVENT</CardTitle>
+						{/*<Separator />*/}
+						<div className="mb-4 mt-2">
 							<label className="text-sm text-gray-400">Title:</label>
 							<Input
 								type="text"
@@ -287,7 +338,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 								disabled={!isEditable}
 							/>
 						</div>
-						<div className="mb-4">
+						<div className="mb-2">
 							<label className="text-sm text-gray-400">Description:</label>
 							<Textarea
 								name="description"
@@ -297,7 +348,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 								disabled={!isEditable}
 							/>
 						</div>
-						<div className="mb-4">
+						<div className="mb-2">
 							<label className="text-sm text-gray-400">Type:</label>
 							<Select
 								name="type"
@@ -347,6 +398,47 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 								disabled={!isEditable}
 							/>
 						</div>
+						{/* ===================  ТЕГИ  ================*/}
+						<div className="mb-4">
+							<Label className="text-sm text-gray-400" htmlFor="tags">
+								Tags:
+							</Label>
+							<div className="mt-2 flex flex-wrap gap-2 ">
+								{formData.tags.map((tag, index) => (
+									<div
+										key={index}
+										className="flex items-center rounded-lg  border-2 px-1 py-1 text-sm font-medium"
+									>
+										<span>{tag}</span>
+										<Button
+											disabled={!isEditable}
+											variant="ghost"
+											size="icon"
+											onClick={() => handleRemoveTag(tag)}
+											className="ml-2 h-2 w-2 text-red-500"
+										>
+											&times;
+										</Button>
+									</div>
+								))}
+								<div className="flex items-center gap-2">
+									<Input
+										disabled={!isEditable}
+										type="text"
+										id="tags"
+										value={newTagInput}
+										onChange={(e) => setNewTagInput(e.target.value)}
+										className="rounded-md px-2 py-1 text-sm"
+										placeholder="Enter new tag"
+									/>
+									<Button variant="default" disabled={!isEditable} onClick={handleAddTag}>
+										Add Tag
+									</Button>
+								</div>
+							</div>
+						</div>
+
+						{/*==================== COLLABORATORS =================*/}
 
 						<div className="flex flex-col items-center justify-between sm:flex-row">
 							<div className="flex items-center gap-2">
@@ -411,6 +503,9 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 						</div>
 					</div>
 				</section>
+
+				{/* ================ COVER IMAGE ===============  */}
+
 				<section className="mb-4">
 					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
 						<h3 className="mb-4 text-xl font-semibold">Cover Image</h3>
@@ -418,14 +513,14 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 							<img
 								src={URL.createObjectURL(imageFile)}
 								alt="Preview"
-								className="mb-4 h-[200px] w-full rounded-lg object-cover"
+								className="mb-4 h-[400px] w-[400] rounded-lg object-cover"
 							/>
 						) : event.cover_images ? (
 							event.cover_images
 								.sort((a, b) => a.position - b.position)
 								.map((image) => (
 									<div key={image.position} className="overflow-hidden rounded-lg">
-										<img className="h-40 w-full object-cover" src={image.url} />
+										<img className="h-[400px] w-[400] object-cover" src={image.url} />
 									</div>
 								))
 						) : (
@@ -433,6 +528,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 						)}
 						<Input
 							disabled={!isEditable}
+							className="relative w-80"
 							type="file"
 							accept="image/*"
 							onChange={handleFileSelection}

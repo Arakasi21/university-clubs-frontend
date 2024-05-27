@@ -64,7 +64,7 @@ export default function Page({ params }: { params: { eventID: string } }) {
 					{event.cover_images ? (
 						event.cover_images.map((image) => (
 							<div key={image.name} className="overflow-hidden rounded-lg">
-								<img className="h-[400px] w-full " src={image.url} />
+								<img className="h-[600px] w-full " src={image.url} />
 							</div>
 						))
 					) : (
@@ -80,6 +80,7 @@ export default function Page({ params }: { params: { eventID: string } }) {
 								{event.tags ? (
 									event.tags.map((tag) => (
 										<span key={tag} className="text-xs text-gray-400">
+											{' '}
 											#{tag}
 										</span>
 									))
