@@ -1,8 +1,6 @@
 'use client'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { AlertTriangle, Search } from 'lucide-react'
-import DropdownMenuEvent from '@/components/clubs/events/DropdownMenuEvent'
+import { AlertTriangle } from 'lucide-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Event } from '@/types/event'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
@@ -98,27 +96,28 @@ export default function EventsContent() {
 							<p className="text-xs text-gray-500 dark:text-gray-400">
 								{new Date(event.created_at).toLocaleString()}
 							</p>
-
-							{event.status === 'DRAFT' ? (
-								<div className="my-2 flex items-center space-x-2 text-xs">
-									<AlertTriangle className="h-5 w-5 text-yellow-500" />
-									<div className="rounded-md bg-yellow-500 px-2 py-2 text-xs text-white">
-										{eventStatus.label}
+							<div className="flex flex-row justify-between">
+								{event.status === 'DRAFT' ? (
+									<div className="my-2 flex items-center space-x-2 text-xs">
+										<AlertTriangle className="h-5 w-5 text-yellow-500" />
+										<div className="rounded-md bg-yellow-500 px-2 py-2 text-xs text-white">
+											{eventStatus.label}
+										</div>
 									</div>
-								</div>
-							) : (
-								<div className="my-2 flex items-center space-x-2 text-xs">
-									<div className={`rounded-md px-2 py-2 text-xs text-white ${eventStatus.color}`}>
-										{eventStatus.label}
+								) : (
+									<div className="my-2 flex items-center space-x-2 text-xs">
+										<div className={`rounded-md px-2 py-2 text-xs text-white ${eventStatus.color}`}>
+											{eventStatus.label}
+										</div>
 									</div>
-								</div>
-							)}
-							<div className="flex  items-center justify-between">
-								{isEventOwner(event) && (
-									<Link href={`/events/${event.id}`}>
-										<Button className=" w-22 h-8 p-4">View Event</Button>
-									</Link>
 								)}
+								<div className="flex  items-center justify-between">
+									{isEventOwner(event) && (
+										<Link href={`/events/${event.id}`}>
+											<Button className=" w-18 h-8 p-4">View Event</Button>
+										</Link>
+									)}
+								</div>
 							</div>
 						</div>
 					)

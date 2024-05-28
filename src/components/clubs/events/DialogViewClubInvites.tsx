@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import React from 'react'
 import usePendingClubInvites from '@/hooks/usePendingClubInvites'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
+import { toast } from 'sonner'
 
 type DialogViewClubInvites = {
 	clubId: number | undefined
@@ -35,12 +36,14 @@ function DialogViewClubInvites({ clubId }: DialogViewClubInvites) {
 			console.log(response.data)
 			if (response.status.toString().startsWith('2')) {
 				setPendingRequests(pendingClubInvites - 1)
+				toast.success('Invite accepted')
 				if (eventInvites) {
 					setEventInvites(eventInvites.filter((invite) => invite.id !== inviteId))
 				}
 			}
 		} catch (error) {
-			console.error(error)
+			console.error('Network error:', error)
+			toast.error('Failed to accept invite, maybe user is already organizer.')
 		}
 	}
 
@@ -53,6 +56,7 @@ function DialogViewClubInvites({ clubId }: DialogViewClubInvites) {
 			console.log(response.data)
 			if (response.status.toString().startsWith('2')) {
 				setPendingRequests(pendingClubInvites - 1)
+				toast.success('Invite rejected')
 				if (eventInvites) {
 					setEventInvites(eventInvites.filter((invite) => invite.id !== inviteId))
 				}
