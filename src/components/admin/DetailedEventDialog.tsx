@@ -224,7 +224,9 @@ export function DetailedEventDialog({
 													<CardContent className="flex items-center gap-4 p-4">
 														<Avatar className="h-12 w-12">
 															<AvatarImage alt="Organizer 1" src={organizer.avatar_url} />
-															<AvatarFallback>JD</AvatarFallback>
+															<AvatarFallback style={{ fontSize: 95 / 4 }}>
+																{organizer?.first_name.slice(0, 1)}
+															</AvatarFallback>
 														</Avatar>
 														<div>
 															<div className="font-medium">
@@ -261,7 +263,9 @@ export function DetailedEventDialog({
 													<CardContent className="flex items-center gap-4 p-4">
 														<Avatar className="h-12 w-12">
 															<AvatarImage alt="Club 1" src={club.logo_url} />
-															<AvatarFallback>JD</AvatarFallback>
+															<AvatarFallback style={{ fontSize: 95 / 4 }}>
+																{club?.name.slice(0, 1)}
+															</AvatarFallback>
 														</Avatar>
 														<div>
 															<div className="font-medium">{club.name}</div>

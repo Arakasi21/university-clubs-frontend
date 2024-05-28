@@ -71,7 +71,7 @@ function EventsRow({ onUpdate, event }: EventsRowProps) {
 				<TableCell>{event.id}</TableCell>
 				<TableCell>{event.title}</TableCell>
 				<TableCell>
-					{event.description.length > 100
+					{event?.description?.length > 100
 						? event.description.slice(0, 100) + '...'
 						: event.description}
 				</TableCell>
