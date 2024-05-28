@@ -89,7 +89,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 		PENDING: { color: 'bg-yellow-500', label: 'Pending' },
 		APPROVED: { color: 'bg-green-500', label: 'Approved' },
 		REJECTED: { color: 'bg-red-500', label: 'Rejected' },
-		IN_PROGRESS: { color: 'bg-green-500', label: 'In Progress' },
+		IN_PROGRESS: { color: 'bg-green-900', label: 'In Progress' },
 	}
 
 	const eventStatus = eventStatusMapping[event?.status || 'DRAFT'] || {

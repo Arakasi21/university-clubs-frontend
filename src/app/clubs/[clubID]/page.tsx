@@ -16,6 +16,7 @@ import ClubMembersCard from '@/components/clubs/ClubMembersCard'
 import ClubMembersDialog from '@/components/clubs/ClubMembersDialog'
 import ClubPageButtons from '@/components/clubs/ClubPageButtons'
 import BackgroundClubImage from '@/components/clubs/BackgroundClubImage'
+import ClubEvent from '@/components/clubs/ClubEvent'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { isLoggedIn, user } = useUserStore()
@@ -87,7 +88,7 @@ function Page({ params }: { params: { clubID: number } }) {
 							<div className="z-1 absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#020817]/90" />
 						</div>
 
-						<div className="relative z-30 mx-auto max-w-[1000px] pt-14">
+						<div className="relative z-30 mx-auto max-w-[1200px] pt-14">
 							<BackgroundClubImage club={club} />
 							<div className="z-50 rounded-lg bg-[#0c1125]">
 								<div className="flex items-center justify-between gap-4 p-6">
@@ -127,23 +128,7 @@ function Page({ params }: { params: { clubID: number } }) {
 									</CardHeader>
 									<CardContent className="overflow-hidden">
 										{clubEvents?.length ? (
-											clubEvents.map((event) => (
-												<Card key={event.id}>
-													<CardContent className="flex w-full items-center justify-between gap-4 overflow-hidden rounded-lg bg-gray-900 p-4">
-														<div className="flex flex-col">
-															<h3 className="text-nd font-medium text-white">{event.title}</h3>
-															<p className="text-sm font-normal text-muted-foreground">
-																{new Date(event.start_date).toLocaleString()}
-															</p>
-														</div>
-														<div className="items-end">
-															<Button className="bg-gray-900" variant="outline">
-																View
-															</Button>
-														</div>
-													</CardContent>
-												</Card>
-											))
+											clubEvents.map((event) => <ClubEvent key={event.id} event={event} />)
 										) : (
 											<p className="flex flex-col items-center justify-items-center text-gray-400 text-muted-foreground">
 												<Calendar className="h-14 w-14 border-gray-400 pb-2" />

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import useEventStore from '@/store/event'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
-import { Event } from '@/types/event'
+import { Event, EventParticipationStatus, EventUserStatus } from '@/types/event'
 
 export type useEventProps = {
 	eventID: string
@@ -14,6 +14,8 @@ export default function useEvent({ eventID, user }: useEventProps) {
 	const [event, setEvent] = useState<Event | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [isOwner, setIsOwner] = useState(false)
+	const [participantStatus, setParticipantStatus] = useState<EventParticipationStatus>('UNKNOWN')
+	const [eventUserStatus, setEventUserStatus] = useState<EventUserStatus>('UNKNOWN')
 
 	const axiosAuth = useAxiosInterceptor()
 	const { setEventStore } = useEventStore()
@@ -27,6 +29,8 @@ export default function useEvent({ eventID, user }: useEventProps) {
 				setEvent(response.data.event)
 				setIsOwner(response.data.event.owner_id == user?.id)
 				setLoading(false)
+				setParticipantStatus(response.data.participation_status)
+				setEventUserStatus(response.data.event_user_status)
 				setEventStore(response.data.event, response.data.event.owner_id == user?.id, fetchEventInfo)
 			} else {
 				toast.error('not found', {
@@ -43,5 +47,5 @@ export default function useEvent({ eventID, user }: useEventProps) {
 		fetchEventInfo()
 	}, [fetchEventInfo])
 
-	return { event, loading, isOwner, fetchEventInfo }
+	return { event, loading, isOwner, fetchEventInfo, participantStatus, eventUserStatus }
 }

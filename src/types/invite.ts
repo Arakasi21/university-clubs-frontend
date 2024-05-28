@@ -1,3 +1,5 @@
+import { Event } from '@/types/event'
+
 export interface User {
 	id: number
 	first_name: string
@@ -14,7 +16,7 @@ export interface Club {
 
 export interface OrganizerInvite {
 	id: string
-	event_id: string
+	event: Event
 	club_id: number
 	by_who_id: number
 	user: User
@@ -22,6 +24,6 @@ export interface OrganizerInvite {
 
 export interface CollaboratorInvite {
 	id: string
-	event_id: string
+	event: Event
 	club: Club
 }

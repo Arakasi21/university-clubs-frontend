@@ -25,7 +25,13 @@ export type Event = {
 	title: string
 	description: string
 	type: string
+	published_at: string
+	is_hidden_for_non_members: boolean
 }
+
+export type EventParticipationStatus = 'UNKNOWN' | 'BANNED' | 'PARTICIPANT'
+
+export type EventUserStatus = 'UNKNOWN' | 'ORGANIZER' | 'OWNER'
 
 export type Organizer = {
 	id: number

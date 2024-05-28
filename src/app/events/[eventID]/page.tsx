@@ -3,20 +3,28 @@
 import useEvent from '@/hooks/useEvent'
 import useUserStore from '@/store/user'
 import Nav from '@/components/NavBar'
-import React from 'react'
-import { Organizer } from '@/types/event'
+import React, { useState, useEffect } from 'react'
+import { EventParticipationStatus, Organizer } from '@/types/event'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Link from 'next/link'
 import { DateTimeFormatOptions } from 'intl'
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
+import { useAxiosInterceptor } from '@/helpers/fetch_api'
+import { toast } from 'sonner'
 
 export default function Page({ params }: { params: { eventID: string } }) {
 	const { user } = useUserStore()
-	const { event } = useEvent({ eventID: params.eventID, user })
+	const { event, fetchEventInfo, eventUserStatus, participantStatus } = useEvent({
+		eventID: params.eventID,
+		user,
+	})
+
 	const isUserOrganizer = event?.organizers.some(
 		(organizer: Organizer) => organizer.id === user?.id,
 	)
+
+	const axiosAuth = useAxiosInterceptor()
 
 	type EventStatusMapping = {
 		[key: string]: { color: string; label: string }
@@ -27,7 +35,7 @@ export default function Page({ params }: { params: { eventID: string } }) {
 		PENDING: { color: 'bg-yellow-500', label: 'Pending' },
 		APPROVED: { color: 'bg-green-500', label: 'Approved' },
 		REJECTED: { color: 'bg-red-500', label: 'Rejected' },
-		IN_PROGRESS: { color: 'bg-green-500', label: 'In Progress' },
+		IN_PROGRESS: { color: 'bg-green-900', label: 'In Progress' },
 	}
 
 	const eventStatus = eventStatusMapping[event?.status || 'DRAFT'] || {
@@ -47,6 +55,43 @@ export default function Page({ params }: { params: { eventID: string } }) {
 	const formattedStartDate = startDate
 		? startDate.toLocaleDateString(undefined, options)
 		: 'No start date available'
+
+	const publishEvent = async (eventID: string) => {
+		try {
+			const response = await axiosAuth.patch(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${eventID}/publish`,
+			)
+
+			if (response.status !== 200) {
+				toast.error('Failed to publish event')
+				return
+			}
+
+			toast.success('Event successfully  published!')
+			fetchEventInfo()
+		} catch (error) {
+			console.error('Error publishing event:', error)
+		}
+	}
+
+	const unpublishEvent = async (eventID: string) => {
+		try {
+			const response = await axiosAuth.patch(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${eventID}/unpublish`,
+			)
+			if (response.status !== 200) {
+				toast.error('Failed to unpublish event')
+				return
+			}
+
+			toast.success('Event upublished!')
+			fetchEventInfo()
+		} catch (error) {
+			console.error('Error unpublishing event:', error)
+		}
+	}
+
+	useEffect(() => {}, [eventStatus])
 
 	if (!event) {
 		return (
@@ -195,6 +240,30 @@ export default function Page({ params }: { params: { eventID: string } }) {
 											</Button>
 										</Link>
 									</div>
+								)}
+								{isUserOrganizer && event.status === 'APPROVED' && (
+									<Button
+										className="mt-2 flex-1"
+										variant="default"
+										onClick={() => publishEvent(event.id)}
+									>
+										Publish Event
+									</Button>
+								)}
+
+								{participantStatus === 'UNKNOWN' && (
+									<Button className=" mt-2 " variant="default">
+										Participate
+									</Button>
+								)}
+								{isUserOrganizer && event.status === 'IN_PROGRESS' && (
+									<Button
+										className="mt-2 "
+										variant="destructive"
+										onClick={() => unpublishEvent(event.id)}
+									>
+										Unpublish Event
+									</Button>
 								)}
 							</div>
 						</div>
