@@ -31,7 +31,7 @@ export default function DangerZone() {
 		if (response.status.toString().startsWith('2')) {
 			toast.success('Club deleted successfully')
 			toast.info('Redirect to main page')
-			router.push('/')
+			router.replace('/')
 		} else {
 			toast.error('Failed to delete club', { description: response.data.error })
 		}

@@ -10,6 +10,7 @@ import useClubStore from '@/store/club'
 import Link from 'next/link'
 import EventCreationComponent from '@/components/clubs/settings/EventCreationComponent'
 import useUserStore from '@/store/user'
+import DialogViewClubInvites from '@/components/clubs/events/DialogViewClubInvites'
 
 export default function EventsContent() {
 	const user = useUserStore()
@@ -62,16 +63,19 @@ export default function EventsContent() {
 			<div className="flex flex-col items-center gap-4 sm:flex-row">
 				<h1 className="text-lg font-semibold md:text-2xl">Events</h1>
 				<div className="flex flex-col items-center gap-4 sm:ml-auto sm:flex-row">
-					<div className="relative w-full max-w-md">
-						<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
-						<Input
-							className="h-9 w-full rounded-md border border-gray-200 bg-white pl-8 pr-4 text-sm shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-800 dark:bg-gray-950 dark:text-gray-50"
-							placeholder="Search events..."
-							type="search"
-						/>
+					{/*<div className="relative w-full max-w-md">*/}
+					{/*	<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />*/}
+					{/*	<Input*/}
+					{/*		className="h-9 w-full rounded-md border border-gray-200 bg-white pl-8 pr-4 text-sm shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-800 dark:bg-gray-950 dark:text-gray-50"*/}
+					{/*		placeholder="Search events..."*/}
+					{/*		type="search"*/}
+					{/*	/>*/}
+					{/*</div>*/}
+					<div className="flex gap-3">
+						<DialogViewClubInvites clubId={club?.id} />
 					</div>
 					<div className="flex flex-col gap-4 sm:flex-row">
-						<DropdownMenuEvent />
+						{/*<DropdownMenuEvent />*/}
 						<EventCreationComponent clubID={club?.id} onEventCreated={fetchClubEvents} />
 					</div>
 				</div>

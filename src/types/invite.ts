@@ -9,6 +9,7 @@ export interface User {
 export interface Club {
 	id: number
 	name: string
+	logo_url: string
 }
 
 export interface OrganizerInvite {

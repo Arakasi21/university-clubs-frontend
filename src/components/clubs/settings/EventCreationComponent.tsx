@@ -46,7 +46,7 @@ export default function EventCreationComponent({ clubID, onEventCreated }: UseEv
 	}, [clubID, onEventCreated])
 
 	return (
-		<Button onClick={handleCreateEvent} type="submit">
+		<Button onClick={handleCreateEvent} variant="secondary" type="submit">
 			Create
 		</Button>
 	)

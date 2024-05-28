@@ -38,6 +38,7 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 				headers: {
 					'Content-Type': 'application/json',
 				},
+				withCredentials: true,
 			})
 
 			if (!response.status.toString().startsWith('2')) {
@@ -64,6 +65,7 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 			const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/members`
 			const response = await axiosAuth(apiUrl, {
 				method: 'DELETE',
+				withCredentials: true,
 			})
 
 			if (!response.status.toString().startsWith('2')) {
