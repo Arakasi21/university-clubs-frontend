@@ -69,13 +69,16 @@ function Page({ params }: { params: { clubID: number } }) {
 				{loading ? (
 					<SceletonClub />
 				) : (
-					<div className="px-0 py-12 sm:px-6 ">
-						<div className="mx-auto max-w-6xl">
-							<div className=" rounded-lg bg-[#0c1125]">
-								<div
-									style={{ backgroundImage: `url(${club?.banner_url ?? '/main_photo.jpeg'})` }}
-									className="h-40 w-full rounded-t-lg bg-cover bg-center"
-								/>
+					<div className="px-0">
+						<div
+							style={{
+								backgroundImage: `url(${club?.banner_url ?? '/main_photo.jpeg'})`,
+								zIndex: 1,
+							}}
+							className="from-dark-mode-gradient-start before:h-150 absolute h-80 w-full rounded-t-lg bg-gradient-to-t to-transparent bg-cover bg-center opacity-80 before:absolute before:-bottom-1 before:left-0 before:right-0 before:block before:bg-black/[.9] before:content-[] after:absolute after:-bottom-1 after:z-20 after:block after:h-40 after:bg-gradient-to-t after:from-cyan-500 after:to-blue-500  after:content-[]"
+						/>
+						<div className="relative z-30 mx-auto max-w-6xl pt-56">
+							<div className="z-50 rounded-lg bg-[#0c1125]">
 								<div className="flex items-center justify-between gap-4 p-6">
 									<div className="flex items-center gap-2">
 										<div className="hidden aspect-square shrink-0 overflow-hidden rounded-full sm:flex">

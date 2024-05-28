@@ -56,6 +56,7 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 
 	useEffect(() => {
 		setImageUrl(user ? user.avatar_url : null)
+		setAvatarUrl(user ? user.avatar_url : '')
 	}, [user])
 
 	return (

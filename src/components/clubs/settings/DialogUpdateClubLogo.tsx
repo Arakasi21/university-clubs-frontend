@@ -1,149 +1,95 @@
 import { Button } from '@/components/ui/button'
-import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from '@/components/ui/dialog'
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Skeleton } from '@/components/ui/skeleton'
-import { zodResolver } from '@hookform/resolvers/zod'
-import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import React, { useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { z } from 'zod'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import useClubStore from '@/store/club'
+import { Input } from '@/components/ui/input'
+import { ImageCropper } from '@/components/ImgCropper'
 
-const MAX_FILE_SIZE = 5000000 // ~5MB
-const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
-
-const formSchema = z.object({
-	logo: z
-		.any()
-		.refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-		.refine(
-			(file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-			'Only .jpg, .jpeg, .png and .webp formats are supported.',
-		),
-})
-
-const ClubLogoEditForm: React.FC = () => {
+export function DialogUpdateClubLogo() {
 	const { club } = useClubStore()
 
-	const [imagePreview, setImagePreview] = useState<string | null>(
-		club?.logo_url ? club.logo_url : '/main_photo.jpeg',
-	)
+	const [logoUrl, setLogoUrl] = useState(club?.logo_url)
+	const [imageUrl, setImageUrl] = useState<string | null>(club?.logo_url ? club?.logo_url : null)
+	const [isDialogOpen, setIsDialogOpen] = useState(false)
+	const onCropRef = useRef<(() => Promise<null | Blob>) | null>(null)
+	const inputRef = useRef<HTMLInputElement | null>(null)
 
 	const axiosAuth = useAxiosInterceptor()
-
-	useEffect(() => {
-		setImagePreview(club?.logo_url ? club.logo_url : '/main_photo.jpeg')
-	}, [club])
-
-	const form = useForm<z.infer<typeof formSchema>>({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-			logo: club?.logo_url,
-		},
-	})
-
-	const updateClubLogo = async (values: z.infer<typeof formSchema>) => {
+	const updateClubLogo = async () => {
 		try {
-			if (!values.logo) {
-				toast.error('Select image')
-				return
+			if (!onCropRef.current) {
+				throw new Error('Crop function is not defined')
 			}
+			onCropRef.current().then(async (croppedImgBlob) => {
+				const formData = new FormData()
+				formData.append('avatar', croppedImgBlob ? croppedImgBlob : '')
 
-			const formData = new FormData()
-			formData.append('logo', values.logo)
+				const response = await axiosAuth(
+					`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club?.id}/logo`,
+					{
+						method: 'PATCH',
+						data: formData,
+					},
+				)
 
-			const response = await axiosAuth(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club?.id}/logo`,
-				{
-					method: 'PATCH',
-					data: formData,
-				},
-			)
+				if (response.status !== 200) {
+					toast.error('Change logo error', {
+						description: response.data.error,
+					})
+				}
 
-			if (response.status !== 200) {
-				toast.error('Change logo error', {
-					description: response.data.error,
-				})
-			}
-
-			toast.success('Club logo successfully have changed!')
+				toast.success('Club logo successfully have changed!')
+			})
 		} catch (e) {
 			console.log(e)
 		}
 	}
-	return (
-		<div>
-			<Form {...form}>
-				<form onSubmit={form.handleSubmit(updateClubLogo)}>
-					{club ? (
-						<FormField
-							control={form.control}
-							name="logo"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										<Image
-											src={imagePreview ? imagePreview : '/main_photo.jpeg'}
-											alt={`${club.name}'s logo`}
-											width={250}
-											height={200}
-										/>
-									</FormLabel>
-									<FormControl>
-										<Input
-											type="file"
-											ref={field.ref}
-											name={field.name}
-											onBlur={field.onBlur}
-											onChange={(e) => {
-												const file = e.target.files?.[0]
-												field.onChange(file)
-												setImagePreview(
-													file ? URL.createObjectURL(file) : club?.logo_url || '/main_photo.jpeg',
-												)
-											}}
-										/>
-									</FormControl>
-									<Button type="submit" className="w-full">
-										Set new club logo
-									</Button>
-								</FormItem>
-							)}
-						/>
-					) : (
-						<Skeleton className="h-12 w-12 rounded-full" />
-					)}
-				</form>
-			</Form>
-		</div>
-	)
-}
 
-export function DialogUpdateClubLogo() {
 	return (
-		<Dialog>
-			<DialogTrigger asChild>
-				<Button className="w-40" variant="secondary">
-					Update Club Logo
-				</Button>
-			</DialogTrigger>
-			<DialogContent className="sm:max-w-md">
-				<DialogHeader>
-					<DialogTitle>Update Club Logo</DialogTitle>
-				</DialogHeader>
-				<div className="flex items-center space-x-2">
-					<ClubLogoEditForm />
-				</div>
-			</DialogContent>
-		</Dialog>
+		<>
+			<div className="hidden">
+				<Input
+					id="image"
+					ref={inputRef}
+					type="file"
+					accept="image/*"
+					hidden={true}
+					onChange={(e) => {
+						const imageFile = e.target.files?.[0]
+						if (imageFile) {
+							setImageUrl(URL.createObjectURL(imageFile))
+							setIsDialogOpen(true)
+						}
+					}}
+				/>
+			</div>
+
+			<Button
+				onClick={() => {
+					inputRef.current?.click()
+				}}
+				className="w-40"
+				variant="secondary"
+			>
+				Upload Club Logo
+			</Button>
+
+			<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+				<DialogContent className="flex flex-col sm:max-w-[425px]">
+					<DialogHeader className="">
+						<DialogTitle>Update Club Logo</DialogTitle>
+					</DialogHeader>
+
+					<div className="flex justify-center">
+						{imageUrl && <ImageCropper imageUrl={imageUrl} onCropRef={onCropRef} />}
+					</div>
+					<Button type="button" onClick={updateClubLogo} className="w-max">
+						Set new club logo
+					</Button>
+				</DialogContent>
+			</Dialog>
+		</>
 	)
 }

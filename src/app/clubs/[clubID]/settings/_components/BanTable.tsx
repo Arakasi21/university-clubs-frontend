@@ -123,7 +123,7 @@ function BanTable({ clubID }: { clubID: number }) {
 										<TableCell>
 											<UserLink user={ban.admin} />
 										</TableCell>
-										<TableCell className="text-right">{ban.reason}</TableCell>
+										<TableCell className="break-all text-right text-xs">{ban.reason}</TableCell>
 										<TableCell className="text-right">
 											<Button onClick={() => handleUnbanMember(ban.user.id)}>Unban</Button>
 										</TableCell>

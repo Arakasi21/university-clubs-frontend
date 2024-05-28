@@ -8,6 +8,7 @@ export type ImageCropperProps = {
 	aspect?: number
 	width?: number
 	height?: number
+	borderRadius?: string
 }
 
 export const ImageCropper = ({
@@ -16,6 +17,7 @@ export const ImageCropper = ({
 	aspect = 1,
 	width = 300,
 	height = 300,
+	borderRadius = '50%',
 }: ImageCropperProps) => {
 	const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
 	const [zoom, setZoom] = useState(1)
@@ -63,7 +65,7 @@ export const ImageCropper = ({
 					flex: 1,
 				},
 				cropAreaStyle: {
-					borderRadius: '50%',
+					borderRadius,
 					height,
 					width,
 				},

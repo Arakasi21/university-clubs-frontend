@@ -19,6 +19,7 @@ const config = {
 		},
 		extend: {
 			colors: {
+				'dark-mode-gradient-start': '#141414',
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -72,6 +73,20 @@ const config = {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 			},
+			height: {
+				'150': '150px',
+			},
+			inset: {
+				'-1': '-1px',
+			},
+			zIndex: {
+				'3': '3',
+			},
+		},
+	},
+	variants: {
+		extend: {
+			backgroundImage: ['dark'],
 		},
 	},
 	plugins: [require('tailwindcss-animate')],
