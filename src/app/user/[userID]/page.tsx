@@ -127,8 +127,8 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 												/>
 											</div>
 										</div>
-										<div className="flex-1">
-											<h3 className="text-lg font-bold">{club.name}</h3>
+										<div className="flex-1 overflow-hidden">
+											<p className="break-words text-lg font-bold text-white">{club.name}</p>
 											<p className="text-sm text-gray-400">{club.club_type}</p>
 										</div>
 									</div>

@@ -237,10 +237,10 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 		fetchInvites()
 	}, [])
 
-	async function revokeInvite(inviteID: string) {
+	async function revokeInvite(inviteID: string, type: string) {
 		try {
 			const response = await axiosAuth.delete(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/invites/${inviteID}/organizers`,
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/invites/${inviteID}/${type}`,
 			)
 
 			if (response.status.toString().startsWith('2')) {
@@ -645,7 +645,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 													size="sm"
 													className="mt-0"
 													variant="ghost"
-													onClick={() => revokeInvite(invite.id)}
+													onClick={() => revokeInvite(invite.id, 'organizers')}
 												>
 													<XIcon className="h-4 w-4" />
 													<span className="sr-only">Revoke invite</span>
@@ -679,6 +679,17 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 									{collaboratorInvites.map((invite) => (
 										<li key={invite.id} className="flex items-center space-x-2">
 											<span>{invite.club.name}</span>
+											<div className="m-0 mt-0 flex items-center justify-center p-0">
+												<Button
+													size="sm"
+													className="mt-0"
+													variant="ghost"
+													onClick={() => revokeInvite(invite.id, 'collaborators')}
+												>
+													<XIcon className="h-4 w-4" />
+													<span className="sr-only">Revoke invite</span>
+												</Button>
+											</div>
 										</li>
 									))}
 								</ul>
