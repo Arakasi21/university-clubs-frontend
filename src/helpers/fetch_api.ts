@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios'
 import useUserStore from '@/store/user'
 
 export const useAxiosInterceptor = () => {
-	const { setUser, jwt_token } = useUserStore()
+	const { setUser } = useUserStore()
 	const instance = axios.create()
 
 	instance.interceptors.response.use(
@@ -10,15 +10,8 @@ export const useAxiosInterceptor = () => {
 		async (error) => {
 			if (error.response?.status === 401) {
 				try {
-					if (!jwt_token) {
-						await new Promise((resolve) => setTimeout(resolve, 500))
-						console.log(jwt_token)
-					}
 					const options: AxiosRequestConfig = {
 						method: 'POST',
-						headers: {
-							Authorization: `Bearer ${jwt_token}`,
-						},
 						withCredentials: true,
 					}
 					const refreshRes = await instance(
@@ -26,8 +19,7 @@ export const useAxiosInterceptor = () => {
 						options,
 					)
 					if (refreshRes.status === 200) {
-						setUser(refreshRes.data.user, refreshRes.data.jwt_token)
-						error.config.headers['Authorization'] = `Bearer ${refreshRes.data.jwt_token}`
+						setUser(refreshRes.data.user)
 						return axios(error.config)
 					} else {
 						console.error('Refresh token request failed with status:', refreshRes.status)
@@ -43,9 +35,6 @@ export const useAxiosInterceptor = () => {
 
 	instance.interceptors.request.use(
 		(config) => {
-			if (jwt_token) {
-				config.headers['Authorization'] = `Bearer ${jwt_token}`
-			}
 			config.withCredentials = true
 			return config
 		},

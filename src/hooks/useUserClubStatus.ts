@@ -1,7 +1,6 @@
 import { UserClubStatus } from '@/types/club'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import useUserStore from '@/store/user'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { useRouter } from 'next/navigation'
 
@@ -11,7 +10,6 @@ export type UseUserClubStatusProps = {
 
 export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 	const [memberStatus, setMemberStatus] = useState<UserClubStatus>('NOT_MEMBER')
-	const { jwt_token } = useUserStore()
 	const axiosAuth = useAxiosInterceptor()
 	const router = useRouter()
 	// Disable eslint for the specific line
@@ -20,7 +18,6 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 		try {
 			const response = await axiosAuth(
 				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/join/status`,
-				{},
 			)
 			if (!response.status.toString().startsWith('2')) {
 				toast.error('Failed to fetch member join status', { description: response.data.error })
@@ -30,18 +27,17 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 		} catch (error) {
 			console.error(error)
 		}
-	}, [clubID, axiosAuth])
+	}, [clubID])
 	// Disable eslint for the specific line
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const handleJoinRequest = useCallback(async () => {
 		try {
-			if (!jwt_token) {
-				throw new Error('JWT token is missing')
-			}
 			const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubID}/join`
 			const response = await axiosAuth(apiUrl, {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+				headers: {
+					'Content-Type': 'application/json',
+				},
 			})
 
 			if (!response.status.toString().startsWith('2')) {
@@ -59,7 +55,8 @@ export default function useUserClubStatus({ clubID }: UseUserClubStatusProps) {
 			console.error(error)
 		}
 		await fetchUserClubStatus()
-	}, [fetchUserClubStatus, jwt_token, clubID])
+	}, [fetchUserClubStatus, clubID])
+
 	// Disable eslint for the specific line
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const handleLeaveClub = useCallback(async () => {

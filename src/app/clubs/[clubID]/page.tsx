@@ -20,9 +20,10 @@ import BackgroundClubImage from '@/components/clubs/BackgroundClubImage'
 function Page({ params }: { params: { clubID: number } }) {
 	const { isLoggedIn, user } = useUserStore()
 	const { club, clubMembers, isOwner, loading } = useClub({ clubID: params.clubID, user })
-	const { memberStatus, handleJoinRequest, handleLeaveClub } = useUserClubStatus({
-		clubID: params.clubID,
-	})
+	const { fetchUserClubStatus, handleJoinRequest, handleLeaveClub, memberStatus } =
+		useUserClubStatus({
+			clubID: params.clubID,
+		})
 
 	const { permissions } = useUserRolesStore()
 
@@ -51,7 +52,7 @@ function Page({ params }: { params: { clubID: number } }) {
 				const data = await response.json()
 				setClubEvents(data.events)
 			} else {
-				console.error('Failed to fetch events')
+				console.log('There is no fetched events')
 			}
 		} catch (err) {
 			console.error('Network Error: Unable to fetch events')

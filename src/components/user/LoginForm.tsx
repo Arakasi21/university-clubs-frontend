@@ -59,7 +59,7 @@ export default function Login() {
 
 			const data = await response.json()
 
-			setUser(data.user, data.jwt_token)
+			setUser(data.user)
 			toast('You Signed In successfully!')
 			router.push('/')
 		} catch (error) {

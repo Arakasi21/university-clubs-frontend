@@ -18,7 +18,7 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 	const inputRef = useRef<HTMLInputElement | null>(null)
 
 	const axiosAuth = useAxiosInterceptor()
-	const { setUser, jwt_token } = useUserStore()
+	const { setUser } = useUserStore()
 
 	const updateUserAvatar = async () => {
 		try {
@@ -44,7 +44,7 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 					return
 				}
 
-				setUser(response.data.user, jwt_token)
+				setUser(response.data.user)
 				setAvatarUrl(response.data.user.avatar_url)
 				toast.success('Your avatar has been changed!')
 			})

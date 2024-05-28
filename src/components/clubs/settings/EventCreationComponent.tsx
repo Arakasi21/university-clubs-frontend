@@ -17,6 +17,7 @@ export default function EventCreationComponent({ clubID, onEventCreated }: UseEv
 			const response = await axiosAuth(apiUrl, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
+				withCredentials: true,
 			})
 
 			if (!response.status.toString().startsWith('2')) {
@@ -28,6 +29,9 @@ export default function EventCreationComponent({ clubID, onEventCreated }: UseEv
 					action: {
 						label: 'X',
 						onClick: () => {},
+					},
+					style: {
+						color: 'green',
 					},
 				})
 
