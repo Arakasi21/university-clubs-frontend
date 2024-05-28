@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import useEvent from '@/hooks/useEvent'
 import useUserStore from '@/store/user'
 import Nav from '@/components/NavBar'
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle, XIcon } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Link from 'next/link'
 import { DateTimeFormatOptions } from 'intl'
@@ -45,7 +45,6 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 	const { event, fetchEventInfo } = useEvent({ eventID: params.eventID, user })
 	const isUserOrganizer = event?.organizers.some((organizer) => organizer.id === user?.id)
 	const [isPendingReview, setIsPendingReview] = useState(event?.status === 'PENDING')
-	const [isApproved, setIsApproved] = useState(event?.status === 'APPROVED')
 	const isEditable = ['DRAFT', 'REJECTED', 'APPROVED'].includes(event?.status || '')
 
 	const [collaboratorInvites, setCollaboratorInvites] = useState<CollaboratorInvite[]>([])
@@ -115,7 +114,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 
 	// ====================	ДОБАВЛЯЕМ ТЕГИ ====================
 
-	const [tags, setTags] = useState<string[]>(event?.tags || [])
+	const [tags] = useState<string[]>(event?.tags || [])
 	const [newTagInput, setNewTagInput] = useState<string>('')
 
 	const handleAddTag = () => {
@@ -237,6 +236,23 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 	useEffect(() => {
 		fetchInvites()
 	}, [])
+
+	async function revokeInvite(inviteID: string) {
+		try {
+			const response = await axiosAuth.delete(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/invites/${inviteID}/organizers`,
+			)
+
+			if (response.status.toString().startsWith('2')) {
+				toast.success('Invite revoked successfully')
+				fetchInvites() // Refresh the invites
+			} else {
+				toast.error('Failed to revoke invite', { description: response.data.error })
+			}
+		} catch (error) {
+			toast.error('Failed to revoke invite')
+		}
+	}
 
 	// ==================== HANDLE Функции ====================
 	const handleFileSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -361,7 +377,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 							<img
 								alt="Event Cover"
 								className="aspect-[2/1] w-full rounded-xl object-cover"
-								src="/placeholder.svg"
+								src="/main_photo.jpeg"
 							/>
 						)}
 					</div>
@@ -573,7 +589,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 								.sort((a, b) => a.position - b.position)
 								.map((image) => (
 									<div key={image.position} className="overflow-hidden rounded-lg">
-										<img className="h-[400px] w-[400] object-cover" src={image.url} />
+										<img className="h-[400px] w-[400] object-cover" src={image.url} alt="alt" />
 									</div>
 								))
 						) : (
@@ -601,19 +617,40 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 							</div>
 							<InviteOrganizerDialog eventID={params.eventID} fetchInvites={fetchInvites} />
 						</div>
-						{organizerInvites.length > 0 && (
+						{Array.isArray(organizerInvites) && organizerInvites.length > 0 && (
 							<div className="mt-4">
 								<h4 className="text-lg font-semibold">Pending Organizer Invites</h4>
-								<ul>
+								<ul className="items-center p-2">
 									{organizerInvites.map((invite) => (
-										<li key={invite.id} className="flex items-center space-x-2">
-											<Avatar className="h-10 w-10">
-												<AvatarImage src={invite.user.avatar_url} alt={invite.user.first_name} />
-												<AvatarFallback>{invite.user.first_name[0]}</AvatarFallback>
-											</Avatar>
-											<span>
-												{invite.user.first_name} {invite.user.last_name}
-											</span>
+										<li
+											key={invite.id}
+											className="flex items-center justify-between space-x-2 space-y-6"
+										>
+											<div className="flex flex-row items-center gap-2 ">
+												<Avatar className="h-12 w-12">
+													<AvatarImage src={invite.user.avatar_url} alt={invite.user.first_name} />
+													<AvatarFallback>{invite.user.first_name[0]}</AvatarFallback>
+												</Avatar>
+												<div>
+													<div>
+														{invite.user.first_name} {invite.user.last_name}
+													</div>
+													<div className="text-sm text-gray-500 dark:text-gray-400">
+														{invite.user.barcode}
+													</div>
+												</div>
+											</div>
+											<div className="m-0 mt-0 flex items-center justify-center p-0">
+												<Button
+													size="sm"
+													className="mt-0"
+													variant="ghost"
+													onClick={() => revokeInvite(invite.id)}
+												>
+													<XIcon className="h-4 w-4" />
+													<span className="sr-only">Revoke invite</span>
+												</Button>
+											</div>
 										</li>
 									))}
 								</ul>

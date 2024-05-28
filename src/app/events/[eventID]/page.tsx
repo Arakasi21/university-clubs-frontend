@@ -3,14 +3,13 @@
 import useEvent from '@/hooks/useEvent'
 import useUserStore from '@/store/user'
 import Nav from '@/components/NavBar'
-import { CheckIcon, PlusIcon } from 'lucide-react'
 import React from 'react'
 import { Organizer } from '@/types/event'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Link from 'next/link'
 import { DateTimeFormatOptions } from 'intl'
 import { Button } from '@/components/ui/button'
-import useUserClubStatus from '@/hooks/useUserClubStatus'
+import { ArrowRight } from 'lucide-react'
 
 export default function Page({ params }: { params: { eventID: string } }) {
 	const { user } = useUserStore()
@@ -18,13 +17,6 @@ export default function Page({ params }: { params: { eventID: string } }) {
 	const isUserOrganizer = event?.organizers.some(
 		(organizer: Organizer) => organizer.id === user?.id,
 	)
-
-	const { memberStatus } = useUserClubStatus({
-		clubID: event?.club_id || 0,
-	})
-	const isMember = (clubId: number) => {
-		return memberStatus[clubId] === 'member'
-	}
 
 	type EventStatusMapping = {
 		[key: string]: { color: string; label: string }
@@ -141,26 +133,24 @@ export default function Page({ params }: { params: { eventID: string } }) {
 									<div className="pb-2 text-sm font-medium text-gray-400">Club Collaborators</div>
 									{event.collaborator_clubs.map((club) => (
 										<div key={club.id} className="flex items-center gap-2 pb-2">
-											<div className="flex items-center justify-between rounded-full bg-gray-700 px-2 py-1">
-												<div className="flex-shrink-0  rounded-full">
-													<img
-														className="h-10 w-10 rounded-full object-cover"
-														src={club.logo_url || '/placeholder.svg'}
-														alt={club.name}
-													/>
+											<div className="flex w-full items-center justify-between rounded-full bg-gray-700 px-2 py-1">
+												<div className="flex items-center">
+													<div className="flex-shrink-0 rounded-full">
+														<img
+															className="h-10 w-10 rounded-full object-cover"
+															src={club.logo_url || '/main_photo.jpeg'}
+															alt={club.name}
+														/>
+													</div>
+													<div className="ml-2 text-sm font-medium">{club.name}</div>
 												</div>
-												<div className="ml-2 text-sm font-medium">{club.name}</div>
 												<Link href={`/clubs/${club.id}`}>
 													<Button
 														className="text-gray-400 hover:bg-gray-700 hover:text-gray-50"
 														size="icon"
 														variant="ghost"
 													>
-														{isMember(club.id) ? (
-															<PlusIcon className="h-4 w-4" />
-														) : (
-															<CheckIcon className="h-4 w-4 text-green-500" />
-														)}
+														<ArrowRight className="h-4 w-4" />
 													</Button>
 												</Link>
 											</div>
@@ -170,8 +160,8 @@ export default function Page({ params }: { params: { eventID: string } }) {
 								<div className="text-sm font-medium text-gray-400">Organizers</div>
 								<div className="flex-col items-center gap-4">
 									{event.organizers.map((organizer: Organizer) => (
-										<div key={organizer.id} className="flex items-center gap-2 pb-2">
-											<Avatar style={{ width: 44, height: 44 }}>
+										<div key={organizer.id} className="flex items-center gap-2  px-2  pb-2">
+											<Avatar style={{ width: 44, height: 44 }} className="border border-gray-600">
 												<AvatarImage
 													src={organizer?.avatar_url}
 													alt={`${organizer?.first_name}'s profile picture`}
