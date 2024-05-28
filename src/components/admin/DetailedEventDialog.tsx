@@ -286,9 +286,17 @@ export function DetailedEventDialog({
 					</Tabs>
 
 					<DialogFooter>
-						<Button className="mr-auto" variant={'destructive'} onClick={onDelete}>
-							Delete Event
-						</Button>
+						<div className="mr-auto flex flex-row gap-4">
+							<Button className="mr-auto" variant={'destructive'} onClick={onDelete}>
+								Delete Event
+							</Button>
+							<Link href={`/events/${event.id}`}>
+								<Button className="mr-auto" variant={'default'}>
+									View Event
+								</Button>
+							</Link>
+						</div>
+
 						{event.status === 'PENDING' && (
 							<>
 								<Button variant={'outline'} onClick={handleRejectEvent}>

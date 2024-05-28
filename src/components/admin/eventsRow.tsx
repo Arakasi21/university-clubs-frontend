@@ -70,7 +70,11 @@ function EventsRow({ onUpdate, event }: EventsRowProps) {
 			<TableRow key={event.id} onClick={handleRowClick} className="cursor-default">
 				<TableCell>{event.id}</TableCell>
 				<TableCell>{event.title}</TableCell>
-				<TableCell>{event.description}</TableCell>
+				<TableCell>
+					{event.description.length > 100
+						? event.description.slice(0, 100) + '...'
+						: event.description}
+				</TableCell>
 				<TableCell>
 					{event.organizers.map((organizer) => (
 						<div key={organizer.id}>{organizer.first_name}</div>

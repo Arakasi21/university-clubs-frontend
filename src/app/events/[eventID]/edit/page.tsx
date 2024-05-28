@@ -13,7 +13,6 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { toast } from 'sonner'
-import { format } from 'date-fns'
 import { CoverImage } from '@/types/event'
 import {
 	Select,
@@ -24,6 +23,9 @@ import {
 } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
 import { CardTitle } from '@/components/ui/card'
+import InviteOrganizerDialog from '@/components/events/inviteOrganizerDialog'
+import InviteCollaboratorDialog from '@/components/events/InviteCollaboratorDialog'
+import { CollaboratorInvite, OrganizerInvite } from '@/types/invite'
 
 type FormData = {
 	title: string
@@ -45,6 +47,9 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 	const [isPendingReview, setIsPendingReview] = useState(event?.status === 'PENDING')
 	const [isApproved, setIsApproved] = useState(event?.status === 'APPROVED')
 	const isEditable = ['DRAFT', 'REJECTED', 'APPROVED'].includes(event?.status || '')
+
+	const [collaboratorInvites, setCollaboratorInvites] = useState<CollaboratorInvite[]>([])
+	const [organizerInvites, setOrganizerInvites] = useState<OrganizerInvite[]>([])
 
 	const axiosAuth = useAxiosInterceptor()
 	const [imageFile, setImageFile] = useState<File | null>(null)
@@ -206,6 +211,32 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 			console.error('There has been a problem with your fetch operation:', error)
 		}
 	}
+
+	const fetchInvites = async () => {
+		try {
+			const [collaboratorsRes, organizersRes] = await Promise.all([
+				axiosAuth.get(
+					`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${params.eventID}/invites/collaborators`,
+				),
+				axiosAuth.get(
+					`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${params.eventID}/invites/organizers`,
+				),
+			])
+
+			if (collaboratorsRes.status === 200 && organizersRes.status === 200) {
+				setCollaboratorInvites(collaboratorsRes.data.invites)
+				setOrganizerInvites(organizersRes.data.invites)
+			} else {
+				toast.error('Failed to fetch invites')
+			}
+		} catch (error) {
+			toast.error('Failed to fetch invites')
+		}
+	}
+
+	useEffect(() => {
+		fetchInvites()
+	}, [])
 
 	// ==================== HANDLE Функции ====================
 	const handleFileSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -528,7 +559,9 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 
 				<section className="mb-4">
 					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
-						<h3 className="mb-4 text-xl font-semibold">Cover Image</h3>
+						<h3 className=" text-xl font-semibold">Cover Image</h3>
+						<p className=" mb-4 text-sm text-gray-400"> Upload a cover image for your event.</p>
+
 						{imageFile ? (
 							<img
 								src={URL.createObjectURL(imageFile)}
@@ -553,6 +586,67 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 							accept="image/*"
 							onChange={handleFileSelection}
 						/>
+					</div>
+				</section>
+
+				{/* ============================ ADD ORGANIZERS ============================ */}
+				<section className="mb-4">
+					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
+						<div className="flex flex-col items-center gap-4 sm:flex-row">
+							<div>
+								<h3 className="text-xl font-semibold">Add Organizers</h3>
+								<p className="mb-4 text-sm text-gray-400">
+									Manage the people who can access and edit this event.
+								</p>
+							</div>
+							<InviteOrganizerDialog eventID={params.eventID} fetchInvites={fetchInvites} />
+						</div>
+						{organizerInvites.length > 0 && (
+							<div className="mt-4">
+								<h4 className="text-lg font-semibold">Pending Organizer Invites</h4>
+								<ul>
+									{organizerInvites.map((invite) => (
+										<li key={invite.id} className="flex items-center space-x-2">
+											<Avatar className="h-10 w-10">
+												<AvatarImage src={invite.user.avatar_url} alt={invite.user.first_name} />
+												<AvatarFallback>{invite.user.first_name[0]}</AvatarFallback>
+											</Avatar>
+											<span>
+												{invite.user.first_name} {invite.user.last_name}
+											</span>
+										</li>
+									))}
+								</ul>
+							</div>
+						)}
+					</div>
+				</section>
+
+				{/* ============================ ADD COLLABORATORS ============================ */}
+				<section className="mb-4">
+					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
+						<div className="kitems-center flex flex-col gap-4 sm:flex-row">
+							<div>
+								<h3 className="text-xl font-semibold">Invite Club Collaborators</h3>
+								<p className="mb-4 text-sm text-gray-400">
+									Manage the clubs that can access and edit this event.
+								</p>
+							</div>
+							<InviteCollaboratorDialog eventID={params.eventID} fetchInvites={fetchInvites} />
+						</div>
+
+						{Array.isArray(collaboratorInvites) && collaboratorInvites.length > 0 && (
+							<div className="mt-4">
+								<h4 className="text-lg font-semibold">Pending Club Invites</h4>
+								<ul>
+									{collaboratorInvites.map((invite) => (
+										<li key={invite.id} className="flex items-center space-x-2">
+											<span>{invite.club.name}</span>
+										</li>
+									))}
+								</ul>
+							</div>
+						)}
 					</div>
 				</section>
 			</div>
