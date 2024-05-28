@@ -4,24 +4,18 @@ import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-	Dialog,
-	DialogContent,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import Image from 'next/image'
 import { ImageCropper } from '@/components/ImgCropper'
 
 const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
-	const [image, setImage] = useState<File | null>(null)
+	const [avatarUrl, setAvatarUrl] = useState(user?.avatar_url)
 	const [imageUrl, setImageUrl] = useState<string | null>(user ? user.avatar_url : null)
+	const [isDialogOpen, setIsDialogOpen] = useState(false)
 	const onCropRef = useRef<(() => Promise<null | Blob>) | null>(null)
+	const inputRef = useRef<HTMLInputElement | null>(null)
 
 	const axiosAuth = useAxiosInterceptor()
 	const { setUser, jwt_token } = useUserStore()
@@ -51,6 +45,7 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 				}
 
 				setUser(response.data.user, jwt_token)
+				setAvatarUrl(response.data.user.avatar_url)
 				toast.success('Your avatar has been changed!')
 			})
 		} catch (e) {
@@ -69,46 +64,54 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 				<CardHeader>
 					<CardTitle>Change Avatar</CardTitle>
 				</CardHeader>
+				<div className="hidden">
+					<Input
+						id="image"
+						ref={inputRef}
+						type="file"
+						accept="image/*"
+						hidden={true}
+						onChange={(e) => {
+							const imageFile = e.target.files?.[0]
+							if (imageFile) {
+								setImageUrl(URL.createObjectURL(imageFile))
+								setIsDialogOpen(true)
+							}
+						}}
+					/>
+				</div>
+
 				<CardContent>
-					<Dialog>
-						<DialogTrigger asChild>
-							<Image
-								src={imageUrl || ''}
-								alt={`${user?.first_name}'s avatar`}
-								width={400}
-								height={100}
-								className="cursor-pointer"
-							/>
-						</DialogTrigger>
-						<DialogContent className="sm:max-w-[425px]">
-							<DialogHeader>
+					<div className="relative inline-block">
+						<Image
+							src={avatarUrl || ''}
+							alt={`${user?.first_name}'s avatar`}
+							width={400}
+							height={100}
+							className="cursor-pointer rounded-full"
+						/>
+						<Button
+							onClick={() => {
+								inputRef.current?.click()
+							}}
+							className="rounded-2 absolute bottom-0 left-0 mb-2 ml-2 border px-2 py-1"
+						>
+							Upload a photo..
+						</Button>
+					</div>
+
+					<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+						<DialogContent className="flex flex-col sm:max-w-[425px]">
+							<DialogHeader className="">
 								<DialogTitle>Edit Avatar</DialogTitle>
 							</DialogHeader>
-							<div className="grid gap-4 py-4">
-								<div className="grid grid-cols-4 items-center gap-4">
-									<Label htmlFor="image" className="text-right">
-										Choose image
-									</Label>
-									<Input
-										id="image"
-										type="file"
-										accept="image/*"
-										onChange={(e) => {
-											const imageFile = e.target.files?.[0]
-											if (imageFile) {
-												setImageUrl(URL.createObjectURL(imageFile))
-												setImage(imageFile)
-											}
-										}}
-									/>
-								</div>
+
+							<div className="flex justify-center">
 								{imageUrl && <ImageCropper imageUrl={imageUrl} onCropRef={onCropRef} />}
 							</div>
-							<DialogFooter>
-								<Button type="button" onClick={updateUserAvatar}>
-									Set new profile picture
-								</Button>
-							</DialogFooter>
+							<Button type="button" onClick={updateUserAvatar} className="w-max">
+								Set new profile picture
+							</Button>
 						</DialogContent>
 					</Dialog>
 				</CardContent>

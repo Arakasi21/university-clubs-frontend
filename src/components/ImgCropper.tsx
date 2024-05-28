@@ -6,9 +6,17 @@ export type ImageCropperProps = {
 	imageUrl: string | null
 	onCropRef: MutableRefObject<(() => Promise<null | Blob>) | null>
 	aspect?: number
+	width?: number
+	height?: number
 }
 
-export const ImageCropper = ({ imageUrl, onCropRef, aspect = 1 }: ImageCropperProps) => {
+export const ImageCropper = ({
+	imageUrl,
+	onCropRef,
+	aspect = 1,
+	width = 300,
+	height = 300,
+}: ImageCropperProps) => {
 	const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
 	const [zoom, setZoom] = useState(1)
 	const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>({
@@ -45,8 +53,20 @@ export const ImageCropper = ({ imageUrl, onCropRef, aspect = 1 }: ImageCropperPr
 			onCropComplete={onCropComplete}
 			onZoomChange={setZoom}
 			style={{
-				containerStyle: { position: 'relative', display: 'block', width: 'auto' },
-				mediaStyle: { position: 'relative', display: 'block' },
+				containerStyle: {
+					position: 'relative',
+					height,
+					width,
+				},
+				mediaStyle: {
+					display: 'block',
+					flex: 1,
+				},
+				cropAreaStyle: {
+					borderRadius: '50%',
+					height,
+					width,
+				},
 			}}
 		/>
 	)
