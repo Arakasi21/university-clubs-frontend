@@ -15,6 +15,7 @@ import { Event } from '@/types/event'
 import ClubMembersCard from '@/components/clubs/ClubMembersCard'
 import ClubMembersDialog from '@/components/clubs/ClubMembersDialog'
 import ClubPageButtons from '@/components/clubs/ClubPageButtons'
+import BackgroundClubImage from '@/components/clubs/BackgroundClubImage'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { isLoggedIn, user } = useUserStore()
@@ -69,15 +70,24 @@ function Page({ params }: { params: { clubID: number } }) {
 				{loading ? (
 					<SceletonClub />
 				) : (
-					<div className="px-0">
-						<div
-							style={{
-								backgroundImage: `url(${club?.banner_url ?? '/main_photo.jpeg'})`,
-								zIndex: 1,
-							}}
-							className="from-dark-mode-gradient-start before:h-150 absolute h-80 w-full rounded-t-lg bg-gradient-to-t to-transparent bg-cover bg-center opacity-80 before:absolute before:-bottom-1 before:left-0 before:right-0 before:block before:bg-black/[.9] before:content-[] after:absolute after:-bottom-1 after:z-20 after:block after:h-40 after:bg-gradient-to-t after:from-cyan-500 after:to-blue-500  after:content-[]"
-						/>
-						<div className="relative z-30 mx-auto max-w-6xl pt-56">
+					<div className="relative">
+						<div className="absolute h-[320px] w-full overflow-hidden rounded-sm shadow-2xl shadow-[#020817]/40">
+							<img
+								className="z-1 h-full w-full object-cover object-center "
+								height={600}
+								src={club?.banner_url}
+								style={{
+									aspectRatio: '1920/600',
+									objectFit: 'cover',
+								}}
+								width={1920}
+							/>
+							<div className="z-1 absolute inset-0 bg-gradient-to-b from-transparent/30 to-[#020817]/80" />
+							<div className="z-1 absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#020817]/90" />
+						</div>
+
+						<div className="relative z-30 mx-auto max-w-[800px] pt-24">
+							<BackgroundClubImage club={club} />
 							<div className="z-50 rounded-lg bg-[#0c1125]">
 								<div className="flex items-center justify-between gap-4 p-6">
 									<div className="flex items-center gap-2">

@@ -84,8 +84,21 @@ function Page({ params }: { params: { clubID: number } }) {
 	return (
 		<main className="scroll-smooth" style={{ scrollBehavior: 'smooth' }}>
 			<Nav />
-
-			<div className=" max-w-6xl py-12 sm:p-12 md:mx-auto">
+			<div className="absolute h-[320px] w-full overflow-hidden rounded-sm shadow-2xl shadow-[#020817]/40">
+				<img
+					className="z-1 h-full w-full object-cover object-center "
+					height={600}
+					src={club?.banner_url}
+					style={{
+						aspectRatio: '1920/600',
+						objectFit: 'cover',
+					}}
+					width={1920}
+				/>
+				<div className="z-1 absolute inset-0 bg-gradient-to-b from-transparent/30 to-[#020817]/80" />
+				<div className="z-1 absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#020817]/90" />
+			</div>
+			<div className="relative z-30 max-w-6xl py-12 sm:p-12 md:mx-auto">
 				<BackgroundClubImage club={club} />
 				<div className=" rounded-lg bg-[#0c1125]">
 					<div className="flex items-center justify-between gap-4 p-6">
