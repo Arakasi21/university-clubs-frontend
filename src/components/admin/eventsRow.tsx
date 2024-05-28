@@ -12,6 +12,7 @@ import {
 	DialogTitle,
 } from '@/components/ui/dialog'
 import { DetailedEventDialog } from '@/components/admin/DetailedEventDialog'
+import { getEventStatus } from '@/lib/eventStatusUtils'
 
 export type EventsRowProps = {
 	onUpdate: () => void
@@ -48,22 +49,7 @@ function EventsRow({ onUpdate, event }: EventsRowProps) {
 	}
 
 	// COLOR
-	type EventStatusMapping = {
-		[key: string]: { color: string; label: string }
-	}
-
-	const eventStatusMapping: EventStatusMapping = {
-		DRAFT: { color: 'bg-gray-700 hover:bg-gray-900', label: 'Draft' },
-		PENDING: { color: 'bg-yellow-700 hover:bg-yellow-900', label: 'Pending' },
-		APPROVED: { color: 'bg-green-700 hover:bg-green-900', label: 'Approved' },
-		REJECTED: { color: 'bg-red-700 hover:bg-red-900', label: 'Rejected' },
-		IN_PROGRESS: { color: 'bg-blue-700 hover:bg-blue-700', label: 'In Progress' },
-	}
-
-	const eventStatus = eventStatusMapping[event?.status || 'DRAFT'] || {
-		color: 'bg-gray-500',
-		label: 'Unknown',
-	}
+	const eventStatus = getEventStatus(event?.status || 'DRAFT')
 
 	return (
 		<>

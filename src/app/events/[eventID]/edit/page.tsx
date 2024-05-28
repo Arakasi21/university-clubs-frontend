@@ -26,6 +26,7 @@ import { CardTitle } from '@/components/ui/card'
 import InviteOrganizerDialog from '@/components/events/inviteOrganizerDialog'
 import InviteCollaboratorDialog from '@/components/events/InviteCollaboratorDialog'
 import { CollaboratorInvite, OrganizerInvite } from '@/types/invite'
+import { getEventStatus } from '@/lib/eventStatusUtils'
 
 type FormData = {
 	title: string
@@ -80,22 +81,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 
 	//  ==================== ТУТ МЫ ПРОСТО ЗАДАЕМ EVENT STATUS ЦВЕТА  ====================
 
-	type EventStatusMapping = {
-		[key: string]: { color: string; label: string }
-	}
-
-	const eventStatusMapping: EventStatusMapping = {
-		DRAFT: { color: 'bg-gray-500', label: 'Draft' },
-		PENDING: { color: 'bg-yellow-500', label: 'Pending' },
-		APPROVED: { color: 'bg-green-500', label: 'Approved' },
-		REJECTED: { color: 'bg-red-500', label: 'Rejected' },
-		IN_PROGRESS: { color: 'bg-green-900', label: 'In Progress' },
-	}
-
-	const eventStatus = eventStatusMapping[event?.status || 'DRAFT'] || {
-		color: 'bg-gray-500',
-		label: 'Unknown',
-	}
+	const eventStatus = getEventStatus(event?.status || 'DRAFT')
 
 	// ==================== ФОРМАТИРОВАНИЕ	ДАТЫ В ФОРМАТЕ 23 мая 2024 г. в 19:51 ====================
 

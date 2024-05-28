@@ -9,6 +9,7 @@ import Link from 'next/link'
 import EventCreationComponent from '@/components/clubs/settings/EventCreationComponent'
 import useUserStore from '@/store/user'
 import DialogViewClubInvites from '@/components/clubs/events/DialogViewClubInvites'
+import { getEventStatus } from '@/lib/eventStatusUtils'
 
 export default function EventsContent() {
 	const user = useUserStore()
@@ -21,17 +22,6 @@ export default function EventsContent() {
 	const axiosAuth = useAxiosInterceptor()
 
 	// COLOR
-	type EventStatusMapping = {
-		[key: string]: { color: string; label: string }
-	}
-
-	const eventStatusMapping: EventStatusMapping = {
-		DRAFT: { color: 'bg-gray-500', label: 'Draft' },
-		PENDING: { color: 'bg-yellow-500', label: 'Pending' },
-		APPROVED: { color: 'bg-green-500', label: 'Approved' },
-		REJECTED: { color: 'bg-red-500', label: 'Rejected' },
-		IN_PROGRESS: { color: 'bg-green-900', label: 'In Progress' },
-	}
 
 	const fetchClubEvents = useCallback(async () => {
 		try {
@@ -82,10 +72,7 @@ export default function EventsContent() {
 			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 				{/* TODO EVENT STATUS COLOR*/}
 				{events?.map((event) => {
-					const eventStatus = eventStatusMapping[event.status] || {
-						color: 'bg-gray-500',
-						label: 'Unknown',
-					}
+					const eventStatusMapping = getEventStatus(event?.status || 'DRAFT')
 
 					return (
 						<div
@@ -101,13 +88,15 @@ export default function EventsContent() {
 									<div className="my-2 flex items-center space-x-2 text-xs">
 										<AlertTriangle className="h-5 w-5 text-yellow-500" />
 										<div className="rounded-md bg-yellow-500 px-2 py-2 text-xs text-white">
-											{eventStatus.label}
+											{eventStatusMapping.label}
 										</div>
 									</div>
 								) : (
 									<div className="my-2 flex items-center space-x-2 text-xs">
-										<div className={`rounded-md px-2 py-2 text-xs text-white ${eventStatus.color}`}>
-											{eventStatus.label}
+										<div
+											className={`rounded-md px-2 py-2 text-xs text-white ${eventStatusMapping.color}`}
+										>
+											{eventStatusMapping.label}
 										</div>
 									</div>
 								)}

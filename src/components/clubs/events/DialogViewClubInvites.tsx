@@ -89,14 +89,16 @@ function DialogViewClubInvites({ clubId }: DialogViewClubInvites) {
 								<div className="grid grid-cols-[50px_1fr_auto] items-center rounded-lg border p-2">
 									<div className="rounded-full ">
 										<img
-											src={invite.club.logo_url}
-											alt={invite.club.name}
+											src={invite.event.cover_images[0].url}
+											alt={invite.event.title}
 											className="h-8 w-8 rounded-full"
 										/>
 									</div>
 									<div>
 										<p className="font-medium">{invite.club.name}</p>
-										<p className="text-sm text-gray-500 dark:text-gray-400">{invite.event_id}</p>
+										<p className="text-sm text-gray-500 dark:text-gray-400">
+											{invite.event.description}
+										</p>
 									</div>
 									<div className="flex gap-2">
 										<Button

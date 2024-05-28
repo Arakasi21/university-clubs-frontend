@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { toast } from 'sonner'
+import { getEventStatus } from '@/lib/eventStatusUtils'
 
 export default function Page({ params }: { params: { eventID: string } }) {
 	const { user } = useUserStore()
@@ -26,22 +27,7 @@ export default function Page({ params }: { params: { eventID: string } }) {
 
 	const axiosAuth = useAxiosInterceptor()
 
-	type EventStatusMapping = {
-		[key: string]: { color: string; label: string }
-	}
-
-	const eventStatusMapping: EventStatusMapping = {
-		DRAFT: { color: 'bg-gray-500', label: 'Draft' },
-		PENDING: { color: 'bg-yellow-500', label: 'Pending' },
-		APPROVED: { color: 'bg-green-500', label: 'Approved' },
-		REJECTED: { color: 'bg-red-500', label: 'Rejected' },
-		IN_PROGRESS: { color: 'bg-green-900', label: 'In Progress' },
-	}
-
-	const eventStatus = eventStatusMapping[event?.status || 'DRAFT'] || {
-		color: 'bg-gray-500',
-		label: 'Unknown',
-	}
+	const eventStatus = getEventStatus(event?.status || 'DRAFT')
 
 	const startDate = event?.start_date ? new Date(event.start_date) : null
 
@@ -235,7 +221,10 @@ export default function Page({ params }: { params: { eventID: string } }) {
 								{isUserOrganizer && (
 									<div className="flex gap-2">
 										<Link href={`/events/${event.id}/edit`}>
-											<Button className="flex-1" variant="default">
+											<Button
+												className="flex-1 bg-gray-500 text-white hover:bg-gray-700"
+												variant="default"
+											>
 												Edit Event
 											</Button>
 										</Link>
@@ -243,7 +232,7 @@ export default function Page({ params }: { params: { eventID: string } }) {
 								)}
 								{isUserOrganizer && event.status === 'APPROVED' && (
 									<Button
-										className="mt-2 flex-1"
+										className="mt-2 flex-1 bg-green-500 text-white hover:bg-green-900 "
 										variant="default"
 										onClick={() => publishEvent(event.id)}
 									>
@@ -251,7 +240,7 @@ export default function Page({ params }: { params: { eventID: string } }) {
 									</Button>
 								)}
 
-								{participantStatus === 'UNKNOWN' && (
+								{participantStatus === 'UNKNOWN' && event.status === 'IN_PROGRESS' && (
 									<Button className=" mt-2 " variant="default">
 										Participate
 									</Button>

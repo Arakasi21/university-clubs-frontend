@@ -88,7 +88,7 @@ function Page({ params }: { params: { clubID: number } }) {
 							<div className="z-1 absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#020817]/90" />
 						</div>
 
-						<div className="relative z-30 mx-auto max-w-[1200px] pt-14">
+						<div className="relative z-30 mx-auto max-w-[1200px] pt-24">
 							<BackgroundClubImage club={club} />
 							<div className="z-50 rounded-lg bg-[#0c1125]">
 								<div className="flex items-center justify-between gap-4 p-6">
