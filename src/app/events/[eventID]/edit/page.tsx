@@ -330,7 +330,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 			setFormData({
 				title: event.title || '',
 				description: event.description || '',
-				start_date: event.start_date ? event.start_date : '',
+				start_date: new Date().toISOString().slice(0, 16) ? event.start_date : '',
 				end_date: event.end_date ? event.end_date : '',
 				location_uni: event.location_university || '',
 				location_link: event.location_link || '',
@@ -605,6 +605,45 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 					</div>
 				</section>
 
+				{/* ============================ ADD COLLABORATORS ============================ */}
+				<section className="mb-4">
+					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
+						<div className="kitems-center flex flex-col gap-4 sm:flex-row">
+							<div>
+								<h3 className="text-xl font-semibold">Invite Club Collaborators</h3>
+								<p className="mb-4 text-sm text-gray-400">
+									Manage the clubs that can access and edit this event.
+								</p>
+							</div>
+							<InviteCollaboratorDialog eventID={params.eventID} fetchInvites={fetchInvites} />
+						</div>
+
+						{Array.isArray(collaboratorInvites) && collaboratorInvites.length > 0 && (
+							<div className="mt-4">
+								<h4 className="text-lg font-semibold">Pending Club Invites</h4>
+								<ul>
+									{collaboratorInvites.map((invite) => (
+										<li key={invite.id} className="flex items-center space-x-2">
+											<span>{invite.club.name}</span>
+											<div className="m-0 mt-0 flex items-center justify-center p-0">
+												<Button
+													size="sm"
+													className="mt-0"
+													variant="ghost"
+													onClick={() => revokeInvite(invite.id, 'collaborators')}
+												>
+													<XIcon className="h-4 w-4" />
+													<span className="sr-only">Revoke invite</span>
+												</Button>
+											</div>
+										</li>
+									))}
+								</ul>
+							</div>
+						)}
+					</div>
+				</section>
+
 				{/* ============================ ADD ORGANIZERS ============================ */}
 				<section className="mb-4">
 					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
@@ -646,45 +685,6 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 													className="mt-0"
 													variant="ghost"
 													onClick={() => revokeInvite(invite.id, 'organizers')}
-												>
-													<XIcon className="h-4 w-4" />
-													<span className="sr-only">Revoke invite</span>
-												</Button>
-											</div>
-										</li>
-									))}
-								</ul>
-							</div>
-						)}
-					</div>
-				</section>
-
-				{/* ============================ ADD COLLABORATORS ============================ */}
-				<section className="mb-4">
-					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
-						<div className="kitems-center flex flex-col gap-4 sm:flex-row">
-							<div>
-								<h3 className="text-xl font-semibold">Invite Club Collaborators</h3>
-								<p className="mb-4 text-sm text-gray-400">
-									Manage the clubs that can access and edit this event.
-								</p>
-							</div>
-							<InviteCollaboratorDialog eventID={params.eventID} fetchInvites={fetchInvites} />
-						</div>
-
-						{Array.isArray(collaboratorInvites) && collaboratorInvites.length > 0 && (
-							<div className="mt-4">
-								<h4 className="text-lg font-semibold">Pending Club Invites</h4>
-								<ul>
-									{collaboratorInvites.map((invite) => (
-										<li key={invite.id} className="flex items-center space-x-2">
-											<span>{invite.club.name}</span>
-											<div className="m-0 mt-0 flex items-center justify-center p-0">
-												<Button
-													size="sm"
-													className="mt-0"
-													variant="ghost"
-													onClick={() => revokeInvite(invite.id, 'collaborators')}
 												>
 													<XIcon className="h-4 w-4" />
 													<span className="sr-only">Revoke invite</span>

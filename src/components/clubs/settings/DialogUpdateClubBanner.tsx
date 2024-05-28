@@ -88,10 +88,10 @@ export function DialogUpdateClubBanner() {
 							<ImageCropper
 								imageUrl={imageUrl}
 								onCropRef={onCropRef}
-								aspect={25 / 4}
+								aspect={10 / 4}
 								borderRadius="0"
-								width={450}
-								height={200}
+								width={1200}
+								height={400}
 							/>
 						)}
 					</div>

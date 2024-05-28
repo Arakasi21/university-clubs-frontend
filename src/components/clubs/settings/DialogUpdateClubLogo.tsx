@@ -24,7 +24,7 @@ export function DialogUpdateClubLogo() {
 			}
 			onCropRef.current().then(async (croppedImgBlob) => {
 				const formData = new FormData()
-				formData.append('avatar', croppedImgBlob ? croppedImgBlob : '')
+				formData.append('logo', croppedImgBlob ? croppedImgBlob : '')
 
 				const response = await axiosAuth(
 					`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${club?.id}/logo`,

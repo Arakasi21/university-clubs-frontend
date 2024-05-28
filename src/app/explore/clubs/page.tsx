@@ -8,6 +8,7 @@ import Nav from '@/components/NavBar'
 import { Badge } from '@/components/ui/badge'
 import Image from 'next/image'
 import useUserRolesStore from '@/store/useUserRoles'
+import { UsersIcon } from 'lucide-react'
 
 export default function Clubs() {
 	const [clubs, setClubs] = useState<Club[]>()
@@ -68,7 +69,7 @@ export default function Clubs() {
 										height={400}
 										width={600}
 										priority={true}
-										style={{ aspectRatio: '30/20', objectFit: 'cover' }}
+										style={{ aspectRatio: '30/15', objectFit: 'cover' }}
 									/>
 									<div className="space-y-2 p-4">
 										<div className="flex items-center gap-2">
@@ -90,8 +91,12 @@ export default function Clubs() {
 											</div>
 										</div>
 										<p className="line-clamp-2 text-sm text-gray-400">{club.description}</p>
-										<div className="flex items-center justify-between text-sm text-gray-400">
-											<span>{club.num_of_members} members</span>
+										<div className="flex items-center justify-between  text-sm text-gray-400">
+											<div className="flex ">
+												<UsersIcon className="mr-2 h-4 w-4" />
+												<span>{club.num_of_members} members</span>
+											</div>
+
 											<Badge variant="default">Active</Badge>
 										</div>
 									</div>
