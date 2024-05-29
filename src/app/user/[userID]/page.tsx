@@ -10,6 +10,7 @@ import { toast } from 'sonner'
 import UserAvatar from '@/components/user/userAvatar'
 import { Skeleton } from '@/components/ui/skeleton'
 import Nav from '@/components/NavBar'
+import DialogViewUserInvites from '@/components/user/DialogViewUserInvites'
 
 const UserPage = ({ params }: { params: { userID: number } }) => {
 	const { user } = useUserStore()
@@ -87,13 +88,19 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 						</div>
 						<div className="mt-6 md:mt-8">
 							{isOwner && (
-								<Button
-									className="w-full bg-white text-black hover:bg-muted/50 dark:bg-white dark:text-black"
-									variant="default"
-									onClick={() => router.push('/user/edit')}
-								>
-									Edit Profile
-								</Button>
+								<div>
+									<Button
+										className="w-full bg-white text-black hover:bg-muted/50 dark:bg-white dark:text-black"
+										variant="default"
+										onClick={() => router.push('/user/edit')}
+									>
+										Edit Profile
+									</Button>
+
+									<div>
+										<DialogViewUserInvites userId={user?.id} />
+									</div>
+								</div>
 							)}
 						</div>
 					</div>

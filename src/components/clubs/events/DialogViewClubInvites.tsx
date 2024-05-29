@@ -33,7 +33,6 @@ function DialogViewClubInvites({ clubId }: DialogViewClubInvites) {
 				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubIdNumber}/invites/${inviteId}/handle`,
 				{ method: 'POST', data: JSON.stringify({ action: 'accept' }) },
 			)
-			console.log(response.data)
 			if (response.status.toString().startsWith('2')) {
 				setPendingRequests(pendingClubInvites - 1)
 				toast.success('Invite accepted')
@@ -53,7 +52,6 @@ function DialogViewClubInvites({ clubId }: DialogViewClubInvites) {
 				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${clubIdNumber}/invites/${inviteId}/handle`,
 				{ method: 'POST', data: JSON.stringify({ action: 'reject' }) },
 			)
-			console.log(response.data)
 			if (response.status.toString().startsWith('2')) {
 				setPendingRequests(pendingClubInvites - 1)
 				toast.success('Invite rejected')
@@ -71,9 +69,9 @@ function DialogViewClubInvites({ clubId }: DialogViewClubInvites) {
 				<Button variant="secondary">
 					Invites{' '}
 					{pendingClubInvites > 0 && (
-						<span
-							className={pendingClubInvites > 0 ? 'text-red-500' : ''}
-						>{`(+${pendingClubInvites})`}</span>
+						<span className={pendingClubInvites > 0 ? 'text-red-500' : ''}>
+							{`(+${pendingClubInvites})`}
+						</span>
 					)}
 				</Button>
 			</DialogTrigger>
@@ -87,19 +85,22 @@ function DialogViewClubInvites({ clubId }: DialogViewClubInvites) {
 						{eventInvites.map((invite) => (
 							<div className="grid gap-2 bg-gray-900" key={invite.id}>
 								<div className="grid grid-cols-[50px_1fr_auto] items-center rounded-lg border p-2">
-									<div className="rounded-full ">
-										<img
-											src={invite.event.cover_images[0].url}
-											alt={invite.event.title}
-											className="h-8 w-8 rounded-full"
-										/>
+									<div className="rounded-full">
+										{invite.event.cover_images?.[0]?.url ? (
+											<img
+												src={invite.event.cover_images[0].url}
+												alt={invite.event.title}
+												className="h-10 w-10 rounded-full"
+											/>
+										) : (
+											<div className="h-10 w-10 rounded-full bg-gray-700" />
+										)}
 									</div>
-									<div>
-										<p className="font-medium">{invite.club.name}</p>
-										<p className="text-sm text-gray-500 dark:text-gray-400">
-											{invite.event.description}
-										</p>
+									<div className="flex-1 space-y-1">
+										<p className="text-sm font-medium">{invite.event.title}</p>
+										<p className="text-sm text-gray-500 dark:text-gray-400">{invite.club.name}</p>
 									</div>
+
 									<div className="flex gap-2">
 										<Button
 											size="sm"
