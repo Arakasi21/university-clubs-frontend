@@ -16,6 +16,8 @@ import { LogOutIcon, PlusCircleIcon, SettingsIcon, UserRoundIcon } from 'lucide-
 import { useRouter } from 'next/navigation'
 
 import PendingClubsDropdownItem from '@/components/clubs/PendingClubsDropdownItem'
+import DialogViewUserInvites from '@/components/user/DialogViewUserInvites'
+import React from 'react'
 
 const DropdownForLoggedIn = ({ user, logout }: { user: User; logout: () => void }) => {
 	const router = useRouter()
@@ -24,12 +26,15 @@ const DropdownForLoggedIn = ({ user, logout }: { user: User; logout: () => void 
 	return (
 		<div>
 			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
-					<Button variant="ghost" className="flex items-center space-x-2.5 ">
-						<p>{user?.first_name}</p>
-						<UserAvatar user={user} size={44} />
-					</Button>
-				</DropdownMenuTrigger>
+				<div className="flex flex-row">
+					<DialogViewUserInvites userId={user?.id} />
+					<DropdownMenuTrigger asChild>
+						<Button variant="ghost" className="flex items-center space-x-2.5 ">
+							<p>{user?.first_name}</p>
+							<UserAvatar user={user} size={44} />
+						</Button>
+					</DropdownMenuTrigger>
+				</div>
 
 				<DropdownMenuContent
 					className="w-56"

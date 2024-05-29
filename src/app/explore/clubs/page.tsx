@@ -65,7 +65,7 @@ export default function Clubs() {
 									<Image
 										src={club.banner_url ?? '/main_photo.jpeg'}
 										alt={`Banner image of club ${club.name}`}
-										className="w-full object-cover"
+										className="object-cover "
 										height={400}
 										width={600}
 										priority={true}

@@ -42,7 +42,7 @@ export default function Nav() {
 					</Link>
 					<Link
 						className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-accent"
-						href="#"
+						href={'/explore/events'}
 					>
 						Events
 					</Link>
@@ -84,11 +84,11 @@ export default function Nav() {
 									className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
 									href={'/explore/clubs'}
 								>
-									Explore
+									Clubs
 								</Link>
 								<Link
 									className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
-									href="#"
+									href={'/explore/events'}
 								>
 									Events
 								</Link>

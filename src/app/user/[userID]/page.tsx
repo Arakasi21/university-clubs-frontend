@@ -96,10 +96,6 @@ const UserPage = ({ params }: { params: { userID: number } }) => {
 									>
 										Edit Profile
 									</Button>
-
-									<div>
-										<DialogViewUserInvites userId={user?.id} />
-									</div>
 								</div>
 							)}
 						</div>

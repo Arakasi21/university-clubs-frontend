@@ -7,9 +7,10 @@ import {
 	DialogTrigger,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import React from 'react'
+import React, { useEffect } from 'react'
 import usePendingUserInvites from '@/hooks/usePendingUserInvites'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
+import { MailPlus } from 'lucide-react'
 type DialogViewClubInvites = {
 	userId: number | undefined
 }
@@ -60,18 +61,20 @@ function DialogViewUserInvites({ userId }: DialogViewClubInvites) {
 			console.error(error)
 		}
 	}
+
+	useEffect(() => {
+		fetchPendingUserInvites()
+	}, [userIdNumber])
 	return (
 		<Dialog>
-			<DialogTrigger asChild>
-				<Button variant="secondary">
-					Invites{' '}
-					{pendingUserInvites > 0 && (
-						<span
-							className={pendingUserInvites > 0 ? 'text-red-500' : ''}
-						>{`(+${pendingUserInvites})`}</span>
-					)}
-				</Button>
-			</DialogTrigger>
+			{pendingUserInvites > 0 && (
+				<DialogTrigger asChild>
+					<Button variant="ghost">
+						<MailPlus />
+						<span className="text-red-500">{`+${pendingUserInvites}`}</span>
+					</Button>
+				</DialogTrigger>
+			)}
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Event Invites</DialogTitle>

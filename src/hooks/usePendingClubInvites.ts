@@ -14,8 +14,6 @@ export default function usePendingClubInvites(clubID: number) {
 			if (response.data && response.data.invites) {
 				setPendingRequests(response.data.invites ? response.data.invites.length : 0)
 				setEventInvites(response.data.invites)
-			} else {
-				console.warn('Unexpected response structure', response.data)
 			}
 		}
 	}
