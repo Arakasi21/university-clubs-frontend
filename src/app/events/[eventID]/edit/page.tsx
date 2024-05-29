@@ -601,7 +601,11 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 									Manage the clubs that can access and edit this event.
 								</p>
 							</div>
-							<InviteCollaboratorDialog eventID={params.eventID} fetchInvites={fetchInvites} />
+							<InviteCollaboratorDialog
+								eventID={params.eventID}
+								fetchInvites={fetchInvites}
+								invitedClubs={collaboratorInvites || []}
+							/>
 						</div>
 
 						{Array.isArray(collaboratorInvites) && collaboratorInvites.length > 0 && (
