@@ -614,7 +614,16 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 								<ul>
 									{collaboratorInvites.map((invite) => (
 										<li key={invite.id} className="flex items-center space-x-2">
-											<span>{invite.club.name}</span>
+											<div className="flex items-center py-2">
+												<Link href={`/clubs/${invite.club.id}`}>
+													<img
+														src={invite.club?.logo_url || '/main_photo.jpeg'}
+														alt={invite.club.name}
+														className="w-10 rounded-full"
+													/>
+												</Link>
+												<div className="px-2 font-medium">{invite.club.name} </div>
+											</div>
 											<div className="m-0 mt-0 flex items-center justify-center p-0">
 												<Button
 													size="sm"
@@ -644,7 +653,11 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 									Manage the people who can access and edit this event.
 								</p>
 							</div>
-							<InviteOrganizerDialog eventID={params.eventID} fetchInvites={fetchInvites} />
+							<InviteOrganizerDialog
+								eventID={params.eventID}
+								fetchInvites={fetchInvites}
+								organizerInvites={organizerInvites || []}
+							/>
 						</div>
 						{Array.isArray(organizerInvites) && organizerInvites.length > 0 && (
 							<div className="mt-4">

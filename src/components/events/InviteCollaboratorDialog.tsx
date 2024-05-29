@@ -66,7 +66,7 @@ const InviteCollaboratorDialog: React.FC<InviteCollaboratorDialogProps> = ({
 				toast.error('Failed to fetch clubs')
 			}
 		},
-		[query, pageNumber, pageSize],
+		[pageNumber, pageSize],
 	)
 
 	const handleInvite = async (clubId: number) => {
@@ -137,7 +137,7 @@ const InviteCollaboratorDialog: React.FC<InviteCollaboratorDialogProps> = ({
 		<>
 			<Dialog>
 				<DialogTrigger asChild>
-					<Button variant="outline">Invite Clubs</Button>
+					<Button className="ml-auto">Invite Clubs</Button>
 				</DialogTrigger>
 				<DialogContent className="sm:max-w-[600px]">
 					<DialogHeader>
@@ -176,15 +176,11 @@ const InviteCollaboratorDialog: React.FC<InviteCollaboratorDialogProps> = ({
 											<img
 												src={club?.logo_url || '/main_photo.jpeg'}
 												alt={club.name}
-												className="w-10 rounded-full"
+												className="w-14 rounded-full"
 											/>
 										</Link>
-										<div>
-											<div className="font-medium">{club.name} </div>
-											<div className="overflow-hidden overflow-ellipsis text-sm text-gray-500 dark:text-gray-400">
-												{club.description}
-											</div>
-										</div>
+
+										<div className="font-medium">{club.name} </div>
 									</div>
 									{event?.collaborator_clubs.find((collab) => collab.id === club.id) ? (
 										<Button variant="outline" disabled>
