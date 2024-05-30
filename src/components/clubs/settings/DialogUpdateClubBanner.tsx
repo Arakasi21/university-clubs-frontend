@@ -41,6 +41,8 @@ export function DialogUpdateClubBanner() {
 					})
 				} else {
 					toast.success('Club banner successfully have changed!')
+					// TODO - add router
+					// router.push(`/clubs/${club?.id}/settings`)
 				}
 			})
 		} catch (e) {
@@ -78,7 +80,7 @@ export function DialogUpdateClubBanner() {
 			</Button>
 
 			<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-				<DialogContent className="flex flex-col sm:max-w-[425px]">
+				<DialogContent className="flex flex-col sm:max-w-[1000px]">
 					<DialogHeader className="">
 						<DialogTitle>Update Club Banner</DialogTitle>
 					</DialogHeader>
@@ -88,7 +90,7 @@ export function DialogUpdateClubBanner() {
 							<ImageCropper
 								imageUrl={imageUrl}
 								onCropRef={onCropRef}
-								aspect={10 / 4}
+								aspect={25 / 4}
 								borderRadius="0"
 								width={1200}
 								height={400}

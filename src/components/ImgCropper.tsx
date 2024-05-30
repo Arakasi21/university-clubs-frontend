@@ -20,7 +20,7 @@ export const ImageCropper = ({
 	borderRadius = '50%',
 }: ImageCropperProps) => {
 	const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
-	const [zoom, setZoom] = useState(1)
+	const [zoom, setZoom] = useState(1.15)
 	const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>({
 		x: 0,
 		y: 0,

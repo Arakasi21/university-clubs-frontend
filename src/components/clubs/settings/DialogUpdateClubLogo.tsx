@@ -41,6 +41,8 @@ export function DialogUpdateClubLogo() {
 				}
 
 				toast.success('Club logo successfully have changed!')
+				// TODO - add router
+				// router.push(`/clubs/${club?.id}/settings`)
 			})
 		} catch (e) {
 			console.log(e)
@@ -77,7 +79,7 @@ export function DialogUpdateClubLogo() {
 			</Button>
 
 			<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-				<DialogContent className="flex flex-col sm:max-w-[425px]">
+				<DialogContent className="flex flex-col sm:max-w-[525px]">
 					<DialogHeader className="">
 						<DialogTitle>Update Club Logo</DialogTitle>
 					</DialogHeader>

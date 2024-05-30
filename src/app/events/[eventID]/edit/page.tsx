@@ -700,6 +700,20 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 						)}
 					</div>
 				</section>
+				{/*TODO Attach files section DO LATER*/}
+				<section>
+					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
+						<h3 className="text-xl font-semibold">Attach Files</h3>
+						<p className="mb-4 text-sm text-gray-400">Attach files to your event.</p>
+						<Input
+							disabled={!isEditable}
+							className="relative w-80"
+							type="file"
+							accept="application/pdf"
+							// onChange={handleFileSelection}
+						/>
+					</div>
+				</section>
 			</div>
 		</>
 	)

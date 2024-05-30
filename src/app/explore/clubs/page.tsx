@@ -63,13 +63,13 @@ export default function Clubs() {
 									onClick={() => handleClubClick(club.id)}
 								>
 									<Image
-										src={club.banner_url ?? '/main_photo.jpeg'}
+										src={club.logo_url ?? '/main_photo.jpeg'}
 										alt={`Banner image of club ${club.name}`}
 										className="object-cover "
-										height={400}
-										width={600}
+										height={200}
+										width={550}
 										priority={true}
-										style={{ aspectRatio: '30/15', objectFit: 'cover' }}
+										style={{ aspectRatio: '1/1', objectFit: 'cover' }}
 									/>
 									<div className="space-y-2 p-4">
 										<div className="flex items-center gap-2">
