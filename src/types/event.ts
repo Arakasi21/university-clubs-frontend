@@ -27,6 +27,7 @@ export type Event = {
 	type: string
 	published_at: string
 	is_hidden_for_non_members: boolean
+	[key: string]: any
 }
 
 export type EventParticipationStatus = 'UNKNOWN' | 'BANNED' | 'PARTICIPANT'

@@ -34,10 +34,11 @@ type FormData = {
 	end_date: string
 	location_uni: string
 	location_link: string
-	max_participants: string
+	// max_participants: string
 	cover_images: CoverImage[]
 	type: string
 	tags: string[]
+	[key: string]: string | CoverImage[] | string[]
 }
 
 export default function EditEventPage({ params }: { params: { eventID: string } }) {
@@ -63,7 +64,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 		end_date: event?.end_date ? event.end_date : '',
 		location_uni: event?.location_university || '',
 		location_link: event?.location_link || '',
-		max_participants: event?.max_participants?.toString() || '',
+		// max_participants: event?.max_participants?.toString() || '',
 		cover_images: event?.cover_images || [],
 		type: event?.type || '',
 		tags: event?.tags || [],
@@ -79,6 +80,15 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 		event.end_date &&
 		event.location_university &&
 		event.type
+
+	// const editableFields = [
+	// 	'max_participants',
+	// 	'location_link',
+	// 	'location_university',
+	// 	'start_date',
+	// 	'end_date',
+	// 	'is_hidden_for_non_members',
+	// ]
 
 	//  ==================== ТУТ МЫ ПРОСТО ЗАДАЕМ EVENT STATUS ЦВЕТА  ====================
 
@@ -280,13 +290,22 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 		if (imageFile) {
 			uploadedImage = await handleImageUpload()
 		}
-		const updatedEvent = {
-			...formData,
-			cover_images: uploadedImage
-				? [uploadedImage].map((image, index) => ({ ...image, position: index + 1 }))
-				: [],
-			max_participants: parseInt(formData.max_participants),
+
+		const updatedEvent: Partial<FormData> = {}
+
+		for (const key in formData) {
+			if (event && formData[key] !== event[key]) {
+				updatedEvent[key] = formData[key]
+			}
 		}
+
+		if (uploadedImage) {
+			updatedEvent.cover_images = [uploadedImage].map((image, index) => ({
+				...image,
+				position: index + 1,
+			}))
+		}
+
 		await fetchEventInfo()
 		if (event) {
 			await updateEvent(event.id, updatedEvent)
@@ -306,7 +325,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 				end_date: event.end_date ? event.end_date : '',
 				location_uni: event.location_university || '',
 				location_link: event.location_link || '',
-				max_participants: event.max_participants?.toString() || '',
+				// max_participants: event.max_participants?.toString() || '',
 				cover_images: event.cover_images || [],
 				type: event.type || '',
 				tags: event.tags || [],
