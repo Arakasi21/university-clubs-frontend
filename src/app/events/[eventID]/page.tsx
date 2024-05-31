@@ -3,8 +3,8 @@
 import useEvent from '@/hooks/useEvent'
 import useUserStore from '@/store/user'
 import Nav from '@/components/NavBar'
-import React, { useState, useEffect } from 'react'
-import { EventParticipationStatus, Organizer } from '@/types/event'
+import React, { useEffect } from 'react'
+import { Organizer } from '@/types/event'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Link from 'next/link'
 import { DateTimeFormatOptions } from 'intl'
@@ -16,7 +16,7 @@ import { getEventStatus } from '@/lib/eventStatusUtils'
 
 export default function Page({ params }: { params: { eventID: string } }) {
 	const { user } = useUserStore()
-	const { event, fetchEventInfo, eventUserStatus, participantStatus } = useEvent({
+	const { event, fetchEventInfo, participantStatus } = useEvent({
 		eventID: params.eventID,
 		user,
 	})
@@ -144,7 +144,14 @@ export default function Page({ params }: { params: { eventID: string } }) {
 								</div>
 							</div>
 						</div>
+
+						{/* ============== RIGHT SECTION ================*/}
 						<div className="flex h-fit flex-col  space-y-6 rounded-xl bg-gray-800 p-6">
+							<div className="flex items-center space-x-2 text-xs">
+								<div className={`rounded-md  px-2 py-2 text-xs text-white ${eventStatus.color}`}>
+									{eventStatus.label}
+								</div>
+							</div>
 							<div className="space-y-2">
 								<div className="text-sm font-medium text-gray-400">When</div>
 								<div>
@@ -208,51 +215,51 @@ export default function Page({ params }: { params: { eventID: string } }) {
 									))}
 								</div>
 							</div>
-							<div className="inline-block align-bottom">
-								<div className="space-y-2">
-									<div className="my-2 flex items-center space-x-2 text-xs">
-										<div
-											className={`rounded-md  px-2 py-2 text-xs text-white ${eventStatus.color}`}
-										>
-											{eventStatus.label}
-										</div>
-									</div>
-								</div>
+
+							{/* ============ buttons =================*/}
+
+							<div className="align-bottom">
 								{isUserOrganizer && (
-									<div className="flex gap-2">
-										<Link href={`/events/${event.id}/edit`}>
+									<Link className="w-full" href={`/events/${event.id}/edit`}>
+										<Button
+											className="w-full bg-gray-500 text-white hover:bg-gray-700"
+											variant="default"
+										>
+											Edit Event
+										</Button>
+									</Link>
+								)}
+								{isUserOrganizer &&
+									(event.status === 'APPROVED' || event.type === 'INTRA_CLUB') && (
+										<div className="flex gap-2">
 											<Button
-												className="flex-1 bg-gray-500 text-white hover:bg-gray-700"
+												className="mt-2 flex-1 bg-green-500 text-white hover:bg-green-900 "
 												variant="default"
+												onClick={() => publishEvent(event.id)}
 											>
-												Edit Event
+												Publish Event
 											</Button>
-										</Link>
-									</div>
-								)}
-								{isUserOrganizer && event.status === 'APPROVED' && (
-									<Button
-										className="mt-2 flex-1 bg-green-500 text-white hover:bg-green-900 "
-										variant="default"
-										onClick={() => publishEvent(event.id)}
-									>
-										Publish Event
-									</Button>
-								)}
+										</div>
+									)}
 
 								{participantStatus === 'UNKNOWN' && event.status === 'IN_PROGRESS' && (
-									<Button className=" mt-2 " variant="default">
-										Participate
-									</Button>
+									<div className="flex gap-2">
+										<Button className=" mt-2 flex-1" variant="default">
+											Participate
+										</Button>
+									</div>
 								)}
+
 								{isUserOrganizer && event.status === 'IN_PROGRESS' && (
-									<Button
-										className="mt-2 "
-										variant="destructive"
-										onClick={() => unpublishEvent(event.id)}
-									>
-										Unpublish Event
-									</Button>
+									<div className="flex gap-2">
+										<Button
+											className="mt-2 flex-1"
+											variant="destructive"
+											onClick={() => unpublishEvent(event.id)}
+										>
+											Unpublish Event
+										</Button>
+									</div>
 								)}
 							</div>
 						</div>

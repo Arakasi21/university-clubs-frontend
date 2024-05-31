@@ -14,8 +14,8 @@ import { getEventStatus } from '@/lib/eventStatusUtils'
 export default function EventsContent() {
 	const user = useUserStore()
 	const [events, setEvents] = useState<Event[]>()
-	const isEventOwner = (event: Event) => {
-		return event.owner_id === user.user?.id
+	const isEventOrganizer = (event: Event) => {
+		return event.organizers.some((organizer) => organizer.id === user.user?.id)
 	}
 
 	const { club } = useClubStore()
@@ -101,7 +101,7 @@ export default function EventsContent() {
 									</div>
 								)}
 								<div className="flex  items-center justify-between">
-									{isEventOwner(event) && (
+									{isEventOrganizer(event) && (
 										<Link href={`/events/${event.id}`}>
 											<Button className=" w-18 h-8 p-4">View Event</Button>
 										</Link>

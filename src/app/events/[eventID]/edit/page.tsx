@@ -7,7 +7,6 @@ import Nav from '@/components/NavBar'
 import { AlertTriangle, XIcon } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Link from 'next/link'
-import { DateTimeFormatOptions } from 'intl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -45,8 +44,9 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 	const { user } = useUserStore()
 	const { event, fetchEventInfo } = useEvent({ eventID: params.eventID, user })
 	const isUserOrganizer = event?.organizers.some((organizer) => organizer.id === user?.id)
+
 	const [isPendingReview, setIsPendingReview] = useState(event?.status === 'PENDING')
-	const isEditable = ['DRAFT', 'REJECTED', 'APPROVED'].includes(event?.status || '')
+	const isEditable = ['DRAFT', 'REJECTED', 'APPROVED', 'IN_PROGRESS'].includes(event?.status || '')
 
 	const [collaboratorInvites, setCollaboratorInvites] = useState<CollaboratorInvite[]>([])
 	const [organizerInvites, setOrganizerInvites] = useState<OrganizerInvite[]>([])
@@ -74,6 +74,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 	const isEventReadyForReview =
 		event?.cover_images &&
 		event?.title &&
+		event.description &&
 		event.start_date &&
 		event.end_date &&
 		event.location_university &&
@@ -82,21 +83,6 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 	//  ==================== ТУТ МЫ ПРОСТО ЗАДАЕМ EVENT STATUS ЦВЕТА  ====================
 
 	const eventStatus = getEventStatus(event?.status || 'DRAFT')
-
-	// ==================== ФОРМАТИРОВАНИЕ	ДАТЫ В ФОРМАТЕ 23 мая 2024 г. в 19:51 ====================
-
-	const startDate = event?.start_date ? new Date(event.start_date) : null
-
-	const options: DateTimeFormatOptions = {
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric',
-		hour: 'numeric',
-		minute: 'numeric',
-	}
-	const formattedStartDate = startDate
-		? startDate.toLocaleDateString(undefined, options)
-		: 'No start date available'
 
 	// ====================	ДОБАВЛЯЕМ ТЕГИ ====================
 
@@ -143,7 +129,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 			}
 
 			toast.success('Event successfully updated!')
-			fetchEventInfo()
+			await fetchEventInfo()
 		} catch (error) {
 			toast.error('Failed to update event')
 		}
@@ -163,7 +149,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 			if (response.status === 200) {
 				toast.success('Event sent to review')
 				event.status = 'PENDING'
-				fetchEventInfo()
+				await fetchEventInfo()
 				setIsPendingReview(true)
 			} else {
 				toast.error('Failed to send event to review')
@@ -187,7 +173,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 			if (response.status === 200) {
 				toast.success('Review successfully revoked')
 				event.status = 'DRAFT'
-				fetchEventInfo()
+				await fetchEventInfo()
 				setIsPendingReview(false)
 			} else {
 				toast.error('Failed to revoke review')
@@ -231,7 +217,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 
 			if (response.status.toString().startsWith('2')) {
 				toast.success('Invite revoked successfully')
-				fetchInvites() // Refresh the invites
+				await fetchInvites() // Refresh the invites
 			} else {
 				toast.error('Failed to revoke invite', { description: response.data.error })
 			}
@@ -301,9 +287,9 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 				: [],
 			max_participants: parseInt(formData.max_participants),
 		}
-		fetchEventInfo()
+		await fetchEventInfo()
 		if (event) {
-			updateEvent(event.id, updatedEvent)
+			await updateEvent(event.id, updatedEvent)
 		} else {
 			console.error('Event is null')
 		}
@@ -535,11 +521,21 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 
 									{isUserOrganizer &&
 										isEventReadyForReview &&
-										event.status !== 'PENDING' &&
-										event.status !== 'APPROVED' && (
+										event.status == 'DRAFT' &&
+										formData.type === 'UNIVERSITY' && (
 											<Button className="h-8" variant="default" onClick={handleSendToReview}>
 												Send to Review
 											</Button>
+										)}
+
+									{isUserOrganizer &&
+										isEventReadyForReview &&
+										event.status == 'DRAFT' &&
+										formData.type === 'INTRA_CLUB' && (
+											<span className="w-40 text-xs">
+												You now can publish event. Please, return to the event page to publish the
+												event
+											</span>
 										)}
 									{isPendingReview && (
 										<Button

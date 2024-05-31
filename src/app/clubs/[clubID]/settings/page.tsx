@@ -23,8 +23,6 @@ import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/c
 import EventsContent from '@/app/clubs/[clubID]/settings/_components/Events'
 import ClubImage from '@/components/clubs/ClubImage'
 
-// TODO MAKE CLUB INFO PATCH ( WRITE PATCH FOR UPDATING CLUB INFO )
-
 function Page({ params }: { params: { clubID: number } }) {
 	const { user } = useUserStore()
 	const { club, clubMembers, fetchClubInfo, isOwner } = useClub({
@@ -88,6 +86,7 @@ function Page({ params }: { params: { clubID: number } }) {
 				<img
 					className="z-1 h-full w-full object-cover object-center "
 					height={600}
+					alt={'hello'}
 					src={club?.banner_url}
 					style={{
 						aspectRatio: '1920/600',
@@ -121,7 +120,7 @@ function Page({ params }: { params: { clubID: number } }) {
 						>
 							Return
 						</Link>
-						{hasPermission(permissions, Permissions.ALL) ? (
+						{hasPermission(permissions, Permissions.manage_membership) ? (
 							<TabsTrigger value="members" className="text-xs sm:text-sm">
 								Members
 							</TabsTrigger>

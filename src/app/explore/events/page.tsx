@@ -95,8 +95,8 @@ export default function Events() {
 										}
 									})}
 									<p className="mb-4 text-gray-400 ">
-										{event.description.substring(0, 60)}
-										{event.description.length > 60 ? '...' : ''}
+										{event.description?.substring(0, 60)}
+										{event.description?.length > 60 ? '...' : ''}
 									</p>
 									<div className="mb-4 flex items-center">
 										<CalendarIcon className="mr-2 h-5 w-5" />
