@@ -86,7 +86,6 @@ function Page({ params }: { params: { clubID: number } }) {
 				<img
 					className="z-1 h-full w-full object-cover object-center "
 					height={600}
-					alt={'hello'}
 					src={club?.banner_url}
 					style={{
 						aspectRatio: '1920/600',

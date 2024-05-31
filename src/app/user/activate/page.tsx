@@ -68,7 +68,7 @@ const Page = () => {
 			{loading ? (
 				<div>loading</div>
 			) : successful ? (
-				<div>You Account Activated</div>
+				<div>Your Account Activated</div>
 			) : (
 				<div>Failed to Activate Your Account</div>
 			)}
