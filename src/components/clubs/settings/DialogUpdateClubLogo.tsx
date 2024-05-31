@@ -10,7 +10,6 @@ import { ImageCropper } from '@/components/ImgCropper'
 export function DialogUpdateClubLogo() {
 	const { club } = useClubStore()
 
-	const [logoUrl, setLogoUrl] = useState(club?.logo_url)
 	const [imageUrl, setImageUrl] = useState<string | null>(club?.logo_url ? club?.logo_url : null)
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
 	const onCropRef = useRef<(() => Promise<null | Blob>) | null>(null)
@@ -20,7 +19,9 @@ export function DialogUpdateClubLogo() {
 	const updateClubLogo = async () => {
 		try {
 			if (!onCropRef.current) {
-				throw new Error('Crop function is not defined')
+				console.log('Crop function is not defined')
+				toast.error('An error occurred while updating the club logo.')
+				return
 			}
 			onCropRef.current().then(async (croppedImgBlob) => {
 				const formData = new FormData()
@@ -41,8 +42,7 @@ export function DialogUpdateClubLogo() {
 				}
 
 				toast.success('Club logo successfully have changed!')
-				// TODO - add router
-				// router.push(`/clubs/${club?.id}/settings`)
+				setIsDialogOpen(false)
 			})
 		} catch (e) {
 			console.log(e)

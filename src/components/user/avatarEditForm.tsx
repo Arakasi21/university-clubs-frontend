@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Image from 'next/image'
 import { ImageCropper } from '@/components/ImgCropper'
+import { useRouter } from 'next/navigation'
 
 const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 	const [avatarUrl, setAvatarUrl] = useState(user?.avatar_url)
@@ -20,10 +21,14 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 	const axiosAuth = useAxiosInterceptor()
 	const { setUser } = useUserStore()
 
+	const router = useRouter()
+
 	const updateUserAvatar = async () => {
 		try {
 			if (!onCropRef.current) {
-				throw new Error('Crop function is not defined')
+				console.log('Crop function is not defined')
+				toast.error('An error occurred while updating the avatar.')
+				return
 			}
 			onCropRef.current().then(async (croppedImgBlob) => {
 				const formData = new FormData()
@@ -46,6 +51,7 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 
 				setUser(response.data.user)
 				setAvatarUrl(response.data.user.avatar_url)
+				router.push(`/user/${user?.id}`)
 				toast.success('Your avatar has been changed!')
 			})
 		} catch (e) {

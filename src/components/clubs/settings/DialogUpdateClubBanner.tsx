@@ -9,19 +9,20 @@ import { ImageCropper } from '@/components/ImgCropper'
 
 export function DialogUpdateClubBanner() {
 	const { club } = useClubStore()
+	const axiosAuth = useAxiosInterceptor()
 
-	const [logoUrl, setLogoUrl] = useState(club?.logo_url)
-	const [imageUrl, setImageUrl] = useState<string | null>(club?.logo_url ? club?.logo_url : null)
-	const [isDialogOpen, setIsDialogOpen] = useState(false)
 	const onCropRef = useRef<(() => Promise<null | Blob>) | null>(null)
 	const inputRef = useRef<HTMLInputElement | null>(null)
 
-	const axiosAuth = useAxiosInterceptor()
+	const [imageUrl, setImageUrl] = useState<string | null>(club?.logo_url ? club?.logo_url : null)
+	const [isDialogOpen, setIsDialogOpen] = useState(false)
 
 	const updateClubBanner = async () => {
 		try {
 			if (!onCropRef.current) {
-				throw new Error('Crop function is not defined')
+				console.log('Crop function is not defined')
+				toast.error('An error occurred while updating the club banner.')
+				return
 			}
 			onCropRef.current().then(async (croppedImgBlob) => {
 				const formData = new FormData()
@@ -34,15 +35,13 @@ export function DialogUpdateClubBanner() {
 						data: formData,
 					},
 				)
-
 				if (response.status !== 200) {
 					toast.error('Change banner error', {
 						description: response.data.error,
 					})
 				} else {
+					setIsDialogOpen(false)
 					toast.success('Club banner successfully have changed!')
-					// TODO - add router
-					// router.push(`/clubs/${club?.id}/settings`)
 				}
 			})
 		} catch (e) {

@@ -2,7 +2,6 @@ import React from 'react'
 import { DialogUpdateClubBanner } from '@/components/clubs/settings/DialogUpdateClubBanner'
 import { DialogUpdateClubLogo } from '@/components/clubs/settings/DialogUpdateClubLogo'
 import { Button } from '@/components/ui/button'
-import Link from 'next/link'
 import { hasPermission } from '@/helpers/permissions'
 
 import { Club } from '@/types/club'

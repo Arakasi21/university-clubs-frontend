@@ -23,6 +23,7 @@ import { toast } from 'sonner'
 import { z } from 'zod'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
 	name: z.string().min(2, {
@@ -43,6 +44,7 @@ export default function Page() {
 		},
 	})
 	const axiosAuth = useAxiosInterceptor()
+	const router = useRouter()
 
 	const handleSubmit = async (values: z.infer<typeof formSchema>) => {
 		const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs`
@@ -58,7 +60,7 @@ export default function Page() {
 					description: response.data.error,
 				})
 			}
-
+			router.push('/explore/clubs')
 			toast.success('Request to create club successfully made!', {
 				action: {
 					label: 'X',
