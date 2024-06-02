@@ -54,9 +54,9 @@ export default function Nav() {
 					</Link>
 					<Link
 						className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-accent"
-						href="#"
+						href={'/explore/faq'}
 					>
-						About
+						FAQ
 					</Link>
 				</nav>
 				<div className="flex items-center gap-2">

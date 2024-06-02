@@ -88,7 +88,7 @@ export default function Home() {
 							<p className="pb-4 text-gray-400">
 								Stay up-to-date with the latest club events and activities, and participate in them.
 							</p>
-							<Link className=" text-gray-50 hover:underline" href="#">
+							<Link className=" text-gray-50 hover:underline" href={'/explore/events'}>
 								View Events
 							</Link>
 						</div>

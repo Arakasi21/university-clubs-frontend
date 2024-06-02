@@ -230,7 +230,8 @@ export default function Page({ params }: { params: { eventID: string } }) {
 									</Link>
 								)}
 								{isUserOrganizer &&
-									(event.status === 'APPROVED' || event.type === 'INTRA_CLUB') && (
+									(event.status === 'APPROVED' || event.type === 'INTRA_CLUB') &&
+									event.status !== 'IN_PROGRESS' && (
 										<div className="flex gap-2">
 											<Button
 												className="mt-2 flex-1 bg-green-500 text-white hover:bg-green-900 "

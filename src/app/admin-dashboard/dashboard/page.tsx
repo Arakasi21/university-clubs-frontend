@@ -13,7 +13,7 @@ function Page() {
 			<div>
 				<Tabs
 					defaultValue="students"
-					className="grid flex-1 items-start gap-4 p-0 py-4 sm:px-10 sm:py-8 md:gap-8 md:px-10 lg:px-32 xl:px-64 2xl:px-96"
+					className="grid flex-1 items-start gap-4 p-0 py-4 sm:px-10 sm:py-8 md:gap-4 md:px-10 lg:px-32 xl:px-64 2xl:px-96"
 				>
 					<div>
 						<span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">

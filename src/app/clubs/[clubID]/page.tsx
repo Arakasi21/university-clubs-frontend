@@ -126,7 +126,7 @@ function Page({ params }: { params: { clubID: number } }) {
 									<CardHeader>
 										<CardTitle>Club Events</CardTitle>
 									</CardHeader>
-									<CardContent className="overflow-hidden">
+									<CardContent className="space-y-4 overflow-hidden">
 										{clubEvents?.length ? (
 											clubEvents.map((event) => <ClubEvent key={event.id} event={event} />)
 										) : (
