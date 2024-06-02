@@ -53,7 +53,7 @@ export default function Page({ params }: { params: { eventID: string } }) {
 				return
 			}
 
-			toast.success('Event successfully  published!')
+			toast.success('Event successfully published!')
 			fetchEventInfo()
 		} catch (error) {
 			console.error('Error publishing event:', error)
@@ -70,10 +70,46 @@ export default function Page({ params }: { params: { eventID: string } }) {
 				return
 			}
 
-			toast.success('Event upublished!')
+			toast.success('Event unpublished!')
 			fetchEventInfo()
 		} catch (error) {
 			console.error('Error unpublishing event:', error)
+		}
+	}
+
+	const participateEvent = async () => {
+		try {
+			const response = await axiosAuth.post(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${params.eventID}/participants`,
+			)
+
+			if (response.status !== 204) {
+				toast.error('Failed to participate in event')
+				return
+			}
+
+			toast.success('Successfully participated in the event!')
+			fetchEventInfo()
+		} catch (error) {
+			console.error('Error participating in event:', error)
+		}
+	}
+
+	const leaveEvent = async () => {
+		try {
+			const response = await axiosAuth.delete(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${params.eventID}/participants`,
+			)
+
+			if (response.status !== 204) {
+				toast.error('Failed to leave the event')
+				return
+			}
+
+			toast.success('Successfully left the event!')
+			fetchEventInfo()
+		} catch (error) {
+			console.error('Error leaving event:', error)
 		}
 	}
 
@@ -245,8 +281,16 @@ export default function Page({ params }: { params: { eventID: string } }) {
 
 								{participantStatus === 'UNKNOWN' && event.status === 'IN_PROGRESS' && (
 									<div className="flex gap-2">
-										<Button className=" mt-2 flex-1" variant="default">
+										<Button className="mt-2 flex-1" variant="default" onClick={participateEvent}>
 											Participate
+										</Button>
+									</div>
+								)}
+
+								{participantStatus === 'PARTICIPANT' && event.status === 'IN_PROGRESS' && (
+									<div className="flex gap-2">
+										<Button className="mt-2 flex-1" variant="destructive" onClick={leaveEvent}>
+											Leave Event
 										</Button>
 									</div>
 								)}

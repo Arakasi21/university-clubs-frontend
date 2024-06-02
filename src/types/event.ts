@@ -100,3 +100,11 @@ export type EventFilters = {
 	sort_by: '' | 'date' | 'participants' | 'type'
 	sort_order: '' | 'asc' | 'desc'
 }
+
+export type Participant = {
+	id: number
+	first_name: string
+	last_name: string
+	barcode: number
+	avatar_url: string
+}

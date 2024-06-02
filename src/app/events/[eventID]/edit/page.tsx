@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import useEvent from '@/hooks/useEvent'
 import useUserStore from '@/store/user'
 import Nav from '@/components/NavBar'
@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { toast } from 'sonner'
-import { CoverImage } from '@/types/event'
+import { CoverImage, Participant } from '@/types/event'
 import {
 	Select,
 	SelectContent,
@@ -21,11 +21,34 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
-import { CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import InviteOrganizerDialog from '@/components/events/inviteOrganizerDialog'
 import InviteCollaboratorDialog from '@/components/events/InviteCollaboratorDialog'
 import { CollaboratorInvite, OrganizerInvite } from '@/types/invite'
 import { getEventStatus } from '@/lib/eventStatusUtils'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import axios from 'axios'
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '@/components/ui/table'
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+} from '@/components/ui/dialog'
 
 type FormData = {
 	title: string
@@ -45,6 +68,10 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 	const { user } = useUserStore()
 	const { event, fetchEventInfo } = useEvent({ eventID: params.eventID, user })
 	const isUserOrganizer = event?.organizers.some((organizer) => organizer.id === user?.id)
+	const [participants, setParticipants] = useState([])
+
+	const [isKickDialogOpen, setIsKickDialogOpen] = useState(false)
+	const [isBanDialogOpen, setIsBanDialogOpen] = useState(false)
 
 	const [isPendingReview, setIsPendingReview] = useState(event?.status === 'PENDING')
 	const isEditable = ['DRAFT', 'REJECTED', 'APPROVED', 'IN_PROGRESS'].includes(event?.status || '')
@@ -52,8 +79,13 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 	const [collaboratorInvites, setCollaboratorInvites] = useState<CollaboratorInvite[]>([])
 	const [organizerInvites, setOrganizerInvites] = useState<OrganizerInvite[]>([])
 
+	const [isContextMenuOpen, setIsContextMenuOpen] = useState<number | null>(null)
+	const [banReason, setBanReason] = useState('')
+
 	const axiosAuth = useAxiosInterceptor()
 	const [imageFile, setImageFile] = useState<File | null>(null)
+
+	const [selectedUserId, setSelectedUserId] = useState<number | null>(null)
 
 	// ======== ПОЛЯ ФОРМЫ =========
 
@@ -126,6 +158,58 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 	}, [tags])
 
 	// ==================== ВСЕ ФУНКЦИИ ====================
+
+	const confirmKickMember = useCallback(() => {
+		if (selectedUserId !== null) {
+			handleKickMember(selectedUserId)
+		}
+		setIsKickDialogOpen(false)
+	}, [selectedUserId])
+
+	const confirmBanMember = useCallback(() => {
+		if (selectedUserId !== null) {
+			handleBanMember(selectedUserId)
+		}
+		setIsBanDialogOpen(false)
+	}, [selectedUserId])
+
+	const openKickDialog = (userId: number) => {
+		setSelectedUserId(userId)
+		setIsKickDialogOpen(true)
+	}
+
+	const openBanDialog = (userId: number) => {
+		setSelectedUserId(userId)
+		setIsBanDialogOpen(true)
+	}
+
+	async function fetchParticipants(eventId: string) {
+		if (!eventId) {
+			return
+		}
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${eventId}/participants`,
+			)
+			if (response.status === 200) {
+				return response.data.participants
+			} else {
+				console.error(`Failed to fetch participants: ${response.status}`)
+				return []
+			}
+		} catch (error) {
+			console.error(`Failed to fetch participants: ${error}`)
+			return []
+		}
+	}
+
+	useEffect(() => {
+		if (!event?.id) {
+			return
+		}
+		fetchParticipants(event.id).then(setParticipants)
+	}, [event?.id])
+
 	async function updateEvent(eventId: string, updatedEvent: any) {
 		try {
 			const response = await axiosAuth.patch(
@@ -147,7 +231,6 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 
 	const handleSendToReview = async () => {
 		if (!event) {
-			toast.error('Event is not defined')
 			return
 		}
 
@@ -171,7 +254,6 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 
 	const handleRevokeReview = async () => {
 		if (!event) {
-			toast.error('Event is not defined')
 			return
 		}
 
@@ -233,6 +315,72 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 			}
 		} catch (error) {
 			toast.error('Failed to revoke invite')
+		}
+	}
+
+	// ======================== HANDLE KICK REMOVE PARTICIPANTS
+
+	const handleKickMember = async (userId: number) => {
+		if (!event) {
+			console.error('Event is null')
+			return
+		}
+		try {
+			await axiosAuth.delete(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${event.id}/participants/${userId}`,
+			)
+			toast.success('Participant kicked')
+			fetchParticipants(event.id).then(setParticipants)
+		} catch (error) {
+			toast.error('Failed to kick participant')
+		}
+	}
+
+	const handleBanMember = async (userId: number) => {
+		if (!event) {
+			console.error('Event is null')
+			return
+		}
+		try {
+			await axiosAuth.post(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${event.id}/participants/${userId}/ban`,
+				{ reason: banReason },
+			)
+			fetchParticipants(event.id).then(setParticipants)
+		} catch (error) {
+			toast.error('Failed to ban participant')
+		}
+	}
+
+	// ======================== HANDLE KICK REMOVE ORGANIZERS
+
+	const handleKickOrganizer = async (userId: number) => {
+		if (!event) {
+			console.error('Event is null')
+			return
+		}
+		try {
+			await axiosAuth.delete(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${event.id}/organizers/${userId}`,
+			)
+			toast.success('Organizer kicked')
+		} catch (error) {
+			toast.error('Failed to kick organizer')
+		}
+	}
+
+	const handleRemoveCollaborator = async (clubId: number) => {
+		if (!event) {
+			console.error('Event is null')
+			return
+		}
+		try {
+			await axiosAuth.delete(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${event.id}/collaborators/${clubId}`,
+			)
+			toast.success('Collaborator removed')
+		} catch (error) {
+			toast.error('Failed to remove collaborator')
 		}
 	}
 
@@ -728,6 +876,119 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 							// onChange={handleFileSelection}
 						/>
 					</div>
+				</section>
+
+				<section className="my-4">
+					<Card className="bg-[#030a20]">
+						<CardHeader>
+							{' '}
+							<CardTitle>Participants</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<Table>
+								<TableHeader>
+									<TableRow>
+										<TableHead className="hidden sm:table-cell">Avatar</TableHead>
+										<TableHead className="text-left">Name</TableHead>
+										<TableHead className="text-left">Surname</TableHead>
+										<TableHead className="hidden md:table-cell">Barcode</TableHead>
+									</TableRow>
+								</TableHeader>
+								<TableBody>
+									{participants &&
+										participants.map((participant: Participant) => (
+											<TableRow
+												key={participant.id}
+												onContextMenu={(e) => {
+													e.preventDefault()
+													setIsContextMenuOpen(participant.id)
+												}}
+												onClick={(e) => {
+													e.preventDefault()
+													setIsContextMenuOpen(participant.id)
+												}}
+											>
+												<DropdownMenu
+													open={isContextMenuOpen === participant.id}
+													onOpenChange={(isOpen) =>
+														setIsContextMenuOpen(isOpen ? participant.id : null)
+													}
+													modal={true}
+												>
+													<TableCell className="hidden sm:table-cell">
+														<Avatar style={{ width: 44, height: 44 }}>
+															<AvatarImage
+																src={participant?.avatar_url}
+																alt={`${participant?.first_name}'s profile picture`}
+															/>
+															<AvatarFallback style={{ fontSize: 44 / 4 }}>
+																{participant?.first_name.slice(0, 1)}
+															</AvatarFallback>
+														</Avatar>
+													</TableCell>
+													<TableCell className="text-left">{participant.first_name}</TableCell>
+													<TableCell className="text-left">{participant.last_name}</TableCell>
+													<TableCell className="hidden md:table-cell">
+														{participant.barcode}
+													</TableCell>
+													<DropdownMenuContent>
+														<DropdownMenuItem>
+															<Link href={`/user/${participant.id}`}>{participant.first_name}</Link>
+														</DropdownMenuItem>
+														{user?.id !== participant.id && (
+															<>
+																<DropdownMenuSeparator />
+																<DropdownMenuItem onClick={() => openKickDialog(participant.id)}>
+																	<p style={{ color: 'orange' }}>Kick</p>
+																</DropdownMenuItem>
+																<DropdownMenuItem onClick={() => openBanDialog(participant.id)}>
+																	<p style={{ color: 'red' }}>Ban</p>
+																</DropdownMenuItem>
+															</>
+														)}
+													</DropdownMenuContent>
+													<DropdownMenuTrigger></DropdownMenuTrigger>
+												</DropdownMenu>
+												<Dialog open={isKickDialogOpen} onOpenChange={setIsKickDialogOpen}>
+													<DialogContent>
+														<DialogHeader>
+															<DialogTitle>Are you absolutely sure?</DialogTitle>
+															<DialogDescription>
+																This will permanently kick the user from the event.
+															</DialogDescription>
+														</DialogHeader>
+														<Button variant={'destructive'} onClick={confirmKickMember}>
+															Yes, kick the user
+														</Button>
+														<Button onClick={() => setIsKickDialogOpen(false)}>No, cancel</Button>
+													</DialogContent>
+												</Dialog>
+												<Dialog open={isBanDialogOpen} onOpenChange={setIsBanDialogOpen}>
+													<DialogContent>
+														<DialogHeader>
+															<DialogTitle>Are you absolutely sure?</DialogTitle>
+															<DialogDescription>
+																This will permanently ban the user from the event.
+															</DialogDescription>
+														</DialogHeader>
+														<Input
+															type="text"
+															value={banReason}
+															onChange={(e) => setBanReason(e.target.value)}
+															placeholder="Enter ban reason"
+														/>
+														<Button variant={'destructive'} onClick={confirmBanMember}>
+															Yes, ban the user
+														</Button>
+														<Button onClick={() => setIsBanDialogOpen(false)}>No, cancel</Button>
+													</DialogContent>
+												</Dialog>
+											</TableRow>
+										))}
+								</TableBody>
+							</Table>
+						</CardContent>
+					</Card>
 				</section>
 			</div>
 		</>
