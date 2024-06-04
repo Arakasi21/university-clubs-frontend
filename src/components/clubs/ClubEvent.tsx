@@ -10,7 +10,7 @@ export default function ClubEvent(props: { event: Event }) {
 
 	return (
 		<Card>
-			<CardContent className="flex w-full items-center justify-between gap-4 overflow-hidden rounded-lg bg-gray-700 p-4">
+			<CardContent className="flex w-full flex-wrap items-center justify-between gap-2 overflow-hidden rounded-lg bg-gray-700 p-4 sm:flex-nowrap sm:gap-4">
 				<div className="flex flex-col">
 					<h3 className="text-nd font-medium text-white">{props.event.title}</h3>
 					<p className="text-sm font-normal text-muted-foreground">

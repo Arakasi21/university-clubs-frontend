@@ -87,10 +87,19 @@ export function DetailedEventDialog({
 					</DialogHeader>
 					<Tabs defaultValue="images" className="pt-4" activationMode="manual">
 						<TabsList className="grid w-full grid-cols-4">
-							<TabsTrigger value="images">Images</TabsTrigger>
-							<TabsTrigger value="info">Event Info</TabsTrigger>
-							<TabsTrigger value="organizers">Organizers</TabsTrigger>
-							<TabsTrigger value="collaborators">Collaborator Clubs</TabsTrigger>
+							<TabsTrigger className="text-xs sm:text-sm" value="images">
+								Images
+							</TabsTrigger>
+							<TabsTrigger className="text-xs sm:text-sm" value="info">
+								Event Info
+							</TabsTrigger>
+							<TabsTrigger className="text-xs sm:text-sm" value="organizers">
+								Organizers
+							</TabsTrigger>
+							{/*todo: add break-word property*/}
+							<TabsTrigger className="text-xs sm:text-sm" value="collaborators">
+								Collaborator Clubs
+							</TabsTrigger>
 						</TabsList>
 
 						{/* ============== INFO ============= */}
@@ -289,10 +298,14 @@ export function DetailedEventDialog({
 
 						{event.status === 'PENDING' && (
 							<>
-								<Button variant={'outline'} onClick={handleRejectEvent}>
+								<Button variant={'outline'} className="my-4 sm:my-0" onClick={handleRejectEvent}>
 									Reject Event
 								</Button>
-								<Button className="bg-green-500" variant={'default'} onClick={handleApproveEvent}>
+								<Button
+									className="mt-4 bg-green-500 sm:mt-0"
+									variant={'default'}
+									onClick={handleApproveEvent}
+								>
 									Approve Event
 								</Button>
 							</>

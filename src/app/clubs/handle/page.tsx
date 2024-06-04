@@ -130,17 +130,14 @@ function Page() {
 	return (
 		<div>
 			<Nav />
-
-			<Tabs
-				className="mx-96 grid flex-1 items-start gap-4 p-8 sm:p-2 sm:px-16 sm:py-8 md:gap-8 "
-				defaultValue="all"
-			>
-				<TabsContent value="all">
+			<div className="sm:mx-30 grid flex-1 items-start gap-4 p-4 sm:p-8 md:mx-auto lg:mx-auto xl:mx-96">
+				<div className="w-full overflow-x-auto">
 					<Card x-chunk="dashboard-06-chunk-0">
 						<CardHeader>
 							<CardTitle>Pending clubs</CardTitle>
 							<CardDescription>Approve / reject club creation request</CardDescription>
 						</CardHeader>
+
 						<CardContent>
 							<Table>
 								<TableHeader>
@@ -183,8 +180,8 @@ function Page() {
 							</Table>
 						</CardContent>
 					</Card>
-				</TabsContent>
-			</Tabs>
+				</div>
+			</div>
 			{selectedClub && (
 				<HandleDialog
 					isOpen={isDialogOpen}

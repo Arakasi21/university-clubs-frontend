@@ -69,7 +69,7 @@ export default function HandleDialog({ selectedClub, isOpen, onClose }: HandleDi
 
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
-			<DialogContent>
+			<DialogContent className="rounded-md">
 				<DialogHeader>
 					<DialogTitle>Are you absolutely sure?</DialogTitle>
 					<DialogDescription className="space-x-2 space-y-2">

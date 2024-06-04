@@ -20,7 +20,7 @@ import {
 	DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card'
 
 function BanTable({ clubID }: { clubID: number }) {
 	const axiosAuth = useAxiosInterceptor()

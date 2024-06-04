@@ -1,5 +1,4 @@
 'use client'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import useClub from '@/hooks/useClub'
 import useUserClubStatus from '@/hooks/useUserClubStatus'
@@ -88,7 +87,7 @@ function Page({ params }: { params: { clubID: number } }) {
 							<div className="z-1 absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#020817]/90" />
 						</div>
 
-						<div className="relative z-30 mx-auto max-w-[1200px] pt-24">
+						<div className="md:mx-15 relative z-30 mx-5 my-5 max-w-[1200px] pt-24 sm:mx-10 lg:mx-20 xl:mx-auto">
 							<BackgroundClubImage club={club} />
 							<div className="z-50 rounded-lg bg-[#0c1125]">
 								<div className="flex items-center justify-between gap-4 p-6">
@@ -122,7 +121,7 @@ function Page({ params }: { params: { clubID: number } }) {
 							{/*CLUBS MEMBERS CARD*/}
 							<ClubMembersCard club={club!} clubMembers={clubMembers!} />
 							<div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2 ">
-								<Card className=" bg-[#0c1125]">
+								<Card className="bg-[#0c1125]">
 									<CardHeader>
 										<CardTitle>Club Events</CardTitle>
 									</CardHeader>

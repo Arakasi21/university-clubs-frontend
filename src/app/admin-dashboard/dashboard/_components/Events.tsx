@@ -73,7 +73,7 @@ export default function Events() {
 	}, [])
 
 	const renderPaginationItems = () => {
-		let pages = []
+		let pages: any[]
 		if (currentPage < 3) {
 			pages = [1, 2, 3].filter((pageNumber) => pageNumber <= currentPage || hasMorePages)
 		} else {

@@ -496,7 +496,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 	return (
 		<>
 			<Nav />
-			<div className="mx-auto max-w-4xl pt-10">
+			<div className="mx-5 max-w-4xl pt-10 sm:mx-auto">
 				<section className="mb-4">
 					<div className="relative">
 						{event.cover_images ? (
@@ -637,7 +637,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 						{/*==================== COLLABORATORS =================*/}
 
 						<div className="flex flex-col items-center justify-between sm:flex-row">
-							<div className="flex items-center gap-2">
+							<div className="flex flex-col items-center gap-2 sm:flex-row">
 								{event.collaborator_clubs.map((club) => (
 									<div key={club.id} className="flex items-center space-x-4 pb-2">
 										<Avatar>
@@ -724,7 +724,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 
 				<section className="mb-4">
 					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
-						<h3 className=" text-xl font-semibold">Cover Image</h3>
+						<h3 className="text-xl font-semibold">Cover Image</h3>
 						<p className=" mb-4 text-sm text-gray-400"> Upload a cover image for your event.</p>
 
 						{imageFile ? (
@@ -746,7 +746,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 						)}
 						<Input
 							disabled={!isEditable}
-							className="relative w-80"
+							className="relative w-auto"
 							type="file"
 							accept="image/*"
 							onChange={handleFileSelection}
@@ -870,7 +870,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 						<p className="mb-4 text-sm text-gray-400">Attach files to your event.</p>
 						<Input
 							disabled={!isEditable}
-							className="relative w-80"
+							className="relative w-auto"
 							type="file"
 							accept="application/pdf"
 							// onChange={handleFileSelection}
@@ -891,7 +891,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 										<TableHead className="hidden sm:table-cell">Avatar</TableHead>
 										<TableHead className="text-left">Name</TableHead>
 										<TableHead className="text-left">Surname</TableHead>
-										<TableHead className="hidden md:table-cell">Barcode</TableHead>
+										<TableHead className="text-left">Barcode</TableHead>
 									</TableRow>
 								</TableHeader>
 								<TableBody>
@@ -928,9 +928,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 													</TableCell>
 													<TableCell className="text-left">{participant.first_name}</TableCell>
 													<TableCell className="text-left">{participant.last_name}</TableCell>
-													<TableCell className="hidden md:table-cell">
-														{participant.barcode}
-													</TableCell>
+													<TableCell className="text-left">{participant.barcode}</TableCell>
 													<DropdownMenuContent>
 														<DropdownMenuItem>
 															<Link href={`/user/${participant.id}`}>{participant.first_name}</Link>

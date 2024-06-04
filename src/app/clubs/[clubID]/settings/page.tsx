@@ -96,7 +96,7 @@ function Page({ params }: { params: { clubID: number } }) {
 				<div className="z-1 absolute inset-0 bg-gradient-to-b from-transparent/30 to-[#020817]/80" />
 				<div className="z-1 absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#020817]/90" />
 			</div>
-			<div className="relative z-30 max-w-6xl py-12 sm:p-12 md:mx-auto">
+			<div className="sm:mx-o relative z-30 mx-5 max-w-6xl py-12 sm:p-12 md:mx-auto">
 				<BackgroundClubImage club={club} />
 				<div className=" rounded-lg bg-[#0c1125]">
 					<div className="flex items-center justify-between gap-4 p-6">
@@ -111,7 +111,7 @@ function Page({ params }: { params: { clubID: number } }) {
 						</div>
 					</div>
 				</div>
-				<Tabs className="grid flex-1 items-start py-2" defaultValue="settings">
+				<Tabs className=" grid flex-1 items-start py-2" defaultValue="settings">
 					<TabsList className="grid w-full grid-cols-5 ">
 						<Link
 							className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3  text-xs font-medium ring-offset-background sm:text-sm"

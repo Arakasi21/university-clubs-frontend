@@ -1,10 +1,8 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import DropdownForLoggedIn from '@/components/ui/dropdown_for_logged_in'
-import { Input } from '@/components/ui/input'
 import useUserStore from '@/store/user'
-import { MenuIcon, Search } from 'lucide-react'
-import Image from 'next/image'
+import { MenuIcon } from 'lucide-react'
 import Link from 'next/link'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useRouter } from 'next/navigation'
@@ -78,7 +76,7 @@ export default function Nav() {
 								<span className="sr-only">Toggle navigation menu</span>
 							</Button>
 						</SheetTrigger>
-						<SheetContent className="w-full max-w-xs" side="right">
+						<SheetContent className="w-auto max-w-xs" side="right">
 							<div className="grid gap-4 p-4">
 								<Link
 									className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
