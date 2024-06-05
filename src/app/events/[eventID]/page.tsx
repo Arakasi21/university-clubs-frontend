@@ -3,8 +3,8 @@
 import useEvent from '@/hooks/useEvent'
 import useUserStore from '@/store/user'
 import Nav from '@/components/NavBar'
-import React, { useEffect } from 'react'
-import { Organizer } from '@/types/event'
+import React, { useEffect, useState } from 'react'
+import { Organizer, Participant } from '@/types/event'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Link from 'next/link'
 import { DateTimeFormatOptions } from 'intl'
@@ -13,7 +13,9 @@ import { ArrowRight } from 'lucide-react'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
 import { toast } from 'sonner'
 import { getEventStatus } from '@/lib/eventStatusUtils'
-
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
+import axios from 'axios'
 export default function Page({ params }: { params: { eventID: string } }) {
 	const { user } = useUserStore()
 	const { event, fetchEventInfo, participantStatus } = useEvent({
@@ -115,6 +117,73 @@ export default function Page({ params }: { params: { eventID: string } }) {
 
 	useEffect(() => {}, [eventStatus])
 
+	// everything for particpants
+
+	const [participants, setParticipants] = useState([])
+
+	async function fetchParticipants(eventId: string) {
+		if (!eventId) {
+			return
+		}
+		try {
+			const response = await axios.get(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/${eventId}/participants`,
+			)
+			if (response.status === 200) {
+				return response.data.participants
+			} else {
+				console.error(`Failed to fetch participants: ${response.status}`)
+				return []
+			}
+		} catch (error) {
+			console.error(`Failed to fetch participants: ${error}`)
+			return []
+		}
+	}
+
+	useEffect(() => {
+		if (!event?.id) {
+			return
+		}
+		fetchParticipants(event.id).then(setParticipants)
+	}, [event?.id])
+
+	const generatePDF = () => {
+		const doc = new jsPDF()
+
+		doc.text(event?.title || 'Event Report', 20, 20)
+
+		doc.autoTable({
+			startY: 30,
+			head: [['Field', 'Details']],
+
+			body: [
+				['Title', event?.title || 'N/A'],
+				['Description', event?.description || 'N/A'],
+				['Date', formattedStartDate],
+				['Location', event?.location_university || 'N/A'],
+				[
+					'Organizers',
+					event?.organizers
+						.map((organizer) => `${organizer.first_name} ${organizer.last_name}`)
+						.join(', '),
+				],
+				['Collaborator Clubs', event?.collaborator_clubs.map((club) => club.name).join(', ')],
+			],
+		})
+
+		doc.autoTable({
+			startY: doc.previousAutoTable.finalY + 20,
+			head: [['#', 'Participant Name', 'Barcode']],
+			body: participants.map((participant: Participant, index: number) => [
+				index + 1,
+				`${participant.first_name} ${participant.last_name}`,
+				participant.barcode,
+			]),
+		})
+
+		doc.save(`${event?.title || 'Event Report'}.pdf`)
+	}
 	if (!event) {
 		return (
 			<>
@@ -309,6 +378,18 @@ export default function Page({ params }: { params: { eventID: string } }) {
 											onClick={() => unpublishEvent(event.id)}
 										>
 											Unpublish Event
+										</Button>
+									</div>
+								)}
+								{isUserOrganizer && (
+									<div className="flex gap-2">
+										{' '}
+										<Button
+											className="mt-2 flex-1 bg-blue-500 text-white hover:bg-blue-700"
+											variant="default"
+											onClick={generatePDF}
+										>
+											Make a Report
 										</Button>
 									</div>
 								)}
