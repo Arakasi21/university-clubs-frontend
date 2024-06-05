@@ -48,7 +48,12 @@ export default function DialogDeleteClub({
 					<Button onClick={handleAccept} variant={'destructive'}>
 						Yes, delete the club
 					</Button>
-					<Button onClick={onCancel}>No, cancel</Button>
+					<Button
+						className="bg-blue-300 text-gray-900 hover:bg-blue-300/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+						onClick={onCancel}
+					>
+						No, cancel
+					</Button>
 				</DialogContent>
 			</Dialog>
 		</div>

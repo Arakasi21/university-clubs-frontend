@@ -47,9 +47,9 @@ export default function EventsContent() {
 	}, [])
 
 	return (
-		<main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+		<main className="flex flex-1 flex-col gap-4 bg-accent p-4 dark:bg-[#0D1525] md:gap-8 md:p-6">
 			<div className="flex flex-col items-center gap-4 sm:flex-row">
-				<h1 className="text-lg font-semibold md:text-2xl">Events</h1>
+				<h1 className="text-lg font-semibold  md:text-2xl">Events</h1>
 				<div className="flex flex-col items-center gap-4 sm:ml-auto sm:flex-row">
 					{/*<div className="relative w-full max-w-md">*/}
 					{/*	<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />*/}
@@ -77,7 +77,7 @@ export default function EventsContent() {
 					return (
 						<div
 							key={event.id}
-							className="rounded-lg border border-gray-200 p-4 shadow-sm dark:border-gray-800"
+							className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-[#0D1525]"
 						>
 							<h3 className="text-lg font-medium">{event.title || 'No Title'}</h3>
 							<p className="text-xs text-gray-500 dark:text-gray-400">
@@ -100,10 +100,12 @@ export default function EventsContent() {
 										</div>
 									</div>
 								)}
-								<div className="flex  items-center justify-between">
+								<div className="flex items-center justify-between">
 									{isEventOrganizer(event) && (
 										<Link href={`/events/${event.id}`}>
-											<Button className=" w-18 h-8 p-4">View Event</Button>
+											<Button className="w-18 h-8 bg-blue-200 p-4 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90">
+												View Event
+											</Button>
 										</Link>
 									)}
 								</div>

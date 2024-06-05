@@ -65,7 +65,7 @@ export default function Events() {
 									<img
 										src={event.cover_images[0].url}
 										alt="Event Cover"
-										className="object-covertransition-transform duration-300 hover:scale-105"
+										className="object-cover transition-transform duration-300 hover:scale-105"
 										height={400}
 										width={600}
 										style={{ aspectRatio: '1/1', objectFit: 'cover' }}

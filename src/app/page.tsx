@@ -29,7 +29,7 @@ export default function Home() {
 								{isLoggedIn ? (
 									<Link href={'explore/clubs'}>
 										<Button
-											className="invert-[.2] dark:text-white dark:invert-0"
+											className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-800/70"
 											variant={'secondary'}
 										>
 											Explore Clubs
@@ -39,14 +39,19 @@ export default function Home() {
 									<>
 										<Link href={'/sign-in'}>
 											<Button
-												className="hidden invert dark:text-white dark:invert-0 sm:inline-flex"
+												className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-800/70"
 												variant={'secondary'}
 											>
 												Join Now
 											</Button>
 										</Link>
 										<Link href={'explore/clubs'}>
-											<Button variant={'dark' ? 'secondary' : 'default'}>Explore Clubs</Button>
+											<Button
+												className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-800/70"
+												variant={'secondary'}
+											>
+												Explore Clubs
+											</Button>
 										</Link>
 									</>
 								)}
@@ -71,34 +76,34 @@ export default function Home() {
 			<section className="pt-20">
 				<div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
 					<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-						<div className="hover: space-y-4 rounded-lg bg-[#0c1125] p-6 shadow-md transition duration-300 hover:bg-[#0c1125]/80">
-							<UsersIcon className="h-8 w-8 text-gray-50" />
-							<h3 className="text-xl font-semibold text-white">Discover Clubs</h3>
-							<p className="pb-4 text-gray-400">
+						<div className="space-y-4 rounded-lg bg-blue-200 p-6 shadow-md transition duration-300 hover:bg-blue-200/70 dark:bg-[#0c1125] dark:hover:bg-[#0c1125]/60">
+							<UsersIcon className="h-8 w-8 dark:text-white" />
+							<h3 className="text-xl font-semibold dark:text-white">Discover Clubs</h3>
+							<p className="pb-4 text-neutral-600 dark:text-gray-400">
 								Explore a diverse range of clubs that cater to your interests, hobbies, and
 								passions.
 							</p>
-							<Link className="text-gray-50 hover:underline" href={'/explore/clubs'}>
+							<Link className="hover:underline dark:text-white" href={'/explore/clubs'}>
 								Browse Clubs
 							</Link>
 						</div>
-						<div className="space-y-4 rounded-lg bg-[#0c1125] p-6 shadow-md transition duration-300 hover:bg-[#0c1125]/80">
-							<CalendarIcon className="h-8 w-8 text-gray-50" />
-							<h3 className="text-xl font-semibold text-white">Attend Events</h3>
-							<p className="pb-4 text-gray-400">
+						<div className="space-y-4 rounded-lg bg-blue-200 p-6 shadow-md transition duration-300 hover:bg-blue-200/70 dark:bg-[#0c1125] dark:hover:bg-[#0c1125]/60">
+							<CalendarIcon className="h-8 w-8 dark:text-white" />
+							<h3 className="text-xl font-semibold dark:text-white">Attend Events</h3>
+							<p className="pb-4 text-neutral-600 dark:text-gray-400">
 								Stay up-to-date with the latest club events and activities, and participate in them.
 							</p>
-							<Link className=" text-gray-50 hover:underline" href={'/explore/events'}>
+							<Link className="hover:underline dark:text-white" href={'/explore/events'}>
 								View Events
 							</Link>
 						</div>
-						<div className="space-y-4 rounded-lg bg-[#0c1125] p-6 shadow-md transition duration-300 hover:bg-[#0c1125]/80">
-							<GroupIcon className="h-8 w-8 text-gray-50" />
-							<h3 className="text-xl font-semibold text-white">Connect with Members</h3>
-							<p className="pb-4 text-gray-400">
+						<div className="space-y-4 rounded-lg bg-blue-200 p-6 shadow-md transition duration-300 hover:bg-blue-200/70 dark:bg-[#0c1125] dark:hover:bg-[#0c1125]/60">
+							<GroupIcon className="h-8 w-8 dark:text-white" />
+							<h3 className="text-xl font-semibold dark:text-white">Connect with Members</h3>
+							<p className="pb-4 text-neutral-600 dark:text-gray-400">
 								Engage with other club members, share ideas, and build meaningful connections.
 							</p>
-							<Link className="text-gray-50 hover:underline" href="#">
+							<Link className="hover:underline dark:text-white" href="#">
 								Join the Community
 							</Link>
 						</div>

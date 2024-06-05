@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { decimalToRgb } from '@/helpers/helper'
 import { Club, ClubMember, ClubRole } from '@/types/club'
 import ClubMembersDialog from '@/components/clubs/ClubMembersDialog'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 interface ClubMembersCardProps {
 	club: Club
@@ -24,7 +23,7 @@ const ClubMembersCard: React.FC<ClubMembersCardProps> = ({ club, clubMembers }) 
 	}
 	return (
 		<>
-			<Card className="mt-8 bg-[#0c1125]">
+			<Card className="mt-8 bg-accent dark:bg-[#0c1125]">
 				<CardHeader>
 					<CardTitle onClick={openClubMembersDialog}>
 						Club Members <span className="text-base"> - {club?.num_of_members}</span>

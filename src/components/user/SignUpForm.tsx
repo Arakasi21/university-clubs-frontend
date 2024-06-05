@@ -85,7 +85,7 @@ export default function SignUp() {
 	}
 
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-between p-12 sm:p-24">
+		<main className="flex min-h-screen flex-col items-center justify-between p-12 sm:p-14">
 			<Card className="w-full max-w-sm">
 				<CardHeader>
 					<CardTitle className="text-2xl">Register</CardTitle>
@@ -219,7 +219,10 @@ export default function SignUp() {
 								)}
 							/>
 
-							<Button type="submit" className="w-full">
+							<Button
+								type="submit"
+								className="w-full bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+							>
 								Create an account
 							</Button>
 						</form>
@@ -235,7 +238,7 @@ export default function SignUp() {
 					{/*</Button>*/}
 					<div className="mt-2 text-center text-sm">
 						Already have an account?{' '}
-						<Link href="/sign-in" className="underline">
+						<Link href="/sign-in" className="underline ">
 							Log in
 						</Link>
 					</div>

@@ -129,7 +129,7 @@ export default function Page({ params }: { params: { eventID: string } }) {
 	return (
 		<>
 			<Nav />
-			<div className="flex min-h-screen flex-col bg-[#030a20] text-gray-50">
+			<div className="flex min-h-screen flex-col text-gray-50 dark:bg-[#030a20]">
 				<main className="container mx-auto flex-1 px-4 py-12 md:px-6 md:py-16 lg:px-8 lg:py-24">
 					<div className="grid gap-8 md:grid-cols-[1fr_300px] lg:gap-12">
 						<div>
@@ -156,7 +156,7 @@ export default function Page({ params }: { params: { eventID: string } }) {
 								)}
 							</div>
 							<div className="mt-8 space-y-2">
-								<h1 className="text-3xl font-bold md:text-4xl lg:text-5xl">
+								<h1 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl lg:text-5xl">
 									{event.title || event.id}
 								</h1>
 
@@ -175,36 +175,40 @@ export default function Page({ params }: { params: { eventID: string } }) {
 									)}
 								</div>
 
-								<div className="prose max-w-[800px] text-gray-300">
+								<div className="prose max-w-[800px] text-gray-500 dark:text-gray-300">
 									<p>{event.description || 'No event description'}</p>
 								</div>
 							</div>
 						</div>
 
 						{/* ============== RIGHT SECTION ================*/}
-						<div className="flex h-fit flex-col  space-y-6 rounded-xl bg-gray-800 p-6">
+						<div className="flex h-fit flex-col  space-y-6 rounded-xl bg-gray-200 p-6 dark:bg-gray-800">
 							<div className="flex items-center space-x-2 text-xs">
 								<div className={`rounded-md  px-2 py-2 text-xs text-white ${eventStatus.color}`}>
 									{eventStatus.label}
 								</div>
 							</div>
 							<div className="space-y-2">
-								<div className="text-sm font-medium text-gray-400">When</div>
+								<div className="text-sm font-medium text-gray-500 dark:text-gray-400">When</div>
 								<div>
-									<div className="text-lg font-medium">{formattedStartDate}</div>
+									<div className="text-lg font-medium text-gray-900 dark:text-white">
+										{formattedStartDate}
+									</div>
 								</div>
 							</div>
 							<div className="space-y-2">
-								<div className="text-sm font-medium text-gray-400">Where</div>
+								<div className="text-sm font-medium text-gray-500 dark:text-gray-400">Where</div>
 								<div>
-									<div className="text-lg font-medium">
+									<div className="text-lg font-medium text-gray-900 dark:text-white">
 										{event.location_university || 'Location not specified'}
 									</div>
 								</div>
 							</div>
 							<div className="space-y-2">
 								<div>
-									<div className="pb-2 text-sm font-medium text-gray-400">Club Collaborators</div>
+									<div className="pb-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+										Club Collaborators
+									</div>
 									{event.collaborator_clubs.map((club) => (
 										<div key={club.id} className="flex items-center gap-2 pb-2">
 											<div className="flex w-full items-center justify-between rounded-full bg-gray-700 px-2 py-1">
@@ -231,7 +235,9 @@ export default function Page({ params }: { params: { eventID: string } }) {
 										</div>
 									))}
 								</div>
-								<div className="text-sm font-medium text-gray-400">Organizers</div>
+								<div className="text-sm font-medium text-gray-500 dark:text-gray-400">
+									Organizers
+								</div>
 								<div className="flex-col items-center gap-4">
 									{event.organizers.map((organizer: Organizer) => (
 										<div key={organizer.id} className="flex items-center gap-2  px-2  pb-2">
@@ -244,7 +250,7 @@ export default function Page({ params }: { params: { eventID: string } }) {
 													{organizer?.first_name.slice(0, 1)}
 												</AvatarFallback>
 											</Avatar>
-											<div className="text-sm font-medium">
+											<div className="text-sm font-medium text-gray-900 dark:text-white">
 												{organizer.first_name} {organizer.last_name}
 											</div>
 										</div>

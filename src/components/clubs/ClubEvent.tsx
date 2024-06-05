@@ -10,9 +10,9 @@ export default function ClubEvent(props: { event: Event }) {
 
 	return (
 		<Card>
-			<CardContent className="flex w-full flex-wrap items-center justify-between gap-2 overflow-hidden rounded-lg bg-gray-700 p-4 sm:flex-nowrap sm:gap-4">
+			<CardContent className="flex w-full flex-wrap items-center justify-between gap-2 overflow-hidden rounded-lg p-4 dark:bg-gray-700 sm:flex-nowrap sm:gap-4">
 				<div className="flex flex-col">
-					<h3 className="text-nd font-medium text-white">{props.event.title}</h3>
+					<h3 className="text-md font-medium">{props.event.title}</h3>
 					<p className="text-sm font-normal text-muted-foreground">
 						{new Date(props.event.start_date).toLocaleString()}
 					</p>
@@ -24,7 +24,10 @@ export default function ClubEvent(props: { event: Event }) {
 				</div>
 				<div className="flex flex-row items-end">
 					<Link href={`/events/${props.event.id}`}>
-						<Button className="bg-gray-900" variant="outline">
+						<Button
+							className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-900/90"
+							variant="outline"
+						>
 							View
 						</Button>
 					</Link>

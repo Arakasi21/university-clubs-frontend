@@ -55,11 +55,11 @@ export default function Clubs() {
 						<h1 className="mb-8 text-center text-3xl font-bold dark:text-white md:text-4xl lg:text-5xl">
 							Discover Clubs
 						</h1>
-						<div className="grid grid-cols-1 gap-6 text-white sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
+						<div className="grid grid-cols-1 gap-6 dark:text-white sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
 							{clubs?.map((club) => (
 								<div
 									key={club.id}
-									className="cursor-pointer overflow-hidden rounded-lg bg-gray-900 shadow-lg transition-transform duration-300 hover:scale-105"
+									className="cursor-pointer overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:scale-105 dark:bg-gray-900"
 									onClick={() => handleClubClick(club.id)}
 								>
 									<Image
@@ -87,17 +87,21 @@ export default function Clubs() {
 											/>
 											<div>
 												<h3 className="font-semibold">{club.name}</h3>
-												<p className="text-sm text-gray-400">{club.club_type}</p>
+												<p className="text-sm text-gray-600 dark:text-gray-400">{club.club_type}</p>
 											</div>
 										</div>
-										<p className="line-clamp-2 text-sm text-gray-400">{club.description}</p>
-										<div className="flex items-center justify-between  text-sm text-gray-400">
+										<p className="line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
+											{club.description}
+										</p>
+										<div className="flex items-center justify-between text-sm dark:text-gray-400">
 											<div className="flex ">
 												<UsersIcon className="mr-2 h-4 w-4" />
 												<span>{club.num_of_members} members</span>
 											</div>
 
-											<Badge variant="default">Active</Badge>
+											<Badge className="bg-blue-300 text-gray-900 dark:bg-white" variant="default">
+												Active
+											</Badge>
 										</div>
 									</div>
 								</div>

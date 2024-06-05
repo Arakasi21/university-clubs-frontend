@@ -89,7 +89,7 @@ export default function RolesTab({
 														<Badge
 															key={index}
 															variant={p.id === 'administrator' ? 'destructive' : 'default'}
-															className="text-1xl mx-2.5 my-1.5 w-fit text-nowrap text-center"
+															className={`text-1xl mx-2.5 my-1.5 w-fit text-nowrap text-center ${p.id !== 'administrator' ? 'text-gray-900' : ''} ${p.id !== 'administrator' ? 'bg-blue-300' : ''} dark:${p.id !== 'administrator' ? 'bg-white' : ''}`}
 														>
 															{p.label}
 														</Badge>

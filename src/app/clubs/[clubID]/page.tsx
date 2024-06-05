@@ -72,31 +72,32 @@ function Page({ params }: { params: { clubID: number } }) {
 					<SceletonClub />
 				) : (
 					<div className="relative">
-						<div className="absolute h-[320px] w-full overflow-hidden rounded-sm shadow-2xl shadow-[#020817]/40">
+						<div className="absolute h-[320px] w-full overflow-hidden rounded-sm dark:shadow-2xl dark:shadow-[#020817]/40">
 							<img
 								className="z-1 h-full w-full object-cover object-center "
 								height={600}
 								src={club?.banner_url}
+								alt={club?.name}
 								style={{
 									aspectRatio: '1920/600',
 									objectFit: 'cover',
 								}}
 								width={1920}
 							/>
-							<div className="z-1 absolute inset-0 bg-gradient-to-b from-transparent/30 to-[#020817]/80" />
-							<div className="z-1 absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#020817]/90" />
+							<div className="z-1 absolute inset-0 bg-gradient-to-b from-transparent/30 to-[#ffffff]/100 dark:bg-gradient-to-b dark:from-transparent/30 dark:to-[#020817]/80" />
+							<div className="z-1 absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#ffffff]/40 dark:bg-gradient-to-t dark:from-[#020817]/90" />
 						</div>
 
 						<div className="md:mx-15 relative z-30 mx-5 my-5 max-w-[1200px] pt-24 sm:mx-10 lg:mx-20 xl:mx-auto">
 							<BackgroundClubImage club={club} />
-							<div className="z-50 rounded-lg bg-[#0c1125]">
+							<div className="z-50 rounded-lg border bg-accent dark:border-none dark:bg-[#0c1125]">
 								<div className="flex items-center justify-between gap-4 p-6">
 									<div className="flex items-center gap-2">
 										<div className="hidden aspect-square shrink-0 overflow-hidden rounded-full sm:flex">
 											<ClubImage club={club} width={84} height={84} />
 										</div>
 										<div className="pl-4">
-											<CardTitle>{club?.name}</CardTitle>
+											<CardTitle className="text-gray-900 dark:text-white">{club?.name}</CardTitle>
 											<CardDescription>{club?.description}</CardDescription>
 											<CardDescription
 												className="cursor-pointer pt-2"
@@ -121,7 +122,7 @@ function Page({ params }: { params: { clubID: number } }) {
 							{/*CLUBS MEMBERS CARD*/}
 							<ClubMembersCard club={club!} clubMembers={clubMembers!} />
 							<div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2 ">
-								<Card className="bg-[#0c1125]">
+								<Card className="bg-accent dark:bg-[#0c1125]">
 									<CardHeader>
 										<CardTitle>Club Events</CardTitle>
 									</CardHeader>
@@ -136,7 +137,7 @@ function Page({ params }: { params: { clubID: number } }) {
 										)}
 									</CardContent>
 								</Card>
-								<Card className=" bg-[#0c1125]">
+								<Card className="bg-accent dark:bg-[#0c1125]">
 									<CardHeader>
 										<CardTitle>Club Posts</CardTitle>
 									</CardHeader>
@@ -147,7 +148,7 @@ function Page({ params }: { params: { clubID: number } }) {
 										</p>
 									</CardContent>
 								</Card>
-								<Card className=" bg-[#0c1125]">
+								<Card className="bg-accent dark:bg-[#0c1125]">
 									<CardHeader>
 										<CardTitle>Club Achievements</CardTitle>
 									</CardHeader>

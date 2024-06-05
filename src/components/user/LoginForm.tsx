@@ -129,7 +129,10 @@ export default function Login() {
 									</FormItem>
 								)}
 							/>
-							<Button type="submit" className="w-full">
+							<Button
+								type="submit"
+								className="w-full bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+							>
 								Log in
 							</Button>
 						</form>

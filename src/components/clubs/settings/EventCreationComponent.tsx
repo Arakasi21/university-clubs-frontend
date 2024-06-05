@@ -46,7 +46,12 @@ export default function EventCreationComponent({ clubID, onEventCreated }: UseEv
 	}, [clubID, onEventCreated])
 
 	return (
-		<Button onClick={handleCreateEvent} variant="secondary" type="submit">
+		<Button
+			onClick={handleCreateEvent}
+			variant="secondary"
+			type="submit"
+			className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+		>
 			Create
 		</Button>
 	)

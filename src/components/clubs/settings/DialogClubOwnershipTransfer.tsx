@@ -152,7 +152,12 @@ export default function DialogClubOwnershipTransfer({
 					>
 						Yes, transfer the ownership
 					</Button>
-					<Button onClick={onClick1}>No, cancel</Button>
+					<Button
+						className="bg-blue-300 text-gray-900 hover:bg-blue-300/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+						onClick={onClick1}
+					>
+						No, cancel
+					</Button>
 				</DialogContent>
 			</Dialog>
 

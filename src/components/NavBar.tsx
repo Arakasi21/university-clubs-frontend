@@ -26,32 +26,34 @@ export default function Nav() {
 	}
 
 	return (
-		<header className="sticky top-0 z-50 border-b bg-gray-900 text-white backdrop-blur-sm dark:bg-gray-900">
+		<header className="sticky top-0 z-50 border-b bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
 			<div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
 				<Link className="flex items-center gap-2" href="/">
-					<span className="text-lg font-semibold tracking-tight text-gray-50">UCMS AITU</span>
+					<span className="text-lg font-semibold tracking-tight transition duration-300">
+						UCMS AITU
+					</span>
 				</Link>
 				<nav className="hidden space-x-4 sm:flex">
 					<Link
-						className="text-grey-50 rounded-md px-3 py-2 text-sm font-medium transition duration-300 hover:bg-accent/80"
+						className="rounded-md px-3 py-2 text-sm font-medium transition duration-300 hover:bg-gray-200 dark:hover:bg-accent"
 						href={'/explore/clubs'}
 					>
 						Clubs
 					</Link>
 					<Link
-						className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-accent"
+						className="rounded-md px-3 py-2 text-sm font-medium transition duration-300 hover:bg-gray-200 dark:hover:bg-accent"
 						href={'/explore/events'}
 					>
 						Events
 					</Link>
 					<Link
-						className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-accent"
+						className="rounded-md px-3 py-2 text-sm font-medium transition duration-300 hover:bg-gray-200 dark:hover:bg-accent"
 						href="#"
 					>
 						Community
 					</Link>
 					<Link
-						className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-accent"
+						className="rounded-md px-3 py-2 text-sm font-medium transition duration-300 hover:bg-gray-200 dark:hover:bg-accent"
 						href={'/explore/faq'}
 					>
 						FAQ
@@ -63,7 +65,10 @@ export default function Nav() {
 					) : (
 						<>
 							<Link href={'/sign-in'}>
-								<Button className="hidden sm:inline-flex" variant="secondary">
+								<Button
+									className="hidden bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-800/70 sm:inline-flex"
+									variant="secondary"
+								>
 									Sign In
 								</Button>
 							</Link>
@@ -79,25 +84,25 @@ export default function Nav() {
 						<SheetContent className="w-auto max-w-xs" side="right">
 							<div className="grid gap-4 p-4">
 								<Link
-									className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
+									className="rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
 									href={'/explore/clubs'}
 								>
 									Clubs
 								</Link>
 								<Link
-									className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
+									className="rounded-md px-3 py-2 text-sm font-medium hover:bg-[#040a2f]"
 									href={'/explore/events'}
 								>
 									Events
 								</Link>
 								<Link
-									className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
+									className="rounded-md px-3 py-2 text-sm font-medium hover:bg-[#040a2f]"
 									href="#"
 								>
 									Community
 								</Link>
 								<Link
-									className="rounded-md px-3 py-2 text-sm font-medium text-gray-50 hover:bg-[#040a2f]"
+									className="rounded-md px-3 py-2 text-sm font-medium hover:bg-[#040a2f]"
 									href="#"
 								>
 									About
@@ -105,7 +110,10 @@ export default function Nav() {
 								<div className="flex flex-col gap-2">
 									{!isLoggedIn ? (
 										<Link href={'/sign-in'}>
-											<Button className="inline-flex" variant="secondary">
+											<Button
+												className="inline-flex bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-800/70"
+												variant="secondary"
+											>
 												Sign In
 											</Button>
 										</Link>

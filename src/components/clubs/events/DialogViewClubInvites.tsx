@@ -66,7 +66,10 @@ function DialogViewClubInvites({ clubId }: DialogViewClubInvites) {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button variant="secondary">
+				<Button
+					variant="secondary"
+					className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+				>
 					Invites{' '}
 					{pendingClubInvites > 0 && (
 						<span className={pendingClubInvites > 0 ? 'text-red-500' : ''}>

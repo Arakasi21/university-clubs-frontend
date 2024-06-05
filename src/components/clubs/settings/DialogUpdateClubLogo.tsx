@@ -72,7 +72,7 @@ export function DialogUpdateClubLogo() {
 				onClick={() => {
 					inputRef.current?.click()
 				}}
-				className="w-40"
+				className="w-40 bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#1B2436] dark:text-white dark:hover:bg-[#1B2436]/80"
 				variant="secondary"
 			>
 				Upload Club Logo

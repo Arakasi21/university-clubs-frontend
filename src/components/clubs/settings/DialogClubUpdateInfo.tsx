@@ -133,7 +133,10 @@ export function DialogUpdateClubInfo() {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button className="w-40" variant="secondary">
+				<Button
+					className="w-40 bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#1B2436] dark:text-white dark:hover:bg-[#1B2436]/80"
+					variant="secondary"
+				>
 					Update Club Info
 				</Button>
 			</DialogTrigger>

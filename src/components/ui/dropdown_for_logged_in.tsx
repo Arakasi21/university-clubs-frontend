@@ -29,7 +29,10 @@ const DropdownForLoggedIn = ({ user, logout }: { user: User; logout: () => void 
 				<div className="flex flex-row">
 					<DialogViewUserInvites userId={user?.id} />
 					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" className="flex items-center space-x-2.5 ">
+						<Button
+							variant="ghost"
+							className="flex items-center space-x-2.5 transition duration-300 hover:bg-gray-200 dark:hover:bg-accent"
+						>
 							<p>{user?.first_name}</p>
 							<UserAvatar user={user} size={44} />
 						</Button>

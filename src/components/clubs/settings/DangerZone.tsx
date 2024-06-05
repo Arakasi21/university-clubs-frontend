@@ -36,7 +36,7 @@ export default function DangerZone() {
 			toast.error('Failed to delete club', { description: response.data.error })
 		}
 		setIsDeleteDialogOpen(false)
-	}, [club?.id])
+	}, [club?.id, router])
 
 	return (
 		<Card className="border-red-900">
@@ -50,7 +50,7 @@ export default function DangerZone() {
 				<div className="flex items-center py-2">
 					<Label className="text-sm text-muted-foreground">Transfer ownership of the club</Label>
 					<Button
-						className="ml-auto text-red-500 hover:bg-red-500 hover:text-white"
+						className="ml-auto bg-red-100 text-red-500 hover:bg-red-500 hover:text-white dark:bg-[#182234] dark:hover:bg-red-500"
 						variant="secondary"
 						disabled={!isOwner}
 						onClick={() => setIsTransferOwnershipDialogOpen(true)}
@@ -62,7 +62,7 @@ export default function DangerZone() {
 				<div className="flex items-center py-2">
 					<Label className="text-sm text-muted-foreground">Delete Club</Label>
 					<Button
-						className="ml-auto text-red-500 hover:bg-red-500 hover:text-white"
+						className="ml-auto bg-red-100 text-red-500 hover:bg-red-500 hover:text-white dark:bg-[#182234] dark:hover:bg-red-500"
 						variant="secondary"
 						disabled={!isOwner}
 						onClick={() => setIsDeleteDialogOpen(true)}

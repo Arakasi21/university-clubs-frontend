@@ -38,13 +38,10 @@ export default function Members({
 								<div className="flex gap-3">
 									<Button
 										variant={`secondary`}
-										className=" w-30 right-0 h-20 whitespace-normal sm:h-max sm:w-60"
+										className="w-30 right-0 h-20 whitespace-normal bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90 sm:h-max sm:w-60"
 									>
 										{' '}
-										<Link
-											className="right-0 w-full font-bold"
-											href={`/clubs/${club?.id}/join-request`}
-										>
+										<Link className="right-0 w-full " href={`/clubs/${club?.id}/join-request`}>
 											Handle new members{' '}
 											{pendingRequests > 0 && (
 												<span

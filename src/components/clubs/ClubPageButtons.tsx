@@ -22,10 +22,17 @@ export default function ClubPageButtons(props: {
 					{hasPermission(props.memberPerms, Permissions.ALL) && (
 						<div className=" flex flex-col gap-3 md:flex-row">
 							<Link href={`/clubs/${props.club?.id}/settings`}>
-								<Button variant="default">Settings</Button>
+								<Button
+									variant="default"
+									className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+								>
+									Settings
+								</Button>
 							</Link>
 							<Link href={`/clubs/${props.club?.id}/todo`}>
-								<Button>Notion Link</Button>
+								<Button className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90">
+									Notion Link
+								</Button>
 							</Link>
 						</div>
 					)}
