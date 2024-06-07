@@ -58,7 +58,7 @@ export default function Events() {
 						{events?.map((event) => (
 							<div
 								key={event.id}
-								className="cursor-pointer overflow-hidden rounded-lg bg-gray-900 shadow-lg"
+								className="cursor-pointer overflow-hidden rounded-lg bg-gray-200/70 shadow-lg dark:bg-gray-900"
 								onClick={() => handleEventClick(event.id)}
 							>
 								{event.cover_images ? (
@@ -94,7 +94,7 @@ export default function Events() {
 											)
 										}
 									})}
-									<p className="mb-4 text-gray-400 ">
+									<p className="mb-4 text-gray-500 dark:text-gray-400 ">
 										{event.description?.substring(0, 60)}
 										{event.description?.length > 60 ? '...' : ''}
 									</p>
@@ -111,7 +111,7 @@ export default function Events() {
 											event.tags.map((tag) => (
 												<div
 													key={tag}
-													className="rounded-full bg-gray-800 px-3 py-1 text-sm font-medium"
+													className="rounded-full bg-blue-200 px-3 py-1 text-sm font-medium dark:bg-gray-800"
 												>
 													{tag}
 												</div>

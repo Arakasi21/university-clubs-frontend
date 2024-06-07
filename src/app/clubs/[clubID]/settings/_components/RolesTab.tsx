@@ -29,7 +29,7 @@ export default function RolesTab({
 }: RolesTabProps) {
 	const { handleDragStart, handleDragOver, handleDrop } = useDragDrop({ club, fetchClubInfo })
 	return (
-		<Card className="bg-muted/40">
+		<Card className="bg-accent">
 			<CardHeader className="flex gap-4">
 				<div className="flex items-center justify-between gap-4">
 					<div className="flex items-center">
@@ -57,7 +57,6 @@ export default function RolesTab({
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{/*TODO закрепить member внизу*/}
 						{club &&
 							club.roles
 								.sort((role: ClubRole, role2: ClubRole) => {
@@ -83,13 +82,13 @@ export default function RolesTab({
 												{role.name}
 											</p>
 										</TableCell>
-										<TableCell className="flex  flex-wrap">
+										<TableCell className="flex flex-wrap">
 											{role.permissions
 												? permissionsToStringArr(role.permissions).map((p, index) => (
 														<Badge
 															key={index}
 															variant={p.id === 'administrator' ? 'destructive' : 'default'}
-															className={`text-1xl mx-2.5 my-1.5 w-fit text-nowrap text-center ${p.id !== 'administrator' ? 'text-gray-900' : ''} ${p.id !== 'administrator' ? 'bg-blue-300' : ''} dark:${p.id !== 'administrator' ? 'bg-white' : ''}`}
+															className={`text-1xl mx-2.5 my-1.5 w-fit text-nowrap text-center ${p.id !== 'administrator' ? 'bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-white dark:hover:bg-white/70' : ''}`}
 														>
 															{p.label}
 														</Badge>

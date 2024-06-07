@@ -100,7 +100,10 @@ const RoleCreateForm: React.FC<{
 						</FormItem>
 					)}
 				/>
-				<Button className="mt-8" type="submit">
+				<Button
+					className="mt-8 bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+					type="submit"
+				>
 					Create Role
 				</Button>
 			</form>
