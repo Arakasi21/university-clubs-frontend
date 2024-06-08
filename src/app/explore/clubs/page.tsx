@@ -99,7 +99,10 @@ export default function Clubs() {
 												<span>{club.num_of_members} members</span>
 											</div>
 
-											<Badge className="bg-blue-300 text-gray-900 dark:bg-white" variant="default">
+											<Badge
+												className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+												variant="default"
+											>
 												Active
 											</Badge>
 										</div>
