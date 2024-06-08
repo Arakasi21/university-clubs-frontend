@@ -137,7 +137,9 @@ const InviteCollaboratorDialog: React.FC<InviteCollaboratorDialogProps> = ({
 		<>
 			<Dialog>
 				<DialogTrigger asChild>
-					<Button className="ml-auto">Invite Clubs</Button>
+					<Button className="ml-auto bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90">
+						Invite Clubs
+					</Button>
 				</DialogTrigger>
 				<DialogContent className="sm:max-w-[600px]">
 					<DialogHeader>
@@ -183,15 +185,20 @@ const InviteCollaboratorDialog: React.FC<InviteCollaboratorDialogProps> = ({
 										<div className="font-medium">{club.name} </div>
 									</div>
 									{event?.collaborator_clubs.find((collab) => collab.id === club.id) ? (
-										<Button variant="outline" disabled>
+										<Button className="border-2" variant="outline" disabled>
 											Already a collaborator
 										</Button>
 									) : invitedClubs.find((invite) => invite.club.id === club.id) ? (
-										<Button variant="outline" disabled>
+										<Button className="border-2" variant="outline" disabled>
 											Invited
 										</Button>
 									) : (
-										<Button onClick={() => handleInvite(club.id)} variant="default" size="sm">
+										<Button
+											className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+											onClick={() => handleInvite(club.id)}
+											variant="default"
+											size="sm"
+										>
 											Invite
 										</Button>
 									)}

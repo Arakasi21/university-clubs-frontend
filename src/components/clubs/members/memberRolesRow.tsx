@@ -254,7 +254,12 @@ function MemberRolesRow({
 					<Button variant={'destructive'} onClick={confirmKickMember}>
 						Yes, kick the user
 					</Button>
-					<Button onClick={() => setIsKickDialogOpen(false)}>No, cancel</Button>
+					<Button
+						className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+						onClick={() => setIsKickDialogOpen(false)}
+					>
+						No, cancel
+					</Button>
 				</DialogContent>
 			</Dialog>
 			<Dialog open={isBanDialogOpen} onOpenChange={setIsBanDialogOpen}>
@@ -272,7 +277,12 @@ function MemberRolesRow({
 					<Button variant={'destructive'} onClick={confirmBanMember}>
 						Yes, ban the user
 					</Button>
-					<Button onClick={() => setIsBanDialogOpen(false)}>No, cancel</Button>
+					<Button
+						className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+						onClick={() => setIsBanDialogOpen(false)}
+					>
+						No, cancel
+					</Button>
 				</DialogContent>
 			</Dialog>
 		</TableRow>

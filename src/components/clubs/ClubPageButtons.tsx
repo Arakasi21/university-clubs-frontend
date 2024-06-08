@@ -38,7 +38,12 @@ export default function ClubPageButtons(props: {
 					)}
 					<div>
 						{props.memberStatus === 'NOT_MEMBER' && (
-							<Button onClick={props.onClick}>Join Club</Button>
+							<Button
+								className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+								onClick={props.onClick}
+							>
+								Join Club
+							</Button>
 						)}
 						{props.memberStatus === 'PENDING' && <Button disabled>Pending</Button>}
 						{props.memberStatus === 'BANNED' && (

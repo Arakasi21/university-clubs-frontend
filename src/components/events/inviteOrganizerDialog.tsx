@@ -145,7 +145,9 @@ export function InviteOrganizerDialog({
 		<>
 			<Dialog>
 				<DialogTrigger asChild>
-					<Button className="ml-auto">Invite Users</Button>
+					<Button className="ml-auto bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90">
+						Invite Users
+					</Button>
 				</DialogTrigger>
 				<DialogContent className="sm:max-w-[600px]">
 					<DialogHeader>
@@ -194,11 +196,20 @@ export function InviteOrganizerDialog({
 										</div>
 									</div>
 									{event?.organizers.find((organizer) => organizer.id === member.id) ? (
-										<Button disabled>Already Organizer</Button>
+										<Button className="border-2" variant="outline" disabled>
+											Already Organizer
+										</Button>
 									) : organizerInvites.find((invite) => invite.user.id === member.id) ? (
-										<Button disabled>Invite Pending</Button>
+										<Button className="border-2" variant="outline" disabled>
+											Invite Pending
+										</Button>
 									) : (
-										<Button onClick={() => handleInvite(member.id)}>Invite</Button>
+										<Button
+											className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+											onClick={() => handleInvite(member.id)}
+										>
+											Invite
+										</Button>
 									)}
 								</div>
 							))}

@@ -520,7 +520,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 							/>
 						)}
 					</div>
-					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
+					<div className="rounded-lg bg-accent p-6 dark:bg-[#030a20] sm:p-8">
 						<CardTitle className="mb-2 flex items-center justify-center">EDIT EVENT</CardTitle>
 						{/*<Separator />*/}
 						<div className="mb-4 mt-2">
@@ -627,7 +627,12 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 										className="rounded-md px-2 py-1 text-sm"
 										placeholder="Enter new tag"
 									/>
-									<Button variant="default" disabled={!isEditable} onClick={handleAddTag}>
+									<Button
+										className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+										variant="default"
+										disabled={!isEditable}
+										onClick={handleAddTag}
+									>
 										Add Tag
 									</Button>
 								</div>
@@ -681,7 +686,11 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 
 									{/*CHECKING */}
 									{isUserOrganizer && event.status !== 'PENDING' && (
-										<Button className="h-8" variant="secondary" onClick={handleSubmit}>
+										<Button
+											className="h-8 bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+											variant="secondary"
+											onClick={handleSubmit}
+										>
 											Update Event
 										</Button>
 									)}
@@ -690,7 +699,11 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 										isEventReadyForReview &&
 										event.status == 'DRAFT' &&
 										formData.type === 'UNIVERSITY' && (
-											<Button className="h-8" variant="default" onClick={handleSendToReview}>
+											<Button
+												className="h-8 bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+												variant="default"
+												onClick={handleSendToReview}
+											>
 												Send to Review
 											</Button>
 										)}
@@ -723,7 +736,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 				{/* ================ COVER IMAGE ===============  */}
 
 				<section className="mb-4">
-					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
+					<div className="rounded-lg bg-accent p-6 dark:bg-[#030a20] sm:p-8">
 						<h3 className="text-xl font-semibold">Cover Image</h3>
 						<p className=" mb-4 text-sm text-gray-400"> Upload a cover image for your event.</p>
 
@@ -756,8 +769,8 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 
 				{/* ============================ ADD COLLABORATORS ============================ */}
 				<section className="mb-4">
-					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
-						<div className="kitems-center flex flex-col gap-4 sm:flex-row">
+					<div className="rounded-lg bg-accent p-6 dark:bg-[#030a20] sm:p-8">
+						<div className="flex flex-col items-center gap-4 sm:flex-row">
 							<div>
 								<h3 className="text-xl font-semibold">Invite Club Collaborators</h3>
 								<p className="mb-4 text-sm text-gray-400">
@@ -776,7 +789,10 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 								<h4 className="text-lg font-semibold">Pending Club Invites</h4>
 								<ul>
 									{collaboratorInvites.map((invite) => (
-										<li key={invite.id} className="flex items-center space-x-2">
+										<li
+											key={invite.id}
+											className="flex items-center justify-between space-x-2 space-y-6"
+										>
 											<div className="flex items-center py-2">
 												<Link href={`/clubs/${invite.club.id}`}>
 													<img
@@ -808,7 +824,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 
 				{/* ============================ ADD ORGANIZERS ============================ */}
 				<section className="mb-4">
-					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
+					<div className="rounded-lg bg-accent p-6 dark:bg-[#030a20] sm:p-8">
 						<div className="flex flex-col items-center gap-4 sm:flex-row">
 							<div>
 								<h3 className="text-xl font-semibold">Add Organizers</h3>
@@ -865,7 +881,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 				</section>
 				{/*TODO Attach files section DO LATER*/}
 				<section>
-					<div className="rounded-lg bg-[#030a20] p-6 sm:p-8">
+					<div className="rounded-lg bg-accent p-6 dark:bg-[#030a20] sm:p-8">
 						<h3 className="text-xl font-semibold">Attach Files</h3>
 						<p className="mb-4 text-sm text-gray-400">Attach files to your event.</p>
 						<Input
@@ -879,7 +895,7 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 				</section>
 
 				<section className="my-4">
-					<Card className="bg-[#030a20]">
+					<Card className="bg-accent dark:bg-[#030a20]">
 						<CardHeader>
 							{' '}
 							<CardTitle>Participants</CardTitle>
@@ -958,7 +974,12 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 														<Button variant={'destructive'} onClick={confirmKickMember}>
 															Yes, kick the user
 														</Button>
-														<Button onClick={() => setIsKickDialogOpen(false)}>No, cancel</Button>
+														<Button
+															className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+															onClick={() => setIsKickDialogOpen(false)}
+														>
+															No, cancel
+														</Button>
 													</DialogContent>
 												</Dialog>
 												<Dialog open={isBanDialogOpen} onOpenChange={setIsBanDialogOpen}>
@@ -978,7 +999,12 @@ export default function EditEventPage({ params }: { params: { eventID: string } 
 														<Button variant={'destructive'} onClick={confirmBanMember}>
 															Yes, ban the user
 														</Button>
-														<Button onClick={() => setIsBanDialogOpen(false)}>No, cancel</Button>
+														<Button
+															className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+															onClick={() => setIsBanDialogOpen(false)}
+														>
+															No, cancel
+														</Button>
 													</DialogContent>
 												</Dialog>
 											</TableRow>
