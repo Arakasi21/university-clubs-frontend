@@ -101,9 +101,9 @@ const AvatarEditForm: React.FC<AvatarEditFormProps> = ({ user, ...props }) => {
 							onClick={() => {
 								inputRef.current?.click()
 							}}
-							className="rounded-2 absolute bottom-0 left-0 mb-2 ml-2 border px-2 py-1"
+							className="rounded-2 absolute -bottom-6 -left-5 h-8 w-20 text-wrap border bg-blue-200 text-xs text-gray-900 hover:bg-blue-200/90 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90 sm:bottom-0 sm:left-0 sm:mb-2 sm:ml-2 sm:h-10 sm:w-36 sm:px-2 sm:py-1 sm:text-sm"
 						>
-							Upload a photo..
+							Upload photo..
 						</Button>
 					</div>
 

@@ -22,7 +22,7 @@ export default function Members({
 	const pendingRequests = usePendingJoinRequests(club?.id ?? 0)
 	return (
 		<div>
-			<Card className="bg-accent" x-chunk="dashboard-05-chunk-3 ">
+			<Card className="bg-accent dark:bg-[#0D1525]" x-chunk="dashboard-05-chunk-3 ">
 				<CardHeader className="flex gap-4">
 					<div className="flex items-center justify-between gap-4">
 						<div className="flex items-center">

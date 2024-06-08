@@ -113,7 +113,7 @@ function Page({ params }: { params: { clubID: number } }) {
 					</div>
 				</div>
 				<Tabs className=" grid flex-1 items-start py-2" defaultValue="settings">
-					<TabsList className="grid w-full grid-cols-5 ">
+					<TabsList className="grid w-full grid-cols-5 border">
 						<Link
 							className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3  text-xs font-medium ring-offset-background sm:text-sm"
 							href={`/clubs/${club?.id}`}
