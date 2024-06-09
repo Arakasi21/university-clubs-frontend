@@ -333,7 +333,7 @@ export default function Page({ params }: { params: { eventID: string } }) {
 								{isUserOrganizer && (
 									<Link className="w-full" href={`/events/${event.id}/edit`}>
 										<Button
-											className="w-full bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
+											className="w-full bg-gray-500 text-white hover:bg-gray-700"
 											variant="default"
 										>
 											Edit Event
@@ -356,11 +356,7 @@ export default function Page({ params }: { params: { eventID: string } }) {
 
 								{participantStatus === 'UNKNOWN' && event.status === 'IN_PROGRESS' && (
 									<div className="flex gap-2">
-										<Button
-											className="mt-2 flex-1 bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90"
-											variant="default"
-											onClick={participateEvent}
-										>
+										<Button className="mt-2 flex-1" variant="default" onClick={participateEvent}>
 											Participate
 										</Button>
 									</div>

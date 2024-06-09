@@ -148,17 +148,6 @@ function Page({ params }: { params: { clubID: number } }) {
 										</p>
 									</CardContent>
 								</Card>
-								<Card className="bg-accent dark:bg-[#0c1125]">
-									<CardHeader>
-										<CardTitle>Club Achievements</CardTitle>
-									</CardHeader>
-									<CardContent>
-										<p className="flex flex-col items-center justify-items-center text-gray-400 text-muted-foreground">
-											<Medal className="h-14 w-14 border-gray-400 pb-2" />
-											No achievements
-										</p>
-									</CardContent>
-								</Card>
 							</div>
 						</div>
 					</div>
