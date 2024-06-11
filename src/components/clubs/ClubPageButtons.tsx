@@ -29,9 +29,9 @@ export default function ClubPageButtons(props: {
 									Settings
 								</Button>
 							</Link>
-							<Link href={`/clubs/${props.club?.id}/todo`}>
+							<Link href={`/clubs/${props.club?.id}/posts`}>
 								<Button className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90">
-									Notion Link
+									Posts
 								</Button>
 							</Link>
 						</div>
