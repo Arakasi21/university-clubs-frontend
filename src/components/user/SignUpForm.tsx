@@ -63,13 +63,9 @@ export default function SignUp() {
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(values),
 			})
-
 			if (!response.ok) {
 				let errorData = await response.json()
-
-				toast.error('Signup error', {
-					description: errorData.error,
-				})
+				throw new Error(errorData.error)
 			}
 
 			toast('Signup successful!', {
@@ -79,8 +75,10 @@ export default function SignUp() {
 				},
 			})
 			router.push('/')
-		} catch (error) {
-			toast.error('ERROR', { description: 'An error occurred while trying to Sign up.' })
+		} catch (error: any) {
+			toast.error('Signup error', {
+				description: error.message,
+			})
 		}
 	}
 
