@@ -8,7 +8,7 @@ function Page() {
 	return (
 		<>
 			<Nav />
-			<div className="mx-44 grid h-screen  grid-cols-[300px_1fr_300px]">
+			<div className="mx-44 grid h-screen grid-cols-[300px_1fr_300px]">
 				<Events />
 
 				<Posts />
