@@ -20,11 +20,11 @@ function Page() {
 							UCMS AITUSA DASHBOARD
 						</span>
 					</div>
-					<TabsList className="grid w-full grid-cols-4">
+					<TabsList className="grid w-full grid-cols-3">
 						<TabsTrigger value="students">Students</TabsTrigger>
 						<TabsTrigger value="clubs">Clubs</TabsTrigger>
 						<TabsTrigger value="events">Events</TabsTrigger>
-						<TabsTrigger value="reports">Reports</TabsTrigger>
+						{/*<TabsTrigger value="reports">Reports</TabsTrigger>*/}
 					</TabsList>
 					<TabsContent value="students" className="w-full overflow-x-auto">
 						<Students />
@@ -35,9 +35,9 @@ function Page() {
 					<TabsContent value="events" className="w-full overflow-x-auto">
 						<Events />
 					</TabsContent>
-					<TabsContent value="reports">
-						<Reports />
-					</TabsContent>
+					{/*<TabsContent value="reports">*/}
+					{/*	<Reports />*/}
+					{/*</TabsContent>*/}
 				</Tabs>
 			</div>
 		</>
