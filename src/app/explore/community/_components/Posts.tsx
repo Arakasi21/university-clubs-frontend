@@ -33,7 +33,7 @@ function Posts() {
 	}, [fetchPosts])
 
 	return (
-		<div className="overflow-auto bg-white p-4 dark:bg-gray-950">
+		<div className="overflow-auto bg-white p-4 dark:bg-[#020817]">
 			<h2 className="mb-4 text-lg font-semibold">Posts</h2>
 			<div className="grid gap-4">
 				{loadingPosts ? (
