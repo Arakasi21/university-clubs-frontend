@@ -112,7 +112,7 @@ export function InviteOrganizerDialog({
 	)
 
 	const renderPaginationItems = () => {
-		let pages: number[] = []
+		let pages: number[]
 		if (pageNumber < 4) {
 			pages = [1, 2, 3, 4].filter((pageNumber) => pageNumber <= pageNumber || hasMorePages)
 		} else {
