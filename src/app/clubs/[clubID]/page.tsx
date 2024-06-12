@@ -77,7 +77,7 @@ function Page({ params }: { params: { clubID: number } }) {
 								className="z-1 h-full w-full object-cover object-center "
 								height={600}
 								src={club?.banner_url}
-								alt={club?.name}
+								alt={''}
 								style={{
 									aspectRatio: '1920/600',
 									objectFit: 'cover',
