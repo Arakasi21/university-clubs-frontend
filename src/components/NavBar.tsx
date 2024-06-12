@@ -48,7 +48,7 @@ export default function Nav() {
 					</Link>
 					<Link
 						className="rounded-md px-3 py-2 text-sm font-medium transition duration-300 hover:bg-gray-200 dark:hover:bg-accent"
-						href="#"
+						href={'/explore/community'}
 					>
 						Community
 					</Link>
@@ -97,7 +97,7 @@ export default function Nav() {
 								</Link>
 								<Link
 									className="rounded-md px-3 py-2 text-sm font-medium hover:bg-[#040a2f]"
-									href="#"
+									href={'/explore/community'}
 								>
 									Community
 								</Link>
