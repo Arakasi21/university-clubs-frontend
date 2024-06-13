@@ -199,6 +199,9 @@ function Page({ params }: { params: { clubID: number } }) {
 										onClick1={handleLeaveClub}
 									/>
 								</div>
+								<div className="flex flex-row">
+									<p className="mx-8 mb-3">instagram.com</p>{' '}
+								</div>
 							</div>
 							{/*CLUBS MEMBERS CARD*/}
 							<ClubMembersCard club={club!} clubMembers={clubMembers!} />

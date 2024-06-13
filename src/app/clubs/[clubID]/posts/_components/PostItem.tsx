@@ -432,39 +432,58 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 								</div>
 							</div>
 						</div>
-						<p className="text-gray-500">{post.description}</p>
-						<div className="flex items-center gap-2">
-							{post.tags?.map((tag) => (
-								<Badge
-									key={tag}
-									variant="default"
-									className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#1B2436] dark:text-white dark:hover:bg-[#1B2436]/80"
-								>
-									{tag}
-								</Badge>
-							))}
-						</div>
 						{post.cover_images?.length === 0 && <div>No images attached.</div>}
 						<div className="relative">
 							<Carousel>
 								<CarouselContent>
-									{cover_images.map((image, index) => (
-										<CarouselItem key={index} className="h-full w-full">
+									{post.cover_images?.map((image, index) => (
+										<CarouselItem key={index} className="relative h-full w-full rounded-xl">
+											<div className="absolute inset-0 h-full w-full overflow-hidden rounded-xl">
+												<img
+													src={image.url}
+													alt={image.name}
+													className="absolute inset-0 h-full w-full rounded-xl object-cover blur-2xl filter"
+													style={{
+														transform: 'scale(1.1)', // Slightly scale up the background image
+													}}
+												/>
+												<div className="absolute inset-0 h-full w-full bg-black opacity-50"></div>{' '}
+												{/* Optional dark overlay for better contrast */}
+											</div>
 											<img
 												src={image.url}
 												alt={image.name}
-												className="h-full max-h-[500px] w-full rounded-xl object-cover"
+												className="relative z-10 h-full max-h-[500px] w-full rounded-xl object-scale-down"
 											/>
 										</CarouselItem>
 									))}
 								</CarouselContent>
-								{cover_images.length > 1 && (
+								{post.cover_images && post.cover_images.length > 1 && (
 									<>
 										<CarouselPrevious>Previous</CarouselPrevious>
 										<CarouselNext>Next</CarouselNext>
 									</>
 								)}
 							</Carousel>
+						</div>
+						<p
+							className="mb-4 whitespace-pre-line text-sm text-gray-500 dark:text-gray-400"
+							dangerouslySetInnerHTML={{ __html: post.description }}
+						></p>
+						<div className="flex items-center gap-2">
+							<p className="text-gray-500 dark:text-gray-400">tags: </p>
+							{post.tags ? (
+								post.tags.map((tag) => (
+									<div
+										key={tag}
+										className="py-1text-sm rounded-md bg-gray-100 px-2 font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400"
+									>
+										#{tag}
+									</div>
+								))
+							) : (
+								<span>No tags</span>
+							)}
 						</div>
 						{post.attached_files?.length === 0 && <div>No files attached.</div>}
 						<div className="flex items-center gap-2">
