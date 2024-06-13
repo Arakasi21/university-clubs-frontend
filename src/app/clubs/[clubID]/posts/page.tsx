@@ -10,6 +10,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Post } from '@/types/post'
 import { DialogCreatePost } from '@/components/clubs/posts/DialogCreatePost'
 import PostItem from '@/app/clubs/[clubID]/posts/_components/PostItem'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const axiosAuth = useAxiosInterceptor()
@@ -84,6 +86,13 @@ function Page({ params }: { params: { clubID: number } }) {
 								<CardTitle>{club?.name}</CardTitle>
 								<CardDescription>{club?.description}</CardDescription>
 							</div>
+						</div>
+						<div>
+							<Link href={`/clubs/${club?.id}`}>
+								<Button size="sm" variant="secondary">
+									Back to Club Page
+								</Button>
+							</Link>
 						</div>
 					</div>
 				</div>

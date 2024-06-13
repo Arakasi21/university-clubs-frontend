@@ -1,7 +1,6 @@
 'use client'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { PaperclipIcon, Share2Icon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { Post } from '@/types/post'
@@ -13,7 +12,6 @@ import {
 	CarouselNext,
 	CarouselPrevious,
 } from '@/components/ui/carousel'
-import ReactMarkdown from 'react-markdown'
 import { truncateText } from '@/helpers/truncateText'
 
 function Posts() {
@@ -52,15 +50,29 @@ function Posts() {
 						<div key={post.id}>
 							<Card>
 								<CardHeader>
-									<div className="flex items-center gap-3">
-										<img
-											src={post.club.logo_url}
-											alt="Club Logo"
-											width={40}
-											height={40}
-											className="rounded-full"
-										/>
-										<div className="font-medium">{post.club.name}</div>
+									<div className="flex justify-between px-4">
+										<div className="flex items-center gap-3">
+											<img
+												src={post.club.logo_url}
+												alt="Club Logo"
+												width={40}
+												height={40}
+												className="rounded-full"
+											/>
+											<Link href={`/clubs/${post.club.id}`}>
+												<div className="font-medium">{post.club.name}</div>
+											</Link>
+										</div>
+										<div className="flex items-center gap-2 text-sm text-gray-500">
+											<div>
+												Created:{' '}
+												{new Date(post.created_at).toLocaleDateString('en-US', {
+													year: 'numeric',
+													month: 'long',
+													day: 'numeric',
+												})}
+											</div>
+										</div>
 									</div>
 								</CardHeader>
 								<CardContent className="p-8 pt-0">
@@ -76,7 +88,7 @@ function Posts() {
 																alt={image.name}
 																className="absolute inset-0 h-full w-full rounded-xl object-cover blur-2xl filter"
 																style={{
-																	transform: 'scale(1.1)', // Slightly scale up the background image
+																	transform: 'scale(1.1)',
 																}}
 															/>
 															<div className="absolute inset-0 h-full w-full bg-black opacity-50"></div>{' '}
@@ -117,18 +129,15 @@ function Posts() {
 										<Link href={`/posts/${post.id}`}>{post.title}</Link>
 									</h3>
 									<p
-										className="mb-4 line-clamp-4 overflow-hidden whitespace-pre-line text-sm text-gray-500 dark:text-gray-400"
+										className="mb-2 line-clamp-4 overflow-hidden whitespace-pre-line text-sm text-gray-500 dark:text-gray-400"
 										dangerouslySetInnerHTML={{ __html: truncateText(post.description, 50) }}
 									></p>
 									<div className="flex items-center gap-2">
-										<Button variant="ghost" size="icon">
-											<PaperclipIcon className="h-4 w-4" />
-											<span className="sr-only">Attachments</span>
-										</Button>
-										<Button variant="ghost" size="icon">
-											<Share2Icon className="h-4 w-4" />
-											<span className="sr-only">Share</span>
-										</Button>
+										<Link href={`/posts/${post.id}`}>
+											<Button variant={'link'}>
+												<p>&rarr; Go to post</p>
+											</Button>
+										</Link>
 									</div>
 								</CardContent>
 							</Card>

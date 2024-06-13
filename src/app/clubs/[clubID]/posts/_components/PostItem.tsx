@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import {
 	DownloadIcon,
 	FileIcon,
@@ -39,7 +38,6 @@ import {
 	CarouselPrevious,
 } from '@/components/ui/carousel'
 import { Label } from '@/components/ui/label'
-import { setState } from 'jest-circus'
 
 export type PostItemProps = {
 	post: Post
@@ -57,7 +55,6 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 	const [isDropdownShown, setIsDropdownShown] = useState(false)
 	const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
 	const [isDragging, setIsDragging] = useState(false)
-	const [isUpdating, setIsUpdating] = useState(false)
 
 	const [newTag, setNewTag] = useState('')
 	const [imageFile, setImageFile] = useState<File>()
@@ -204,6 +201,7 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 					type: uploadedImage.type,
 					position: cover_images.length + 1,
 				})
+				setIsDialogOpen(false)
 			})
 		} catch (e) {
 			toast.error('Failed to change cover image')
@@ -322,10 +320,10 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 				return
 			}
 
-			toast.success('Image successfully uploaded!')
+			toast.success('File successfully uploaded!')
 			return new Promise<PostFile>((resolve) => resolve(response.data as PostFile))
 		} catch (error) {
-			toast.error('Failed to upload image')
+			toast.error('Failed to upload file')
 		}
 	}
 
@@ -340,10 +338,10 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 				return
 			}
 
-			toast.success('Image successfully deleted!')
+			toast.success('File successfully deleted!')
 			return new Promise<PostFile>((resolve) => resolve(response.data as PostFile))
 		} catch (error) {
-			toast.error('Failed to delete image')
+			toast.error('Failed to delete file')
 		}
 	}
 
@@ -511,6 +509,11 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 							))}
 						</div>
 						<div className="flex items-center justify-end gap-2">
+							<Link href={`/posts/${post.id}`}>
+								<Button size="sm" variant="default">
+									View
+								</Button>
+							</Link>
 							<Button size="sm" variant="outline" onClick={handleEditPost}>
 								<PencilIcon className="mr-2 h-4 w-4" />
 								Edit
