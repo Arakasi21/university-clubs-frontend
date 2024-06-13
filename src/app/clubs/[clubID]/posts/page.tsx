@@ -22,6 +22,10 @@ function Page({ params }: { params: { clubID: number } }) {
 		user: user,
 	})
 
+	const handleDeletePost = (postId: string) => {
+		setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId))
+	}
+
 	const fetchClubPosts = useCallback(async () => {
 		try {
 			const response = await axiosAuth.get(
@@ -111,9 +115,7 @@ function Page({ params }: { params: { clubID: number } }) {
 										post={post}
 										key={post.id}
 										onUpdate={onUpdate}
-										onDelete={function (postId: string): void {
-											throw new Error('Function not implemented.')
-										}}
+										onDelete={handleDeletePost}
 									/>
 								))
 							)}
