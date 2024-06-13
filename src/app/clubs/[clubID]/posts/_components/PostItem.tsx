@@ -1,7 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { PaperclipIcon, PencilIcon, TrashIcon, UploadCloudIcon, XIcon } from 'lucide-react'
+import {
+	PaperclipIcon,
+	PencilIcon,
+	PencilLineIcon,
+	TrashIcon,
+	UploadCloudIcon,
+	XIcon,
+} from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -32,6 +39,7 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 	const [isChanged, setIsChanged] = useState(false)
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
 	const [isDropdownShown, setIsDropdownShown] = useState(false)
+	const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
 
 	const [newTag, setNewTag] = useState('')
 	const [imageFile, setImageFile] = useState<File | undefined>(undefined)
@@ -252,6 +260,42 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 		setCoverImages((presState) => presState.filter((cv) => cv.url != url))
 	}
 
+	const [isDragging, setIsDragging] = useState(false)
+	const [draggedItem, setDraggedItem] = useState<Image>()
+
+	const handleDragStart = (e: any, image: Image) => {
+		setIsDragging(true)
+		setDraggedItem(image)
+		e.dataTransfer.effectAllowed = 'move'
+	}
+	const handleDragOver = (e: any) => {
+		e.preventDefault()
+		e.dataTransfer.dropEffect = 'move'
+	}
+	const handleDrop = (e: any, targetImage: Image) => {
+		e.preventDefault()
+		setIsDragging(false)
+		const updatedImages = cover_images.map((image) => {
+			if (image.url === draggedItem?.url) {
+				return { ...targetImage, position: targetImage.position }
+			} else if (image.url === targetImage.url) {
+				return { ...draggedItem, position: image.position }
+			} else {
+				return image
+			}
+		}) as Image[]
+		updatedImages.sort((a, b) => a.position - b.position)
+		setCoverImages(updatedImages)
+	}
+	const handleDragEnd = () => {
+		setIsDragging(false)
+		setDraggedItem(undefined)
+	}
+
+	const handleBack = () => {
+		setIsEditDialogOpen(false)
+	}
+
 	useEffect(() => {
 		haveChanged()
 	}, [title, description, tags, attached_files, cover_images])
@@ -297,18 +341,26 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 							))}
 						</div>
 						{post.cover_images?.length === 0 && <div>No images attached.</div>}
-						<div className="grid grid-cols-3 gap-4">
-							{post.cover_images?.map((image) => (
-								<div className="flex flex-col gap-2" key={image.url}>
-									<img
-										src={image.url}
-										alt="Post Cover"
-										width={400}
-										height={300}
-										className="aspect-[4/3] rounded-lg object-cover"
-									/>
-								</div>
-							))}
+						<div className="relative">
+							<Carousel>
+								<CarouselContent>
+									{cover_images.map((image, index) => (
+										<CarouselItem key={index} className="h-full w-full">
+											<img
+												src={image.url}
+												alt={image.name}
+												className="h-full max-h-[500px] w-full rounded-xl object-cover"
+											/>
+										</CarouselItem>
+									))}
+								</CarouselContent>
+								{cover_images.length > 1 && (
+									<>
+										<CarouselPrevious>Previous</CarouselPrevious>
+										<CarouselNext>Next</CarouselNext>
+									</>
+								)}
+							</Carousel>
 						</div>
 						{post.attached_files?.length === 0 && <div>No files attached.</div>}
 						<div className="flex items-center gap-2">
@@ -342,27 +394,32 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 								<p className=" mb-4 text-sm text-gray-400"> Upload a cover image for your event.</p>
 
 								{cover_images && cover_images.length > 0 ? (
-									<Carousel className="w-full max-w-xs">
+									<Carousel className="w-full max-w-full">
 										<CarouselContent onClick={() => setIsDropdownShown(!isDropdownShown)}>
 											{cover_images
 												.sort((a, b) => a.position - b.position)
 												.map((image) => (
-													<CarouselItem key={image.position}>
-														<div className="w-full p-1">
-															<Card className="w-full">
-																<CardContent className="w-fullflex relative aspect-square items-center justify-center p-6">
+													<CarouselItem key={image.position} className="h-full w-full">
+														<div className="h-full w-full p-1">
+															<Card className="h-full w-full">
+																<CardContent className="relative flex h-full w-full items-center justify-center p-6">
 																	<Button
 																		variant="ghost"
 																		size="icon"
 																		className="absolute right-2 top-2 z-10 rounded-full bg-gray-900/50 text-gray-50 hover:bg-gray-900 dark:bg-gray-50/50 dark:text-gray-900 dark:hover:bg-gray-50"
 																		onClick={() => {
-																			handleDeleteCoverImage(image)
+																			setIsEditDialogOpen(true)
 																		}}
 																	>
-																		<XIcon className="h-4 w-4" />
-																		<span className="sr-only">Delete</span>
+																		<PencilLineIcon className="h-4 w-4" />
+																		<span className="sr-only">Edit</span>
 																	</Button>
-																	<img className=" object-cover" src={image.url} alt="alt" />
+
+																	<img
+																		className="h-full max-h-[500px] w-full rounded-xl object-cover"
+																		src={image.url}
+																		alt="alt"
+																	/>
 																</CardContent>
 															</Card>
 														</div>
@@ -371,23 +428,6 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 										</CarouselContent>
 										<CarouselPrevious />
 										<CarouselNext />
-
-										{isDropdownShown && (
-											<div className="absolute right-4 top-12 z-10 w-48 rounded-md bg-white py-2 shadow-lg dark:bg-gray-800">
-												<button
-													className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700"
-													onClick={() => {}} //todo: handle delete cover image
-												>
-													Delete Cover Image
-												</button>
-												<button
-													className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700"
-													onClick={handleChangeImage}
-												>
-													Change Cover Image
-												</button>
-											</div>
-										)}
 									</Carousel>
 								) : (
 									<button
@@ -442,9 +482,74 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 												/>
 											</div>
 										</div>
-										<Button type="button" onClick={handleUpdateCoverImage} className="w-max">
+										<Button
+											type="button"
+											onClick={handleUpdateCoverImage}
+											className="w-max bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#1B2436] dark:text-white dark:hover:bg-[#1B2436]/80"
+										>
 											Update
 										</Button>
+									</DialogContent>
+								</Dialog>
+								<Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+									<DialogContent className="flex max-w-[80vw] flex-col md:max-w-[70vw] lg:max-w-[60vw]">
+										<div className="flex w-full">
+											<div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+												{cover_images
+													.sort((a, b) => a.position - b.position)
+													.map((image) => (
+														<div
+															key={image.position}
+															className={`relative max-h-full max-w-full overflow-hidden rounded-lg border ${
+																isDragging && draggedItem?.url === image.url
+																	? 'cursor-grabbing opacity-50'
+																	: 'cursor-grab'
+															}`}
+															draggable
+															onDragStart={(e) => handleDragStart(e, image)}
+															onDragOver={handleDragOver}
+															onDrop={(e) => handleDrop(e, image)}
+															onDragEnd={handleDragEnd}
+														>
+															<img
+																src={image.url}
+																alt={`Image ${image.name}`}
+																className="absolute inset-0 h-[300px] w-full object-cover blur-lg filter"
+															/>
+															<img
+																src={image.url}
+																alt={`Image ${image.name}`}
+																className="relative m-auto h-[230px] rounded-md object-scale-down drop-shadow-md"
+															/>
+															<div className="absolute right-2 top-2 flex gap-2">
+																<Button
+																	className="hover:bg-accent-foreground/40"
+																	variant="ghost"
+																	size="icon"
+																	onClick={() => handleDeleteCoverImage(image)}
+																>
+																	<TrashIcon className="  h-5 w-5 text-red-700 dark:text-red-500" />
+																	<span className="sr-only">Delete</span>
+																</Button>
+															</div>
+														</div>
+													))}
+											</div>
+										</div>
+										<div className="flex items-center justify-between border-t bg-white p-4 dark:bg-gray-950">
+											<Button variant="outline" onClick={handleBack}>
+												Back
+											</Button>
+											<Button
+												className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#1B2436] dark:text-white dark:hover:bg-[#1B2436]/80"
+												onClick={handleSavePost}
+											>
+												Save
+											</Button>
+											<Button variant="outline" onClick={handleChangeImage}>
+												Add more photos
+											</Button>
+										</div>
 									</DialogContent>
 								</Dialog>
 							</div>
