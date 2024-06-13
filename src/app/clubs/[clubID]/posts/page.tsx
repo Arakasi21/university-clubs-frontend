@@ -119,14 +119,17 @@ function Page({ params }: { params: { clubID: number } }) {
 							{posts.length === 0 ? (
 								<div>No posts available.</div>
 							) : (
-								posts.map((post) => (
-									<PostItem
-										post={post}
-										key={post.id}
-										onUpdate={onUpdate}
-										onDelete={handleDeletePost}
-									/>
-								))
+								posts
+									?.slice()
+									.reverse()
+									.map((post) => (
+										<PostItem
+											post={post}
+											key={post.id}
+											onUpdate={onUpdate}
+											onDelete={handleDeletePost}
+										/>
+									))
 							)}
 						</div>
 					</CardContent>

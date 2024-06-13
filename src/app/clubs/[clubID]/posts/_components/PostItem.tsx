@@ -55,6 +55,7 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 	const [isDropdownShown, setIsDropdownShown] = useState(false)
 	const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
 	const [isDragging, setIsDragging] = useState(false)
+	const [isExpanded, setIsExpanded] = useState(false)
 
 	const [newTag, setNewTag] = useState('')
 	const [imageFile, setImageFile] = useState<File>()
@@ -471,10 +472,6 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 								)}
 							</Carousel>
 						</div>
-						<p
-							className="mb-4 whitespace-pre-line text-sm text-gray-500 dark:text-gray-400"
-							dangerouslySetInnerHTML={{ __html: post.description }}
-						></p>
 						<div className="flex items-center gap-2">
 							<p className="text-gray-500 dark:text-gray-400">tags: </p>
 							{post.tags ? (
@@ -489,6 +486,20 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 							) : (
 								<span>No tags</span>
 							)}
+						</div>
+						<div>
+							{isExpanded ? (
+								<p className="mb-4 whitespace-pre-line text-sm text-gray-500 dark:text-gray-400">
+									{post.description}
+								</p>
+							) : (
+								<p className="mb-4 line-clamp-4 overflow-hidden whitespace-pre-line text-sm text-gray-500 dark:text-gray-400">
+									{post.description}
+								</p>
+							)}
+							<Button size="sm" variant="outline" onClick={() => setIsExpanded(!isExpanded)}>
+								{isExpanded ? 'Show Less' : 'Read More'}
+							</Button>
 						</div>
 						{post.attached_files?.length === 0 && <div>No files attached.</div>}
 						<div className="flex items-center gap-2">
