@@ -1,9 +1,10 @@
-import { Permissions } from '@/types/permissions'
-import { hasPermission } from '@/helpers/permissions'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import React from 'react'
 import { Club } from '@/types/club'
+import { hasPermission } from '@/helpers/permissions'
+import { Permissions } from '@/types/permissions'
+import useUserRolesStore from '@/store/useUserRoles'
 
 export default function ClubPageButtons(props: {
 	memberPerms: Permissions
@@ -29,12 +30,14 @@ export default function ClubPageButtons(props: {
 									Settings
 								</Button>
 							</Link>
-							<Link href={`/clubs/${props.club?.id}/posts`}>
-								<Button className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90">
-									Posts
-								</Button>
-							</Link>
 						</div>
+					)}
+					{hasPermission(props.memberPerms, Permissions.manage_posts) && (
+						<Link href={`/clubs/${props.club?.id}/posts`}>
+							<Button className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#ffffff] dark:hover:bg-[#ffffff]/90">
+								Posts
+							</Button>
+						</Link>
 					)}
 					<div>
 						{props.memberStatus === 'NOT_MEMBER' && (

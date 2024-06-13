@@ -12,10 +12,14 @@ import { DialogCreatePost } from '@/components/clubs/posts/DialogCreatePost'
 import PostItem from '@/app/clubs/[clubID]/posts/_components/PostItem'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import useUserRolesStore from '@/store/useUserRoles'
+import { hasPermission } from '@/helpers/permissions'
+import { Permissions } from '@/types/permissions'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const axiosAuth = useAxiosInterceptor()
 	const { user } = useUserStore()
+	const { permissions } = useUserRolesStore()
 
 	const [posts, setPosts] = useState<Post[]>([])
 	const [loading, setLoading] = useState(true)
@@ -109,29 +113,39 @@ function Page({ params }: { params: { clubID: number } }) {
 							</div>
 							<div className="flex flex-row gap-3">
 								<div className="flex gap-3">
-									{club && <DialogCreatePost club={club} onCreateSuccess={fetchClubPosts} />}
+									{hasPermission(permissions, Permissions.manage_posts) ? (
+										club && <DialogCreatePost club={club} onCreateSuccess={fetchClubPosts} />
+									) : (
+										<Button size="sm" variant="secondary" disabled>
+											Create Post
+										</Button>
+									)}
 								</div>
 							</div>
 						</div>
 					</CardHeader>
 					<CardContent>
-						<div className="grid gap-6">
-							{posts.length === 0 ? (
-								<div>No posts available.</div>
-							) : (
-								posts
-									?.slice()
-									.reverse()
-									.map((post) => (
-										<PostItem
-											post={post}
-											key={post.id}
-											onUpdate={onUpdate}
-											onDelete={handleDeletePost}
-										/>
-									))
-							)}
-						</div>
+						{hasPermission(permissions, Permissions.manage_posts) ? (
+							<div className="grid gap-6">
+								{posts.length === 0 ? (
+									<div>No posts available.</div>
+								) : (
+									posts
+										?.slice()
+										.reverse()
+										.map((post) => (
+											<PostItem
+												post={post}
+												key={post.id}
+												onUpdate={onUpdate}
+												onDelete={handleDeletePost}
+											/>
+										))
+								)}
+							</div>
+						) : (
+							<p>no access</p>
+						)}
 					</CardContent>
 				</Card>
 			</div>
