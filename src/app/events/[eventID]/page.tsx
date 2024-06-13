@@ -225,7 +225,7 @@ export default function Page({ params }: { params: { eventID: string } }) {
 								)}
 							</div>
 							<div className="mt-8 space-y-2">
-								<h1 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl lg:text-5xl">
+								<h1 className="text-xl font-bold text-gray-900 dark:text-white md:text-2xl lg:text-3xl">
 									{event.title || event.id}
 								</h1>
 
@@ -245,7 +245,12 @@ export default function Page({ params }: { params: { eventID: string } }) {
 								</div>
 
 								<div className="prose max-w-[800px] text-gray-500 dark:text-gray-300">
-									<p>{event.description || 'No event description'}</p>
+									<p
+										className="text-md mb-4 whitespace-pre-line text-gray-500 dark:text-gray-400"
+										dangerouslySetInnerHTML={{
+											__html: event.description || 'No event description',
+										}}
+									></p>
 								</div>
 							</div>
 						</div>
