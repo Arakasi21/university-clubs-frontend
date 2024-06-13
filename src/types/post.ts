@@ -7,7 +7,7 @@ export type Post = {
 	created_at: string
 	updated_at: string
 	cover_images?: Image[]
-	attached_files?: File[]
+	attached_files?: PostFile[]
 }
 export type Image = {
 	url: string
@@ -16,7 +16,7 @@ export type Image = {
 	position: number
 }
 
-export type File = {
+export type PostFile = {
 	url: string
 	name: string
 	type: string

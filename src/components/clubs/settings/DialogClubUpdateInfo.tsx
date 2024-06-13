@@ -34,6 +34,7 @@ const formSchema = z.object({
 	name: z.string(),
 	description: z.string(),
 	club_type: z.string(),
+	social_links: z.array(z.string()).max(4, 'Maximum of 4 social links'),
 })
 
 const ClubInfoEditForm: React.FC = (props) => {
@@ -45,6 +46,7 @@ const ClubInfoEditForm: React.FC = (props) => {
 			name: club?.name,
 			description: club?.description,
 			club_type: club?.club_type,
+			social_links: club?.social_links || [''], // Default value for social links
 		},
 	})
 
@@ -120,7 +122,53 @@ const ClubInfoEditForm: React.FC = (props) => {
 							</FormItem>
 						)}
 					/>
-					<Button type="submit" className="w-full">
+					<FormField
+						control={form.control}
+						name="social_links"
+						render={({ field }) => (
+							<FormItem className="pb-4">
+								<FormLabel>Social Links</FormLabel>
+								{field.value.map((link, index) => (
+									<div key={index} className="flex items-center space-x-2">
+										<FormControl>
+											<Input
+												value={link}
+												onChange={(e) => {
+													const newLinks = [...field.value]
+													newLinks[index] = e.target.value
+													field.onChange(newLinks)
+												}}
+											/>
+										</FormControl>
+										<Button
+											className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#1B2436] dark:text-white dark:hover:bg-[#1B2436]/80"
+											type="button"
+											onClick={() => {
+												const newLinks = field.value.filter((_, i) => i !== index)
+												field.onChange(newLinks)
+											}}
+										>
+											Remove
+										</Button>
+									</div>
+								))}
+								{field.value.length < 4 && (
+									<Button
+										className="bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#1B2436] dark:text-white dark:hover:bg-[#1B2436]/80"
+										type="button"
+										onClick={() => field.onChange([...field.value, ''])}
+									>
+										Add Link
+									</Button>
+								)}
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<Button
+						type="submit"
+						className="w-full bg-blue-200 text-gray-900 hover:bg-blue-200/70 dark:bg-[#1B2436] dark:text-white dark:hover:bg-[#1B2436]/80"
+					>
 						Update Club Info
 					</Button>
 				</form>

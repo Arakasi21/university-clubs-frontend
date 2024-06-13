@@ -7,15 +7,27 @@ import useUserStore from '@/store/user'
 import useUserRolesStore from '@/store/useUserRoles'
 import ClubImage from '@/components/clubs/ClubImage'
 import Nav from '@/components/NavBar'
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import SceletonClub from '@/components/Skeletons/SkeletonClub'
-import { Calendar, Inbox, Medal } from 'lucide-react'
 import { Event } from '@/types/event'
+import { Post } from '@/types/post'
 import ClubMembersCard from '@/components/clubs/ClubMembersCard'
 import ClubMembersDialog from '@/components/clubs/ClubMembersDialog'
 import ClubPageButtons from '@/components/clubs/ClubPageButtons'
 import BackgroundClubImage from '@/components/clubs/BackgroundClubImage'
 import ClubEvent from '@/components/clubs/ClubEvent'
+import {
+	FaFacebookF,
+	FaGithub,
+	FaGlobe,
+	FaInstagram,
+	FaLinkedinIn,
+	FaTelegramPlane,
+	FaTiktok,
+	FaTwitter,
+	FaYoutube,
+} from 'react-icons/fa'
+import ClubPosts from '@/components/clubs/ClubPosts'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { isLoggedIn, user } = useUserStore()
@@ -38,6 +50,7 @@ function Page({ params }: { params: { clubID: number } }) {
 	const openClubMembersDialog = () => setIsDialogOpen(true)
 	const closeDialog = () => setIsDialogOpen(false)
 	const [clubEvents, setClubEvents] = useState<Event[] | null>([])
+	const [clubPosts, setClubPosts] = useState<Post[] | null>([])
 
 	const fetchClubEvents = useCallback(async () => {
 		try {
@@ -59,9 +72,67 @@ function Page({ params }: { params: { clubID: number } }) {
 		}
 	}, [params.clubID])
 
+	const fetchClubPosts = useCallback(async () => {
+		try {
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/${params.clubID}/posts?page=1&page_size=30`,
+				{
+					method: 'GET',
+				},
+			)
+
+			if (response.ok) {
+				const data = await response.json()
+				setClubPosts(data.posts)
+			} else {
+				console.log('There is no fetched posts')
+			}
+		} catch (err) {
+			console.error('Network Error: Unable to fetch posts')
+		}
+	}, [params.clubID])
+
 	useEffect(() => {
 		fetchClubEvents()
-	}, [])
+		fetchClubPosts()
+	}, [fetchClubEvents, fetchClubPosts])
+
+	const getDomain = (url: string) => {
+		try {
+			const domain = new URL(url)
+			const parts = domain.hostname.split('.')
+			parts.pop()
+			return parts.join('.').replace('www.', '')
+		} catch (error) {
+			console.error(`Invalid URL: ${url}`)
+			return url
+		}
+	}
+
+	const getSocialIcon = (url: string) => {
+		const domain = getDomain(url)
+		if (url.includes('t.me')) {
+			return <FaTelegramPlane size={20} />
+		}
+		switch (domain) {
+			case 'instagram':
+				return <FaInstagram size={20} />
+			case 'twitter':
+				return <FaTwitter size={20} />
+			case 'facebook':
+				return <FaFacebookF size={20} />
+			case 'linkedin':
+				return <FaLinkedinIn size={20} />
+			case 'youtube':
+				return <FaYoutube size={20} />
+			case 'github':
+				return <FaGithub size={20} />
+			case 'tiktok':
+				return <FaTiktok size={20} />
+			default:
+				return <FaGlobe />
+		}
+	}
 
 	return (
 		<>
@@ -74,7 +145,7 @@ function Page({ params }: { params: { clubID: number } }) {
 					<div className="relative">
 						<div className="absolute h-[320px] w-full overflow-hidden rounded-sm dark:shadow-2xl dark:shadow-[#020817]/40">
 							<img
-								className="z-1 h-full w-full object-cover object-center "
+								className="z-1 h-full w-full object-cover object-center"
 								height={600}
 								src={club?.banner_url}
 								alt={''}
@@ -99,11 +170,21 @@ function Page({ params }: { params: { clubID: number } }) {
 										<div className="pl-4">
 											<CardTitle className="text-gray-900 dark:text-white">{club?.name}</CardTitle>
 											<CardDescription>{club?.description}</CardDescription>
-											<CardDescription
-												className="cursor-pointer pt-2"
-												onClick={openClubMembersDialog}
-											>
-												{club?.num_of_members} members
+											<CardDescription className="cursor-pointer pt-2">
+												<div onClick={openClubMembersDialog}>{club?.num_of_members} members</div>
+												<div className="flex flex-row space-x-3 pt-4">
+													{club?.social_links?.map((link, index) => (
+														<a
+															key={index}
+															href={link}
+															target="_blank"
+															rel="noopener noreferrer"
+															className=" text-2xl transition-colors duration-200 hover:text-blue-500"
+														>
+															{getSocialIcon(link)}
+														</a>
+													))}
+												</div>
 											</CardDescription>
 										</div>
 									</div>
@@ -131,7 +212,6 @@ function Page({ params }: { params: { clubID: number } }) {
 											clubEvents.map((event) => <ClubEvent key={event.id} event={event} />)
 										) : (
 											<p className="flex flex-col items-center justify-items-center text-gray-400 text-muted-foreground">
-												<Calendar className="h-14 w-14 border-gray-400 pb-2" />
 												No events.
 											</p>
 										)}
@@ -141,11 +221,14 @@ function Page({ params }: { params: { clubID: number } }) {
 									<CardHeader>
 										<CardTitle>Club Posts</CardTitle>
 									</CardHeader>
-									<CardContent>
-										<p className="flex flex-col items-center justify-items-center text-gray-400 text-muted-foreground">
-											<Inbox className="h-14 w-14 border-gray-400 pb-2" />
-											No posts
-										</p>
+									<CardContent className="space-y-4 overflow-hidden">
+										{clubPosts?.length ? (
+											clubPosts.map((post) => <ClubPosts key={post.id} post={post} />)
+										) : (
+											<p className="flex flex-col items-center justify-items-center text-gray-400 text-muted-foreground">
+												No posts.
+											</p>
+										)}
 									</CardContent>
 								</Card>
 							</div>
