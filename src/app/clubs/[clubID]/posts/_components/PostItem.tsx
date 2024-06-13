@@ -2,11 +2,17 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
+	DownloadIcon,
+	FileIcon,
+	FileImage,
+	FileQuestionIcon,
+	FileText,
 	PaperclipIcon,
 	PencilIcon,
 	PencilLineIcon,
 	TrashIcon,
 	UploadCloudIcon,
+	UploadIcon,
 	XIcon,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -16,7 +22,15 @@ import { Textarea } from '@/components/ui/textarea'
 import { Image, Post, PostFile } from '@/types/post'
 import { toast } from 'sonner'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from '@/components/ui/dialog'
 import {
 	Carousel,
 	CarouselContent,
@@ -24,6 +38,7 @@ import {
 	CarouselNext,
 	CarouselPrevious,
 } from '@/components/ui/carousel'
+import { Label } from '@/components/ui/label'
 
 export type PostItemProps = {
 	post: Post
@@ -40,10 +55,13 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
 	const [isDropdownShown, setIsDropdownShown] = useState(false)
 	const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+	const [isDragging, setIsDragging] = useState(false)
 
 	const [newTag, setNewTag] = useState('')
-	const [imageFile, setImageFile] = useState<File | undefined>(undefined)
+	const [imageFile, setImageFile] = useState<File>()
+	const [file, setFile] = useState<File>()
 	const inputRef = useRef<HTMLInputElement | null>(null)
+	const [draggedItem, setDraggedItem] = useState<Image>()
 
 	//partial update
 	const [title, setTitle] = useState(post.title)
@@ -57,7 +75,7 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 
 		if (title != post.title) data.title = title
 		if (description != post.title) data.description = description
-		if (tags.toString() != post.tags.toString()) data.tags = tags
+		if (tags?.toString() != post.tags?.toString()) data.tags = tags
 		if (cover_images != post.cover_images) data.cover_images = cover_images
 		if (attached_files != post.attached_files) data.attached_files = attached_files
 
@@ -73,7 +91,7 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 			setIsChanged(true)
 			return
 		}
-		if (tags.toString() != post.tags.toString()) {
+		if (tags?.toString() != post.tags?.toString()) {
 			setIsChanged(true)
 			return
 		}
@@ -142,7 +160,17 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 
 	const handleAddTag = () => {
 		if (newTag.trim() !== '') {
-			setTags((prevState) => [...prevState, newTag])
+			setTags((prevState) => {
+				if (!prevState) {
+					return [newTag]
+				}
+
+				if (prevState.includes(newTag)) {
+					toast.error('Tag already exists')
+					return prevState
+				}
+				return [...prevState, newTag]
+			})
 			setNewTag('')
 			return
 		}
@@ -181,6 +209,30 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 		}
 	}
 
+	const handleUpdateAttachedFiles = async () => {
+		try {
+			if (!file) {
+				toast.error('No file selected')
+				return
+			}
+
+			const uploadedFile = await handleFileUpload()
+			if (!uploadedFile) {
+				return
+			}
+
+			addAttachedFile({
+				name: uploadedFile.name,
+				url: uploadedFile.url,
+				type: uploadedFile.type,
+			})
+
+			handleSavePost()
+		} catch (e) {
+			toast.error('Failed to upload file')
+		}
+	}
+
 	const handleDeleteCoverImage = async (image: Image) => {
 		try {
 			if (!image) {
@@ -200,6 +252,25 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 		}
 	}
 
+	const handleDeleteAttachedFile = async (file: PostFile) => {
+		try {
+			if (!file) {
+				toast.error('No file selected')
+				return
+			}
+
+			let response = await handleDeleteFile(file.url)
+			if (!response) {
+				return
+			}
+
+			deleteAttachedFile(file.url)
+			handleSavePost()
+		} catch (e) {
+			toast.error('Failed to delete attached file')
+		}
+	}
+
 	const handleImageUpload = async () => {
 		if (!imageFile) {
 			toast.error('No image selected')
@@ -210,7 +281,38 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 
 		try {
 			const response = await axiosAuth.post(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/lolkek/upload/images`,
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/upload/images`,
+				formData,
+				{
+					headers: {
+						'Content-Type': 'multipart/form-data',
+					},
+				},
+			)
+
+			if (response.status !== 200) {
+				toast.error('Failed to upload image')
+				return
+			}
+
+			toast.success('Image successfully uploaded!')
+			return new Promise<PostFile>((resolve) => resolve(response.data as PostFile))
+		} catch (error) {
+			toast.error('Failed to upload image')
+		}
+	}
+
+	const handleFileUpload = async () => {
+		if (!file) {
+			toast.error('No file selected')
+			return
+		}
+		const formData = new FormData()
+		formData.append('file', file)
+
+		try {
+			const response = await axiosAuth.post(
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/upload`,
 				formData,
 				{
 					headers: {
@@ -234,10 +336,7 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 	const handleDeleteFile = async (url: string) => {
 		try {
 			const response = await axiosAuth.delete(
-				`${process.env.NEXT_PUBLIC_BACKEND_URL}/events/lolkek/upload/files`,
-				{
-					url: url,
-				},
+				`${process.env.NEXT_PUBLIC_BACKEND_URL}/clubs/upload?url=${url}`,
 			)
 
 			if (response.status !== 200) {
@@ -260,8 +359,13 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 		setCoverImages((presState) => presState.filter((cv) => cv.url != url))
 	}
 
-	const [isDragging, setIsDragging] = useState(false)
-	const [draggedItem, setDraggedItem] = useState<Image>()
+	const addAttachedFile = (file: PostFile) => {
+		setAttachedFiles((prevState) => [...prevState, file])
+	}
+
+	const deleteAttachedFile = (url: string) => {
+		setAttachedFiles((prevState) => prevState.filter((file) => file.url != url))
+	}
 
 	const handleDragStart = (e: any, image: Image) => {
 		setIsDragging(true)
@@ -330,7 +434,7 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 						</div>
 						<p className="text-gray-500">{post.description}</p>
 						<div className="flex items-center gap-2">
-							{post.tags.map((tag) => (
+							{post.tags?.map((tag) => (
 								<Badge
 									key={tag}
 									variant="default"
@@ -573,7 +677,7 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 							className="text-gray-500 dark:text-gray-400"
 						/>
 						<div className="flex items-center gap-2">
-							{tags.map((tag, index) => (
+							{tags?.map((tag, index) => (
 								<div
 									key={index}
 									className="flex flex-row justify-center rounded-md bg-gray-100 px-2 py-2 align-middle text-xs font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-400"
@@ -608,16 +712,84 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 							</div>
 						</div>
 						<div className="flex items-center gap-2">
-							<PaperclipIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-							{attached_files?.map((attachment, index) => (
-								<div key={index} className="text-gray-500 dark:text-gray-400">
-									<Link href={attachment.url} className="hover:underline" prefetch={false}>
-										{attachment.name}
-									</Link>
+							<div className="grid gap-4">
+								<div className="flex items-center justify-between">
+									<h3 className="text-lg font-medium">Attached Files</h3>
 								</div>
-							))}
+								<div className="grid gap-2">
+									{attached_files?.map((file, index) => (
+										<div
+											className="flex items-center justify-between rounded-md bg-gray-100 px-4 py-3 dark:bg-gray-800"
+											key={index}
+										>
+											<div className="flex items-center gap-3">
+												<GetFileIcon type={file.type} />
+												<div>
+													<p className="font-medium">{file.name}</p>
+												</div>
+											</div>
+											<div className="flex items-center gap-2">
+												<Button
+													variant="ghost"
+													size="icon"
+													className="text-gray-500 dark:text-gray-400"
+													onClick={() => {
+														window.open(file.url)
+													}}
+												>
+													<DownloadIcon className="h-5 w-5" />
+													<span className="sr-only">Download file</span>
+												</Button>
+												<Button
+													variant="ghost"
+													size="icon"
+													className="text-red-500"
+													onClick={() => {
+														handleDeleteAttachedFile(file)
+													}}
+												>
+													<XIcon className="h-5 w-5" />
+													<span className="sr-only">Delete file</span>
+												</Button>
+											</div>
+										</div>
+									))}
+								</div>
+								<Dialog>
+									<DialogTrigger asChild>
+										<Button variant="outline">
+											<UploadIcon className="mr-2 h-4 w-4" />
+											Upload file
+										</Button>
+									</DialogTrigger>
+									<DialogContent className="sm:max-w-[425px]">
+										<DialogHeader>
+											<DialogTitle>Upload File</DialogTitle>
+											<DialogDescription>
+												Select a file to upload to your project.
+											</DialogDescription>
+										</DialogHeader>
+										<div className="grid gap-4 py-4">
+											<div className="space-y-1">
+												<Label htmlFor="file">File</Label>
+												<Input
+													id="file"
+													type="file"
+													onChange={(e) => {
+														setFile(e.target.files?.[0])
+													}}
+												/>
+											</div>
+										</div>
+										<DialogFooter>
+											<Button type="submit" onClick={handleUpdateAttachedFiles}>
+												Upload
+											</Button>
+										</DialogFooter>
+									</DialogContent>
+								</Dialog>
+							</div>
 						</div>
-						{/* TODO ADD FILE ATTACHMENT */}
 						<div className="flex items-center gap-2"></div>
 						<div className="flex items-center justify-end gap-2">
 							<Button
@@ -642,6 +814,20 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 			</CardContent>
 		</Card>
 	)
+}
+
+function GetFileIcon({ type }: { type: string }) {
+	switch (type) {
+		case 'application/pdf':
+			return <FileIcon className="h-6 w-6 text-red-500" />
+		case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+			return <FileText className="h-6 w-6 text-blue-500" />
+		case 'image/jpeg':
+		case 'image/png':
+			return <FileImage className="h-6 w-6 text-green-500" />
+		default:
+			return <FileQuestionIcon className="h-6 w-6 text-gray-500" />
+	}
 }
 
 export default PostItem
