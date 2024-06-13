@@ -39,6 +39,7 @@ import {
 	CarouselPrevious,
 } from '@/components/ui/carousel'
 import { Label } from '@/components/ui/label'
+import { setState } from 'jest-circus'
 
 export type PostItemProps = {
 	post: Post
@@ -56,6 +57,7 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 	const [isDropdownShown, setIsDropdownShown] = useState(false)
 	const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
 	const [isDragging, setIsDragging] = useState(false)
+	const [isUpdating, setIsUpdating] = useState(false)
 
 	const [newTag, setNewTag] = useState('')
 	const [imageFile, setImageFile] = useState<File>()
@@ -191,19 +193,18 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 				return
 			}
 
-			const uploadedImage = await handleImageUpload()
-			if (!uploadedImage) {
-				return
-			}
+			handleImageUpload().then((uploadedImage) => {
+				if (!uploadedImage) {
+					return
+				}
 
-			addCoverImage({
-				name: uploadedImage.name,
-				url: uploadedImage.url,
-				type: uploadedImage.type,
-				position: cover_images.length + 1,
+				addCoverImage({
+					name: uploadedImage.name,
+					url: uploadedImage.url,
+					type: uploadedImage.type,
+					position: cover_images.length + 1,
+				})
 			})
-
-			handleSavePost()
 		} catch (e) {
 			toast.error('Failed to change cover image')
 		}
@@ -216,18 +217,17 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 				return
 			}
 
-			const uploadedFile = await handleFileUpload()
-			if (!uploadedFile) {
-				return
-			}
+			await handleFileUpload().then((uploadedFile) => {
+				if (!uploadedFile) {
+					return
+				}
 
-			addAttachedFile({
-				name: uploadedFile.name,
-				url: uploadedFile.url,
-				type: uploadedFile.type,
+				addAttachedFile({
+					name: uploadedFile.name,
+					url: uploadedFile.url,
+					type: uploadedFile.type,
+				})
 			})
-
-			handleSavePost()
 		} catch (e) {
 			toast.error('Failed to upload file')
 		}
@@ -240,13 +240,9 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 				return
 			}
 
-			handleDeleteFile(image.url)
-				.then(() => {
-					deleteCoverImage(image.url)
-				})
-				.then(() => {
-					handleSavePost()
-				})
+			handleDeleteFile(image.url).then(() => {
+				deleteCoverImage(image.url)
+			})
 		} catch (e) {
 			toast.error('Failed to delete cover image')
 		}
@@ -259,13 +255,13 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 				return
 			}
 
-			let response = await handleDeleteFile(file.url)
-			if (!response) {
-				return
-			}
+			handleDeleteFile(file.url).then((response) => {
+				if (!response) {
+					return
+				}
 
-			deleteAttachedFile(file.url)
-			handleSavePost()
+				deleteAttachedFile(file.url)
+			})
 		} catch (e) {
 			toast.error('Failed to delete attached file')
 		}
@@ -367,6 +363,15 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 		setAttachedFiles((prevState) => prevState.filter((file) => file.url != url))
 	}
 
+	const downloadFile = (file: PostFile) => {
+		const link = document.createElement('a')
+		link.href = file.url
+		link.download = file.name
+		document.body.appendChild(link)
+		link.click()
+		document.body.removeChild(link)
+	}
+
 	const handleDragStart = (e: any, image: Image) => {
 		setIsDragging(true)
 		setDraggedItem(image)
@@ -403,6 +408,10 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 	useEffect(() => {
 		haveChanged()
 	}, [title, description, tags, attached_files, cover_images])
+
+	useEffect(() => {
+		handleSavePost()
+	}, [setAttachedFiles, setCoverImages])
 
 	return (
 		<Card key={post.id}>
@@ -491,9 +500,14 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 								<div className="flex items-center gap-2" key={file.name}>
 									<PaperclipIcon className="h-4 w-4 text-gray-500" />
 									<div className="text-gray-500">
-										<Link href={file.url} className="hover:underline" prefetch={false}>
+										<a
+											href={file.url}
+											className="hover:underline"
+											download={file.name}
+											target="_blank"
+										>
 											{file.name}
-										</Link>
+										</a>
 									</div>
 								</div>
 							))}
@@ -753,7 +767,7 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 													size="icon"
 													className="text-gray-500 dark:text-gray-400"
 													onClick={() => {
-														window.open(file.url)
+														downloadFile(file)
 													}}
 												>
 													<DownloadIcon className="h-5 w-5" />
