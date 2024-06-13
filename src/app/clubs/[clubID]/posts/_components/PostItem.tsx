@@ -409,9 +409,7 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 		haveChanged()
 	}, [title, description, tags, attached_files, cover_images])
 
-	useEffect(() => {
-		handleSavePost()
-	}, [setAttachedFiles, setCoverImages])
+	useEffect(() => {}, [setAttachedFiles, setCoverImages])
 
 	return (
 		<Card key={post.id}>
