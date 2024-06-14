@@ -29,10 +29,14 @@ import {
 	DialogTrigger,
 } from '@/components/ui/dialog'
 import Link from 'next/link'
+import MarkdownPreview from '@uiw/react-markdown-preview'
+import { useTheme } from 'next-themes'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const PostPage = ({ params }: { params: { postID: number } }) => {
 	const [loading, setLoading] = useState(true)
 	const [post, setPost] = useState<Post | null>(null)
+	const theme = useTheme()
 
 	const fetchPostInfo = useCallback(() => {
 		fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/posts/${params.postID}`)
@@ -68,31 +72,35 @@ const PostPage = ({ params }: { params: { postID: number } }) => {
 			<div className="md:mx-15 mx-5 my-5 max-w-[1200px] overflow-auto bg-white p-4 dark:bg-[#020817] sm:mx-10 lg:mx-20 xl:mx-auto">
 				<Card>
 					<CardHeader className="pb-2">
-						<div className="flex justify-between px-4">
-							<div className="flex items-center gap-3">
-								<h3 className="mb-2 text-xl font-semibold">{post.title}</h3>{' '}
-								<span className="mb-2 italic">posted by</span>
-								<img
-									src={post.club.logo_url}
-									alt="Club Logo"
-									width={40}
-									height={40}
-									className="mb-2 rounded-full"
-								/>
-								<Link href={`/clubs/${post.club.id}`}>
-									<div className="mb-2 font-medium">{post.club.name}</div>
-								</Link>
-							</div>
-							<div className="flex items-center gap-2 text-sm text-gray-500">
-								<div>
-									Created:{' '}
-									{new Date(post.created_at).toLocaleDateString('en-US', {
-										year: 'numeric',
-										month: 'long',
-										day: 'numeric',
-									})}
-								</div>
-							</div>
+						<Link href={`/posts/${post.id}`}>
+							<h2 className="pl-2 text-2xl font-bold text-black dark:text-foreground">
+								{post.title}
+							</h2>
+						</Link>
+						<div className="flex items-center gap-2 pl-2">
+							<p className="text-black/60 dark:text-foreground/40">by </p>
+							<Link href={`/clubs/${post.club.id}`} className="flex flex-row items-center gap-2">
+								<Avatar className="h-5 w-5">
+									<AvatarImage src={post.club.logo_url} />
+									<AvatarFallback>
+										{post.club.name
+											.split(' ')
+											.map((word) => word[0].toUpperCase())
+											.join('')}
+									</AvatarFallback>
+								</Avatar>
+								<span className="font-medium text-black/60 dark:text-foreground/40">
+									{post.club.name}
+								</span>
+							</Link>
+							<span className="font-medium text-black/60 dark:text-foreground/40">
+								{' - '}
+								{new Date(post.created_at).toLocaleDateString('kz-KZ', {
+									year: 'numeric',
+									month: 'long',
+									day: 'numeric',
+								})}
+							</span>
 						</div>
 					</CardHeader>
 					<CardContent className="p-8 pt-0">
@@ -145,10 +153,17 @@ const PostPage = ({ params }: { params: { postID: number } }) => {
 							)}
 						</div>
 						{/*<h3 className="mb-2 text-xl font-semibold">{post.title}</h3>*/}
-						<p
-							className="mb-4 whitespace-pre-line pt-2 text-sm text-gray-500 dark:text-gray-400"
-							dangerouslySetInnerHTML={{ __html: post.description }}
-						></p>
+						<p className="py-4 text-gray-500 dark:text-gray-400">
+							<MarkdownPreview
+								source={post.description}
+								style={{
+									padding: 16,
+									backgroundColor: 'inherit',
+									color: theme.theme === 'dark' ? '#d1d5db' : '#333',
+								}}
+								className="light:bg-foreground overflow-hidden whitespace-pre-line bg-foreground text-sm text-gray-500 dark:bg-accent dark:text-gray-400"
+							/>
+						</p>
 						<div className="flex items-center gap-2">
 							<Dialog>
 								<DialogTrigger asChild>

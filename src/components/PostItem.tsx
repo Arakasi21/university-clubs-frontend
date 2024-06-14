@@ -11,12 +11,18 @@ import {
 } from '@/components/ui/carousel'
 import { truncateText } from '@/helpers/truncateText'
 import { Button } from '@/components/ui/button'
+import MarkdownPreview from '@uiw/react-markdown-preview'
+import { useTheme } from 'next-themes'
 
 export type PostItemProps = {
 	post: Post
 }
 
 function PostItem({ post }: PostItemProps) {
+	const theme = useTheme()
+	const limitWords = (text: string, limit: number) => {
+		return text.split(' ').slice(0, limit).join(' ')
+	}
 	return (
 		<Card>
 			<CardHeader>
@@ -35,7 +41,6 @@ function PostItem({ post }: PostItemProps) {
 					</div>
 					<div className="flex items-center gap-2 text-sm text-gray-500">
 						<div>
-							Created:{' '}
 							{new Date(post.created_at).toLocaleDateString('en-US', {
 								year: 'numeric',
 								month: 'long',
@@ -98,10 +103,17 @@ function PostItem({ post }: PostItemProps) {
 				<h3 className="mb-2 text-xl font-semibold">
 					<Link href={`/posts/${post.id}`}>{post.title}</Link>
 				</h3>
-				<p
-					className="mb-2 line-clamp-4 overflow-hidden whitespace-pre-line text-sm text-gray-500 dark:text-gray-400"
-					dangerouslySetInnerHTML={{ __html: truncateText(post.description, 50) }}
-				></p>
+				<p className="py-4 text-gray-500 dark:text-gray-400">
+					<MarkdownPreview
+						source={limitWords(post.description, 100)}
+						style={{
+							padding: 0,
+							backgroundColor: 'inherit',
+							color: theme.theme === 'dark' ? '#d1d5db' : '#333',
+						}}
+						className="light:bg-foreground line-clamp-4 overflow-hidden whitespace-pre-line bg-foreground text-sm text-gray-500 dark:bg-accent dark:text-gray-400"
+					/>
+				</p>
 				<div className="flex items-center gap-2">
 					<Link href={`/posts/${post.id}`}>
 						<Button variant={'link'}>

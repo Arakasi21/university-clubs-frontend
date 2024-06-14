@@ -1,12 +1,30 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { DownloadIcon, TagIcon } from 'lucide-react'
+import {
+	DownloadIcon,
+	FileIcon,
+	FileImage,
+	FileQuestionIcon,
+	FileText,
+	PaperclipIcon,
+	Share2Icon,
+	TagIcon,
+} from 'lucide-react'
 import { Post, PostFile } from '@/types/post'
 import React from 'react'
-import { GetFileIcon } from '@/app/clubs/[clubID]/posts/_components/PostItem'
 import Link from 'next/link'
 import MarkdownPreview from '@uiw/react-markdown-preview'
 import { useTheme } from 'next-themes'
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from '@/components/ui/dialog'
+import { toast } from 'sonner'
+import { GetFileIcon } from '@/app/clubs/[clubID]/posts/_components/PostItem'
 
 export type PostItemHorizontalProps = {
 	post: Post
@@ -14,7 +32,9 @@ export type PostItemHorizontalProps = {
 
 export default function PostItemHorizontal({ post }: PostItemHorizontalProps) {
 	const theme = useTheme()
-
+	const limitWords = (text: string, limit: number) => {
+		return text.split(' ').slice(0, limit).join(' ')
+	}
 	const downloadFile = (file: PostFile) => {
 		const link = document.createElement('a')
 		link.href = file.url
@@ -30,9 +50,7 @@ export default function PostItemHorizontal({ post }: PostItemHorizontalProps) {
 				<div className="flex flex-col" />
 				<div className="flex flex-col">
 					<Link href={`/posts/${post.id}`}>
-						<h2 className="text-2xl font-bold text-black dark:text-foreground">
-							Introducing the New Acme Prism Tee
-						</h2>
+						<h2 className="text-2xl font-bold text-black dark:text-foreground">{post.title}</h2>
 					</Link>
 					<div className="flex items-center gap-2">
 						<p className="text-black/60 dark:text-foreground/40">by </p>
@@ -61,16 +79,50 @@ export default function PostItemHorizontal({ post }: PostItemHorizontalProps) {
 					</div>
 					<p className="py-4 text-gray-500 dark:text-gray-400">
 						<MarkdownPreview
-							source={post.description}
+							source={limitWords(post.description, 100)}
 							style={{
-								padding: 16,
+								padding: 0,
 								backgroundColor: 'inherit',
 								color: theme.theme === 'dark' ? '#d1d5db' : '#333',
 							}}
-							className="light:bg-foreground mb-4 line-clamp-none overflow-hidden whitespace-pre-line bg-foreground text-sm text-gray-500 dark:bg-accent dark:text-gray-400"
+							className="light:bg-foreground line-clamp-4 overflow-hidden whitespace-pre-line bg-foreground text-sm text-gray-500 dark:bg-accent dark:text-gray-400"
 						/>
 					</p>
 					<div className="flex flex-wrap gap-2">
+						<Dialog>
+							<DialogTrigger asChild>
+								<Button variant="ghost" size="icon">
+									<PaperclipIcon
+										className="h-4 w-4"
+										color={theme.theme === 'dark' ? 'white' : 'black'}
+									/>
+									<span className="sr-only">Attachments</span>
+								</Button>
+							</DialogTrigger>
+							<DialogContent>
+								<DialogHeader>
+									<DialogTitle>Attached Files</DialogTitle>
+									<DialogDescription>
+										{post.attached_files?.length === 0 && <div>No files attached.</div>}
+										{post.attached_files?.map((file) => (
+											<div className="flex items-center gap-2 pt-2" key={file.name}>
+												<GetFileIcon type={file.type} />
+												<div className="text-gray-500">
+													<a
+														href={file.url}
+														className="hover:underline"
+														download={file.name}
+														target="_blank"
+													>
+														{file.name}
+													</a>
+												</div>
+											</div>
+										))}
+									</DialogDescription>
+								</DialogHeader>
+							</DialogContent>
+						</Dialog>
 						{post.tags?.map((tag, index) => (
 							<div
 								className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-500 dark:bg-gray-800 dark:text-gray-400"
@@ -81,30 +133,13 @@ export default function PostItemHorizontal({ post }: PostItemHorizontalProps) {
 							</div>
 						))}
 					</div>
-					{post.attached_files && post.attached_files?.length > 0 && (
-						<div className="mt-4 flex flex-col">
-							<h3 className=" text-lg font-medium text-black dark:text-foreground">
-								Attached Files
-							</h3>
-							<div className="flex flex-col gap-2">
-								{post.attached_files?.map((file, index) => (
-									<div key={index} className="flex items-center gap-4 p-2">
-										<GetFileIcon type={file.type} />
-										<div className="">
-											<div className="font-medium text-black dark:text-foreground">{file.name}</div>
-											{/*<div className="text-sm text-gray-500 dark:text-gray-400">
-                                            {file.description}
-                                        </div>*/}
-										</div>
-										<Button variant="ghost" size="icon" onClick={() => downloadFile(file)}>
-											<DownloadIcon className="h-4 w-4 text-black dark:text-foreground" />
-											<span className="sr-only">Download</span>
-										</Button>
-									</div>
-								))}
-							</div>
-						</div>
-					)}
+					<div className="flex items-center gap-2 pt-2">
+						<Link href={`/posts/${post.id}`}>
+							<Button variant={'link'}>
+								<p>&rarr; Go to post</p>
+							</Button>
+						</Link>
+					</div>
 				</div>
 			</div>
 		</div>

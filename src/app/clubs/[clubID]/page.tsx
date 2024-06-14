@@ -1,5 +1,5 @@
 'use client'
-import { CardDescription, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import useClub from '@/hooks/useClub'
 import useUserClubStatus from '@/hooks/useUserClubStatus'
 import useMemberRoles from '@/hooks/useMemberRoles'
@@ -28,6 +28,9 @@ import {
 } from 'react-icons/fa'
 import EventItemHorizontal from '@/components/EventItemHorizontal'
 import PostItemHorizontal from '@/components/PostItemHorizontal'
+import ClubEvent from '@/components/clubs/ClubEvent'
+import ClubPosts from '@/components/clubs/ClubPosts'
+import PostItem from '@/components/PostItem'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { isLoggedIn, user } = useUserStore()
@@ -201,6 +204,36 @@ function Page({ params }: { params: { clubID: number } }) {
 							</div>
 							{/*CLUBS MEMBERS CARD*/}
 							<ClubMembersCard club={club!} clubMembers={clubMembers!} />
+							{/*<div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2 ">*/}
+							{/*	<Card className="bg-accent dark:bg-[#0c1125]">*/}
+							{/*		<CardHeader>*/}
+							{/*			<CardTitle>Club Events</CardTitle>*/}
+							{/*		</CardHeader>*/}
+							{/*		<CardContent className="space-y-4 overflow-hidden">*/}
+							{/*			{clubEvents?.length ? (*/}
+							{/*				clubEvents.map((event) => <ClubEvent key={event.id} event={event} />)*/}
+							{/*			) : (*/}
+							{/*				<p className="flex flex-col items-center justify-items-center text-gray-400 text-muted-foreground">*/}
+							{/*					No events.*/}
+							{/*				</p>*/}
+							{/*			)}*/}
+							{/*		</CardContent>*/}
+							{/*	</Card>*/}
+							{/*	<Card className="bg-accent dark:bg-[#0c1125]">*/}
+							{/*		<CardHeader>*/}
+							{/*			<CardTitle>Club Posts</CardTitle>*/}
+							{/*		</CardHeader>*/}
+							{/*		<CardContent className="space-y-4 overflow-hidden">*/}
+							{/*			{clubPosts?.length ? (*/}
+							{/*				clubPosts.map((post) => <ClubPosts key={post.id} post={post} />)*/}
+							{/*			) : (*/}
+							{/*				<p className="flex flex-col items-center justify-items-center text-gray-400 text-muted-foreground">*/}
+							{/*					No posts.*/}
+							{/*				</p>*/}
+							{/*			)}*/}
+							{/*		</CardContent>*/}
+							{/*	</Card>*/}
+							{/*</div>*/}
 							<div className="mt-8 grid grid-cols-1 gap-6 ">
 								{clubEvents &&
 									clubPosts &&
@@ -215,7 +248,9 @@ function Page({ params }: { params: { clubID: number } }) {
 											'club_id' in item ? (
 												<EventItemHorizontal key={index} event={item as Event} />
 											) : (
+												// <div className="mx-12">
 												<PostItemHorizontal key={index} post={item as Post} />
+												// </div>
 											),
 										)}
 							</div>
