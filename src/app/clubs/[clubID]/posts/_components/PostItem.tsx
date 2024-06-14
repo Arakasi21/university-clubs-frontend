@@ -17,7 +17,6 @@ import {
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Image, Post, PostFile } from '@/types/post'
 import { toast } from 'sonner'
 import { useAxiosInterceptor } from '@/helpers/fetch_api'
@@ -38,6 +37,10 @@ import {
 	CarouselPrevious,
 } from '@/components/ui/carousel'
 import { Label } from '@/components/ui/label'
+import MDEditor from '@uiw/react-md-editor'
+import { useTheme } from 'next-themes'
+import rehypeSanitize from 'rehype-sanitize'
+import MarkdownPreview from '@uiw/react-markdown-preview'
 
 export type PostItemProps = {
 	post: Post
@@ -47,6 +50,7 @@ export type PostItemProps = {
 
 function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 	const axiosAuth = useAxiosInterceptor()
+	const theme = useTheme()
 
 	//booleans
 	const [isInEditMode, setIsInEditMode] = useState(false)
@@ -489,9 +493,15 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 						</div>
 						<div>
 							{isExpanded ? (
-								<p className="mb-4 whitespace-pre-line text-sm text-gray-500 dark:text-gray-400">
-									{post.description}
-								</p>
+								<MarkdownPreview
+									source={post.description}
+									style={{
+										padding: 16,
+										backgroundColor: 'inherit',
+										color: theme.theme === 'dark' ? '#d1d5db' : '#333',
+									}}
+									className="light:bg-foreground mb-4 line-clamp-none overflow-hidden whitespace-pre-line bg-foreground text-sm text-gray-500 dark:bg-accent dark:text-gray-400"
+								/>
 							) : (
 								<p className="mb-4 line-clamp-4 overflow-hidden whitespace-pre-line text-sm text-gray-500 dark:text-gray-400">
 									{post.description}
@@ -713,13 +723,15 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 								className="text-xl font-bold"
 							/>
 						</div>
-						<Textarea
-							name="description"
+						<MDEditor
 							value={description}
-							onChange={(e) => {
-								setDescription(e.target.value)
+							onChange={(value) => {
+								setDescription(value || '')
 							}}
-							className="text-gray-500 dark:text-gray-400"
+							previewOptions={{
+								rehypePlugins: [[rehypeSanitize]],
+							}}
+							data-color-mode={theme.theme === 'dark' ? 'dark' : 'light'}
 						/>
 						<div className="flex items-center gap-2">
 							{tags?.map((tag, index) => (
@@ -861,7 +873,7 @@ function PostItem({ post, onUpdate, onDelete }: PostItemProps) {
 	)
 }
 
-function GetFileIcon({ type }: { type: string }) {
+export function GetFileIcon({ type }: { type: string }) {
 	switch (type) {
 		case 'application/pdf':
 			return <FileIcon className="h-6 w-6 text-red-500" />

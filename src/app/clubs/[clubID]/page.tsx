@@ -1,5 +1,5 @@
 'use client'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { CardDescription, CardTitle } from '@/components/ui/card'
 import useClub from '@/hooks/useClub'
 import useUserClubStatus from '@/hooks/useUserClubStatus'
 import useMemberRoles from '@/hooks/useMemberRoles'
@@ -15,7 +15,6 @@ import ClubMembersCard from '@/components/clubs/ClubMembersCard'
 import ClubMembersDialog from '@/components/clubs/ClubMembersDialog'
 import ClubPageButtons from '@/components/clubs/ClubPageButtons'
 import BackgroundClubImage from '@/components/clubs/BackgroundClubImage'
-import ClubEvent from '@/components/clubs/ClubEvent'
 import {
 	FaFacebookF,
 	FaGithub,
@@ -27,15 +26,15 @@ import {
 	FaTwitter,
 	FaYoutube,
 } from 'react-icons/fa'
-import ClubPosts from '@/components/clubs/ClubPosts'
+import EventItemHorizontal from '@/components/EventItemHorizontal'
+import PostItemHorizontal from '@/components/PostItemHorizontal'
 
 function Page({ params }: { params: { clubID: number } }) {
 	const { isLoggedIn, user } = useUserStore()
 	const { club, clubMembers, isOwner, loading } = useClub({ clubID: params.clubID, user })
-	const { fetchUserClubStatus, handleJoinRequest, handleLeaveClub, memberStatus } =
-		useUserClubStatus({
-			clubID: params.clubID,
-		})
+	const { handleJoinRequest, handleLeaveClub, memberStatus } = useUserClubStatus({
+		clubID: params.clubID,
+	})
 
 	const { permissions } = useUserRolesStore()
 
@@ -202,35 +201,23 @@ function Page({ params }: { params: { clubID: number } }) {
 							</div>
 							{/*CLUBS MEMBERS CARD*/}
 							<ClubMembersCard club={club!} clubMembers={clubMembers!} />
-							<div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2 ">
-								<Card className="bg-accent dark:bg-[#0c1125]">
-									<CardHeader>
-										<CardTitle>Club Events</CardTitle>
-									</CardHeader>
-									<CardContent className="space-y-4 overflow-hidden">
-										{clubEvents?.length ? (
-											clubEvents.map((event) => <ClubEvent key={event.id} event={event} />)
-										) : (
-											<p className="flex flex-col items-center justify-items-center text-gray-400 text-muted-foreground">
-												No events.
-											</p>
+							<div className="mt-8 grid grid-cols-1 gap-6 ">
+								{clubEvents &&
+									clubPosts &&
+									[...clubEvents, ...clubPosts]
+										.sort((a, b) => {
+											const aDate = new Date(a.created_at)
+											const bDate = new Date(b.created_at)
+
+											return aDate.getTime() - bDate.getTime()
+										})
+										.map((item, index) =>
+											'club_id' in item ? (
+												<EventItemHorizontal key={index} event={item as Event} />
+											) : (
+												<PostItemHorizontal key={index} post={item as Post} />
+											),
 										)}
-									</CardContent>
-								</Card>
-								<Card className="bg-accent dark:bg-[#0c1125]">
-									<CardHeader>
-										<CardTitle>Club Posts</CardTitle>
-									</CardHeader>
-									<CardContent className="space-y-4 overflow-hidden">
-										{clubPosts?.length ? (
-											clubPosts.map((post) => <ClubPosts key={post.id} post={post} />)
-										) : (
-											<p className="flex flex-col items-center justify-items-center text-gray-400 text-muted-foreground">
-												No posts.
-											</p>
-										)}
-									</CardContent>
-								</Card>
 							</div>
 						</div>
 					</div>

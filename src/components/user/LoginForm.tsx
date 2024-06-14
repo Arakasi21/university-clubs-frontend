@@ -137,7 +137,7 @@ export default function Login() {
 							</Button>
 						</form>
 					</Form>
-					<Button
+					{/*<Button
 						onClick={() => {
 							OpenIDConnectLoginHandler()
 						}}
@@ -145,7 +145,7 @@ export default function Login() {
 						className="w-full"
 					>
 						<p>OpenID Connect</p>
-					</Button>
+					</Button>*/}
 					<div className="mt-4 text-center text-sm">
 						Don&apos;t have an account?{' '}
 						<Link href="/sign-up" className="underline">
