@@ -60,11 +60,6 @@ const DropdownForLoggedIn = ({ user, logout }: { user: User; logout: () => void 
 							<p>Profile</p>
 						</DropdownMenuItem>
 
-						<DropdownMenuItem className="flex flex-row space-x-4">
-							<SettingsIcon />
-							<p>Settings</p>
-						</DropdownMenuItem>
-
 						<DropdownMenuItem
 							onClick={() => {
 								router.push(`/clubs/create`)
